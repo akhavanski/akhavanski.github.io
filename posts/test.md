@@ -1,6 +1,6 @@
 ---
 layout: czerepaha
-title: "Test Post with Czerepaha Style"
+title: "Test Post with Czerepaha Style 2"
 date: 2024-04-04
 author: "Your Name"
 ---
