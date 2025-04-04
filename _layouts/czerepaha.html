@@ -27,7 +27,6 @@
             background: white;
             z-index: 1000;
             transition: transform 0.3s ease;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
         }
         .sidebar.hidden {
             transform: translateX(-100%);
@@ -93,30 +92,32 @@
         }
         .logo {
             font-family: 'Lobster', cursive;
-            font-size: 1.5rem;
-            color: #333;
+            font-size: 3rem;
+            color: #000000;
+            display: inline-block;
             text-decoration: none;
-            position: relative;
-            padding: 0.5rem;
-            background: white;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: opacity 0.3s ease;
+        }
+        .logo:hover {
+            opacity: 0;
         }
         .logo:hover::after {
             content: "🐢🐘🐘🐘";
             position: absolute;
-            left: 0;
-            top: 100%;
-            background: white;
-            padding: 0.5rem;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            white-space: nowrap;
-            z-index: 1002;
+            left: 4rem;
+            top: 1rem;
+            font-size: 2rem;
+            opacity: 1;
         }
         @media (max-width: 768px) {
             .main-content {
                 margin-left: 0;
+            }
+            .logo {
+                font-size: 2rem;
+            }
+            .logo:hover::after {
+                font-size: 1.5rem;
             }
         }
     </style>
