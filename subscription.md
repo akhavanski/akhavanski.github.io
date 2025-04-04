@@ -1,5 +1,5 @@
 ---
-layout: subscription
+layout: post
 title: Рассылка
 category: subscription
 --- 

@@ -1,5 +1,5 @@
 ---
-layout: subscription
+layout: post
 title: Ментальные модели
 description: Коллекция ментальных моделей для принятия решений
 category: mentalmodel

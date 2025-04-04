@@ -130,7 +130,7 @@
                     </div>
 
                     <div class="post-list">
-                        {% assign czerepaha_pages = site.pages | where: "layout", "subscription" | sort: "date" | reverse %}
+                        {% assign czerepaha_pages = site.pages | where: "layout", "post" | sort: "date" | reverse %}
                         {% for page in czerepaha_pages %}
                             {% if page.layout != "archive" %}
                             <div class="post-item">
