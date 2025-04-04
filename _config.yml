@@ -1,7 +1,7 @@
-title: "Aliaksei Khavanski "
-url: https://akhavanski.github.io # root address of the site
-# baseurl: "/no-style-please" # subpath of the site, e.g. "/blog" (leave it blank "" if you're site shouldn't use a subpath)
-description: > # description of the site (multiple lines allowed)
+title: "Черепаха и Слоны"
+url: https://akhavanski.github.io
+description: >
+  Черепаха и Слоны
 
 permalink: /:slug.html
 
