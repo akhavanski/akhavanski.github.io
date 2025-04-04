@@ -164,4 +164,53 @@ body {
     .post-content {
         font-size: 1.1rem;
     }
+}
+
+/* Post listing styles */
+.post-list {
+    margin-top: 2rem;
+}
+
+.post-list-item {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.post-list-item:last-child {
+    border-bottom: none;
+}
+
+.post-list-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.post-list-title a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.post-list-title a:hover {
+    color: var(--link-color);
+}
+
+.post-list-excerpt {
+    color: #666;
+    margin: 1rem 0;
+}
+
+.post-list-meta {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.post-list-meta time {
+    margin-right: 1rem;
+}
+
+.post-list-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 2rem 0;
 } 
