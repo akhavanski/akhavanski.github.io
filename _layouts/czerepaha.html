@@ -16,6 +16,7 @@
             max-width: 1200px;
             margin: 0 auto;
             position: relative;
+            padding-top: 4rem;
         }
         .main-content {
             flex: 1;
@@ -27,12 +28,24 @@
             border-bottom: none;
         }
         .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             padding: 1rem 2rem;
             border-bottom: 1px solid #eee;
-            margin-bottom: 2rem;
+            background: white;
+            z-index: 1000;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
         }
         .logo {
             font-family: 'Inter', sans-serif;
@@ -64,15 +77,16 @@
 </head>
 <body>
     <div class="container">
-        <div class="main-content" id="mainContent">
-            <header class="header">
+        <header class="header">
+            <div class="header-content">
                 <a href="/czerepaha_home" class="logo"></a>
                 <nav class="nav-links">
                     <a href="/czerepaha_home" class="nav-link">Архив рассылки</a>
                     <a href="/mentalmodels" class="nav-link">Ментальные модели</a>
                 </nav>
-            </header>
-
+            </div>
+        </header>
+        <div class="main-content" id="mainContent">
             <main class="content">
                 <article class="post">
                     <header class="post-header">

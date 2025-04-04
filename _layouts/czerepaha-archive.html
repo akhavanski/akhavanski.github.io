@@ -15,6 +15,7 @@
             min-height: 100vh;
             max-width: 1200px;
             margin: 0 auto;
+            padding-top: 4rem;
         }
         .sidebar {
             width: 200px;
@@ -27,7 +28,6 @@
         .main-content {
             flex: 1;
             padding: 2rem;
-            margin-left: 200px;
             max-width: 800px;
             margin: 0 auto;
         }
@@ -52,12 +52,24 @@
             border-bottom: none;
         }
         .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             padding: 1rem 2rem;
             border-bottom: 1px solid #eee;
-            margin-bottom: 2rem;
+            background: white;
+            z-index: 1000;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
         }
         .logo {
             font-family: 'Inter', sans-serif;
@@ -89,27 +101,16 @@
 </head>
 <body>
     <div class="container">
-        <aside class="sidebar">
-            <nav>
-                <ul class="menu">
-                    <li class="menu-item">
-                        <a href="/czerepaha_home" class="menu-link">Архив рассылки</a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="/mentalmodels" class="menu-link">Ментальные модели</a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-        <div class="main-content">
-            <header class="header">
+        <header class="header">
+            <div class="header-content">
                 <a href="/czerepaha_home" class="logo"></a>
                 <nav class="nav-links">
                     <a href="/czerepaha_home" class="nav-link">Архив рассылки</a>
                     <a href="/mentalmodels" class="nav-link">Ментальные модели</a>
                 </nav>
-            </header>
-
+            </div>
+        </header>
+        <div class="main-content">
             <main class="content">
                 <article class="post">
                     <header class="post-header">
