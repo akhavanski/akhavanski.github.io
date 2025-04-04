@@ -4,8 +4,6 @@ title: "FS.blog Style Posts"
 permalink: /fsblog-posts/
 ---
 
-# FS.blog Style Posts
-
 Here's a collection of all posts using the FS.blog style layout:
 
 <div class="post-list">
