@@ -27,6 +27,7 @@
             background: white;
             z-index: 1000;
             transition: transform 0.3s ease;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
         }
         .sidebar.hidden {
             transform: translateX(-100%);
@@ -37,6 +38,10 @@
             margin-left: 200px;
             max-width: 800px;
             margin: 0 auto;
+            transition: margin-left 0.3s ease;
+        }
+        .main-content.sidebar-hidden {
+            margin-left: 0;
         }
         .menu {
             list-style: none;
@@ -68,27 +73,19 @@
             padding: 0.5rem;
             cursor: pointer;
             border-radius: 4px;
-            display: none;
+            display: block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            .sidebar.visible {
-                transform: translateX(0);
-            }
             .main-content {
                 margin-left: 0;
-            }
-            .sidebar-toggle {
-                display: block;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        <button class="sidebar-toggle" onclick="toggleSidebar()" id="sidebarToggle">☰</button>
         <aside class="sidebar" id="sidebar">
             <nav>
                 <ul class="menu">
@@ -101,7 +98,7 @@
                 </ul>
             </nav>
         </aside>
-        <div class="main-content">
+        <div class="main-content" id="mainContent">
             <header class="header">
                 <nav class="nav">
                 </nav>
@@ -160,23 +157,40 @@
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('visible');
+            const mainContent = document.getElementById('mainContent');
+            const isHidden = sidebar.classList.contains('hidden');
+            
+            sidebar.classList.toggle('hidden');
+            mainContent.classList.toggle('sidebar-hidden');
+            
+            // Update toggle button text
+            document.getElementById('sidebarToggle').textContent = isHidden ? '☰' : '×';
         }
 
-        // Check if screen width is less than 768px on load
-        if (window.innerWidth < 768) {
-            document.getElementById('sidebar').classList.add('hidden');
-        }
-
-        // Update sidebar visibility on window resize
-        window.addEventListener('resize', function() {
+        function checkContentWidth() {
+            const mainContent = document.getElementById('mainContent');
             const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth < 768) {
+            const container = document.querySelector('.container');
+            const containerWidth = container.offsetWidth;
+            const contentWidth = mainContent.scrollWidth;
+            const sidebarWidth = 200; // Width of the sidebar
+            
+            // If content width is greater than container width minus sidebar width,
+            // or if we're on mobile, hide the sidebar
+            if (contentWidth > (containerWidth - sidebarWidth) || window.innerWidth < 768) {
                 sidebar.classList.add('hidden');
+                mainContent.classList.add('sidebar-hidden');
+                document.getElementById('sidebarToggle').textContent = '☰';
             } else {
                 sidebar.classList.remove('hidden');
+                mainContent.classList.remove('sidebar-hidden');
+                document.getElementById('sidebarToggle').textContent = '×';
             }
-        });
+        }
+
+        // Check on load and resize
+        window.addEventListener('load', checkContentWidth);
+        window.addEventListener('resize', checkContentWidth);
     </script>
 </body>
 </html> 
