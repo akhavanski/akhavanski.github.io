@@ -33,25 +33,26 @@
                 </div>
 
                 <div class="post-list">
-                    {% for post in site.posts %}
-                        {% if post.layout == 'czerepaha' %}
+                    {% assign czerepaha_pages = site.pages | where: "layout", "czerepaha" | sort: "date" | reverse %}
+                    {% for page in czerepaha_pages %}
                         <div class="post-item">
                             <h2 class="post-item-title">
-                                <a href="{{ post.url }}">{{ post.title }}</a>
+                                <a href="{{ page.url }}">{{ page.title }}</a>
                             </h2>
                             <div class="post-meta">
-                                <time datetime="{{ post.date }}">{{ post.date | date: site.theme_config.date_format }}</time>
-                                {% if post.author %}
-                                <span class="post-author">by {{ post.author }}</span>
+                                {% if page.date %}
+                                <time datetime="{{ page.date }}">{{ page.date | date: site.theme_config.date_format }}</time>
+                                {% endif %}
+                                {% if page.author %}
+                                <span class="post-author">by {{ page.author }}</span>
                                 {% endif %}
                             </div>
-                            {% if post.description %}
+                            {% if page.description %}
                             <div class="post-item-description">
-                                {{ post.description }}
+                                {{ page.description }}
                             </div>
                             {% endif %}
                         </div>
-                        {% endif %}
                     {% endfor %}
                 </div>
             </article>
