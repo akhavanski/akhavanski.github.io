@@ -1,5 +1,5 @@
 ---
-layout: fsblog
+layout: czerepaha
 title: "FS.blog Style Posts"
 permalink: /fsblog-posts/
 ---
