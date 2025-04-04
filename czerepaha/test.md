@@ -3,6 +3,7 @@ layout: czerepaha
 title: "Test Post with FS.blog Style 11"
 date: 2024-04-04
 author: "Your Name"
+category: subscription
 ---
 
 # Introduction 1
