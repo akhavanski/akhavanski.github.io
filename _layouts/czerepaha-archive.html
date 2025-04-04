@@ -34,22 +34,24 @@
 
                 <div class="post-list">
                     {% for post in site.posts %}
-                    <div class="post-item">
-                        <h2 class="post-item-title">
-                            <a href="{{ post.url }}">{{ post.title }}</a>
-                        </h2>
-                        <div class="post-meta">
-                            <time datetime="{{ post.date }}">{{ post.date | date: site.theme_config.date_format }}</time>
-                            {% if post.author %}
-                            <span class="post-author">by {{ post.author }}</span>
+                        {% if post.layout == 'czerepaha' %}
+                        <div class="post-item">
+                            <h2 class="post-item-title">
+                                <a href="{{ post.url }}">{{ post.title }}</a>
+                            </h2>
+                            <div class="post-meta">
+                                <time datetime="{{ post.date }}">{{ post.date | date: site.theme_config.date_format }}</time>
+                                {% if post.author %}
+                                <span class="post-author">by {{ post.author }}</span>
+                                {% endif %}
+                            </div>
+                            {% if post.description %}
+                            <div class="post-item-description">
+                                {{ post.description }}
+                            </div>
                             {% endif %}
                         </div>
-                        {% if post.description %}
-                        <div class="post-item-description">
-                            {{ post.description }}
-                        </div>
                         {% endif %}
-                    </div>
                     {% endfor %}
                 </div>
             </article>
