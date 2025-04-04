@@ -51,6 +51,40 @@
         .post-item {
             border-bottom: none;
         }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 2rem;
+        }
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .logo:hover::before {
+            content: "🐘 ЧС";
+        }
+        .logo:not(:hover)::before {
+            content: "🐢 ЧС";
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-link {
+            color: #333;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .nav-link:hover {
+            color: #000;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -69,7 +103,10 @@
         </aside>
         <div class="main-content">
             <header class="header">
-                <nav class="nav">
+                <a href="/czerepaha_home" class="logo"></a>
+                <nav class="nav-links">
+                    <a href="/czerepaha_home" class="nav-link">Архив рассылки</a>
+                    <a href="/mentalmodels" class="nav-link">Ментальные модели</a>
                 </nav>
             </header>
 
