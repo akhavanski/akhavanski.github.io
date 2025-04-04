@@ -15,6 +15,7 @@
             min-height: 100vh;
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
         }
         .sidebar {
             width: 200px;
@@ -23,6 +24,12 @@
             left: 0;
             top: 0;
             bottom: 0;
+            background: white;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        .sidebar.hidden {
+            transform: translateX(-100%);
         }
         .main-content {
             flex: 1;
@@ -51,11 +58,38 @@
         .post-item {
             border-bottom: none;
         }
+        .sidebar-toggle {
+            position: fixed;
+            left: 1rem;
+            top: 1rem;
+            z-index: 1001;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.visible {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .sidebar-toggle {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <aside class="sidebar">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        <aside class="sidebar" id="sidebar">
             <nav>
                 <ul class="menu">
                     <li class="menu-item">
@@ -70,7 +104,6 @@
         <div class="main-content">
             <header class="header">
                 <nav class="nav">
-                    <a href="/czerepaha_home" class="nav-link">← Home</a>
                 </nav>
             </header>
 
@@ -78,26 +111,72 @@
                 <article class="post">
                     <header class="post-header">
                         <h1 class="post-title">{{ page.title }}</h1>
-                        <div class="post-meta">
-                            <time datetime="{{ page.date }}">{{ page.date | date: site.theme_config.date_format }}</time>
-                            {% if page.author %}
-                            <span class="post-author">by {{ page.author }}</span>
-                            {% endif %}
+                        {% if page.description %}
+                        <div class="post-description">
+                            {{ page.description }}
                         </div>
+                        {% endif %}
                     </header>
 
                     <div class="post-content">
                         {{ content }}
+                    </div>
+
+                    <div class="post-list">
+                        {% assign filtered_pages = site.pages | where: "layout", "czerepaha" | where: "category", page.category | sort: "date" | reverse %}
+                        {% for page in filtered_pages %}
+                            {% if page.layout != "czerepaha-archive" %}
+                            <div class="post-item">
+                                <h2 class="post-item-title">
+                                    <a href="{{ page.url }}">{{ page.title }}</a>
+                                </h2>
+                                <div class="post-meta">
+                                    {% if page.date %}
+                                    <time datetime="{{ page.date }}">{{ page.date | date: site.theme_config.date_format }}</time>
+                                    {% endif %}
+                                    {% if page.author %}
+                                    <span class="post-author">by {{ page.author }}</span>
+                                    {% endif %}
+                                </div>
+                                {% if page.description %}
+                                <div class="post-item-description">
+                                    {{ page.description }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </article>
             </main>
 
             <footer class="footer">
                 <nav class="nav">
-                    <a href="/czerepaha_home" class="nav-link">← Back to Home</a>
                 </nav>
             </footer>
         </div>
     </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('visible');
+        }
+
+        // Check if screen width is less than 768px on load
+        if (window.innerWidth < 768) {
+            document.getElementById('sidebar').classList.add('hidden');
+        }
+
+        // Update sidebar visibility on window resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth < 768) {
+                sidebar.classList.add('hidden');
+            } else {
+                sidebar.classList.remove('hidden');
+            }
+        });
+    </script>
 </body>
 </html> 
