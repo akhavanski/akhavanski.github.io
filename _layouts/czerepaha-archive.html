@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} | {{ site.title }}</title>
+    <link rel="stylesheet" href="/assets/css/czerepaha.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <nav class="nav">
+                <a href="/" class="nav-link">← Home</a>
+            </nav>
+        </header>
+
+        <main class="content">
+            <article class="post">
+                <header class="post-header">
+                    <h1 class="post-title">{{ page.title }}</h1>
+                    {% if page.description %}
+                    <div class="post-description">
+                        {{ page.description }}
+                    </div>
+                    {% endif %}
+                </header>
+
+                <div class="post-content">
+                    {{ content }}
+                </div>
+
+                <div class="post-list">
+                    {% for post in site.posts %}
+                    <div class="post-item">
+                        <h2 class="post-item-title">
+                            <a href="{{ post.url }}">{{ post.title }}</a>
+                        </h2>
+                        <div class="post-meta">
+                            <time datetime="{{ post.date }}">{{ post.date | date: site.theme_config.date_format }}</time>
+                            {% if post.author %}
+                            <span class="post-author">by {{ post.author }}</span>
+                            {% endif %}
+                        </div>
+                        {% if post.description %}
+                        <div class="post-item-description">
+                            {{ post.description }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </article>
+        </main>
+
+        <footer class="footer">
+            <nav class="nav">
+                <a href="/" class="nav-link">← Back to Home</a>
+            </nav>
+        </footer>
+    </div>
+</body>
+</html> 
