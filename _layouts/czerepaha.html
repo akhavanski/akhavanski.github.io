@@ -8,38 +8,84 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            padding: 2rem;
+            border-right: 1px solid #eee;
+        }
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+        }
+        .menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .menu-item {
+            margin-bottom: 1rem;
+        }
+        .menu-link {
+            color: #333;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+        .menu-link:hover {
+            color: #000;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <nav class="nav">
-                <a href="/czerepaha_home" class="nav-link">← Home</a>
+        <aside class="sidebar">
+            <nav>
+                <ul class="menu">
+                    <li class="menu-item">
+                        <a href="/czerepaha_home" class="menu-link">Архив рассылки</a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/mentalmodels" class="menu-link">Ментальные модели</a>
+                    </li>
+                </ul>
             </nav>
-        </header>
+        </aside>
+        <div class="main-content">
+            <header class="header">
+                <nav class="nav">
+                    <a href="/czerepaha_home" class="nav-link">← Home</a>
+                </nav>
+            </header>
 
-        <main class="content">
-            <article class="post">
-                <header class="post-header">
-                    <h1 class="post-title">{{ page.title }}</h1>
-                    <div class="post-meta">
-                        <time datetime="{{ page.date }}">{{ page.date | date: site.theme_config.date_format }}</time>
-                        {% if page.author %}
-                        <span class="post-author">by {{ page.author }}</span>
-                        {% endif %}
+            <main class="content">
+                <article class="post">
+                    <header class="post-header">
+                        <h1 class="post-title">{{ page.title }}</h1>
+                        <div class="post-meta">
+                            <time datetime="{{ page.date }}">{{ page.date | date: site.theme_config.date_format }}</time>
+                            {% if page.author %}
+                            <span class="post-author">by {{ page.author }}</span>
+                            {% endif %}
+                        </div>
+                    </header>
+
+                    <div class="post-content">
+                        {{ content }}
                     </div>
-                </header>
+                </article>
+            </main>
 
-                <div class="post-content">
-                    {{ content }}
-                </div>
-            </article>
-        </main>
-
-        <footer class="footer">
-            <nav class="nav">
-                <a href="/czerepaha_home" class="nav-link">← Back to Home</a>
-            </nav>
-        </footer>
+            <footer class="footer">
+                <nav class="nav">
+                    <a href="/czerepaha_home" class="nav-link">← Back to Home</a>
+                </nav>
+            </footer>
+        </div>
     </div>
 </body>
 </html> 
