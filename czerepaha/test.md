@@ -5,7 +5,7 @@ date: 2024-04-04
 author: "Your Name"
 ---
 
-# Introduction
+# Introduction 1
 
 This is a test post demonstrating the new FS.blog-style layout. The design focuses on readability and clean typography, making it perfect for long-form content.
 
