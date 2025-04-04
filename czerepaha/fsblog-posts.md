@@ -9,7 +9,7 @@ permalink: /fsblog-posts/
 Here's a collection of all posts using the FS.blog style layout:
 
 <div class="post-list">
-{% assign fsblog_posts = site.posts | where: "layout", "fsblog" %}
+{% assign fsblog_posts = site.posts | where: "layout", "czerepaha" %}
 {% for post in fsblog_posts %}
 <div class="post-list-item">
     <h2 class="post-list-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
