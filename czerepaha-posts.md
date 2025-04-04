@@ -1,16 +1,16 @@
 ---
-layout: fsblog
-title: "FS.blog Style Posts"
-permalink: /fsblog-posts/
+layout: czerepaha
+title: "Czerepaha Style Posts"
+permalink: /czerepaha-posts/
 ---
 
-# FS.blog Style Posts
+# Czerepaha Style Posts
 
-Here's a collection of all posts using the FS.blog style layout:
+Here's a collection of all posts using the Czerepaha style layout:
 
 <div class="post-list">
-{% assign fsblog_posts = site.posts | where: "layout", "fsblog" %}
-{% for post in fsblog_posts %}
+{% assign czerepaha_posts = site.posts | where: "layout", "czerepaha" %}
+{% for post in czerepaha_posts %}
 <div class="post-list-item">
     <h2 class="post-list-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
     <div class="post-list-excerpt">

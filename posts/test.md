@@ -1,6 +1,6 @@
 ---
-layout: fsblog
-title: "Test Post with FS.blog Style"
+layout: czerepaha
+title: "Test Post with Czerepaha Style"
 date: 2024-04-04
 author: "Your Name"
 ---
