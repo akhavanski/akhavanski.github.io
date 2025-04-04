@@ -106,9 +106,9 @@
     <div class="container">
         <header class="header">
             <div class="header-content">
-                <a href="/czerepaha_home" class="logo"></a>
+                <a href="/czereslon" class="logo"></a>
                 <nav class="nav-links">
-                    <a href="/czerepaha_home" class="nav-link">Рассылка</a>
+                    <a href="/subscription" class="nav-link">Рассылка</a>
                     <a href="/mentalmodels" class="nav-link">Ментальные модели</a>
                 </nav>
             </div>
@@ -130,9 +130,9 @@
                     </div>
 
                     <div class="post-list">
-                        {% assign czerepaha_pages = site.pages | where: "layout", "czerepaha" | sort: "date" | reverse %}
+                        {% assign czerepaha_pages = site.pages | where: "layout", "czp" | sort: "date" | reverse %}
                         {% for page in czerepaha_pages %}
-                            {% if page.layout != "czerepaha-archive" %}
+                            {% if page.layout != "cza" %}
                             <div class="post-item">
                                 <h2 class="post-item-title">
                                     <a href="{{ page.url }}">{{ page.title }}</a>
