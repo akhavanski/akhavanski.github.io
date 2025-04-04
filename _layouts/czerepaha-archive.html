@@ -35,6 +35,7 @@
                 <div class="post-list">
                     {% assign czerepaha_pages = site.pages | where: "layout", "czerepaha" | sort: "date" | reverse %}
                     {% for page in czerepaha_pages %}
+                        {% if page.layout != "czerepaha-archive" %}
                         <div class="post-item">
                             <h2 class="post-item-title">
                                 <a href="{{ page.url }}">{{ page.title }}</a>
@@ -53,6 +54,7 @@
                             </div>
                             {% endif %}
                         </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </article>
