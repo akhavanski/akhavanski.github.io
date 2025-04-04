@@ -1,4 +1,4 @@
 ---
-layout: cza
+layout: archive
 title: Архив
 --- 

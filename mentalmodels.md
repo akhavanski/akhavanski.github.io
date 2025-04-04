@@ -1,5 +1,5 @@
 ---
-layout: czp
+layout: subscription
 title: Ментальные модели
 description: Коллекция ментальных моделей для принятия решений
 category: mentalmodel

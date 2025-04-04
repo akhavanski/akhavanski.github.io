@@ -106,9 +106,9 @@
                     </div>
 
                     <div class="post-list">
-                        {% assign filtered_pages = site.pages | where: "layout", "czp" | where: "category", page.category | sort: "date" | reverse %}
+                        {% assign filtered_pages = site.pages | where: "layout", "subscription" | where: "category", page.category | sort: "date" | reverse %}
                         {% for page in filtered_pages %}
-                            {% if page.layout != "cza" %}
+                            {% if page.layout != "archive" %}
                             <div class="post-item">
                                 <h2 class="post-item-title">
                                     <a href="{{ page.url }}">{{ page.title }}</a>
