@@ -1,8 +1,6 @@
 ---
 layout: post
+title: Test
 ---
-
-
-Test File
 
 # Test
