@@ -1,0 +1,48 @@
+{%- if include.menu.entries -%}
+  <ul>
+    {%- for entry in include.menu.entries -%}
+      <li>
+        {%- if entry.url -%}
+          <a href="{{ entry.url | relative_url }}">{{ entry.title }}</a>
+        {%- else -%}
+          {{ entry.title }}
+        {%- endif -%}
+
+        {%- if entry.post_list -%}
+          {%- if entry.post_list.limit -%}
+            {%- assign post_limit = entry.post_list.limit -%}
+          {%- else -%}
+            {%- assign post_limit = 5 -%}
+          {%- endif -%}
+
+          {%- if entry.post_list.category -%}
+            {%- assign posts_list = site.categories[entry.post_list.category] | slice: 0, post_limit -%}
+          {%- else -%}
+            {%- assign posts_list = site.posts | slice: 0, post_limit -%}
+          {%- endif -%}
+
+          {%- if posts_list.size > 0 -%}
+            <ul>
+              {%- for post in posts_list -%}
+                <li>
+                  <span>{{ post.date | date: "%Y-%m-%d" }}</span> » <a href="{{ post.url | relative_url }}">{{ post.title | downcase }}</a>
+                </li>
+              {%- endfor -%}
+
+              {%- if entry.post_list.show_more and entry.post_list.show_more_url -%}
+                <li>
+                  <a href="{{ entry.post_list.show_more_url | relative_url }}">{{ entry.post_list.show_more_text | default: "more..." }}</a>
+                </li>
+              {%- endif -%}
+            </ul>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if entry.entries -%}
+          {%- include menu.html menu=entry -%}
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+

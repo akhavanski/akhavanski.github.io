@@ -1,0 +1,28 @@
+---
+layout: default
+---
+
+<h1>{{ page.title }}</h1>
+
+{{ content }}
+
+{%- if page.which_category -%}
+  {%- assign posts = site.categories[page.which_category] -%}
+{%- else -%}
+  {%- assign posts = site.posts -%}
+{%- endif -%}
+
+{%- if posts.size > 0 -%}
+  <ul>
+    {%- for post in posts -%}
+      <li>
+        <span>{{ post.date | date: "%Y-%m-%d" }}</span> » <a href="{{ post.url | relative_url }}">{{ post.title | downcase }}</a>
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- else -%}
+  <p>No posts found.</p>
+{%- endif -%}
+
+<a href="{{ site.theme_config.back_home_text | default: 'back' | prepend: '/' | relative_url }}">{{ site.theme_config.back_home_text | default: "back" }}</a>
+
