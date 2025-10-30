@@ -1,0 +1,45 @@
+# Site settings
+title: Алексей Хованский
+author: Aliaksei Khavanski
+email: lietocake@gmail.com
+description: > # this means to ignore newlines until "show_excerpts:"
+  Работаю бизнес-аналитиком. Интересуюсь философией. В личном блоге пишу про ментальные модели и когнитвные искажения. 
+
+  Иногда пишу посты о работе с документацией и требованиями на Habr и Medium. 
+
+# Build settings
+remote_theme: riggraz/no-style-please # Using remote_theme for GitHub Pages
+
+# Theme config
+theme_config:
+  appearance: "light" # Can be "light", "dark" or "auto"
+  show_description: true
+  back_home_text: "home" # Customize the home link text (HTML allowed)
+
+# Pagination
+paginate: 5
+paginate_path: "/blog/page:num/"
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /posts/:title
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-paginate
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - README.md
+
