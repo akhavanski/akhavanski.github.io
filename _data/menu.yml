@@ -9,6 +9,3 @@ entries:
       show_more: true
       show_more_text: See all posts...
       show_more_url: /blog
-
-  - title: rss
-    url: /feed.xml
