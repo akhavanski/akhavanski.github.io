@@ -10,3 +10,5 @@ header h1 {
   white-space: nowrap;
   font-size: clamp(1.2rem, calc((100vw - 4rem) / 11), 2em);
 }
+
+pre.mermaid { text-align: center; }

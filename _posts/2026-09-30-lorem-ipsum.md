@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Lorem ipsum
+custom_js: [mermaid]
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -31,5 +32,14 @@ def lorem(n):
 ```
 
 ![circle](/pics/circle.png)
+
+```mermaid
+flowchart TD
+    A[Lorem] --> B{Ipsum?}
+    B -->|dolor| C[Sit amet]
+    B -->|consectetur| D[Adipiscing]
+    C --> E[Elit]
+    D --> E
+```
 
 Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
