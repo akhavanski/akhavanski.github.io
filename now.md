@@ -9,7 +9,7 @@ title: Now
 
 ## Projects
 
-Building a content management platform for catholic MOOC and community
+- Building a content management platform for catholic MOOC and community
 
 ## Studying
 
@@ -18,4 +18,4 @@ Building a content management platform for catholic MOOC and community
 
 ## Reading
 
-'How to Fail at Almost Everything and Still Win Big' by Scott Adams
+- 'How to Fail at Almost Everything and Still Win Big' by Scott Adams
