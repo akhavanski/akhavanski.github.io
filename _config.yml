@@ -1,45 +1,32 @@
-# Site settings
-title: Алексей Хованский
-author: Aliaksei Khavanski
-email: lietocake@gmail.com
-description: > # this means to ignore newlines until "show_excerpts:"
-  Работаю бизнес-аналитиком. Интересуюсь философией. В личном блоге пишу про ментальные модели и когнитвные искажения. 
+title: Aliaksei Khavanski # name of the site
+author: Aliaksei Khavanski # name of site's author
+email: lietocake@gmail.com # email of site's author
+url: https://akhavanski.github.io # root address of the site
+baseurl: "" # subpath of the site, e.g. "/blog" (leave it blank "" if you're site shouldn't use a subpath)
 
-  Иногда пишу посты о работе с документацией и требованиями на Habr и Medium. 
+permalink: /:slug.html
 
-# Build settings
-remote_theme: riggraz/no-style-please # Using remote_theme for GitHub Pages
+favicon: "favicon.ico" # name+extension of favicon (which must be put on the root folder)
 
-# Theme config
+remote_theme: riggraz/no-style-please
+
 theme_config:
-  appearance: "light" # Can be "light", "dark" or "auto"
-  show_description: true
-  back_home_text: "home" # Customize the home link text (HTML allowed)
+  appearance: "auto" # can be "light", "dark" or "auto"
+  back_home_text: ".." # customize text for homepage link in post layout
+  date_format: "%Y-%m-%d" # customize how date is formatted
+  show_description: false # show blog description in home page
+  lowercase_titles: true # show titles in lowercase in lists
 
-# Pagination
-paginate: 5
-paginate_path: "/blog/page:num/"
+sass:
+  style: compressed
 
-# Collections
-collections:
-  posts:
-    output: true
-    permalink: /posts/:title
-
-# Plugins
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
-  - jekyll-paginate
+  - jekyll-remote-theme
 
-# Exclude from processing
 exclude:
   - Gemfile
   - Gemfile.lock
-  - node_modules
-  - vendor/bundle/
-  - vendor/cache/
-  - vendor/gems/
-  - vendor/ruby/
+  - vendor
   - README.md
-

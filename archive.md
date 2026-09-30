@@ -1,7 +1,4 @@
 ---
 layout: archive
-title: Post Archive
+title: Archive
 ---
-
-All blog posts, in reverse chronological order.
-
