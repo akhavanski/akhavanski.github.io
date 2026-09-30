@@ -30,3 +30,4 @@ exclude:
   - Gemfile.lock
   - vendor
   - README.md
+  - CLAUDE.md
