@@ -19,3 +19,7 @@ title: Now
 ## Reading
 
 - 'How to Fail at Almost Everything and Still Win Big' by Scott Adams
+
+## Other
+
+- Looking for a job as PdM/PjM/BA
