@@ -1,0 +1,12 @@
+---
+---
+
+@import "no-style-please";
+
+// Keep the site title on one line on narrow screens.
+// The title is 18 monospace characters (about 10.8em wide),
+// so the font shrinks with the viewport minus the 2rem side padding.
+header h1 {
+  white-space: nowrap;
+  font-size: clamp(1.2rem, calc((100vw - 4rem) / 11), 2em);
+}
