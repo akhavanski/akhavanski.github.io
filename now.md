@@ -3,6 +3,8 @@ layout: page
 title: Now
 ---
 
+*Updated on the 1st of October*
+
 ## Work
 
 - Product Owner @ 21vek.by
