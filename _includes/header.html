@@ -1,0 +1,13 @@
+<header>
+  <div class="title-row">
+    <div class="brand">
+      {%- if include.home -%}
+        <h1 class="site-title">{{ site.title }}</h1>
+      {%- else -%}
+        <a class="back" href="{{ "/" | relative_url }}" title="home" aria-label="home">&lt;-</a>
+        <a class="site-title" href="{{ "/" | relative_url }}">{{ site.title }}</a>
+      {%- endif -%}
+    </div>
+    {%-include social.html-%}
+  </div>
+</header>

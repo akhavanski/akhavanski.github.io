@@ -1,15 +1,11 @@
 ---
 layout: default
 ---
-<header>
-  <div class="title-row">
-    <h1>{{ site.title }}</h1>
-    {%-include social.html-%}
-  </div>
-  {%-if site.theme_config.show_description-%}
-    <p>{{ site.description }}</p>
-  {%-endif-%}
-</header>
+{%-include header.html home=true-%}
+
+{%-if site.theme_config.show_description-%}
+  <p>{{ site.description }}</p>
+{%-endif-%}
 
 {%-include menu_item.html collection=site.data.menu.entries-%}
 

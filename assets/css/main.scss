@@ -3,21 +3,53 @@
 
 @import "no-style-please";
 
-// The title and the contact icons share one line.
+// The header is compact, so the page starts higher than the theme's 4rem.
+.w { padding-top: 2rem; }
+
+// The same header on every page: the title and the contact icons share one line.
 .title-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  margin-bottom: 2.5rem;
 }
 
 // Keep the site title on one line on narrow screens.
 // The title is 18 monospace characters (about 10.8em wide),
 // so the font shrinks with the viewport minus the 2rem side padding
 // and the icons (three 1rem icons, 0.75rem between them, 1rem gap to the title).
-header h1 {
+.brand {
+  position: relative;
+  font-size: clamp(1rem, calc((100vw - 9.5rem) / 11), 1.25em);
+
+  a {
+    color: black;
+    text-decoration: none;
+
+    &:hover, &:focus-visible { color: grey; }
+  }
+}
+
+.site-title {
+  font-size: 1em;
+  font-weight: bold;
   white-space: nowrap;
-  font-size: clamp(1rem, calc((100vw - 9.5rem) / 11), 2em);
+  margin: 0;
+}
+
+// "<-" to the home page hangs in the left margin,
+// so the title stays in the same place on every page.
+.back {
+  position: absolute;
+  right: 100%;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  margin-right: 0.35em;
+  font-size: 0.75em;
+  font-weight: bold;
 }
 
 pre.mermaid { text-align: center; }
