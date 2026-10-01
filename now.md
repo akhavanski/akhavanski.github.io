@@ -9,6 +9,10 @@ title: Now
 
 - Product Owner @ 21vek.by
 
+## Projects
+
+- [Certificate.tips](https://certificate.tips) is a site to help people prepare for IT certification in project management or business analysis.
+
 ## Studying
 
 - Claude Academy courses
