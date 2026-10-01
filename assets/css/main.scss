@@ -20,7 +20,6 @@
 // so the font shrinks with the viewport minus the 2rem side padding
 // and the icons (three 1rem icons, 0.75rem between them, 1rem gap to the title).
 .brand {
-  position: relative;
   font-size: clamp(1rem, calc((100vw - 9.5rem) / 11), 1.25em);
 
   a {
@@ -36,20 +35,6 @@
   font-weight: bold;
   white-space: nowrap;
   margin: 0;
-}
-
-// "<-" to the home page hangs in the left margin,
-// so the title stays in the same place on every page.
-.back {
-  position: absolute;
-  right: 100%;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  margin-right: 0.35em;
-  font-size: 0.75em;
-  font-weight: bold;
 }
 
 pre.mermaid { text-align: center; }
