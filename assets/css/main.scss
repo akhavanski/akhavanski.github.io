@@ -12,3 +12,30 @@ header h1 {
 }
 
 pre.mermaid { text-align: center; }
+
+// Contact icons: black by default, brand colour on hover.
+.social {
+  display: flex;
+  gap: 1rem;
+
+  a {
+    display: block;
+    color: black;
+    transition: color 0.2s;
+  }
+
+  svg {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: currentColor;
+  }
+
+  a.social-linkedin:hover, a.social-linkedin:focus-visible { color: #0a66c2; }
+  a.social-email:hover, a.social-email:focus-visible { color: #ea4335; }
+}
+
+footer .social {
+  justify-content: center;
+  margin-top: 4rem;
+}
