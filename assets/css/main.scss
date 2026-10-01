@@ -39,3 +39,17 @@ footer .social {
   justify-content: center;
   margin-top: 4rem;
 }
+
+// Icons on the title line, pushed to the right edge.
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  // Shrink the title to leave room for the icons:
+  // two 1rem icons, the 0.75rem gap between them and the 1rem gap to the title.
+  h1:not(:only-child) {
+    font-size: clamp(1rem, calc((100vw - 7.75rem) / 11), 2em);
+  }
+}
