@@ -75,6 +75,10 @@ pre.mermaid { text-align: center; }
   a.social-linkedin:hover, a.social-linkedin:focus-visible { color: #0a66c2; }
   a.social-telegram:hover, a.social-telegram:focus-visible { color: #26a5e4; }
   a.social-email:hover, a.social-email:focus-visible { color: #ea4335; }
+
+  // Below 20.5rem the title is already at its 1rem minimum
+  // and the icons would push it off the screen, so they go.
+  @media (max-width: 20.5rem) { display: none; }
 }
 
 // Note under each post: smaller and grey.
