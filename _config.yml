@@ -8,6 +8,8 @@ permalink: /:year-:month-:day-:slug.html
 
 favicon: "favicon.ico" # name+extension of favicon (which must be put on the root folder)
 
+goat_counter: "akh" # GoatCounter analytics: akh.goatcounter.com
+
 remote_theme: riggraz/no-style-please
 
 theme_config:
