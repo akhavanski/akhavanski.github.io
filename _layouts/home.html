@@ -4,24 +4,13 @@ layout: default
 <header>
   <div class="title-row">
     <h1>{{ site.title }}</h1>
-    {%-if site.social_links == "title"-%}
-      {%-include social.html-%}
-    {%-endif-%}
+    {%-include social.html-%}
   </div>
   {%-if site.theme_config.show_description-%}
     <p>{{ site.description }}</p>
-  {%-endif-%}
-  {%-if site.social_links == "header"-%}
-    {%-include social.html-%}
   {%-endif-%}
 </header>
 
 {%-include menu_item.html collection=site.data.menu.entries-%}
 
 {{ content }}
-
-{%-if site.social_links == "footer"-%}
-<footer>
-  {%-include social.html-%}
-</footer>
-{%-endif-%}
