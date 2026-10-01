@@ -32,3 +32,5 @@ I think **agency** will stay with humans, while acting can be delegated to an AI
 Right now, many of us confuse agency with action. For example, I heard colleagues say "Claude did it, not me", which is not true, if you have this principle in mind, since Claude did it only because you asked.
 
 This same notion was discussed decades ago in Hannah Arendt's [Eichmann in Jerusalem](https://en.wikipedia.org/wiki/Eichmann_in_Jerusalem): AI will find a way to complete a task without asking why, but the result is yours.
+
+If you don't agree or think I made a mistake, drop me an [email](mailto:aliakseichowanski@gmail.com).
