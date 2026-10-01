@@ -3,7 +3,7 @@ layout: page
 title: Now
 ---
 
-*Updated on the 1st of October*
+*Updated on the 1st of October, 2026*
 
 ## Work
 
