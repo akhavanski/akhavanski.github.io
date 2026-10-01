@@ -14,10 +14,10 @@
 // Keep the site title on one line on narrow screens.
 // The title is 18 monospace characters (about 10.8em wide),
 // so the font shrinks with the viewport minus the 2rem side padding
-// and the icons (two 1rem icons, 0.75rem between them, 1rem gap to the title).
+// and the icons (three 1rem icons, 0.75rem between them, 1rem gap to the title).
 header h1 {
   white-space: nowrap;
-  font-size: clamp(1rem, calc((100vw - 7.75rem) / 11), 2em);
+  font-size: clamp(1rem, calc((100vw - 9.5rem) / 11), 2em);
 }
 
 pre.mermaid { text-align: center; }
@@ -41,6 +41,7 @@ pre.mermaid { text-align: center; }
   }
 
   a.social-linkedin:hover, a.social-linkedin:focus-visible { color: #0a66c2; }
+  a.social-telegram:hover, a.social-telegram:focus-visible { color: #26a5e4; }
   a.social-email:hover, a.social-email:focus-visible { color: #ea4335; }
 }
 
