@@ -43,3 +43,12 @@ pre.mermaid { text-align: center; }
   a.social-linkedin:hover, a.social-linkedin:focus-visible { color: #0a66c2; }
   a.social-email:hover, a.social-email:focus-visible { color: #ea4335; }
 }
+
+// Note under each post: smaller and grey.
+.post-footer {
+  margin-top: 3rem;
+  font-size: 0.85em;
+  color: grey;
+
+  a { color: inherit; }
+}
