@@ -1,0 +1,12 @@
+# Terms explained in posts (see assets/js/glossary.js).
+# In a post write [PBI](#glossary); if the word in the text differs
+# from the term here, give the term in quotes: [PBIs](#glossary "PBI").
+# Only `def` is required.
+PBI:
+  full: Product Backlog Item
+  pron: /ˌpiː biː ˈaɪ/
+  pos: abbr., noun
+  def: It is something you add to your task tracker.
+  example: When a PBI is ready, it must have specific place on the backlog.
+  synonyms: [task, story]
+  see: [Product Backlog, Definition of Ready]

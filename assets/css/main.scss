@@ -987,3 +987,93 @@ $bento-turn: 1.4s;
   .b-item, .b-food, .b-sticks { transition: none !important; }
   .b-left, .b-new { animation: none !important; }
 }
+
+// Terms explained in posts (see assets/js/glossary.js):
+// the term is underlined with red dots, a click on it slides out
+// a library catalogue card with a typewritten dictionary entry,
+// from the same cabinet as the keywords.
+$term-red: #e0352b;
+$card-ink: #6b6250;
+$card-line: 1.5rem;
+
+.term {
+  text-decoration: underline dotted $term-red;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+
+  &:hover, &[aria-expanded="true"] { background-color: rgba($term-red, 0.08); }
+  &:focus-visible { outline: 1px dotted black; }
+}
+
+.term-card {
+  position: absolute;
+  z-index: 10;
+  box-sizing: border-box;
+  width: min(23rem, calc(100vw - 2rem));
+  padding: 0.6rem 0 2.1rem;
+  border-radius: 3px;
+  background: #fbf4df;
+  box-shadow: 0 1px 0 #e6dcc0, 0 12px 14px -8px rgba(0, 0, 0, 0.35);
+  transform: rotate(-0.8deg);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.88rem;
+  line-height: $card-line;
+
+  &.out { animation: term-card-out 0.35s $spring; }
+
+  p { margin: 0; }
+
+  // The hole for the rod that holds the cards in the drawer.
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0.55rem;
+    width: 0.85rem;
+    height: 0.85rem;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: white;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+  }
+}
+
+// The heading line, above the red rule of the card.
+.term-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.6em;
+  padding: 0 1rem 0.15rem;
+  border-bottom: 2px solid #d9534f;
+  color: $card-ink;
+}
+
+.term-word {
+  font-size: 1.35em;
+  letter-spacing: 0.05em;
+  color: black;
+}
+
+// The text is typed on the blue lines of the card.
+.term-body {
+  padding: 0 1rem;
+  background: repeating-linear-gradient(transparent 0 calc(#{$card-line} - 1px), rgba(70, 130, 200, 0.3) calc(#{$card-line} - 1px) $card-line);
+}
+
+.term-full {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.term-example, .term-more { color: $card-ink; }
+.term-example::before { content: "e.g. "; }
+
+@keyframes term-card-out {
+  from { opacity: 0; transform: translateY(18px) rotate(2deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .term-card.out { animation: none; }
+}

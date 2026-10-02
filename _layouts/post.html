@@ -43,6 +43,11 @@ layout: default
 <script src="{{ "/assets/js/fixes.js" | relative_url }}"></script>
 {%- endif %}
 
+{%- if content contains 'href="#glossary"' %}
+<script type="application/json" id="glossary-data">{{ site.data.glossary | jsonify }}</script>
+<script src="{{ "/assets/js/glossary.js" | relative_url }}"></script>
+{%- endif %}
+
 {%-include turtle.html-%}
 
 {%-include goatcounter.html-%}
