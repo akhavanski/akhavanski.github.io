@@ -81,14 +81,83 @@ pre.mermaid { text-align: center; }
   }
 }
 
-// Filters on the blog page (see assets/js/blog-filters.js): the name of a filter
-// in grey in the date column of the list below, its values as cards
-// like the post keywords. A chosen card is pressed in and marked with a marker.
-.blog-filters {
-  margin-bottom: 2rem;
+// Filters on the blog page (see assets/js/blog-filters.js). The heading line
+// has two icons on the right: a globe opens the languages, a tag opens the tags.
+// An open filter's icon is marked with a marker; a number on an icon tells
+// how many values of that filter are chosen.
+// In a filter the name is in grey in the date column of the list below,
+// the values are cards like the post keywords.
+// A chosen card is pressed in and marked with a marker.
+.blog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  // The heading stands where it does on other pages:
+  // its margins would not merge with the ones around in a flex line.
+  margin-bottom: 1.34rem;
+
+  h1 { margin: 0; }
+}
+
+.filter-toggles {
+  display: flex;
+  gap: 0.5rem;
+  // The icons end under the contact icons, not with their padding.
+  margin-right: -0.3rem;
 
   &[hidden] { display: none; }
 }
+
+.filter-toggle {
+  position: relative;
+  display: block;
+  padding: 0.3rem;
+  border: 0;
+  border-radius: 0.3rem;
+  background: none;
+  color: black;
+  cursor: pointer;
+  transition: color 0.2s;
+
+  svg {
+    display: block;
+    width: 1.4rem;
+    height: 1.4rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+  }
+
+  &:hover { color: grey; }
+  &:focus-visible { outline: 1px dotted black; }
+
+  &[aria-expanded="true"] {
+    background: url("../img/marker.svg") 0 0 / 100% 100% no-repeat;
+  }
+}
+
+.filter-count {
+  position: absolute;
+  top: -0.2rem;
+  right: -0.3rem;
+  min-width: 1rem;
+  height: 1rem;
+  padding: 0 0.2rem;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  background: black;
+  font-family: monospace;
+  font-size: 0.65rem;
+  line-height: 1rem;
+  text-align: center;
+  color: white;
+
+  &:empty { display: none; }
+}
+
+.blog-filters:has(> :not([hidden])) { margin-bottom: 2rem; }
 
 .filter {
   display: grid;
@@ -96,6 +165,8 @@ pre.mermaid { text-align: center; }
   column-gap: 1ch;
   align-items: baseline;
   margin: 0.6rem 0;
+
+  &[hidden] { display: none; }
 
   > span { color: grey; }
 
