@@ -1,6 +1,8 @@
 // Filters on the blog page. A click on the name of a filter (Language, Keywords)
 // opens a menu with its options; a second click, a click anywhere else
-// or Escape closes it. A click on an option turns it on or off,
+// or Escape closes it. On wide screens, where the filters stand in the column
+// right of the list, a filter with chosen options stays open: only a click
+// on its name closes it. A click on an option turns it on or off,
 // a click on a keyword under a post turns that keyword on.
 // Several languages and several keywords can be on at once. A post is shown
 // if it is in one of the chosen languages (any language if none is chosen)
@@ -16,6 +18,8 @@
   var posts = document.querySelectorAll(".blog-posts li");
   var status = box.querySelector(".filter-status");
   var count = status.querySelector("span");
+  // The width of $wide-screen in assets/css/main.scss.
+  var wide = window.matchMedia("(min-width: 72rem)");
 
   function chosen(filter) {
     var values = [];
@@ -27,9 +31,34 @@
     return values;
   }
 
+  function menu(name) {
+    return document.getElementById(name.getAttribute("aria-controls"));
+  }
+
   function show(name, open) {
     name.setAttribute("aria-expanded", String(open));
-    document.getElementById(name.getAttribute("aria-controls")).classList.toggle("is-open", open);
+    menu(name).classList.toggle("is-open", open);
+  }
+
+  // A filter with chosen options stays open on wide screens.
+  function kept(name) {
+    return wide.matches && menu(name).querySelector('[aria-pressed="true"]') !== null;
+  }
+
+  // Closes the menus, all but the kept ones.
+  function closeAll() {
+    names.forEach(function (name) {
+      if (!kept(name)) show(name, false);
+    });
+  }
+
+  // Opens the filters with chosen options on wide screens,
+  // on narrow ones closes all (the menus would cover the list).
+  function showKept() {
+    names.forEach(function (name) {
+      if (kept(name)) show(name, true);
+      else if (!wide.matches) show(name, false);
+    });
   }
 
   function apply() {
@@ -75,9 +104,9 @@
     var button = e.target.closest("button");
     if (!button) return;
     if (button.classList.contains("filter-name")) {
-      // One menu at a time.
+      // One menu at a time, besides the kept ones.
       var open = button.getAttribute("aria-expanded") !== "true";
-      names.forEach(function (name) { show(name, false); });
+      closeAll();
       show(button, open);
       return;
     }
@@ -103,24 +132,29 @@
       }
     });
     apply();
+    showKept();
     // The list got shorter, so the filters may be above the screen now.
     if (box.getBoundingClientRect().top < 0) box.scrollIntoView();
   });
 
   document.addEventListener("click", function (e) {
-    if (!e.target.closest(".filter")) names.forEach(function (name) { show(name, false); });
+    if (!e.target.closest(".filter")) closeAll();
   });
 
-  // Escape closes the open menu, the focus goes back to its name.
+  // Escape closes the open menu, unless it is kept;
+  // the focus goes back to its name.
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Escape") return;
     names.forEach(function (name) {
-      if (name.getAttribute("aria-expanded") !== "true") return;
+      if (name.getAttribute("aria-expanded") !== "true" || kept(name)) return;
       show(name, false);
       name.focus();
     });
   });
 
+  wide.addEventListener("change", showKept);
+
   box.hidden = false;
   apply();
+  showKept();
 })();
