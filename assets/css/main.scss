@@ -579,7 +579,13 @@ mark.comment {
 mark.fix {
   background: none;
   color: inherit;
-  text-decoration: underline wavy #d23;
+  // Longhands with the -webkit- prefix: Safari on iPhone ignores the shorthand.
+  -webkit-text-decoration-line: underline;
+  -webkit-text-decoration-style: wavy;
+  -webkit-text-decoration-color: #d23;
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: #d23;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
   text-decoration-skip-ink: none;
