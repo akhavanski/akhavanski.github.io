@@ -66,6 +66,14 @@ pre.mermaid { text-align: center; }
   @media (max-width: 20.5rem) { display: none; }
 }
 
+// Author's signature at the end of each post: smaller, grey, on the right.
+.post-signature {
+  margin-top: 2rem;
+  text-align: right;
+  font-size: 0.85em;
+  color: grey;
+}
+
 // Note under each post: smaller and grey.
 .post-footer {
   margin-top: 3rem;
