@@ -670,8 +670,9 @@ mark.fix {
 // The keyword filter on the home page has the same cabinet on wide screens.
 $ink: #2b2b2b;
 $toon-line: 2.5px solid $ink;
-// The cabinet is modelled at full size and scaled down as a whole.
-$cabinet-scale: scale3d(0.5, 0.5, 0.5);
+// The cabinet is modelled at full size and scaled down as a whole,
+// to the width of the bento box (smaller without the right column, like it).
+$cabinet-scale: var(--cabinet-scale);
 $spring: cubic-bezier(0.34, 1.5, 0.64, 1);
 // The turn to profile; the keywords come out during the same time.
 $turn: 0.6s;
@@ -767,6 +768,7 @@ $turn: 0.6s;
 }
 
 .catalog {
+  --cabinet-scale: scale3d(0.54, 0.54, 0.54);
   position: relative;
   display: block;
   flex: none;
@@ -986,7 +988,7 @@ $turn: 0.6s;
   .filter .keywords-toggle {
     display: block;
     // The cabinet's right edge under the bento box's.
-    margin-right: -0.3rem;
+    margin-right: -0.05rem;
 
     .catalog { display: block; }
     &::after { content: none; }
@@ -1211,6 +1213,14 @@ $bento-turn: 1.4s;
 // and the menu opens under the box from its right edge.
 @media not all and (min-width: $wide-screen) {
   .bento { width: 2.85rem; height: 2.25rem; }
+
+  .catalog {
+    --cabinet-scale: scale3d(0.405, 0.405, 0.405);
+    width: 2.85rem;
+    height: 2.25rem;
+
+    .cabinet { top: 1.0125rem; }
+  }
 
   .menu-label {
     position: absolute;
