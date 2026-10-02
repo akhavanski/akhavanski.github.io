@@ -3,8 +3,6 @@ layout: page
 title: Now
 ---
 
-*Updated on the 1st of October, 2026*
-
 ## Work
 
 - Product Owner @ 21vek.by
@@ -25,3 +23,6 @@ title: Now
 ## Other
 
 - Looking for a job as PdM/PjM/BA
+
+Updated on the 1st of October, 2026
+{: .post-footer}
