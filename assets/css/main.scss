@@ -6,6 +6,9 @@
 // The header is compact, so the page starts higher than the theme's 4rem.
 .w { padding-top: 2rem; }
 
+// Links stay black, opened ones too (the browser would make them purple).
+a { color: black; }
+
 // The same header on every page: the title and the contact icons share one line.
 .title-row {
   display: flex;
