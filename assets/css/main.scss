@@ -42,6 +42,38 @@ a { color: black; }
 
 pre.mermaid { text-align: center; }
 
+// Posts on the home page: no bullets, the date in grey in its own column,
+// a long title wraps under itself, not under the date.
+.home-posts {
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 10ch 1fr;
+    column-gap: 1ch;
+    margin: 0.6rem 0;
+  }
+
+  span { color: grey; }
+
+  // "See all posts..." has no date, so it stands under the titles.
+  a:only-child { grid-column: 2; }
+
+  // On phones the date column leaves too little room for titles,
+  // so the date goes above the title.
+  @media (max-width: 30rem) {
+    li { display: block; }
+
+    span {
+      display: block;
+      font-size: 0.85em;
+    }
+  }
+}
+
 // Contact icons: black by default, brand colour on hover.
 .social {
   display: flex;
