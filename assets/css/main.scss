@@ -727,11 +727,14 @@ $turn: 0.6s;
 // The menu in the header (see _includes/menu.html and _includes/bento.html):
 // a cartoon wooden bento box with a row of sushi and the word "Menu".
 // On hover chopsticks come and pick up the last sushi; a click carries it away,
-// the rest move up, a new one slides in from the other side (assets/js/menu.js),
-// and the menu opens under the box, cards like the post keywords.
+// and another pair on the left pushes the rest up and puts a new one
+// in the first slot (assets/js/menu.js); the menu opens under the box,
+// cards like the post keywords.
 // On wide screens it stands in the right column, right above Keywords;
 // on narrow ones only the box is in the title, a bit smaller.
 $bento-carry: 0.55s;
+// The whole turn of the left chopsticks: the push takes its second quarter.
+$bento-turn: 1.4s;
 
 .menu {
   position: relative;
@@ -783,12 +786,12 @@ $bento-carry: 0.55s;
 }
 
 // The sushi stand in slots one --step apart (set on the row).
-.b-item {
-  transform: translateX(calc(var(--slot) * var(--step)));
-  transition: transform $bento-carry ease-in-out;
-}
+.b-item { transform: translateX(calc(var(--slot) * var(--step))); }
 
 .b-food { transition: transform 0.25s ease-out; }
+
+// The left chopsticks and the sushi they bring show only during a click.
+.b-left, .b-new { opacity: 0; }
 
 // The chopsticks wait up and to the right, out of sight.
 .b-sticks {
@@ -812,6 +815,29 @@ $bento-carry: 0.55s;
 
   .b-sticks { transform: translate(26px, -26px); }
   .b-item:last-child .b-food { transform: translate(26px, -30px); }
+
+  // Pushed by the left chopsticks.
+  .b-item { transition: transform ($bento-turn / 4) ease-in-out ($bento-turn / 4); }
+  .b-left { animation: bento-left $bento-turn both; }
+  .b-new { animation: bento-new $bento-turn both; }
+}
+
+// The left chopsticks come down by the first sushi, push the row a slot up
+// with it, go up for the next sushi and bring it down into the first slot.
+@keyframes bento-left {
+  0%, 7% { transform: translate(-30px, -30px); opacity: 0; }
+  25% { transform: translate(-8px, 2px); opacity: 1; animation-timing-function: ease-in-out; }
+  50% { transform: translate(10.5px, 2px); opacity: 1; }
+  62% { transform: translate(0, -30px); opacity: 0; }
+  82% { transform: translate(0, -4px); opacity: 1; }
+  88% { transform: none; opacity: 1; }
+  100% { transform: translate(-26px, -26px); opacity: 0; }
+}
+
+@keyframes bento-new {
+  0%, 62% { transform: translate(0, -30px); opacity: 0; }
+  82% { transform: translate(0, -4px); opacity: 1; }
+  88%, 100% { transform: none; opacity: 1; }
 }
 
 // Over Keywords while it is open; the current page is filled with yellow.
@@ -959,4 +985,5 @@ $bento-carry: 0.55s;
   .menu-list a { transition: none; }
   // The bento rules for carrying a sushi are more specific.
   .b-item, .b-food, .b-sticks { transition: none !important; }
+  .b-left, .b-new { animation: none !important; }
 }

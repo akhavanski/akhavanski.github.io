@@ -1,16 +1,18 @@
 // The menu in the header (see _includes/menu.html). A click on the bento box
 // (or the word "Menu") opens or closes the menu; the chopsticks carry away
-// the sushi they hold, the rest move up and a new one slides in from the other
-// side. Without hover (a tap) the chopsticks first come and pick it up.
+// the sushi they hold, another pair pushes the rest up and puts a new one in
+// on the other side. Without hover (a tap) the chopsticks first come and pick it up.
 // A click elsewhere or Escape closes the menu.
 (function () {
   var toggle = document.querySelector(".menu-toggle");
   var list = document.getElementById("menu-list");
   var row = toggle && toggle.querySelector(".b-row");
-  if (!toggle || !list || !row) return;
+  var fresh = toggle && toggle.querySelector(".b-new");
+  if (!toggle || !list || !row || !fresh) return;
 
-  // How long the chopsticks carry a sushi away ($bento-carry in assets/css/main.scss).
-  var carry = 550;
+  // How long the left chopsticks take to push the row and put a new sushi in
+  // ($bento-turn in assets/css/main.scss).
+  var turn = 1400;
   var busy = false;
 
   function show(open) {
@@ -18,30 +20,30 @@
     list.hidden = !open;
   }
 
-  // The last sushi goes with the chopsticks; the others move a slot up,
-  // and the next kind comes in at the first slot from beyond the box.
+  // The last sushi goes with the chopsticks; the others are pushed a slot up,
+  // and the left chopsticks bring the next kind (.b-new) to the first slot.
+  // There it becomes one of the row.
   function take() {
     var kinds = row.dataset.kinds.split(" ");
     var next = Number(row.dataset.next);
-    var first = row.firstElementChild;
-    var item = first.cloneNode(true);
-    item.querySelector(".b-food").setAttribute("href", "#" + kinds[next % kinds.length]);
-    item.style.setProperty("--slot", -1);
+    var kind = "#" + kinds[next % kinds.length];
     row.dataset.next = next + 1;
-    row.insertBefore(item, first);
-    // So the new sushi slides in from beyond the edge of the box.
-    getComputedStyle(item).transform;
+    fresh.setAttribute("href", kind);
 
     toggle.classList.add("is-taking");
-    for (var i = 0, el = item; el !== row.lastElementChild; i++, el = el.nextElementSibling) {
+    for (var i = 1, el = row.firstElementChild; el !== row.lastElementChild; i++, el = el.nextElementSibling) {
       el.style.setProperty("--slot", i);
     }
 
     setTimeout(function () {
+      var item = row.firstElementChild.cloneNode(true);
+      item.querySelector(".b-food").setAttribute("href", kind);
+      item.style.setProperty("--slot", 0);
       row.lastElementChild.remove();
+      row.insertBefore(item, row.firstElementChild);
       toggle.classList.remove("is-taking", "is-holding");
       busy = false;
-    }, carry);
+    }, turn);
   }
 
   toggle.addEventListener("click", function () {

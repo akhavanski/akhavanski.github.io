@@ -4,15 +4,14 @@
   a row of nigiri and maki rolls side on. The kinds of sushi that come in turn are in the row's
   data-kinds, data-next is the one to come next; the slots are --step apart.
   It goes inside a button with the class menu-toggle: hover brings the chopsticks
-  to pick up the last sushi, a click has them carry it away
-  (assets/css/main.scss, assets/js/menu.js). The back chopstick is drawn behind
-  the sushi, the front one over the box; a new sushi slides in
-  from behind the left wall (the clip).
+  to pick up the last sushi, a click has them carry it away while another pair
+  on the left pushes the row up and puts the next sushi (.b-new) in the first slot
+  (assets/css/main.scss, assets/js/menu.js). Of each pair the back chopstick
+  is drawn behind the sushi, the front one over the box.
 {%- endcomment -%}
 <span class="bento" aria-hidden="true">
   <svg viewBox="0 0 76 60">
     <defs>
-      <clipPath id="b-clip"><path d="M10 -60 H200 V200 H6 V36 L10 16 Z"/></clipPath>
       <g id="b-sake">
         <g transform="scale(1.2)" stroke-width="1.33">
           <rect x="1.5" y="6" width="13" height="10" rx="4" fill="#fffaf0"/>
@@ -65,12 +64,16 @@
     <g class="b-sticks">
       <path d="M54.5 18 L82 -10" stroke-width="3.6"/><path d="M54.5 18 L82 -10" stroke="#e0b07a" stroke-width="1.8"/><path d="M75.5 -3.4 L82 -10" stroke="#7a3b2e" stroke-width="1.8"/>
     </g>
-    <g clip-path="url(#b-clip)">
-      <g class="b-row" transform="translate(10 17)" style="--step: 18.5px" data-kinds="b-maguro b-kappa-maki b-sake b-tamago b-sake-maki b-ebi" data-next="3">
-        <g class="b-item" style="--slot: 0"><use class="b-food" href="#b-maguro"/></g>
-        <g class="b-item" style="--slot: 1"><use class="b-food" href="#b-kappa-maki"/></g>
-        <g class="b-item" style="--slot: 2"><use class="b-food" href="#b-sake"/></g>
+    <g class="b-row" transform="translate(10 17)" style="--step: 18.5px" data-kinds="b-maguro b-kappa-maki b-sake b-tamago b-sake-maki b-ebi" data-next="3">
+      <g class="b-item" style="--slot: 0"><use class="b-food" href="#b-maguro"/></g>
+      <g class="b-item" style="--slot: 1"><use class="b-food" href="#b-kappa-maki"/></g>
+      <g class="b-item" style="--slot: 2"><use class="b-food" href="#b-sake"/></g>
+    </g>
+    <g transform="translate(10 17)">
+      <g class="b-left">
+        <path d="M11.7 5 L-15.8 -23" stroke-width="3.6"/><path d="M11.7 5 L-15.8 -23" stroke="#e0b07a" stroke-width="1.8"/><path d="M-9.3 -16.4 L-15.8 -23" stroke="#7a3b2e" stroke-width="1.8"/>
       </g>
+      <use class="b-new" href="#b-tamago"/>
     </g>
     <path d="M6 12 L10 16 L6 36 H2 Z" fill="#e3a869"/>
     <path d="M70 12 L74 36 H70 L66 16 Z" fill="#e3a869"/>
@@ -78,6 +81,11 @@
     <rect x="3.2" y="36.2" width="69.6" height="2.3" fill="#f0c08a" stroke="none"/>
     <path d="M3.3 38.5 H72.7" stroke-width="1.2"/>
     <path d="M10 46 C17 44.5 24 44.5 31 46 M42 49.5 C49 48 56 48 63 49.5" fill="none" stroke="#b97a3e" stroke-width="1.2"/>
+    <g transform="translate(10 17)">
+      <g class="b-left">
+        <path d="M7.7 10.5 L-20.8 -17.5" stroke-width="3.6"/><path d="M7.7 10.5 L-20.8 -17.5" stroke="#e0b07a" stroke-width="1.8"/><path d="M-14.3 -10.9 L-20.8 -17.5" stroke="#7a3b2e" stroke-width="1.8"/>
+      </g>
+    </g>
     <g class="b-sticks">
       <path d="M58.5 23.5 L87 -4.5" stroke-width="3.6"/><path d="M58.5 23.5 L87 -4.5" stroke="#e0b07a" stroke-width="1.8"/><path d="M80.5 1.9 L87 -4.5" stroke="#7a3b2e" stroke-width="1.8"/>
     </g>
