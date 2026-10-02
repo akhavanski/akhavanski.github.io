@@ -6,9 +6,21 @@ layout: default
 
 {%- assign keywords = page.tags %}
 
+{%- comment -%} Sections and subsections: the table of contents needs at least two. {%- endcomment -%}
+{%- assign h2s = content | split: "<h2" | size | minus: 1 %}
+{%- assign h3s = content | split: "<h3" | size | minus: 1 %}
+{%- assign heads = h2s | plus: h3s %}
+
 <article>
+  {%- if heads >= 2 %}
+  <nav class="toc" id="toc" aria-label="Table of contents"></nav>
+  {%- endif %}
+
   <div class="post-head">
     <a class="to-blog" href="{{ "/" | relative_url }}">← to blog</a>
+    {%- if heads >= 2 %}
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc">Table of contents</button>
+    {%- endif %}
     <h1>{{ page.title }}</h1>
 
     {%- if keywords.size > 0 %}
@@ -36,6 +48,11 @@ layout: default
 
 {%- if keywords.size > 0 %}
 <script src="{{ "/assets/js/keywords.js" | relative_url }}"></script>
+{%- endif %}
+
+{%- if heads >= 2 %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@333f55ec19733c28cdc43567ecf72eafd6b0af61/font/Serif/cmun-serif.css">
+<script src="{{ "/assets/js/toc.js" | relative_url }}"></script>
 {%- endif %}
 
 {%- if content contains 'href="#fix"' %}
