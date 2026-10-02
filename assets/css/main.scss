@@ -122,9 +122,11 @@ pre.mermaid { text-align: center; }
   a { color: inherit; }
 }
 
-// A stroke of a real yellow marker: uneven edges,
-// the ink is a bit darker where the stroke ends.
-@mixin marker {
+// Corrections in posts (see assets/js/fixes.js):
+// the fixed text is highlighted like with a real marker
+// (the ink is a bit darker where the stroke ends),
+// a click on it opens a handwritten sticky note held by a strip of tape.
+mark.fix {
   background: linear-gradient(100deg,
     rgba(255, 230, 0, 0) 1%,
     rgba(255, 230, 0, 0.5) 4%,
@@ -132,18 +134,11 @@ pre.mermaid { text-align: center; }
     rgba(255, 222, 0, 0.5) 88%,
     rgba(250, 210, 0, 0.75) 97%,
     rgba(250, 210, 0, 0) 99%);
-  // Each line gets its own stroke.
+  // Each line of a long fix gets its own stroke.
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
   border-radius: 0.6em 0.25em;
   padding: 0 0.15em;
-}
-
-// Corrections in posts (see assets/js/fixes.js):
-// the fixed text is highlighted with the marker,
-// a click on it opens a handwritten sticky note held by a strip of tape.
-mark.fix {
-  @include marker;
   color: inherit;
   cursor: pointer;
 
@@ -488,14 +483,25 @@ $turn: 0.6s;
 }
 
 // The tags page: the line of the tag someone came for is highlighted
-// with the marker; the text stays where it was.
+// with a stroke of a marker (assets/img/marker.svg). The stroke starts
+// a little before the word; the text stays where it was.
 .tags h2 {
   scroll-margin-top: 1rem;
 
   &:target {
-    @include marker;
-    margin-left: -0.15em;
-    margin-right: -0.15em;
+    position: relative;
+    // The stroke goes under the text, but not under the page's white.
+    isolation: isolate;
+    background: none;
+
+    // The letters sit high in the line, so the stroke reaches above it.
+    &::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: -0.2em -0.15em 0 -0.6em;
+      background: url("../img/marker.svg") 0 0 / 100% 100% no-repeat;
+    }
   }
 }
 
