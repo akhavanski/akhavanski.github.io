@@ -61,7 +61,7 @@ pre.mermaid { text-align: center; }
     margin: 0.6rem 0;
   }
 
-  li > span { color: grey; }
+  span { color: grey; }
 
   // "See all posts..." has no date, so it stands under the titles.
   a:only-child { grid-column: 2; }
@@ -71,7 +71,7 @@ pre.mermaid { text-align: center; }
   @media (max-width: 30rem) {
     li { display: block; }
 
-    li > span {
+    span {
       display: block;
       font-size: 0.85em;
     }
@@ -487,17 +487,15 @@ $turn: 0.6s;
   from { opacity: 0; transform: translateX(-3rem); }
 }
 
-// The tags page: the tag someone came for is highlighted with the marker
-// (on the inner span, so the stroke is as tall as the letters, not the line).
+// The tags page: the line of the tag someone came for is highlighted
+// with the marker; the text stays where it was.
 .tags h2 {
   scroll-margin-top: 1rem;
 
-  // Not the theme's yellow fill of the whole line.
-  &:target { background: none; }
-
-  &:target span {
+  &:target {
     @include marker;
     margin-left: -0.15em;
+    margin-right: -0.15em;
   }
 }
 
