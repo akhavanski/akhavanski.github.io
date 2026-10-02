@@ -1069,6 +1069,8 @@ $card-line: 1.5rem;
 
 .term-example, .term-more { color: $card-ink; }
 .term-example::before { content: "e.g. "; }
+// A blank line of the card between the definition and the example.
+.term-card .term-example { margin-top: $card-line; }
 
 @keyframes term-card-out {
   from { opacity: 0; transform: translateY(18px) rotate(2deg); }
