@@ -3,7 +3,7 @@
 // the post's sections and subsections out from under the post, below the button.
 // The page marks the section you are in. A second click or Escape slides it back.
 // It also goes back by itself: after a jump to a section, on a click outside it,
-// when the mouse has left it for a second, when the focus has left it, and when
+// when the mouse has left it for three seconds, when the focus has left it, and when
 // the post has scrolled half a window with the mouse elsewhere.
 // Once "← to blog" has scrolled away, the button is alone left of the text and goes quiet.
 // The post layout loads this script only when the post has two headings or more.
@@ -73,7 +73,7 @@
     if (isOpen() && !nav.contains(e.target)) show(false);
   });
 
-  // The mouse on the button or the page; a second away from both closes it.
+  // The mouse on the button or the page; three seconds away from both close it.
   nav.addEventListener("pointerover", function (e) {
     if (e.pointerType !== "mouse") return;
     inside = true;
@@ -82,7 +82,7 @@
   nav.addEventListener("pointerout", function (e) {
     if (e.pointerType !== "mouse" || nav.contains(e.relatedTarget)) return;
     inside = false;
-    if (isOpen()) leaving = setTimeout(function () { show(false); }, 1000);
+    if (isOpen()) leaving = setTimeout(function () { show(false); }, 3000);
   });
 
   nav.addEventListener("focusout", function (e) {
