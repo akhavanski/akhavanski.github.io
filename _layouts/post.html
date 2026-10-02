@@ -40,7 +40,7 @@ layout: default
 
       <ul class="keywords-list" id="keywords" hidden>
         {%- for keyword in keywords %}
-        <li style="--i: {{ forloop.index0 }}"><a href="{{ "/tags" | relative_url }}#{{ keyword | slugify }}">{{ keyword }}</a></li>
+        <li style="--i: {{ forloop.index0 }}"><a href="{{ "/blog" | relative_url }}?tag={{ keyword | slugify }}">{{ keyword }}</a></li>
         {%- endfor %}
       </ul>
     </div>
