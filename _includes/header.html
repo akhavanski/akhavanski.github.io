@@ -1,10 +1,8 @@
 {%- comment -%}
-  The same header on every page: the site title and the contact icons.
-  On phones the icons give way to the About button: it is highlighted
-  like the fixes in posts, a click on it opens a sticky note like theirs
-  with the text about me (_includes/about.md) and the icons
-  (see assets/js/about.js). On wider screens the home page shows the text
-  itself. Without the script the icons stay on phones too.
+  The same header on every page: the site title, the About link and the contact
+  icons. The link leads to the page with the text about me (about.md); it is
+  highlighted like the fixes in posts. On phones the icons give way to it:
+  they are on that page then.
 {%- endcomment -%}
 <header>
   <div class="title-row">
@@ -15,13 +13,7 @@
         <a class="site-title" href="{{ "/" | relative_url }}">{{ site.title }}</a>
       {%- endif -%}
     </div>
-    {%-include social.html-%}
-    <button type="button" class="about-toggle" aria-expanded="false" aria-controls="about" hidden>About</button>
-  </div>
-  {%- capture about %}{% include about.md %}{% endcapture %}
-  <div class="about-note" id="about" hidden>
-    {{ about | markdownify }}
+    <a class="about-link" href="{{ "/about" | relative_url }}">About</a>
     {%-include social.html-%}
   </div>
 </header>
-<script src="{{ "/assets/js/about.js" | relative_url }}"></script>

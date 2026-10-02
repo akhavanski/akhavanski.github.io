@@ -3,15 +3,16 @@
   a post's tag (see assets/js/blog-filters.js). Several languages and several
   keywords can be chosen: a post is shown if it is in one of the chosen languages
   and has one of the chosen keywords.
-  On wide screens the filters stand right of the list, level with the title,
-  like the keywords in a post: the names one under the other, a click on a name
-  shows its options under it. On narrow screens they are under the title:
-  the names in one line, a click on a name opens a menu with its options.
+  On wide screens the filters stand right of the list like the keywords
+  in a post, Keywords in the same place as there: the names one under
+  the other, a click on a name shows its options under it. On narrow screens
+  they are under the title: the names in one line, a click on a name opens
+  a menu with its options.
   The number after a name tells how many are chosen.
-  On wide screens Language has a globe with letters of different alphabets
-  round it: when its options are open, the globe is turned. Keywords has
-  the catalogue cabinet from the posts: when its options are open,
-  the cabinet is turned and its drawer is pulled out.
+  On wide screens Keywords has the catalogue cabinet from the posts:
+  when its options are open, the cabinet is turned and its drawer is pulled out.
+  Language has a globe with letters of different alphabets round it:
+  when its options are open, the globe is turned.
   Each option has its own fill colour for when it is chosen: data-fill counts
   the options of both filters in a row (the colours are in assets/css/main.scss).
   Without the script the filters stay hidden and the whole list is shown.
@@ -28,17 +29,6 @@
   <div class="blog-filters" hidden>
     <div class="filter-names">
       <div class="filter">
-        <button type="button" class="filter-name globe-toggle" aria-expanded="false" aria-controls="filter-lang">
-          {%- include globe.html %}
-          <span class="globe-label">Language</span>
-        </button><span class="filter-count" data-filter="lang"></span>
-        <div class="filter-options" id="filter-lang" role="group" aria-label="Language">
-          {%- for lang in langs %}
-          <button type="button" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ forloop.index0 | modulo: 8 }}" style="--i: {{ forloop.index0 }}">{{ site.data.languages[lang] | default: lang }}</button>
-          {%- endfor %}
-        </div>
-      </div>
-      <div class="filter">
         <button type="button" class="filter-name keywords-toggle" aria-expanded="false" aria-controls="filter-keywords">
           {%- include catalog.html %}
           <span class="keywords-label">Keywords</span>
@@ -46,6 +36,17 @@
         <div class="filter-options" id="filter-keywords" role="group" aria-label="Keywords">
           {%- for tag in tags %}
           <button type="button" aria-pressed="false" data-filter="tag" data-value="{{ tag | slugify }}" data-fill="{{ forloop.index0 | plus: langs.size | modulo: 8 }}" style="--i: {{ forloop.index0 }}">{{ tag }}</button>
+          {%- endfor %}
+        </div>
+      </div>
+      <div class="filter">
+        <button type="button" class="filter-name globe-toggle" aria-expanded="false" aria-controls="filter-lang">
+          {%- include globe.html %}
+          <span class="globe-label">Language</span>
+        </button><span class="filter-count" data-filter="lang"></span>
+        <div class="filter-options" id="filter-lang" role="group" aria-label="Language">
+          {%- for lang in langs %}
+          <button type="button" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ forloop.index0 | modulo: 8 }}" style="--i: {{ forloop.index0 }}">{{ site.data.languages[lang] | default: lang }}</button>
           {%- endfor %}
         </div>
       </div>

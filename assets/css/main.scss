@@ -28,8 +28,8 @@ $wide-screen: 72rem;
 // Links stay black, opened ones too (the browser would make them purple).
 a { color: black; }
 
-// The same header on every page: the title and the contact icons share one line;
-// on phones the About button stands in place of the icons.
+// The same header on every page: the title, the About link and the contact icons
+// share one line; on phones the icons go, they are on the About page then.
 .title-row {
   display: flex;
   align-items: center;
@@ -42,7 +42,7 @@ a { color: black; }
 // The title is 18 monospace characters (about 10.8em wide),
 // so the font shrinks with the viewport minus the 2rem side padding
 // and the icons (three 1rem icons, 0.75rem between them, 1rem gap to the title);
-// the About button is a bit narrower than the icons.
+// on phones the About link stands in their place and is a bit narrower.
 .brand {
   font-size: clamp(1rem, calc((100vw - 9.5rem) / 11), 1.25em);
 
@@ -105,12 +105,18 @@ pre.mermaid { text-align: center; }
 // but light enough for black text (a contrast of 9:1 and more).
 $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #ff8ad8;
 
-.blog-head { position: relative; }
+.blog-head {
+  position: relative;
+
+  // The header's margin is left above it, as above the title of a post,
+  // so the list starts at the same height as a post.
+  h2 { margin-top: 0; }
+}
 
 .blog-filters {
   margin-bottom: 2rem;
-  // Level with the middle of the title's first line.
-  @include right-column(0.35rem);
+  // The cabinet of Keywords at the same height as in a post.
+  @include right-column(0.2rem);
 
   &[hidden] { display: none; }
 }
@@ -324,9 +330,8 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
 // the fixed text is highlighted like with a real marker
 // (the ink is a bit darker where the stroke ends),
 // a click on it opens a handwritten sticky note held by a strip of tape.
-// The About button in the header on phones is the same (see assets/js/about.js):
-// its note has the text about me and the contact icons, in the usual font.
-mark.fix, .about-toggle {
+// The About link in the header is highlighted the same.
+mark.fix, .about-link {
   background: linear-gradient(100deg,
     rgba(255, 230, 0, 0) 1%,
     rgba(255, 230, 0, 0.5) 4%,
@@ -346,25 +351,30 @@ mark.fix, .about-toggle {
   &:focus-visible { outline: 1px dotted black; }
 }
 
-.about-toggle {
-  border: 0;
-  font: inherit;
+// Right of the title, before the contact icons.
+.about-link {
+  margin-left: auto;
+  text-decoration: none;
 }
 
-// The About button and its note are only for phones. There, with the script,
-// which shows the button, the contact icons in the title and the text about me
-// on the home page give way to them.
+// On phones the contact icons give way to the About link in the title
+// and are on the About page instead, under the text; on wider screens
+// they are in the title.
 @media (max-width: 30rem) {
-  .has-about {
-    .title-row .social, .about-home { display: none; }
-  }
+  .title-row .social { display: none; }
 }
 
 @media not all and (max-width: 30rem) {
-  .about-toggle, .about-note { display: none; }
+  .about-contacts { display: none; }
 }
 
-.fix-note, .about-note {
+// On the smallest screens the icons go from the title, not from here.
+.about-contacts .social {
+  display: flex;
+  margin-top: 1.5rem;
+}
+
+.fix-note {
   position: absolute;
   z-index: 10;
   box-sizing: border-box;
@@ -388,21 +398,6 @@ mark.fix, .about-toggle {
     transform: translateX(-50%) rotate(-3deg);
     background: rgba(225, 225, 215, 0.75);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
-}
-
-.about-note {
-  width: min(20rem, calc(100vw - 2rem));
-  font-family: inherit;
-  font-size: 0.9rem;
-  line-height: 1.5;
-
-  p { margin: 0 0 0.6rem; }
-
-  // On the smallest screens the icons go from the title, not from here.
-  .social {
-    display: flex;
-    margin-top: 0.9rem;
   }
 }
 

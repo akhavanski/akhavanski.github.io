@@ -3,11 +3,6 @@ layout: default
 ---
 {%-include header.html home=true-%}
 
-{%- capture about %}{% include about.md %}{% endcapture %}
-<div class="about-home">
-  {{ about | markdownify }}
-</div>
-
 {%-include posts.html-%}
 
 {%-include turtle.html-%}
