@@ -43,6 +43,23 @@
     return el;
   }
 
+  // Fills el with text where [word](url) becomes a link.
+  function withLinks(el, text) {
+    var re = /\[([^\]]+)\]\(([^)\s]+)\)/g, at = 0, m;
+    while ((m = re.exec(text))) {
+      el.appendChild(document.createTextNode(text.slice(at, m.index)));
+      var a = document.createElement("a");
+      a.href = m[2];
+      a.textContent = m[1];
+      a.target = "_blank";
+      a.rel = "noopener";
+      el.appendChild(a);
+      at = re.lastIndex;
+    }
+    el.appendChild(document.createTextNode(text.slice(at)));
+    return el;
+  }
+
   function fill(word) {
     var entry = glossary[word];
     card.textContent = "";
@@ -57,7 +74,7 @@
     var body = document.createElement("div");
     body.className = "term-body";
     if (entry.full) body.appendChild(line("p", "term-full", entry.full));
-    body.appendChild(line("p", "term-def", entry.def));
+    body.appendChild(withLinks(line("p", "term-def", ""), entry.def));
     if (entry.example) body.appendChild(line("p", "term-example", entry.example));
     if (entry.synonyms) body.appendChild(line("p", "term-more", "Synonyms: " + entry.synonyms.join(", ")));
     if (entry.see) body.appendChild(line("p", "term-more", "See also: " + entry.see.join(", ")));

@@ -1,7 +1,7 @@
 # Terms explained in posts (see assets/js/glossary.js).
 # In a post write [PBI](#glossary); if the word in the text differs
 # from the term here, give the term in quotes: [PBIs](#glossary "PBI").
-# Only `def` is required.
+# Only `def` is required. In `def`, [word](url) becomes a link.
 PBI:
   full: Product Backlog Item
   pron: /ˌpiː biː ˈaɪ/
@@ -9,3 +9,5 @@ PBI:
   def: It is something you add to your task tracker.
   example: When a PBI is ready, it must have specific place on the backlog.
   synonyms: [task, story]
+agency:
+  def: "Ability to act; to be a source of action. And act according to free will. Some religions [says](https://bible.by/nasb/1/2/#5) that a human is created to make the world better. I think agency allows to see how the world can be improved."
