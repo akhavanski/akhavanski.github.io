@@ -26,6 +26,10 @@
   note.hidden = true;
   document.body.appendChild(note);
 
+  // Load the handwriting font now, so the first note opens already in it
+  // (the browser would wait until a note is shown).
+  if (document.fonts) document.fonts.load('500 1em "Caveat"');
+
   var current = null;
 
   function open(mark) {
