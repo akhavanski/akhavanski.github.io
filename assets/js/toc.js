@@ -2,6 +2,9 @@
 // stays at the top of the window while you read; a click on it slides a page with
 // the post's sections and subsections out from under the post, below the button.
 // The page marks the section you are in. A second click or Escape slides it back.
+// It also goes back by itself: after a jump to a section, on a click outside it,
+// when the mouse has left it for a second, when the focus has left it, and when
+// the post has scrolled half a window with the mouse elsewhere.
 // Once "← to blog" has scrolled away, the button is alone left of the text and goes quiet.
 // The post layout loads this script only when the post has two headings or more.
 (function () {
@@ -51,17 +54,47 @@
   });
   toggle.parentNode.appendChild(sheet);
 
+  var inside = false, leaving = null, scrollFrom = 0;
+
+  function isOpen() { return nav.classList.contains("is-open"); }
+
   function show(open) {
+    clearTimeout(leaving);
+    scrollFrom = scrollY;
     toggle.setAttribute("aria-expanded", String(open));
     nav.classList.toggle("is-open", open);
   }
 
+  sheet.addEventListener("click", function (e) {
+    if (e.target.closest("a")) show(false);
+  });
+
+  document.addEventListener("click", function (e) {
+    if (isOpen() && !nav.contains(e.target)) show(false);
+  });
+
+  // The mouse on the button or the page; a second away from both closes it.
+  nav.addEventListener("pointerover", function (e) {
+    if (e.pointerType !== "mouse") return;
+    inside = true;
+    clearTimeout(leaving);
+  });
+  nav.addEventListener("pointerout", function (e) {
+    if (e.pointerType !== "mouse" || nav.contains(e.relatedTarget)) return;
+    inside = false;
+    if (isOpen()) leaving = setTimeout(function () { show(false); }, 1000);
+  });
+
+  nav.addEventListener("focusout", function (e) {
+    if (e.relatedTarget && !nav.contains(e.relatedTarget)) show(false);
+  });
+
   toggle.addEventListener("click", function () {
-    show(!nav.classList.contains("is-open"));
+    show(!isOpen());
   });
 
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && nav.classList.contains("is-open")) {
+    if (e.key === "Escape" && isOpen()) {
       show(false);
       toggle.focus();
     }
@@ -82,6 +115,7 @@
     });
   }
   addEventListener("scroll", function () {
+    if (isOpen() && !inside && Math.abs(scrollY - scrollFrom) > innerHeight / 2) show(false);
     if (!ticking) { ticking = true; requestAnimationFrame(mark); }
   }, { passive: true });
   mark();
