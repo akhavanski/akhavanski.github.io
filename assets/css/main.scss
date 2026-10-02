@@ -255,26 +255,26 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   @media (max-width: $tiny-screen) { display: none; }
 }
 
-// The way back to the blog from a post: a quiet grey card, a bit darker on hover.
+// The way back to the blog from a post: a quiet white card with a grey outline,
+// the grey a bit darker on hover.
 // It stands left of the post title, in the empty column left of the 640px wide text,
 // so on narrow screens, where there is no such column, it goes.
 .to-blog {
   display: none;
   padding: 0.1rem 0.4rem;
-  border: 1.5px solid #bbb;
+  border: 1.5px solid #aaa;
   border-radius: 2px;
-  background: #eee;
-  box-shadow: 2px 2px 0 #ccc;
+  background: white;
+  box-shadow: 2px 2px 0 #ddd;
   font-size: 0.8rem;
-  color: #777;
+  color: grey;
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+  transition: color 0.15s, border-color 0.15s, box-shadow 0.15s;
 
   &:hover, &:focus-visible {
-    border-color: #888;
-    background: #e2e2e2;
-    box-shadow: 2px 2px 0 #aaa;
+    border-color: #777;
+    box-shadow: 2px 2px 0 #bbb;
     color: #444;
   }
 
