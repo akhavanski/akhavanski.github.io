@@ -221,6 +221,37 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   @media (max-width: $tiny-screen) { display: none; }
 }
 
+// The way back to the blog from a post: a quiet grey card,
+// black on hover. On wide screens it stands left of the post title,
+// in the empty column left of the 640px wide text; on narrow ones, above the title.
+.to-blog {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border: 1.5px solid #aaa;
+  border-radius: 2px;
+  box-shadow: 2px 2px 0 #ddd;
+  font-size: 0.8rem;
+  color: grey;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s, box-shadow 0.15s;
+
+  &:hover, &:focus-visible {
+    border-color: black;
+    box-shadow: 2px 2px 0 black;
+    color: black;
+  }
+
+  &:focus-visible { outline: 1px dotted black; outline-offset: 3px; }
+
+  // Level with the first line of the title (2em at a line height of 1.4).
+  @media (min-width: 60rem) {
+    position: absolute;
+    top: 0.65rem;
+    right: calc(100% + 2.5rem);
+  }
+}
+
 // Author's signature at the end of each post: smaller, grey, on the right.
 .post-signature {
   margin-top: 2rem;
