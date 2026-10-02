@@ -1,7 +1,7 @@
 {%- comment -%}
   The bento box next to the word "Menu" in the header (_includes/menu.html):
   a wooden box at an angle, like the catalogue cabinet of Keywords, with
-  a row of nigiri side on. The kinds of sushi that come in turn are in the row's
+  a row of nigiri and maki rolls side on. The kinds of sushi that come in turn are in the row's
   data-kinds, data-next is the one to come next; the slots are --step apart.
   It goes inside a button with the class menu-toggle: hover brings the chopsticks
   to pick up the last sushi, a click has them carry it away
@@ -42,6 +42,22 @@
           <path d="M4.5 2.3 L3.5 7.6 M8.3 1 V7 M12 2.2 L12.8 7.6" stroke="#ff7043" stroke-width="1.8"/>
         </g>
       </g>
+      <g id="b-kappa-maki">
+        <g transform="scale(1.2)" stroke-width="1.33">
+          <rect x="1.5" y="4" width="13" height="11" fill="#2f4a35"/>
+          <path d="M4.5 7.5 V12.5" stroke="#5d7d63" stroke-width="1.2"/>
+          <ellipse cx="8" cy="4" rx="6.5" ry="2.8" fill="#fffaf0"/>
+          <ellipse cx="8" cy="4" rx="2.4" ry="1.1" fill="#7ed99a" stroke-width="1"/>
+        </g>
+      </g>
+      <g id="b-sake-maki">
+        <g transform="scale(1.2)" stroke-width="1.33">
+          <rect x="1.5" y="4" width="13" height="11" fill="#2f4a35"/>
+          <path d="M4.5 7.5 V12.5" stroke="#5d7d63" stroke-width="1.2"/>
+          <ellipse cx="8" cy="4" rx="6.5" ry="2.8" fill="#fffaf0"/>
+          <ellipse cx="8" cy="4" rx="2.4" ry="1.1" fill="#ff8a65" stroke-width="1"/>
+        </g>
+      </g>
     </defs>
     <path d="M6 12 H70 L66 16 H10 Z" fill="#f0c08a"/>
     <path d="M10 16 H66 L70 36 H6 Z" fill="#9c6232"/>
@@ -50,9 +66,9 @@
       <path d="M54.5 18 L82 -10" stroke-width="3.6"/><path d="M54.5 18 L82 -10" stroke="#e0b07a" stroke-width="1.8"/><path d="M75.5 -3.4 L82 -10" stroke="#7a3b2e" stroke-width="1.8"/>
     </g>
     <g clip-path="url(#b-clip)">
-      <g class="b-row" transform="translate(10 17)" style="--step: 18.5px" data-kinds="b-maguro b-tamago b-sake b-ebi" data-next="3">
+      <g class="b-row" transform="translate(10 17)" style="--step: 18.5px" data-kinds="b-maguro b-kappa-maki b-sake b-tamago b-sake-maki b-ebi" data-next="3">
         <g class="b-item" style="--slot: 0"><use class="b-food" href="#b-maguro"/></g>
-        <g class="b-item" style="--slot: 1"><use class="b-food" href="#b-tamago"/></g>
+        <g class="b-item" style="--slot: 1"><use class="b-food" href="#b-kappa-maki"/></g>
         <g class="b-item" style="--slot: 2"><use class="b-food" href="#b-sake"/></g>
       </g>
     </g>
