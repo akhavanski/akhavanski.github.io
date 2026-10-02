@@ -325,7 +325,7 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
 // (the ink is a bit darker where the stroke ends),
 // a click on it opens a handwritten sticky note held by a strip of tape.
 // The About button in the header is the same (see assets/js/about.js):
-// its note has the text about me and the contact icons.
+// its note has the text about me and the contact icons, in the usual font.
 mark.fix, .about-toggle {
   background: linear-gradient(100deg,
     rgba(255, 230, 0, 0) 1%,
@@ -383,6 +383,9 @@ mark.fix, .about-toggle {
 
 .about-note {
   width: min(20rem, calc(100vw - 2rem));
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
 
   p { margin: 0 0 0.6rem; }
 

@@ -1,22 +1,13 @@
 // The About button in the header: a click opens a sticky note under it
 // with the text about me and the contact icons, like the notes on fixes
-// in posts (assets/js/fixes.js). A second click, a click anywhere else
-// or Escape closes it. The script shows the button; the styles then hide
-// the icons in the title, as they are in the note (assets/css/main.scss).
+// in posts (assets/js/fixes.js), but in the usual font. A second click,
+// a click anywhere else or Escape closes it. The script shows the button;
+// the styles then hide the icons in the title, as they are in the note
+// (assets/css/main.scss).
 (function () {
   var toggle = document.querySelector(".about-toggle");
   var note = document.getElementById("about");
   if (!toggle || !note) return;
-
-  // The handwriting font of the note. It is loaded now,
-  // so the note opens already in it.
-  var font = document.createElement("link");
-  font.rel = "stylesheet";
-  font.href = "https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap";
-  font.onload = function () {
-    if (document.fonts) document.fonts.load('500 1em "Caveat"');
-  };
-  document.head.appendChild(font);
 
   function show(open) {
     toggle.setAttribute("aria-expanded", String(open));
