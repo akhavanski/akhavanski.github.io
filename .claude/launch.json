@@ -4,51 +4,8 @@
     {
       "name": "blog",
       "runtimeExecutable": "bash",
-      "runtimeArgs": [
-        ".claude/serve.sh",
-        "4000"
-      ],
+      "runtimeArgs": [".claude/serve.sh", "4000"],
       "port": 4000
-    },
-    {
-      "name": "fix-v1",
-      "runtimeExecutable": "bash",
-      "runtimeArgs": [
-        ".claude/serve.sh",
-        "4001",
-        "/private/tmp/claude-501/-Users-akhavanski-Yandex-Disk-localized-AI-blog/08d48768-4230-4d7b-94dc-85f6267deb47/scratchpad/fix-v{v}"
-      ],
-      "port": 4001
-    },
-    {
-      "name": "fix-v2",
-      "runtimeExecutable": "bash",
-      "runtimeArgs": [
-        ".claude/serve.sh",
-        "4002",
-        "/private/tmp/claude-501/-Users-akhavanski-Yandex-Disk-localized-AI-blog/08d48768-4230-4d7b-94dc-85f6267deb47/scratchpad/fix-v{v}"
-      ],
-      "port": 4002
-    },
-    {
-      "name": "fix-v3",
-      "runtimeExecutable": "bash",
-      "runtimeArgs": [
-        ".claude/serve.sh",
-        "4003",
-        "/private/tmp/claude-501/-Users-akhavanski-Yandex-Disk-localized-AI-blog/08d48768-4230-4d7b-94dc-85f6267deb47/scratchpad/fix-v{v}"
-      ],
-      "port": 4003
-    },
-    {
-      "name": "fix-v4",
-      "runtimeExecutable": "bash",
-      "runtimeArgs": [
-        ".claude/serve.sh",
-        "4004",
-        "/private/tmp/claude-501/-Users-akhavanski-Yandex-Disk-localized-AI-blog/08d48768-4230-4d7b-94dc-85f6267deb47/scratchpad/fix-v{v}"
-      ],
-      "port": 4004
     }
   ]
 }
