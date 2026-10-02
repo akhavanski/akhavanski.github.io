@@ -123,12 +123,12 @@ mark.fix {
   font-size: 1.35rem;
   line-height: 1.15;
 
-  // The strip of tape on top.
+  // The strip of tape on top, over the fixed text (the script sets --tape-x).
   &::before {
     content: "";
     position: absolute;
     top: -10px;
-    left: 50%;
+    left: var(--tape-x, 50%);
     width: 4.5rem;
     height: 1.3rem;
     transform: translateX(-50%) rotate(-3deg);

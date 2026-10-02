@@ -68,13 +68,18 @@
   }
 
   // Under the last line of the highlighted text, but not off the screen.
+  // The note is a bit higher than the line's bottom, so its tape
+  // goes over the fixed text, in the middle of it.
   function place() {
     var lines = current.getClientRects();
     var line = lines[lines.length - 1];
     var gap = 16;
     var maxLeft = document.documentElement.clientWidth - note.offsetWidth - gap;
-    note.style.left = window.scrollX + Math.max(gap, Math.min(line.left, maxLeft)) + "px";
-    note.style.top = window.scrollY + line.bottom + 14 + "px";
+    var left = Math.max(gap, Math.min(line.left, maxLeft));
+    var middle = (line.left + line.right) / 2 - left;
+    note.style.left = window.scrollX + left + "px";
+    note.style.top = window.scrollY + line.bottom + 4 + "px";
+    note.style.setProperty("--tape-x", Math.max(48, Math.min(middle, note.offsetWidth - 48)) + "px");
   }
 
   document.addEventListener("click", function (e) {
