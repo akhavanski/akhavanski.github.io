@@ -85,3 +85,27 @@ pre.mermaid { text-align: center; }
 
   a { color: inherit; }
 }
+
+// Corrections in posts (see assets/js/fixes.js):
+// the fixed text is highlighted like with a marker,
+// a click on it opens a yellow sticky note next to it.
+mark.fix {
+  background: #fff59d;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover, &[aria-expanded="true"] { background: #ffeb3b; }
+  &:focus-visible { outline: 1px dotted black; }
+}
+
+.fix-note {
+  position: absolute;
+  z-index: 10;
+  box-sizing: border-box;
+  max-width: min(20rem, calc(100vw - 2rem));
+  padding: 0.75rem 1rem;
+  background: #fff59d;
+  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.2);
+  transform: rotate(-1deg);
+  font-size: 0.85em;
+}

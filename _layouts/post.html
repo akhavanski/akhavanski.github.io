@@ -13,3 +13,7 @@ layout: default
 </article>
 
 <p class="post-footer">Published <time datetime="{{ page.date }}">{{ page.date | date: site.theme_config.date_format }}</time>. If you don’t agree or think I made a mistake, drop me an <a href="mailto:{{ site.contact_email }}">email</a>.</p>
+
+{%- if content contains 'href="#fix"' %}
+<script src="{{ "/assets/js/fixes.js" | relative_url }}"></script>
+{%- endif %}
