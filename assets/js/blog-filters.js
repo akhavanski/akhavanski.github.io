@@ -1,13 +1,12 @@
-// Filters on the blog page. A click on the name of a filter (Language, Keywords)
+// Filters on the home page. A click on the name of a filter (Language, Keywords)
 // opens a menu with its options; a second click, a click anywhere else
 // or Escape closes it. On wide screens, where the filters stand in the column
 // right of the list, a filter with chosen options stays open: only a click
-// on its name closes it. A click on an option turns it on or off,
-// a click on a keyword under a post turns that keyword on.
+// on its name closes it. A click on an option turns it on or off.
 // Several languages and several keywords can be on at once. A post is shown
 // if it is in one of the chosen languages (any language if none is chosen)
 // and has one of the chosen keywords, that is tags (any if none is chosen).
-// The choice is kept in the address, e.g. /blog?lang=en&tag=ai&tag=agency,
+// The choice is kept in the address, e.g. /?lang=en&tag=ai&tag=agency,
 // so a filtered list can be shared or opened again.
 (function () {
   var box = document.querySelector(".blog-filters");
@@ -118,23 +117,6 @@
       button.setAttribute("aria-pressed", String(button.getAttribute("aria-pressed") !== "true"));
     }
     apply();
-  });
-
-  // A keyword under a post links to the list filtered by it;
-  // with the script the filter turns on without reloading the page.
-  document.querySelector(".blog-posts").addEventListener("click", function (e) {
-    var link = e.target.closest("a[data-tag]");
-    if (!link) return;
-    e.preventDefault();
-    buttons.forEach(function (button) {
-      if (button.dataset.filter === "tag" && button.dataset.value === link.dataset.tag) {
-        button.setAttribute("aria-pressed", "true");
-      }
-    });
-    apply();
-    showKept();
-    // The list got shorter, so the filters may be above the screen now.
-    if (box.getBoundingClientRect().top < 0) box.scrollIntoView();
   });
 
   document.addEventListener("click", function (e) {

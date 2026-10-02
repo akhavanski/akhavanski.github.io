@@ -3,17 +3,7 @@ layout: default
 ---
 {%-include header.html home=true-%}
 
-{%-if site.theme_config.show_description-%}
-  <p>{{ site.description }}</p>
-{%-endif-%}
-
-{{ content }}
-
-<h2><a href="{{ "/blog" | relative_url }}">Blog</a><span class="h2-note">last 5 notes</span></h2>
-
-<div class="home-posts">
-  {%-include post_list.html limit=5 show_more=true show_more_text="See all posts..." show_more_url="/blog"-%}
-</div>
+{%-include posts.html-%}
 
 {%-include turtle.html-%}
 

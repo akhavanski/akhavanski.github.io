@@ -1,3 +1,10 @@
+{%- comment -%}
+  The same header on every page: the site title and the About button.
+  The button is highlighted like the fixes in posts, a click on it opens
+  a sticky note like theirs with the text about me (_includes/about.md)
+  and the contact icons (see assets/js/about.js).
+  Without the script the icons stand in the title and the button is hidden.
+{%- endcomment -%}
 <header>
   <div class="title-row">
     <div class="brand">
@@ -8,5 +15,12 @@
       {%- endif -%}
     </div>
     {%-include social.html-%}
+    <button type="button" class="about-toggle" aria-expanded="false" aria-controls="about" hidden>About</button>
+  </div>
+  {%- capture about %}{% include about.md %}{% endcapture %}
+  <div class="about-note" id="about" hidden>
+    {{ about | markdownify }}
+    {%-include social.html-%}
   </div>
 </header>
+<script src="{{ "/assets/js/about.js" | relative_url }}"></script>

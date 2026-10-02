@@ -28,7 +28,8 @@ $wide-screen: 72rem;
 // Links stay black, opened ones too (the browser would make them purple).
 a { color: black; }
 
-// The same header on every page: the title and the contact icons share one line.
+// The same header on every page: the title and the About button share one line
+// (without the script the contact icons stand in place of the button).
 .title-row {
   display: flex;
   align-items: center;
@@ -40,7 +41,8 @@ a { color: black; }
 // Keep the site title on one line on narrow screens.
 // The title is 18 monospace characters (about 10.8em wide),
 // so the font shrinks with the viewport minus the 2rem side padding
-// and the icons (three 1rem icons, 0.75rem between them, 1rem gap to the title).
+// and the icons (three 1rem icons, 0.75rem between them, 1rem gap to the title);
+// the About button is a bit narrower than the icons.
 .brand {
   font-size: clamp(1rem, calc((100vw - 9.5rem) / 11), 1.25em);
 
@@ -61,21 +63,13 @@ a { color: black; }
 
 pre.mermaid { text-align: center; }
 
-// A note next to a heading, e.g. "last 5 notes" next to "Blog": smaller and grey.
-.h2-note {
-  margin-left: 1ch;
-  font-size: 0.6em;
-  font-weight: normal;
-  color: grey;
-}
-
-// Posts on the home page: no bullets, the date in grey in its own column,
-// a long title wraps under itself, not under the date.
-.home-posts {
-  ul {
-    list-style: none;
-    padding: 0;
-  }
+// All posts on the home page (_includes/posts.html): no bullets,
+// the date in grey in its own column, a long title wraps under itself,
+// not under the date.
+.blog-posts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 
   li {
     display: grid;
@@ -84,61 +78,24 @@ pre.mermaid { text-align: center; }
     margin: 0.6rem 0;
   }
 
-  span { color: grey; }
+  // The grid would show the posts the filters hide.
+  li[hidden] { display: none; }
 
-  // "See all posts..." has no date, so it stands under the titles.
-  a:only-child { grid-column: 2; }
+  time { color: grey; }
 
   // On phones the date column leaves too little room for titles,
   // so the date goes above the title.
   @media (max-width: 30rem) {
     li { display: block; }
 
-    span {
+    time {
       display: block;
       font-size: 0.85em;
     }
   }
 }
 
-// Posts on the blog page: the title in bold, the start of the text,
-// the date and the keywords in grey; a thin line between posts.
-.blog-posts {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  // The line goes only between the posts the filters leave in.
-  li:not([hidden]) ~ li:not([hidden]) {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #ddd;
-  }
-}
-
-.post-title { font-weight: bold; }
-
-.post-excerpt {
-  margin: 0.5rem 0 0;
-  font-size: 0.9em;
-  line-height: 1.5;
-  color: #555;
-}
-
-.post-info {
-  margin: 0.6rem 0 0;
-  font-size: 0.85em;
-  color: grey;
-
-  a {
-    color: inherit;
-    text-decoration: none;
-
-    &:hover, &:focus-visible { text-decoration: underline; }
-  }
-}
-
-// Filters on the blog page (see assets/js/blog-filters.js). On narrow screens
+// Filters on the home page (see assets/js/blog-filters.js). On narrow screens
 // they are under the title: the names of the filters in one line, a click
 // on a name opens a menu under it. On wide screens they are right of the list,
 // like the keywords in a post: the names one under the other, a click on a name
@@ -153,7 +110,7 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
 .blog-filters {
   margin-bottom: 2rem;
   // Level with the middle of the title's first line.
-  @include right-column(0.7rem);
+  @include right-column(0.35rem);
 
   &[hidden] { display: none; }
 }
@@ -367,7 +324,9 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
 // the fixed text is highlighted like with a real marker
 // (the ink is a bit darker where the stroke ends),
 // a click on it opens a handwritten sticky note held by a strip of tape.
-mark.fix {
+// The About button in the header is the same (see assets/js/about.js):
+// its note has the text about me and the contact icons.
+mark.fix, .about-toggle {
   background: linear-gradient(100deg,
     rgba(255, 230, 0, 0) 1%,
     rgba(255, 230, 0, 0.5) 4%,
@@ -387,7 +346,15 @@ mark.fix {
   &:focus-visible { outline: 1px dotted black; }
 }
 
-.fix-note {
+.about-toggle {
+  border: 0;
+  font: inherit;
+}
+
+// With the script the contact icons go from the title into the note.
+.has-about .title-row .social { display: none; }
+
+.fix-note, .about-note {
   position: absolute;
   z-index: 10;
   box-sizing: border-box;
@@ -414,12 +381,24 @@ mark.fix {
   }
 }
 
+.about-note {
+  width: min(20rem, calc(100vw - 2rem));
+
+  p { margin: 0 0 0.6rem; }
+
+  // On the smallest screens the icons go from the title, not from here.
+  .social {
+    display: flex;
+    margin-top: 0.9rem;
+  }
+}
+
 // Keywords of a post (see assets/js/keywords.js): a small cartoon library
 // catalogue cabinet with the word "Keywords" next to it. On hover the cabinet
 // turns a little; a click turns it to profile, pulls out the K–P drawer
 // and brings the keywords out under it, one by one from the left.
 // On narrow screens it is under the title, on wide ones right of the post.
-// The keyword filter on the blog page has the same cabinet on wide screens.
+// The keyword filter on the home page has the same cabinet on wide screens.
 $ink: #2b2b2b;
 $toon-line: 2.5px solid $ink;
 // The cabinet is modelled at full size and scaled down as a whole.
@@ -680,7 +659,7 @@ $turn: 0.6s;
   .keywords-toggle:hover .keywords-label { transform: none; }
 }
 
-// The keyword filter on the blog page: on narrow screens it is a name
+// The keyword filter on the home page: on narrow screens it is a name
 // like Language, the cabinet shows only in the right column. There it needs
 // no arrow, and the number of chosen keywords moves aside with the word.
 .filter .keywords-toggle {
@@ -711,7 +690,7 @@ $turn: 0.6s;
   }
 }
 
-// The language filter on the blog page (see _includes/globe.html): on wide
+// The language filter on the home page (see _includes/globe.html): on wide
 // screens the word "Language" has a small cartoon globe with letters
 // of different alphabets round it. On hover the globe turns a little
 // and the letters go round it, the word moves aside like "Keywords";

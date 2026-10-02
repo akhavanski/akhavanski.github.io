@@ -8,7 +8,7 @@ layout: default
 
 <article>
   <div class="post-head">
-    <a class="to-blog" href="{{ "/blog" | relative_url }}">← to blog</a>
+    <a class="to-blog" href="{{ "/" | relative_url }}">← to blog</a>
     <h1>{{ page.title }}</h1>
 
     {%- if keywords.size > 0 %}
@@ -20,7 +20,7 @@ layout: default
 
       <ul class="keywords-list" id="keywords" hidden>
         {%- for keyword in keywords %}
-        <li style="--i: {{ forloop.index0 }}"><a href="{{ "/blog" | relative_url }}?tag={{ keyword | slugify }}">{{ keyword }}</a></li>
+        <li style="--i: {{ forloop.index0 }}"><a href="{{ "/" | relative_url }}?tag={{ keyword | slugify }}">{{ keyword }}</a></li>
         {%- endfor %}
       </ul>
     </div>
