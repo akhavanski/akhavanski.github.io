@@ -1,8 +1,6 @@
 {%- comment -%}
-  The same header on every page: the site title, the About link and the contact
-  icons. The link leads to the page with the text about me (about.md); it is
-  highlighted like the fixes in posts. On phones the icons give way to it:
-  they are on that page then.
+  The same header on every page: the site title and the bento box menu
+  (_includes/menu.html). The contact icons are on the About page.
 {%- endcomment -%}
 <header>
   <div class="title-row">
@@ -13,7 +11,6 @@
         <a class="site-title" href="{{ "/" | relative_url }}">{{ site.title }}</a>
       {%- endif -%}
     </div>
-    <a class="about-link" href="{{ "/about" | relative_url }}">About</a>
-    {%-include social.html-%}
+    {%-include menu.html-%}
   </div>
 </header>

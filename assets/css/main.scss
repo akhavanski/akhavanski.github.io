@@ -3,8 +3,8 @@
 
 @import "no-style-please";
 
-// Below this width the header and post titles are short of room,
-// so decorations go: the contact icons and the keyword cabinet.
+// Below this width post titles are short of room,
+// so a decoration goes: the keyword cabinet.
 $tiny-screen: 20.5rem;
 
 // From this width there is an empty column right of the 640px wide text.
@@ -28,9 +28,10 @@ $wide-screen: 72rem;
 // Links stay black, opened ones too (the browser would make them purple).
 a { color: black; }
 
-// The same header on every page: the title, the About link and the contact icons
-// share one line; on phones the icons go, they are on the About page then.
+// The same header on every page: the title and the bento box menu share one line;
+// on wide screens the menu moves to the right column.
 .title-row {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -41,10 +42,9 @@ a { color: black; }
 // Keep the site title on one line on narrow screens.
 // The title is 18 monospace characters (about 10.8em wide),
 // so the font shrinks with the viewport minus the 2rem side padding
-// and the icons (three 1rem icons, 0.75rem between them, 1rem gap to the title);
-// on phones the About link stands in their place and is a bit narrower.
+// and the bento box (2.85rem, 1rem gap to the title).
 .brand {
-  font-size: clamp(1rem, calc((100vw - 9.5rem) / 11), 1.25em);
+  font-size: clamp(1rem, calc((100vw - 8rem) / 11), 1.25em);
 
   a {
     color: black;
@@ -269,10 +269,6 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   a.social-linkedin:hover, a.social-linkedin:focus-visible { color: #0a66c2; }
   a.social-telegram:hover, a.social-telegram:focus-visible { color: #26a5e4; }
   a.social-email:hover, a.social-email:focus-visible { color: #ea4335; }
-
-  // Below 20.5rem the title is already at its 1rem minimum
-  // and the icons would push it off the screen, so they go.
-  @media (max-width: $tiny-screen) { display: none; }
 }
 
 // The way back to the blog from a post: a quiet white card with a grey outline,
@@ -330,8 +326,7 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
 // the fixed text is highlighted like with a real marker
 // (the ink is a bit darker where the stroke ends),
 // a click on it opens a handwritten sticky note held by a strip of tape.
-// The About link in the header is highlighted the same.
-mark.fix, .about-link {
+mark.fix {
   background: linear-gradient(100deg,
     rgba(255, 230, 0, 0) 1%,
     rgba(255, 230, 0, 0.5) 4%,
@@ -351,28 +346,8 @@ mark.fix, .about-link {
   &:focus-visible { outline: 1px dotted black; }
 }
 
-// Right of the title, before the contact icons.
-.about-link {
-  margin-left: auto;
-  text-decoration: none;
-}
-
-// On phones the contact icons give way to the About link in the title
-// and are on the About page instead, under the text; on wider screens
-// they are in the title.
-@media (max-width: 30rem) {
-  .title-row .social { display: none; }
-}
-
-@media not all and (max-width: 30rem) {
-  .about-contacts { display: none; }
-}
-
-// On the smallest screens the icons go from the title, not from here.
-.about-contacts .social {
-  display: flex;
-  margin-top: 1.5rem;
-}
+// The contact icons on the About page, under the text.
+.about-contacts .social { margin-top: 1.5rem; }
 
 .fix-note {
   position: absolute;
@@ -842,6 +817,161 @@ $globe-turn: 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
   from { opacity: 0; transform: translateX(-3rem); }
 }
 
+// The menu in the header (see _includes/menu.html and _includes/bento.html):
+// a cartoon wooden bento box with a row of nigiri and the word "Menu".
+// On hover chopsticks come and pick up the last sushi; a click carries it away,
+// the rest move up, a new one slides in from the other side (assets/js/menu.js),
+// and the menu opens under the box, cards like the post keywords.
+// On wide screens it stands in the right column, right above Keywords;
+// on narrow ones only the box is in the title, a bit smaller.
+$bento-carry: 0.55s;
+
+.menu {
+  position: relative;
+
+  @media (min-width: $wide-screen) {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 2.5rem);
+    margin-top: -1.5rem;
+  }
+}
+
+.menu-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: black;
+  cursor: pointer;
+
+  &:hover .menu-label { text-decoration: underline; }
+  &:focus-visible { outline: 1px dotted black; outline-offset: 4px; }
+}
+
+.bento {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 3.8rem;
+  height: 3rem;
+
+  // The chopsticks reach out of the box.
+  svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    fill: none;
+    stroke: $ink;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+}
+
+// The sushi stand in slots one --step apart (set on the row).
+.b-item {
+  transform: translateX(calc(var(--slot) * var(--step)));
+  transition: transform $bento-carry ease-in-out;
+}
+
+.b-food { transition: transform 0.25s ease-out; }
+
+// The chopsticks wait up and to the right, out of sight.
+.b-sticks {
+  transform: translate(22px, -22px);
+  opacity: 0;
+  transition: transform 0.3s ease-out, opacity 0.2s;
+}
+
+// The script holds the sushi the same way when there is no hover (a tap).
+.menu-toggle:is(:hover, :focus-visible, .is-holding) {
+  .b-sticks { transform: none; opacity: 1; }
+  .b-item:last-child .b-food { transform: translateY(-4px); transition-delay: 0.15s; }
+}
+
+// Carried away up and to the right, the chopsticks with it.
+.menu-toggle.is-taking {
+  .b-sticks, .b-item:last-child .b-food {
+    opacity: 0;
+    transition: transform $bento-carry ease-in, opacity 0.2s ($bento-carry - 0.2s);
+  }
+
+  .b-sticks { transform: translate(26px, -26px); }
+  .b-item:last-child .b-food { transform: translate(26px, -30px); }
+}
+
+// Over Keywords while it is open; the current page is filled with yellow.
+.menu-list {
+  position: absolute;
+  z-index: 15;
+  top: calc(100% + 0.5rem);
+  left: -0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.6rem;
+  border: 1.5px solid black;
+  border-radius: 2px;
+  background: white;
+  box-shadow: 3px 3px 0 black;
+  list-style: none;
+
+  &[hidden] { display: none; }
+
+  li {
+    margin: 0;
+    animation: keywords-card-in 0.45s ease-out both;
+    animation-delay: calc(var(--i) * 0.05s);
+  }
+
+  a {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border: 1.5px solid black;
+    border-radius: 2px;
+    background: white;
+    box-shadow: 2px 2px 0 black;
+    font-size: 0.8rem;
+    color: black;
+    text-decoration: none;
+    transition: transform 0.15s;
+
+    &:hover, &:focus-visible {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 black;
+      text-decoration: underline;
+    }
+
+    &[aria-current="page"] { background: #ffe14d; }
+  }
+}
+
+// Without the right column the word is only for screen readers,
+// and the menu opens under the box from its right edge.
+@media not all and (min-width: $wide-screen) {
+  .bento { width: 2.85rem; height: 2.25rem; }
+
+  .menu-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .menu-list { left: auto; right: -0.6rem; }
+}
+
 // The turtle in the bottom right corner of the window (see _includes/turtle.html):
 // only the top of its shell peeks out from under the edge,
 // on hover it climbs out, a click opens a speech bubble above it.
@@ -919,5 +1049,8 @@ $globe-turn: 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
 @media (prefers-reduced-motion: reduce) {
   .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-toggle + .filter-count, .keywords-list a, .turtle-btn { transition: none; }
   .globe .g-land, .globe .g-orbit span, .globe-label, .globe-toggle + .filter-count { transition: none; }
-  .keywords-list li, .filter-options button { animation: none; }
+  .keywords-list li, .filter-options button, .menu-list li { animation: none; }
+  .menu-list a { transition: none; }
+  // The bento rules for carrying a sushi are more specific.
+  .b-item, .b-food, .b-sticks { transition: none !important; }
 }
