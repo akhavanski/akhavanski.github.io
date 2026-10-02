@@ -2,13 +2,11 @@
   The globe next to the word "Language" in the language filter on the blog page
   (blog.html), on wide screens: letters of different alphabets go round it.
   It goes inside a button with the class globe-toggle; hover turns the globe
-  a little, the button's aria-expanded turns it further and lets out a burst
-  of letters (assets/css/main.scss).
+  a little, the button's aria-expanded turns it further (assets/css/main.scss).
   The land is drawn twice, the second copy left of the first,
   so the globe has land all the way while it turns.
 {%- endcomment -%}
 {%- assign orbit = "A,Ж,あ,Ω,ع,한" | split: "," %}
-{%- assign burst = "A,Ж,Ω,א,ع,あ,한,ა,अ" | split: "," %}
 <span class="globe" aria-hidden="true">
   <svg viewBox="0 0 40 40">
     <defs>
@@ -33,8 +31,5 @@
   </svg>
   <span class="g-orbit">
     {%- for letter in orbit %}<span>{{ letter }}</span>{% endfor -%}
-  </span>
-  <span class="g-burst">
-    {%- for letter in burst %}<span>{{ letter }}</span>{% endfor -%}
   </span>
 </span>
