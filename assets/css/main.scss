@@ -715,7 +715,81 @@ $turn: 0.6s;
   from { opacity: 0; transform: translateX(-3rem); }
 }
 
+// The turtle in the bottom right corner of the window (see _includes/turtle.html):
+// only the top of its shell peeks out from under the edge,
+// on hover it climbs out, a click opens a speech bubble above it.
+.turtle {
+  position: fixed;
+  right: 2rem;
+  bottom: 0;
+  z-index: 20;
+}
+
+.turtle-btn {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform: translateY(62%);
+  transition: transform 0.45s $spring;
+
+  .turtle:hover &, &[aria-expanded="true"], &:focus-visible { transform: translateY(-0.3rem); }
+  &:focus-visible { outline: 1px dotted black; outline-offset: 2px; }
+
+  svg {
+    display: block;
+    width: 3.5rem;
+    height: auto;
+    overflow: visible;
+    stroke: $ink;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .t-skin { fill: #b9de8f; }
+  .t-shell { fill: #7bc67e; }
+  .t-plates { fill: none; stroke-width: 1.5; }
+  .t-rim { fill: #5a9e5d; }
+  .t-eye { fill: $ink; stroke: none; }
+  .t-smile { fill: none; stroke-width: 1.5; }
+}
+
+// A comic speech bubble, with a tail pointing at the turtle.
+.turtle-bubble {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.6rem);
+  box-sizing: border-box;
+  width: max-content;
+  max-width: min(18rem, calc(100vw - 4rem));
+  padding: 0.6rem 0.75rem;
+  border: 1.5px solid black;
+  border-radius: 2px;
+  background: white;
+  box-shadow: 3px 3px 0 black;
+  font-size: 0.85rem;
+  line-height: 1.45;
+
+  p { margin: 0; }
+  p + p { margin-top: 0.5em; }
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: 1.6rem;
+    bottom: -0.55rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    background: white;
+    border-right: 1.5px solid black;
+    border-bottom: 1.5px solid black;
+    transform: rotate(45deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-list a { transition: none; }
+  .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-list a, .turtle-btn { transition: none; }
   .keywords-list li, .filter-options button { animation: none; }
 }

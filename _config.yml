@@ -11,6 +11,13 @@ favicon: "favicon.ico" # name+extension of favicon (which must be put on the roo
 
 goat_counter: "akh" # GoatCounter analytics: akh.goatcounter.com
 
+# A small turtle peeking out from under the bottom edge of the window
+# (see _includes/turtle.html): `show: true` turns it on,
+# `text` is what it says in a bubble on click (Markdown).
+turtle:
+  show: false
+  text: "Hi! You found the turtle."
+
 remote_theme: riggraz/no-style-please
 
 theme_config:

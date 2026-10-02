@@ -1,0 +1,25 @@
+{%- comment -%}
+  A small turtle in the bottom right corner of the window (see assets/js/turtle.js):
+  only the top of its shell peeks out from under the edge, on hover it climbs out,
+  a click opens a speech bubble above it. It is turned on and its text is set
+  in _config.yml.
+{%- endcomment -%}
+{%- if site.turtle.show -%}
+<div class="turtle">
+  <div class="turtle-bubble" id="turtle-bubble" role="note" hidden>{{ site.turtle.text | markdownify }}</div>
+  <button class="turtle-btn" type="button" aria-expanded="false" aria-controls="turtle-bubble" aria-label="Turtle">
+    <svg viewBox="0 0 64 44" aria-hidden="true">
+      <path class="t-skin" d="M12 31 L3 33.5 L12 35.5 Z"/>
+      <rect class="t-skin" x="13" y="30" width="8" height="10" rx="3"/>
+      <rect class="t-skin" x="37" y="30" width="8" height="10" rx="3"/>
+      <path class="t-skin" d="M44 31 C46 22 51 17 56.5 17 C62 17 63.5 23 61.5 26.5 C59.5 30 54 31.5 44 33 Z"/>
+      <circle class="t-eye" cx="57" cy="22" r="1.7"/>
+      <path class="t-smile" d="M57.5 27 q2 1.2 3.6 -0.4"/>
+      <path class="t-shell" d="M8 31 C8 14 19 6 29.5 6 C40 6 51 14 51 31 Z"/>
+      <path class="t-plates" d="M23.5 14 L35.5 14 L39.5 22.5 L35.5 31 M23.5 14 L19.5 22.5 L23.5 31 M19.5 22.5 L9 22.5 M39.5 22.5 L50 22.5 M23.5 14 L19 8.5 M35.5 14 L40 8.5"/>
+      <rect class="t-rim" x="5" y="29.5" width="49" height="5" rx="2.5"/>
+    </svg>
+  </button>
+</div>
+<script src="{{ "/assets/js/turtle.js" | relative_url }}"></script>
+{%- endif -%}
