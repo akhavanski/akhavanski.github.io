@@ -32,9 +32,23 @@
     if (current) current.setAttribute("aria-expanded", "false");
     current = mark;
     mark.setAttribute("aria-expanded", "true");
-    note.textContent = mark.dataset.note;
+    fill(mark.dataset.note);
     note.hidden = false;
     place();
+  }
+
+  // The note is plain text, only *words in stars* become italic.
+  function fill(text) {
+    note.textContent = "";
+    text.split(/\*([^*]+)\*/).forEach(function (part, i) {
+      if (i % 2) {
+        var em = document.createElement("em");
+        em.textContent = part;
+        note.appendChild(em);
+      } else if (part) {
+        note.appendChild(document.createTextNode(part));
+      }
+    });
   }
 
   function close() {
