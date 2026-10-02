@@ -9,4 +9,3 @@ PBI:
   def: It is something you add to your task tracker.
   example: When a PBI is ready, it must have specific place on the backlog.
   synonyms: [task, story]
-  see: [Product Backlog, Definition of Ready]
