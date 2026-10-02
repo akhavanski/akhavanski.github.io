@@ -1,11 +1,11 @@
-// Filters on the home page. A click on the name of a filter (Keywords, Language)
-// opens a menu with its options; a second click, a click anywhere else
-// or Escape closes it. On wide screens, where the filters stand in the column
-// right of the list, a filter with chosen options stays open: only a click
-// on its name closes it. A click on an option turns it on or off.
-// Several languages and several keywords can be on at once. A post is shown
-// if it is in one of the chosen languages (any language if none is chosen)
-// and has one of the chosen keywords, that is tags (any if none is chosen).
+// The filter on the home page. A click on its name (Keywords) opens a menu
+// with its options, the keywords and under them the languages; a second click,
+// a click anywhere else or Escape closes it. On wide screens, where the filter
+// stands in the column right of the list, a filter with chosen options stays
+// open: only a click on its name closes it. A click on an option turns it on or off.
+// Several keywords and several languages can be on at once. A post is shown
+// if it has one of the chosen keywords, that is tags (any if none is chosen),
+// and is in one of the chosen languages (any language if none is chosen).
 // The choice is kept in the address, e.g. /?lang=en&tag=ai&tag=agency,
 // so a filtered list can be shared or opened again.
 (function () {
@@ -74,9 +74,9 @@
       if (fits) shown++;
     });
 
-    box.querySelectorAll(".filter-count").forEach(function (badge) {
-      var n = chosen(badge.dataset.filter).length;
-      badge.textContent = n ? "(" + n + ")" : "";
+    names.forEach(function (name) {
+      var n = menu(name).querySelectorAll('[aria-pressed="true"]').length;
+      name.nextElementSibling.textContent = n ? "(" + n + ")" : "";
     });
 
     var active = langs.length + tags.length > 0;

@@ -1,4 +1,4 @@
-# Names of post languages for the filter on /blog.
+# Names of post languages for the filter on the home page.
 # A post sets its language with `lang:` in the front matter, English by default (see _config.yml).
 en: English
 ru: Русский

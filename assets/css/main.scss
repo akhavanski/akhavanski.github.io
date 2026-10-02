@@ -95,13 +95,13 @@ pre.mermaid { text-align: center; }
   }
 }
 
-// Filters on the home page (see assets/js/blog-filters.js). On narrow screens
-// they are under the title: the names of the filters in one line, a click
-// on a name opens a menu under it. On wide screens they are right of the list,
-// like the keywords in a post: the names one under the other, a click on a name
+// The filter on the home page (see assets/js/blog-filters.js). On narrow screens
+// it is under the title, a click on its name opens a menu under it. On wide
+// screens it is right of the list, like the keywords in a post: a click on the name
 // brings its options out under it, one by one from the left.
-// The options are cards like the post keywords, several in a line;
-// a chosen one is filled with its own colour. The colours are bright
+// The options are cards like the post keywords, several in a line, the keywords
+// and under them the languages with a small heading; a chosen one is filled
+// with its own colour. The colours are bright
 // but light enough for black text (a contrast of 9:1 and more).
 $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #ff8ad8;
 
@@ -192,6 +192,14 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   }
 }
 
+// The heading of the languages takes a line of its own.
+.filter-heading {
+  flex-basis: 100%;
+  margin: 0.4rem 0 -0.1rem;
+  font-size: 0.75rem;
+  color: grey;
+}
+
 @for $i from 1 through length($filter-fills) {
   .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { background: nth($filter-fills, $i); }
 }
@@ -221,7 +229,7 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
     box-shadow: none;
 
     // The same entrance as the post keywords.
-    button {
+    button, .filter-heading {
       animation: keywords-card-in 0.45s ease-out both;
       animation-delay: calc(var(--i) * 0.05s);
     }
@@ -642,9 +650,9 @@ $turn: 0.6s;
   .keywords-toggle:hover .keywords-label { transform: none; }
 }
 
-// The keyword filter on the home page: on narrow screens it is a name
-// like Language, the cabinet shows only in the right column. There it needs
-// no arrow, and the number of chosen keywords moves aside with the word.
+// The keyword filter on the home page: on narrow screens it is a plain name,
+// the cabinet shows only in the right column. There it needs no arrow,
+// and the number of chosen options moves aside with the word.
 .filter .keywords-toggle {
   display: inline-block;
 
@@ -671,107 +679,6 @@ $turn: 0.6s;
     transform: translateX(1.2rem);
     transition-delay: 0.35s;
   }
-}
-
-// The language filter on the home page (see _includes/globe.html): on wide
-// screens the word "Language" has a small cartoon globe with letters
-// of different alphabets round it. On hover the globe turns a little
-// and the letters go round it, the word moves aside like "Keywords";
-// a click turns the globe further.
-$globe-turn: 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
-
-.filter .globe-toggle .globe { display: none; }
-
-@media (min-width: $wide-screen) {
-  .filter .globe-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    vertical-align: middle;
-
-    .globe { display: block; }
-    &::after { content: none; }
-  }
-
-  .globe-label, .globe-toggle + .filter-count {
-    display: inline-block;
-    transition: transform 0.45s $spring;
-  }
-
-  .globe-toggle:hover {
-    .globe-label, & + .filter-count { transform: translateX(0.35rem); }
-  }
-}
-
-.globe {
-  position: relative;
-  flex: none;
-  width: 3.8rem;
-  height: 3rem;
-
-  svg {
-    position: absolute;
-    left: 0.8rem;
-    top: 0.4rem;
-    width: 2.2rem;
-    height: 2.2rem;
-    overflow: visible;
-    stroke: $ink;
-    stroke-width: 1.5;
-    stroke-linejoin: round;
-    stroke-linecap: round;
-  }
-
-  .g-sea { fill: #82b1ff; stroke: none; }
-  .g-land { fill: #7ed99a; stroke-width: 1.2; transition: transform $globe-turn; }
-  .g-shade { fill: rgba(30, 50, 120, 0.2); stroke: none; }
-  .g-shine { fill: none; stroke: white; stroke-width: 2; }
-  .g-rim { fill: none; }
-
-  // The letters stand on a circle squashed into an ellipse, each letter
-  // stretched back. --turn moves them all along it, upright.
-  .g-orbit {
-    position: absolute;
-    left: 1.9rem;
-    top: 1.5rem;
-    --turn: 0deg;
-    transform: scaleY(0.78);
-  }
-
-  .g-orbit span {
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-family: sans-serif;
-    font-weight: bold;
-    line-height: 1;
-    white-space: nowrap;
-    -webkit-text-stroke: 1px $ink;
-    paint-order: stroke fill;
-  }
-
-  .g-orbit span {
-    font-size: 0.65rem;
-    transform: translate(-50%, -50%) rotate(calc(var(--a) + var(--turn))) translateX(1.55rem) rotate(calc(-1 * (var(--a) + var(--turn)))) scaleY(1.28);
-    transition: transform $globe-turn;
-  }
-}
-
-@for $i from 1 through 6 {
-  .g-orbit span:nth-child(#{$i}) {
-    --a: #{($i - 1) * 60deg + 30deg};
-    color: nth($filter-fills, ($i * 3) % length($filter-fills) + 1);
-  }
-}
-
-.globe-toggle:hover {
-  .g-land { transform: translateX(7px); }
-  .g-orbit { --turn: -40deg; }
-}
-
-.globe-toggle[aria-expanded="true"] {
-  .g-land { transform: translateX(22px); }
-  .g-orbit { --turn: -150deg; }
 }
 
 // The keywords: a card each, several in a line.
@@ -1048,8 +955,7 @@ $bento-carry: 0.55s;
 
 @media (prefers-reduced-motion: reduce) {
   .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-toggle + .filter-count, .keywords-list a, .turtle-btn { transition: none; }
-  .globe .g-land, .globe .g-orbit span, .globe-label, .globe-toggle + .filter-count { transition: none; }
-  .keywords-list li, .filter-options button, .menu-list li { animation: none; }
+  .keywords-list li, .filter-options button, .filter-heading, .menu-list li { animation: none; }
   .menu-list a { transition: none; }
   // The bento rules for carrying a sushi are more specific.
   .b-item, .b-food, .b-sticks { transition: none !important; }
