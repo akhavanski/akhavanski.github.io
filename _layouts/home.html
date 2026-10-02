@@ -7,6 +7,8 @@ layout: default
   <p>{{ site.description }}</p>
 {%-endif-%}
 
-{%-include menu_item.html collection=site.data.menu.entries-%}
-
 {{ content }}
+
+<h2><a href="{{ "/blog" | relative_url }}">Blog</a></h2>
+
+{%-include post_list.html limit=5 show_more=true show_more_text="See all posts..." show_more_url="/blog"-%}
