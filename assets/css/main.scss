@@ -587,10 +587,12 @@ $turn: 0.6s;
     .grain-2 { left: 2rem; top: 2.8rem; width: 2rem; }
   }
 
-  // The K–P drawer, in the bottom left place of the front.
+  // The K–P drawer, in the bottom left place of the front. It goes back in
+  // without the spring: going past its place, it would sink into the cabinet
+  // and leave a dark hole in the front.
   .drawer {
     transform-style: preserve-3d;
-    transition: transform 0.45s $spring;
+    transition: transform 0.3s ease-out;
   }
 
   .d-front {
@@ -660,7 +662,12 @@ $turn: 0.6s;
   .side { visibility: visible; transition-delay: 0s; }
 
   // The drawer comes out after the turn and pushes the word aside.
-  .drawer { transform: translateZ(3.2rem); transition-delay: 0.35s; }
+  .drawer {
+    transform: translateZ(3.2rem);
+    transition-duration: 0.45s;
+    transition-timing-function: $spring;
+    transition-delay: 0.35s;
+  }
   .keywords-label { transform: translateX(1.2rem); transition-delay: 0.35s; }
 }
 
