@@ -1217,7 +1217,10 @@ $card-ink: #6b6250;
 $card-line: 1.5rem;
 
 .term {
-  text-decoration: underline dotted $term-red;
+  // Longhands: Safari drops the shorthand with a style or a colour in it.
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: $term-red;
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
   cursor: pointer;
