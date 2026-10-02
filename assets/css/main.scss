@@ -59,6 +59,9 @@ pre.mermaid { text-align: center; }
     grid-template-columns: 10ch 1fr;
     column-gap: 1ch;
     margin: 0.6rem 0;
+
+    // Posts the blog filters leave out.
+    &[hidden] { display: none; }
   }
 
   span { color: grey; }
@@ -76,6 +79,89 @@ pre.mermaid { text-align: center; }
       font-size: 0.85em;
     }
   }
+}
+
+// Filters on the blog page (see assets/js/blog-filters.js): the name of a filter
+// in grey in the date column of the list below, its values as cards
+// like the post keywords. A chosen card is pressed in and marked with a marker.
+.blog-filters {
+  margin-bottom: 2rem;
+
+  &[hidden] { display: none; }
+}
+
+.filter {
+  display: grid;
+  grid-template-columns: 10ch 1fr;
+  column-gap: 1ch;
+  align-items: baseline;
+  margin: 0.6rem 0;
+
+  > span { color: grey; }
+
+  div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.45rem;
+  }
+
+  button {
+    padding: 0.1rem 0.4rem;
+    border: 1.5px solid black;
+    border-radius: 2px;
+    background: white;
+    box-shadow: 2px 2px 0 black;
+    font: inherit;
+    font-size: 0.8rem;
+    color: black;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+
+    &:hover { text-decoration: underline; }
+    &:focus-visible { outline: 1px dotted black; outline-offset: 3px; }
+
+    &[aria-pressed="true"] {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+      background: white url("../img/marker.svg") 0 0 / 100% 100% no-repeat;
+    }
+  }
+
+  // The same as the list on phones: the name goes above the values.
+  @media (max-width: 30rem) {
+    display: block;
+
+    > span {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.85em;
+    }
+  }
+}
+
+.filter-status {
+  margin: 1rem 0 0;
+  font-size: 0.85em;
+  // Under the values: past the 10ch name column and the 1ch gap,
+  // counted in the characters of the larger text around.
+  padding-left: calc(11ch / 0.85);
+  color: grey;
+
+  &[hidden] { display: none; }
+
+  @media (max-width: 30rem) { padding-left: 0; }
+}
+
+.filter-reset {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover, &:focus-visible { color: black; }
 }
 
 // Contact icons: black by default, brand colour on hover.

@@ -19,6 +19,13 @@ theme_config:
   show_description: false # show blog description in home page
   lowercase_titles: false # show titles in lowercase in lists
 
+# Posts are in English unless a post says otherwise, e.g. `lang: ru`.
+defaults:
+  - scope:
+      type: posts
+    values:
+      lang: en
+
 sass:
   style: compressed
 
