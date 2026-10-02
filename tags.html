@@ -6,17 +6,20 @@ permalink: /tags
 
 {%- comment -%}
   Posts by tag. The keywords under a post title link here (see _layouts/post.html).
+  "English" marks the language of a post, it is not a keyword.
 {%- endcomment -%}
 {%- comment -%} Tag names in alphabetical order, whatever their case. {%- endcomment -%}
 {%- capture names %}{% for tag in site.tags %}{{ tag[0] }}|{% endfor %}{% endcapture %}
 {%- assign names = names | split: "|" | sort_natural %}
 <div class="home-posts tags">
   {%- for name in names %}
+  {%- unless name == "English" %}
   <h2 id="{{ name | slugify }}">{{ name }}</h2>
   <ul>
     {%- for post in site.tags[name] %}
     <li><span>{{ post.date | date: site.theme_config.date_format }}</span> <a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
     {%- endfor %}
   </ul>
+  {%- endunless %}
   {%- endfor %}
 </div>

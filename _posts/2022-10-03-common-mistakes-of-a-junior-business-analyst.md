@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Common mistakes of a Junior Business Analyst and an approach to fixing them"
-tags: [Business Analysis, BABOK, IIBA]
+tags: [Business Analysis, BABOK, IIBA, English]
 ---
 
 If you’re starting your BA life, you can use this article as a list of practices to escape.

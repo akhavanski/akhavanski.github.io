@@ -4,7 +4,8 @@ layout: default
 
 {%-include header.html-%}
 
-{%- assign keywords = page.tags %}
+{%- comment -%} "English" marks the language of a post, it is not a keyword. {%- endcomment -%}
+{%- assign keywords = page.tags | where_exp: "tag", "tag != 'English'" %}
 
 <article>
   {%- if keywords.size > 0 %}
