@@ -19,7 +19,7 @@ I have spoken about it with several people and here's the list of tasks that may
 1. Logic and reasoning
    - Logic and reasoning is already done in AI. It can not only use proper formal logic approach, but also — with appropriate instructions — can use problem solving frameworks.
    - Of course there are nuances to how it is solved. LLM can hallucinate or be based on wrong data (so that output is not logical).
-2. [Creative problem solving](#comment "I mean using problem solving frameworks here (TRIZ, SIT, etc.). However, I assume creativity *may* be solved by AI.")
+2. [Creative problem solving](#fix "I mean using problem solving frameworks here (TRIZ, SIT, etc.). However, I assume creativity *may* be solved by AI.")
    - For example, an LLM can use Theory of Inventive Problem Solving or Systematic Inventive Thinking. E.g. an example of such skills: <https://github.com/tjboudreaux/cc-thinking-skills>.
 3. Communication and selling
    - Communication and selling is partially solved. AI can call a cold lead, rewrite your landing, you can even create a machine that would post to socials for you. It can use Cialdini's persuasion framework.
