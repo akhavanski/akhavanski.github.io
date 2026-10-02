@@ -1,6 +1,7 @@
 // Shows corrections in a post: the fixed text is highlighted,
 // a click on it opens a handwritten sticky note that says what was changed.
 // In the post write [fixed text](#fix "What was changed and why").
+// A picture under the note: [fixed text](#fix "Note"){: data-img="/assets/img/pic.png"}.
 // The post layout loads this script only when the post has such a link.
 (function () {
   var links = document.querySelectorAll('a[href="#fix"]');
@@ -14,6 +15,7 @@
     mark.setAttribute("aria-expanded", "false");
     mark.setAttribute("aria-controls", "fix-note");
     mark.dataset.note = link.title;
+    if (link.dataset.img) mark.dataset.img = link.dataset.img;
     while (link.firstChild) mark.appendChild(link.firstChild);
     link.replaceWith(mark);
   });
@@ -36,13 +38,14 @@
     if (current) current.setAttribute("aria-expanded", "false");
     current = mark;
     mark.setAttribute("aria-expanded", "true");
-    fill(mark.dataset.note);
+    fill(mark.dataset.note, mark.dataset.img);
     note.hidden = false;
     place();
   }
 
   // The note is plain text, only *words in stars* become italic.
-  function fill(text) {
+  // A picture, if any, goes under the text.
+  function fill(text, img) {
     note.textContent = "";
     text.split(/\*([^*]+)\*/).forEach(function (part, i) {
       if (i % 2) {
@@ -53,6 +56,13 @@
         note.appendChild(document.createTextNode(part));
       }
     });
+    if (img) {
+      var pic = note.appendChild(document.createElement("img"));
+      pic.src = img;
+      pic.alt = "";
+      // The note was placed before the picture loaded and may get wider.
+      pic.onload = function () { if (current) place(); };
+    }
   }
 
   function close() {

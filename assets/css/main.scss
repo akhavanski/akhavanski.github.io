@@ -514,6 +514,12 @@ mark.fix {
   font-size: 1.35rem;
   line-height: 1.15;
 
+  img {
+    display: block;
+    width: 100%;
+    margin-top: 0.6rem;
+  }
+
   // The strip of tape on top, over the fixed text (the script sets --tape-x).
   &::before {
     content: "";
