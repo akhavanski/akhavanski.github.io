@@ -4,8 +4,50 @@ layout: default
 
 {%-include header.html-%}
 
+{%- comment -%} "English" marks the language of a post, it is not a keyword. {%- endcomment -%}
+{%- assign keywords = page.tags | where_exp: "tag", "tag != 'English'" %}
+
 <article>
+  {%- if keywords.size > 0 %}
+  <div class="post-head">
+    <h1>{{ page.title }}</h1>
+
+    <div class="keywords">
+      <button class="keywords-toggle" type="button" aria-expanded="false" aria-controls="keywords">
+        <span class="catalog" aria-hidden="true">
+          <span class="cabinet">
+            <span class="front">
+              <span class="dr dr-tl"><span class="lbl">A–D</span><span class="knob"></span></span>
+              <span class="dr dr-tr"><span class="lbl">E–J</span><span class="knob"></span></span>
+              <span class="slot"></span>
+              <span class="dr dr-br"><span class="lbl">Q–Z</span><span class="knob"></span></span>
+            </span>
+            <span class="side"><span class="grain"></span><span class="grain grain-2"></span></span>
+            <span class="drawer">
+              <span class="d-bottom"></span>
+              <span class="d-back"></span>
+              <span class="d-right"></span>
+              {%- for i in (0..2) %}
+              <span class="card" style="--i: {{ i }}"></span>
+              {%- endfor %}
+              <span class="d-left"></span>
+              <span class="d-front"><span class="lbl">K–P</span><span class="knob"></span></span>
+            </span>
+          </span>
+        </span>
+        <span class="keywords-label">Keywords</span>
+      </button>
+
+      <ul class="keywords-list" id="keywords" hidden>
+        {%- for keyword in keywords %}
+        <li style="--i: {{ forloop.index0 }}"><a href="{{ "/tags" | relative_url }}#{{ keyword | slugify }}">{{ keyword }}</a></li>
+        {%- endfor %}
+      </ul>
+    </div>
+  </div>
+  {%- else %}
   <h1>{{ page.title }}</h1>
+  {%- endif %}
 
   {{ content }}
 
@@ -13,6 +55,10 @@ layout: default
 </article>
 
 <p class="post-footer">Published <time datetime="{{ page.date }}">{{ page.date | date: site.theme_config.date_format }}</time>. If you don’t agree or think I made a mistake, drop me an <a href="mailto:{{ site.contact_email }}">email</a>.</p>
+
+{%- if keywords.size > 0 %}
+<script src="{{ "/assets/js/keywords.js" | relative_url }}"></script>
+{%- endif %}
 
 {%- if content contains 'href="#fix"' %}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap">

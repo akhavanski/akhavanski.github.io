@@ -168,3 +168,312 @@ mark.fix {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 }
+
+// Keywords of a post (see assets/js/keywords.js): a small cartoon library
+// catalogue cabinet with the word "Keywords" next to it. On hover the cabinet
+// turns a little; a click turns it to profile, pulls out the K–P drawer
+// and brings the keywords out under it, one by one from the left.
+// On narrow screens it is under the title, on wide ones right of the post.
+$ink: #2b2b2b;
+$toon-line: 2.5px solid $ink;
+// The cabinet is modelled at full size and scaled down as a whole.
+$cabinet-scale: scale3d(0.5, 0.5, 0.5);
+$spring: cubic-bezier(0.34, 1.5, 0.64, 1);
+
+.post-head { position: relative; }
+
+.keywords {
+  margin: -0.5rem 0 1.5rem;
+
+  // The empty column right of the 640px wide text.
+  @media (min-width: 72rem) {
+    position: absolute;
+    top: 0.2rem;
+    left: calc(100% + 2.5rem);
+    width: calc(50vw - 320px - 4.5rem);
+    margin: 0;
+  }
+}
+
+.keywords-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: black;
+  cursor: pointer;
+
+  &:hover .keywords-label { text-decoration: underline; }
+  &:focus-visible { outline: 1px dotted black; outline-offset: 4px; }
+}
+
+.keywords-label { transition: transform 0.45s $spring; }
+
+// Sizes and places a face of the 3D cabinet by its centre.
+@mixin face($w, $h) {
+  width: $w;
+  height: $h;
+  margin: (-$h / 2) 0 0 (-$w / 2);
+}
+
+// Wood with a darker top board and a stubby leg at each side.
+@mixin wood($color) {
+  border: $toon-line;
+  border-radius: 0.25rem;
+  background: $color;
+  box-shadow: inset 0 0.45rem 0 #c0844a, inset 0 calc(0.45rem + 2px) 0 $ink, inset 0 -4px 0 rgba(120, 60, 20, 0.25);
+
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    bottom: -0.65rem;
+    width: 0.55rem;
+    height: 0.6rem;
+    box-sizing: border-box;
+    border: $toon-line;
+    border-top: 0;
+    border-radius: 0 0 0.3rem 0.3rem;
+    background: #b97a3e;
+  }
+
+  &::before { left: 0.35rem; }
+  &::after { right: 0.35rem; }
+}
+
+// A drawer front: a card in a brass label holder, and a knob.
+@mixin drawer-front {
+  width: 2.7rem;
+  height: 1.7rem;
+  border: $toon-line;
+  border-radius: 0.25rem;
+  background: #f0c08a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18rem;
+
+  .lbl, .knob { position: static; }
+
+  .lbl {
+    padding: 0.05rem 0.3rem;
+    border: 2px solid $ink;
+    background: #fffaf0;
+    box-shadow: 0 0 0 2.5px #f1c232, 0 0 0 4.5px $ink;
+    font-size: 0.55rem;
+    font-weight: bold;
+    line-height: 1.1;
+    color: $ink;
+  }
+
+  .knob {
+    width: 0.45rem;
+    height: 0.45rem;
+    border: 2px solid $ink;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff3b0 0 20%, #f1c232 25%, #c98f12);
+  }
+}
+
+.catalog {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 3.8rem;
+  height: 3rem;
+  perspective: 500px;
+
+  span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    box-sizing: border-box;
+    display: block;
+  }
+
+  // 6.4 × 4.4 × 5rem before scaling; the centre is the origin of every face.
+  .cabinet {
+    left: 50%;
+    top: 1.35rem;
+    transform-style: preserve-3d;
+    transform: $cabinet-scale;
+    transition: transform 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
+  }
+
+  // Front: four drawers, A–D, E–J, K–P and Q–Z; K–P is a separate box below.
+  .front {
+    @include face(6.4rem, 4.4rem);
+    @include wood(#e3a869);
+    transform: translateZ(2.5rem);
+
+    .dr { @include drawer-front; }
+    .dr-tl { left: calc(0.35rem - 2.5px); top: calc(0.75rem - 2.5px); }
+    .dr-tr { left: calc(3.35rem - 2.5px); top: calc(0.75rem - 2.5px); }
+    .dr-br { left: calc(3.35rem - 2.5px); top: calc(2.55rem - 2.5px); }
+
+    // The opening the K–P drawer comes out of.
+    .slot {
+      left: calc(0.35rem - 2.5px);
+      top: calc(2.55rem - 2.5px);
+      width: 2.7rem;
+      height: 1.7rem;
+      border: $toon-line;
+      border-radius: 0.25rem;
+      background: #4a2f18;
+    }
+  }
+
+  // The left side. In the front view it is seen edge-on as a stray line,
+  // so it shows only while the cabinet is turned.
+  .side {
+    @include face(5rem, 4.4rem);
+    @include wood(#cf8f55);
+    transform: rotateY(-90deg) translateZ(3.2rem);
+    visibility: hidden;
+    transition: visibility 0s 0.6s;
+
+    .grain {
+      left: 0.7rem;
+      top: 1.5rem;
+      width: 2.2rem;
+      height: 0.7rem;
+      border-top: 2px solid rgba(110, 55, 15, 0.45);
+      border-radius: 50%;
+    }
+
+    .grain-2 { left: 2rem; top: 2.8rem; width: 2rem; }
+  }
+
+  // The K–P drawer, in the bottom left place of the front.
+  .drawer {
+    transform-style: preserve-3d;
+    transition: transform 0.45s $spring;
+  }
+
+  .d-front {
+    @include face(2.7rem, 1.7rem);
+    @include drawer-front;
+    transform: translate3d(-1.5rem, 1.2rem, 2.56rem);
+  }
+
+  .d-left, .d-right {
+    @include face(4.4rem, 1.1rem);
+    border: $toon-line;
+    background: #f0c08a;
+  }
+
+  .d-left { transform: translate3d(-2.75rem, 1.4rem, 0.36rem) rotateY(-90deg); }
+  .d-right { transform: translate3d(-0.25rem, 1.4rem, 0.36rem) rotateY(90deg); }
+
+  .d-back {
+    @include face(2.5rem, 1.1rem);
+    border: $toon-line;
+    background: #d9a067;
+    transform: translate3d(-1.5rem, 1.4rem, -1.84rem);
+  }
+
+  .d-bottom {
+    @include face(2.5rem, 4.4rem);
+    border: $toon-line;
+    background: #d9a067;
+    transform: translate3d(-1.5rem, 1.95rem, 0.36rem) rotateX(90deg);
+  }
+
+  // Cards stand in the drawer, their coloured tabs above its sides.
+  .card {
+    @include face(2.3rem, 1.35rem);
+    border: 2px solid $ink;
+    border-radius: 3px;
+    background: #fffaf0;
+    transform: translate3d(-1.5rem, 1.275rem, calc(1.9rem - var(--i) * 0.9rem));
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -0.45rem;
+      left: calc(0.15rem + var(--i) * 0.7rem);
+      width: 0.65rem;
+      height: 0.45rem;
+      box-sizing: border-box;
+      border: 2px solid $ink;
+      border-bottom: 0;
+      border-radius: 3px 3px 0 0;
+      background: #e9a8a0;
+    }
+
+    & + .card::before { background: #a8c4e9; }
+    & + .card + .card::before { background: #b6dca0; }
+  }
+}
+
+.keywords-toggle:hover {
+  .cabinet { transform: $cabinet-scale rotateY(22deg); }
+  .side { visibility: visible; transition-delay: 0s; }
+  .keywords-label { transform: translateX(0.35rem); }
+}
+
+.keywords-toggle[aria-expanded="true"] {
+  .cabinet { transform: $cabinet-scale rotateY(72deg); }
+  .side { visibility: visible; transition-delay: 0s; }
+
+  // The drawer comes out after the turn and pushes the word aside.
+  .drawer { transform: translateZ(3.2rem); transition-delay: 0.35s; }
+  .keywords-label { transform: translateX(1.2rem); transition-delay: 0.35s; }
+}
+
+// The keywords: a card each, several in a line.
+.keywords-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.45rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+
+  // display: flex would show the list even while it is hidden.
+  &[hidden] { display: none; }
+
+  li {
+    margin: 0;
+    animation: keywords-card-in 0.3s ease-out both;
+    animation-delay: calc(0.7s + var(--i) * 0.1s);
+  }
+
+  a {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border: 1.5px solid black;
+    border-radius: 2px;
+    background: white;
+    box-shadow: 2px 2px 0 black;
+    font-size: 0.8rem;
+    color: black;
+    text-decoration: none;
+    transition: transform 0.15s;
+
+    &:hover, &:focus-visible {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 black;
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes keywords-card-in {
+  from { opacity: 0; transform: translateX(-3rem); }
+}
+
+// The tags page: the tag someone came for is highlighted.
+.tags h2 {
+  scroll-margin-top: 1rem;
+
+  &:target { background: rgba(255, 230, 0, 0.45); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-list a { transition: none; }
+  .keywords-list li { animation: none; }
+}
