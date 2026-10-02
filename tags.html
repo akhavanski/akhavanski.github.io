@@ -14,7 +14,7 @@ permalink: /tags
 <div class="home-posts tags">
   {%- for name in names %}
   {%- unless name == "English" %}
-  <h2 id="{{ name | slugify }}">{{ name }}</h2>
+  <h2 id="{{ name | slugify }}"><span>{{ name }}</span></h2>
   <ul>
     {%- for post in site.tags[name] %}
     <li><span>{{ post.date | date: site.theme_config.date_format }}</span> <a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
