@@ -901,6 +901,49 @@ $turn: 0.6s;
   }
 }
 
+// On phones the filter is the cabinet alone, without the word, right of the
+// title Blog, under the bento box; the number of chosen options is left of it.
+// The menu still opens under the title, from the left edge.
+@media (max-width: 30rem) {
+  .filter-names {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2.4rem;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .filter {
+    display: flex;
+    align-items: center;
+  }
+
+  .filter-count { order: -1; margin: 0 0.5ch 0 0; }
+
+  // Clear of the cabinet's legs.
+  .filter-options { top: calc(100% + 0.9rem); }
+
+  .filter .keywords-toggle {
+    display: block;
+    // The cabinet's right edge under the bento box's.
+    margin-right: -0.3rem;
+
+    .catalog { display: block; }
+    &::after { content: none; }
+  }
+
+  .filter .keywords-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 // The keywords: a card each, several in a line.
 .keywords-list {
   display: flex;
