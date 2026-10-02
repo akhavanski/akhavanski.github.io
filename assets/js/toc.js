@@ -2,9 +2,9 @@
 // stays at the top of the window while you read; a click on it slides a page with
 // the post's sections and subsections out from under the post, below the button.
 // The page marks the section you are in. A second click or Escape slides it back.
-// It also goes back by itself: after a jump to a section, on a click outside it,
-// when the mouse has left it for three seconds, when the focus has left it, and when
-// the post has scrolled half a window with the mouse elsewhere.
+// It also goes back by itself: on a click outside it, when the mouse has left it
+// for three seconds, when the focus has left it, and when the post has scrolled
+// half a window with the mouse elsewhere. A jump to a section doesn't count as scrolling.
 // Once "← to blog" has scrolled away, the button is alone left of the text and goes quiet.
 // The post layout loads this script only when the post has two headings or more.
 (function () {
@@ -54,7 +54,7 @@
   });
   toggle.parentNode.appendChild(sheet);
 
-  var inside = false, leaving = null, scrollFrom = 0;
+  var inside = false, leaving = null, scrollFrom = 0, jumped = false;
 
   function isOpen() { return nav.classList.contains("is-open"); }
 
@@ -66,7 +66,7 @@
   }
 
   sheet.addEventListener("click", function (e) {
-    if (e.target.closest("a")) show(false);
+    if (e.target.closest("a")) jumped = true;
   });
 
   document.addEventListener("click", function (e) {
@@ -115,6 +115,7 @@
     });
   }
   addEventListener("scroll", function () {
+    if (jumped) { jumped = false; scrollFrom = scrollY; }
     if (isOpen() && !inside && Math.abs(scrollY - scrollFrom) > innerHeight / 2) show(false);
     if (!ticking) { ticking = true; requestAnimationFrame(mark); }
   }, { passive: true });
