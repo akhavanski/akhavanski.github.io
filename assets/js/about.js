@@ -1,9 +1,10 @@
-// The About button in the header: a click opens a sticky note under it
-// with the text about me and the contact icons, like the notes on fixes
-// in posts (assets/js/fixes.js), but in the usual font. A second click,
-// a click anywhere else or Escape closes it. The script shows the button;
-// the styles then hide the icons in the title, as they are in the note
-// (assets/css/main.scss).
+// The About button in the header on phones: a click opens a sticky note
+// under it with the text about me and the contact icons, like the notes
+// on fixes in posts (assets/js/fixes.js), but in the usual font. A second
+// click, a click anywhere else or Escape closes it. The script shows
+// the button and marks the page with the class has-about; on phones
+// the styles then hide the icons in the title and the text about me
+// on the home page, as they are in the note (assets/css/main.scss).
 (function () {
   var toggle = document.querySelector(".about-toggle");
   var note = document.getElementById("about");
@@ -46,5 +47,5 @@
   });
 
   toggle.hidden = false;
-  toggle.closest("header").classList.add("has-about");
+  document.documentElement.classList.add("has-about");
 })();
