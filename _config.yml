@@ -1,8 +1,8 @@
 title: Aliaksei Khavanski # name of the site
 author: Aliaksei Khavanski # name of site's author
-email: lietocake@gmail.com # email of site's author
+email: aliakseichowanski@gmail.com # email of site's author
 contact_email: aliakseichowanski@gmail.com # public address for readers (header icon, post footer)
-url: https://akhavanski.github.io # root address of the site
+url: https://akh.cx # root address of the site
 baseurl: "" # subpath of the site, e.g. "/blog" (leave it blank "" if you're site shouldn't use a subpath)
 
 permalink: /:year-:month-:day-:slug.html
