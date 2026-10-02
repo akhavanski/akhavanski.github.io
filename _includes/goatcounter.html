@@ -1,0 +1,8 @@
+{%- comment -%}
+  GoatCounter analytics: counts visits at https://<goat_counter>.goatcounter.com.
+  The site name is set in _config.yml; without it nothing is counted.
+  The theme does not use goat_counter, so every layout includes this file.
+{%- endcomment -%}
+{%- if site.goat_counter -%}
+<script data-goatcounter="https://{{ site.goat_counter }}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+{%- endif -%}
