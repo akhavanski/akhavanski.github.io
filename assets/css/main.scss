@@ -3,6 +3,10 @@
 
 @import "no-style-please";
 
+// Below this width the header and post titles are short of room,
+// so decorations go: the contact icons and the keyword cabinet.
+$tiny-screen: 20.5rem;
+
 // The header is compact, so the page starts higher than the theme's 4rem.
 .w { padding-top: 2rem; }
 
@@ -98,7 +102,7 @@ pre.mermaid { text-align: center; }
 
   // Below 20.5rem the title is already at its 1rem minimum
   // and the icons would push it off the screen, so they go.
-  @media (max-width: 20.5rem) { display: none; }
+  @media (max-width: $tiny-screen) { display: none; }
 }
 
 // Author's signature at the end of each post: smaller, grey, on the right.
@@ -424,6 +428,15 @@ $turn: 0.6s;
   // The drawer comes out after the turn and pushes the word aside.
   .drawer { transform: translateZ(3.2rem); transition-delay: 0.35s; }
   .keywords-label { transform: translateX(1.2rem); transition-delay: 0.35s; }
+}
+
+// On the smallest screens the cabinet goes, like the contact icons:
+// the word "Keywords" alone opens the keywords, and it stays in place.
+@media (max-width: $tiny-screen) {
+  .catalog { display: none; }
+
+  .keywords-toggle[aria-expanded] .keywords-label,
+  .keywords-toggle:hover .keywords-label { transform: none; }
 }
 
 // The keywords: a card each, several in a line.
