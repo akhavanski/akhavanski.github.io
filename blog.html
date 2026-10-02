@@ -16,8 +16,8 @@ permalink: /blog
   shows its options under it. On narrow screens they are under the title:
   the names in one line, a click on a name opens a menu with its options.
   The number after a name tells how many are chosen.
-  Keywords has the catalogue cabinet from the posts: when its options are open,
-  the cabinet is turned and its drawer is pulled out.
+  On wide screens Keywords has the catalogue cabinet from the posts: when its
+  options are open, the cabinet is turned and its drawer is pulled out.
   Each option has its own fill colour for when it is chosen: data-fill counts
   the options of both filters in a row (the colours are in assets/css/main.scss).
   Without the script the filters stay hidden and the whole list is shown.
@@ -44,8 +44,8 @@ permalink: /blog
       <div class="filter">
         <button type="button" class="filter-name keywords-toggle" aria-expanded="false" aria-controls="filter-keywords">
           {%- include catalog.html %}
-          <span class="keywords-label">Keywords<span class="filter-count" data-filter="tag"></span></span>
-        </button>
+          <span class="keywords-label">Keywords</span>
+        </button><span class="filter-count" data-filter="tag"></span>
         <div class="filter-options" id="filter-keywords" role="group" aria-label="Keywords">
           {%- for tag in tags %}
           <button type="button" aria-pressed="false" data-filter="tag" data-value="{{ tag | slugify }}" data-fill="{{ forloop.index0 | plus: langs.size | modulo: 8 }}" style="--i: {{ forloop.index0 }}">{{ tag }}</button>
