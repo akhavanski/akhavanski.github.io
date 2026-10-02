@@ -1,0 +1,23 @@
+{%- comment -%}
+  Posts on the home page: the title, the date with reading time and the beginning of the text.
+  The beginning is the post's `description` from the front matter, otherwise its first paragraph.
+{%- endcomment -%}
+{%- assign posts = site.posts -%}
+
+{%- if posts.size > 0 -%}
+  <ul class="post-previews">
+    {%- for post in posts limit: include.limit -%}
+      {%- assign words = post.content | strip_html | number_of_words -%}
+      {%- assign minutes = words | divided_by: 200.0 | ceil | at_least: 1 -%}
+      <li>
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        <span class="post-preview-meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time> · {{ minutes }} min read</span>
+        <p>{{ post.description | default: post.excerpt | strip_html | normalize_whitespace | truncatewords: 30, "…" }}</p>
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  {%- if include.limit and posts.size > include.limit -%}
+    <p><a href="{{ "/blog" | relative_url }}">See all posts…</a></p>
+  {%- endif -%}
+{%- endif -%}
