@@ -46,6 +46,14 @@ a { color: black; }
 
 pre.mermaid { text-align: center; }
 
+// A note next to a heading, e.g. "last 5 notes" next to "Blog": smaller and grey.
+.h2-note {
+  margin-left: 1ch;
+  font-size: 0.6em;
+  font-weight: normal;
+  color: grey;
+}
+
 // Posts on the home page: no bullets, the date in grey in its own column,
 // a long title wraps under itself, not under the date.
 .home-posts {
