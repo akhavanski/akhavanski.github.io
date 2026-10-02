@@ -544,11 +544,11 @@ article :is(h2, h3, h4):target {
   a { color: inherit; }
 }
 
-// Corrections in posts (see assets/js/fixes.js):
-// the fixed text is highlighted like with a real marker
+// Author's notes in posts (see assets/js/notes.js).
+// A comment: the text is highlighted like with a real marker
 // (the ink is a bit darker where the stroke ends),
 // a click on it opens a handwritten sticky note held by a strip of tape.
-mark.fix {
+mark.comment {
   background: linear-gradient(100deg,
     rgba(255, 230, 0, 0) 1%,
     rgba(255, 230, 0, 0.5) 4%,
@@ -556,7 +556,7 @@ mark.fix {
     rgba(255, 222, 0, 0.5) 88%,
     rgba(250, 210, 0, 0.75) 97%,
     rgba(250, 210, 0, 0) 99%);
-  // Each line of a long fix gets its own stroke.
+  // Each line of a long comment gets its own stroke.
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
   border-radius: 0.6em 0.25em;
@@ -568,10 +568,25 @@ mark.fix {
   &:focus-visible { outline: 1px dotted black; }
 }
 
+// A fix: the new text has a red wavy underline, like a spell checker's,
+// a click on it opens a card with the old text cut out of the page.
+mark.fix {
+  background: none;
+  color: inherit;
+  text-decoration: underline wavy #d23;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-skip-ink: none;
+  cursor: pointer;
+
+  &:hover, &[aria-expanded="true"] { text-decoration-thickness: 2px; }
+  &:focus-visible { outline: 1px dotted black; }
+}
+
 // The contact icons on the About page, under the text.
 .about-contacts .social { margin-top: 1.5rem; }
 
-.fix-note {
+.note {
   position: absolute;
   z-index: 10;
   box-sizing: border-box;
@@ -601,6 +616,37 @@ mark.fix {
     transform: translateX(-50%) rotate(-3deg);
     background: rgba(225, 225, 215, 0.75);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// The card of a fix: no tape, the old text is glued on top instead.
+.note-card {
+  padding: 0.9rem 1rem;
+  background: #f6f0de;
+  border-radius: 2px;
+  box-shadow: 0 8px 14px -8px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  transform: rotate(-1deg);
+
+  &::before { content: none; }
+}
+
+// The old text, cut out of the page with scissors.
+// The shadow is on the outer box, so the cut edges keep it.
+.note-cutout {
+  display: table;
+  margin: 0 0 0.7rem -0.3rem;
+  transform: rotate(-2.5deg);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
+
+  span {
+    display: block;
+    padding: 0.4rem 0.9rem 0.45rem;
+    background: white;
+    font-family: monospace;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: black;
+    clip-path: polygon(0% 10%, 7% 0%, 31% 6%, 56% 1%, 81% 7%, 100% 0%, 97% 48%, 100% 100%, 74% 93%, 49% 100%, 23% 92%, 4% 100%, 2% 52%);
   }
 }
 

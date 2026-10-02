@@ -2,26 +2,34 @@
 
 Personal blog on Jekyll and GitHub Pages.
 
-## Fixes in posts
+## Fixes and comments in posts
 
-A corrected passage is written as a link to `#fix`, with the note in the quotes:
+A corrected passage is written as a link to `#fix`, with the reason in the quotes and the old text in `data-was`:
 
 ```markdown
-[corrected text](#fix "Was: «old text». Changed because…")
+[new text](#fix "Changed because…"){: data-was="old text"}
 ```
 
-On the site the text is highlighted in yellow, and a click shows a sticky note with the note text (`assets/js/fixes.js`, styles in `assets/css/main.scss`).
+On the site the text has a red wavy underline, and a click shows a card with the old text cut out and glued on it, and the reason under it.
 
-If the note contains double quotes, wrap it in single ones:
+A comment on a passage is a link to `#comment`:
 
 ```markdown
-[corrected text](#fix 'Was: "old text"')
+[text](#comment "Comment")
+```
+
+On the site the text is highlighted in yellow, and a click shows a sticky note with the comment.
+
+Both are made by `assets/js/notes.js`, styles in `assets/css/main.scss`. If the note contains double quotes, wrap it in single ones:
+
+```markdown
+[text](#comment 'It is "so"')
 ```
 
 Words in `*asterisks*` inside the note are shown in italics. To put a picture under the note text:
 
 ```markdown
-[corrected text](#fix "Note"){: data-img="/assets/img/pic.png"}
+[text](#comment "Note"){: data-img="/assets/img/pic.png"}
 ```
 
 ## Glossary terms

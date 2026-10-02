@@ -56,9 +56,9 @@ layout: default
 <script src="{{ "/assets/js/toc.js" | relative_url }}"></script>
 {%- endif %}
 
-{%- if content contains 'href="#fix"' %}
+{%- if content contains 'href="#fix"' or content contains 'href="#comment"' %}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap">
-<script src="{{ "/assets/js/fixes.js" | relative_url }}"></script>
+<script src="{{ "/assets/js/notes.js" | relative_url }}"></script>
 {%- endif %}
 
 {%- if content contains 'href="#glossary"' %}

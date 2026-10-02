@@ -17,7 +17,7 @@ Using DoR would solve many problems that your team would face.
 - **Requirements are not estimated or prioritized**. When a [PBI](#glossary) is ready, it must have specific place on the backlog and contain estimation so that it can be planned.
 - **The team does not understand requirements**. Having a PBI is not only about having a set of rules for writing requirements. A ‘ready’ PBI is a one that is discussed with the team, so that you’re sure that relevant team members understand value and ‘to do’s of a PBI. The same thing will also help **if team finds new cases when a feature is in progress**.
 
-### [Definition of Ready vs Definition of Done](#fix "Years go, but the issue is still the same: how to distinguish these two?"){: data-img="/assets/img/dor-vs-dod.png"}
+### [Definition of Ready vs Definition of Done](#comment "Years go, but the issue is still the same: how to distinguish these two?"){: data-img="/assets/img/dor-vs-dod.png"}
 
 There is another document whose name can confuse an aspiring BA: definition of done. While definition of ready is a document that is to be followed by those who create PBIs, definition of done is for those who **do** the PBIs.
 

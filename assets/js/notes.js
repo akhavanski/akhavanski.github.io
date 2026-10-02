@@ -1,29 +1,33 @@
-// Shows corrections in a post: the fixed text is highlighted,
-// a click on it opens a handwritten sticky note that says what was changed.
-// In the post write [fixed text](#fix "What was changed and why").
-// A picture under the note: [fixed text](#fix "Note"){: data-img="/assets/img/pic.png"}.
+// Shows author's notes in a post, opened by a click on the marked text.
+// A comment: [text](#comment "Comment") — the text is highlighted,
+// the note is a handwritten sticky note held by a strip of tape.
+// A fix: [new text](#fix "Why"){: data-was="old text"} — the text has a wavy
+// underline, the note is a card with the old text cut out of the page glued on it.
+// A picture under the note: [text](#comment "Note"){: data-img="/assets/img/pic.png"}.
 // The post layout loads this script only when the post has such a link.
 (function () {
-  var links = document.querySelectorAll('a[href="#fix"]');
+  var links = document.querySelectorAll('a[href="#fix"], a[href="#comment"]');
   if (!links.length) return;
 
   links.forEach(function (link) {
     var mark = document.createElement("mark");
-    mark.className = "fix";
+    mark.className = link.getAttribute("href").slice(1);
     mark.tabIndex = 0;
     mark.setAttribute("role", "button");
     mark.setAttribute("aria-expanded", "false");
-    mark.setAttribute("aria-controls", "fix-note");
+    mark.setAttribute("aria-controls", "post-note");
     mark.dataset.note = link.title;
     if (link.dataset.img) mark.dataset.img = link.dataset.img;
+    if (link.dataset.was) mark.dataset.was = link.dataset.was;
     while (link.firstChild) mark.appendChild(link.firstChild);
     link.replaceWith(mark);
   });
 
-  // One note for the whole page: it moves to the clicked text.
+  // One note for the whole page: it moves to the clicked text
+  // and turns into a sticky note or a card.
   var note = document.createElement("div");
-  note.className = "fix-note";
-  note.id = "fix-note";
+  note.className = "note";
+  note.id = "post-note";
   note.setAttribute("role", "note");
   note.hidden = true;
   document.body.appendChild(note);
@@ -38,15 +42,21 @@
     if (current) current.setAttribute("aria-expanded", "false");
     current = mark;
     mark.setAttribute("aria-expanded", "true");
-    fill(mark.dataset.note, mark.dataset.img);
+    note.classList.toggle("note-card", mark.className === "fix");
+    fill(mark.dataset.note, mark.dataset.img, mark.dataset.was);
     note.hidden = false;
     place();
   }
 
   // The note is plain text, only *words in stars* become italic.
-  // A picture, if any, goes under the text.
-  function fill(text, img) {
+  // The old text of a fix, if any, goes on top, a picture goes under the text.
+  function fill(text, img, was) {
     note.textContent = "";
+    if (was) {
+      var cutout = note.appendChild(document.createElement("div"));
+      cutout.className = "note-cutout";
+      cutout.appendChild(document.createElement("span")).textContent = was;
+    }
     text.split(/\*([^*]+)\*/).forEach(function (part, i) {
       if (i % 2) {
         var em = document.createElement("em");
@@ -79,7 +89,7 @@
 
   // Under the last line of the highlighted text, but not off the screen.
   // The note is a bit higher than the line's bottom, so its tape
-  // goes over the fixed text, in the middle of it.
+  // goes over the marked text, in the middle of it.
   function place() {
     var lines = current.getClientRects();
     var line = lines[lines.length - 1];
@@ -93,7 +103,7 @@
   }
 
   document.addEventListener("click", function (e) {
-    var mark = e.target.closest("mark.fix");
+    var mark = e.target.closest("mark.fix, mark.comment");
     if (mark) toggle(mark);
     else if (!note.contains(e.target)) close();
   });
@@ -103,7 +113,7 @@
       var mark = current;
       close();
       mark.focus();
-    } else if ((e.key === "Enter" || e.key === " ") && e.target.matches("mark.fix")) {
+    } else if ((e.key === "Enter" || e.key === " ") && e.target.matches("mark.fix, mark.comment")) {
       e.preventDefault();
       toggle(e.target);
     }
