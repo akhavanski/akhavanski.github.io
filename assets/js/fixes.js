@@ -1,5 +1,5 @@
 // Shows corrections in a post: the fixed text is highlighted,
-// a click on it opens a sticky note that says what was changed.
+// a click on it opens a handwritten sticky note that says what was changed.
 // In the post write [fixed text](#fix "What was changed and why").
 // The post layout loads this script only when the post has such a link.
 (function () {
@@ -56,7 +56,7 @@
     var gap = 16;
     var maxLeft = document.documentElement.clientWidth - note.offsetWidth - gap;
     note.style.left = window.scrollX + Math.max(gap, Math.min(line.left, maxLeft)) + "px";
-    note.style.top = window.scrollY + line.bottom + 8 + "px";
+    note.style.top = window.scrollY + line.bottom + 14 + "px";
   }
 
   document.addEventListener("click", function (e) {
