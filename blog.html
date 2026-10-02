@@ -16,7 +16,9 @@ permalink: /blog
   shows its options under it. On narrow screens they are under the title:
   the names in one line, a click on a name opens a menu with its options.
   The number after a name tells how many are chosen.
-  On wide screens Keywords has the catalogue cabinet from the posts: when its
+  On wide screens Language has a globe with letters of different alphabets
+  round it: when its options are open, the globe is turned and letters fly out
+  of it. Keywords has the catalogue cabinet from the posts: when its
   options are open, the cabinet is turned and its drawer is pulled out.
   Each option has its own fill colour for when it is chosen: data-fill counts
   the options of both filters in a row (the colours are in assets/css/main.scss).
@@ -34,7 +36,10 @@ permalink: /blog
   <div class="blog-filters" hidden>
     <div class="filter-names">
       <div class="filter">
-        <button type="button" class="filter-name" aria-expanded="false" aria-controls="filter-lang">Language</button><span class="filter-count" data-filter="lang"></span>
+        <button type="button" class="filter-name globe-toggle" aria-expanded="false" aria-controls="filter-lang">
+          {%- include globe.html %}
+          <span class="globe-label">Language</span>
+        </button><span class="filter-count" data-filter="lang"></span>
         <div class="filter-options" id="filter-lang" role="group" aria-label="Language">
           {%- for lang in langs %}
           <button type="button" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ forloop.index0 | modulo: 8 }}" style="--i: {{ forloop.index0 }}">{{ site.data.languages[lang] | default: lang }}</button>
