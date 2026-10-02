@@ -32,7 +32,7 @@ layout: default
   <p class="post-signature">— {{ site.author | split: " " | first }}</p>
 </article>
 
-<p class="post-footer">Published <time datetime="{{ page.date }}">{{ page.date | date: site.theme_config.date_format }}</time>. If you don’t agree or think I made a mistake, drop me an <a href="mailto:{{ site.contact_email }}">email</a>.</p>
+<p class="post-footer">Published <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: site.theme_config.date_format }}</time>. If you don’t agree or think I made a mistake, drop me an <a href="mailto:{{ site.contact_email }}">email</a>.</p>
 
 {%- if keywords.size > 0 %}
 <script src="{{ "/assets/js/keywords.js" | relative_url }}"></script>
