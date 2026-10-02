@@ -11,7 +11,7 @@ $tiny-screen: 20.5rem;
 $wide-screen: 72rem;
 
 // Puts a block in that column, $top below the top of the title's box,
-// which is its positioned parent.
+// which is its positioned parent. Used by the post keywords and the blog filters.
 @mixin right-column($top) {
   @media (min-width: $wide-screen) {
     position: absolute;
@@ -95,32 +95,30 @@ pre.mermaid { text-align: center; }
   }
 }
 
-// Filters on the home page (see assets/js/blog-filters.js): in the line
-// of the title "Blog", at its right end; a click on a name opens a menu
-// with its options under it. When the names do not fit next to the title,
-// they go under it.
+// Filters on the home page (see assets/js/blog-filters.js). On narrow screens
+// they are under the title: the names of the filters in one line, a click
+// on a name opens a menu under it. On wide screens they are right of the list,
+// like the keywords in a post: the names one under the other, a click on a name
+// brings its options out under it, one by one from the left.
 // The options are cards like the post keywords, several in a line;
 // a chosen one is filled with its own colour. The colours are bright
 // but light enough for black text (a contrast of 9:1 and more).
 $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #ff8ad8;
 
-.blog-head {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem 0.75rem;
-  margin-bottom: 1rem;
-
-  h2 { margin-bottom: 0; }
-}
+.blog-head { position: relative; }
 
 .blog-filters {
-  display: flex;
-  gap: 0 2ch;
+  margin-bottom: 2rem;
+  // Level with the middle of the title's first line.
+  @include right-column(0.35rem);
 
   &[hidden] { display: none; }
+}
+
+.filter-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 3ch;
 }
 
 .filter { position: relative; }
@@ -146,14 +144,12 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   color: grey;
 }
 
-// The menu hangs from the right end of its name, the filters being
-// at the right edge of the text.
 .filter-options {
   display: none;
   position: absolute;
   z-index: 5;
   top: calc(100% + 0.5rem);
-  right: -0.6rem;
+  left: -0.6rem;
   box-sizing: border-box;
   width: max-content;
   max-width: 22rem;
@@ -181,30 +177,53 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
     &:hover { text-decoration: underline; }
     &:focus-visible { outline: 1px dotted black; outline-offset: 3px; }
   }
+
+  // On phones a menu would not fit right of its name,
+  // so it opens under the line of names, from its left edge.
+  @media (max-width: 30rem) {
+    left: 0;
+    max-width: 100%;
+  }
 }
 
 @for $i from 1 through length($filter-fills) {
   .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { background: nth($filter-fills, $i); }
 }
 
-// On phones the names are smaller, to fit next to the title with the numbers
-// of chosen options (from a width of 360px), and a menu would not fit
-// under its name, so it opens under the whole line, as wide as the text.
 @media (max-width: 30rem) {
-  .blog-filters { font-size: 0.8em; }
-
+  .filter-names { position: relative; }
   .filter { position: static; }
+}
+
+// In the right column there is no room for a menu, so the options
+// stand right under the name, as cards without a frame.
+@media (min-width: $wide-screen) {
+  .filter-names {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
 
   .filter-options {
-    left: 0;
-    right: 0;
+    position: static;
     width: auto;
     max-width: none;
+    margin-top: 0.8rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+
+    // The same entrance as the post keywords.
+    button {
+      animation: keywords-card-in 0.45s ease-out both;
+      animation-delay: calc(var(--i) * 0.05s);
+    }
   }
 }
 
 .filter-status {
-  margin: 0 0 1rem;
+  margin: 1rem 0 0;
   font-size: 0.85em;
   color: grey;
 
@@ -392,6 +411,7 @@ mark.fix, .about-toggle {
 // turns a little; a click turns it to profile, pulls out the K–P drawer
 // and brings the keywords out under it, one by one from the left.
 // On narrow screens it is under the title, on wide ones right of the post.
+// The keyword filter on the home page has the same cabinet on wide screens.
 $ink: #2b2b2b;
 $toon-line: 2.5px solid $ink;
 // The cabinet is modelled at full size and scaled down as a whole.
@@ -652,6 +672,138 @@ $turn: 0.6s;
   .keywords-toggle:hover .keywords-label { transform: none; }
 }
 
+// The keyword filter on the home page: on narrow screens it is a name
+// like Language, the cabinet shows only in the right column. There it needs
+// no arrow, and the number of chosen keywords moves aside with the word.
+.filter .keywords-toggle {
+  display: inline-block;
+
+  .catalog { display: none; }
+}
+
+@media (min-width: $wide-screen) {
+  .filter .keywords-toggle {
+    display: inline-flex;
+    vertical-align: middle;
+
+    .catalog { display: block; }
+    &::after { content: none; }
+  }
+
+  .keywords-toggle + .filter-count {
+    display: inline-block;
+    transition: transform 0.45s $spring;
+  }
+
+  .keywords-toggle:hover + .filter-count { transform: translateX(0.35rem); }
+
+  .keywords-toggle[aria-expanded="true"] + .filter-count {
+    transform: translateX(1.2rem);
+    transition-delay: 0.35s;
+  }
+}
+
+// The language filter on the home page (see _includes/globe.html): on wide
+// screens the word "Language" has a small cartoon globe with letters
+// of different alphabets round it. On hover the globe turns a little
+// and the letters go round it, the word moves aside like "Keywords";
+// a click turns the globe further.
+$globe-turn: 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
+
+.filter .globe-toggle .globe { display: none; }
+
+@media (min-width: $wide-screen) {
+  .filter .globe-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    vertical-align: middle;
+
+    .globe { display: block; }
+    &::after { content: none; }
+  }
+
+  .globe-label, .globe-toggle + .filter-count {
+    display: inline-block;
+    transition: transform 0.45s $spring;
+  }
+
+  .globe-toggle:hover {
+    .globe-label, & + .filter-count { transform: translateX(0.35rem); }
+  }
+}
+
+.globe {
+  position: relative;
+  flex: none;
+  width: 3.8rem;
+  height: 3rem;
+
+  svg {
+    position: absolute;
+    left: 0.8rem;
+    top: 0.4rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    overflow: visible;
+    stroke: $ink;
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .g-sea { fill: #82b1ff; stroke: none; }
+  .g-land { fill: #7ed99a; stroke-width: 1.2; transition: transform $globe-turn; }
+  .g-shade { fill: rgba(30, 50, 120, 0.2); stroke: none; }
+  .g-shine { fill: none; stroke: white; stroke-width: 2; }
+  .g-rim { fill: none; }
+
+  // The letters stand on a circle squashed into an ellipse, each letter
+  // stretched back. --turn moves them all along it, upright.
+  .g-orbit {
+    position: absolute;
+    left: 1.9rem;
+    top: 1.5rem;
+    --turn: 0deg;
+    transform: scaleY(0.78);
+  }
+
+  .g-orbit span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: sans-serif;
+    font-weight: bold;
+    line-height: 1;
+    white-space: nowrap;
+    -webkit-text-stroke: 1px $ink;
+    paint-order: stroke fill;
+  }
+
+  .g-orbit span {
+    font-size: 0.65rem;
+    transform: translate(-50%, -50%) rotate(calc(var(--a) + var(--turn))) translateX(1.55rem) rotate(calc(-1 * (var(--a) + var(--turn)))) scaleY(1.28);
+    transition: transform $globe-turn;
+  }
+}
+
+@for $i from 1 through 6 {
+  .g-orbit span:nth-child(#{$i}) {
+    --a: #{($i - 1) * 60deg + 30deg};
+    color: nth($filter-fills, ($i * 3) % length($filter-fills) + 1);
+  }
+}
+
+.globe-toggle:hover {
+  .g-land { transform: translateX(7px); }
+  .g-orbit { --turn: -40deg; }
+}
+
+.globe-toggle[aria-expanded="true"] {
+  .g-land { transform: translateX(22px); }
+  .g-orbit { --turn: -150deg; }
+}
+
 // The keywords: a card each, several in a line.
 .keywords-list {
   display: flex;
@@ -770,6 +922,7 @@ $turn: 0.6s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-list a, .turtle-btn { transition: none; }
-  .keywords-list li { animation: none; }
+  .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-toggle + .filter-count, .keywords-list a, .turtle-btn { transition: none; }
+  .globe .g-land, .globe .g-orbit span, .globe-label, .globe-toggle + .filter-count { transition: none; }
+  .keywords-list li, .filter-options button { animation: none; }
 }
