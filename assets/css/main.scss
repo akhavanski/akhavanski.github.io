@@ -728,7 +728,7 @@ $turn: 0.6s;
 // a cartoon wooden bento box with a row of sushi and the word "Menu".
 // On hover chopsticks come and pick up the last sushi; a click carries it away,
 // the rest move up, a new one slides in from the other side (assets/js/menu.js),
-// and the menu comes up on a Nokia 3310 (below).
+// and the menu opens under the box, cards like the post keywords.
 // On wide screens it stands in the right column, right above Keywords;
 // on narrow ones only the box is in the title, a bit smaller.
 $bento-carry: 0.55s;
@@ -814,141 +814,56 @@ $bento-carry: 0.55s;
   .b-item:last-child .b-food { transform: translate(26px, -30px); }
 }
 
-// The menu itself: a Nokia 3310 (assets/js/nokia.js) in a dialog over
-// the whole window, a click beside the phone closes it. The phone comes up
-// from the bottom, turning straight on the way, and goes back down.
-// Its body is assets/img/nokia-3310.svg; the screen is a canvas over
-// the display window of the picture, the boxes below are measured in its
-// units (200 × 462).
-$nokia-screen: 27.5, 121, 144, 98;
-
-.nokia {
-  position: fixed;
-  inset: 0;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  max-height: none;
-  margin: 0;
-  padding: 1rem;
-  border: 0;
-  background: none;
-  overflow: hidden;
-
-  &[open] {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &::backdrop {
-    background: rgba(8, 12, 28, 0.5);
-    animation: nokia-fade 0.3s both;
-  }
-
-  &.is-closing::backdrop { animation: nokia-fade-out 0.3s both; }
-}
-
-// The page stays still under the phone.
-html:has(.nokia[open]) { overflow: hidden; }
-
-.nokia-phone {
-  position: relative;
-  flex: none;
-  height: min(88vh, 36rem, calc((100vw - 2rem) * 2.31));
-  aspect-ratio: 200 / 462;
-  filter: drop-shadow(0 1.6rem 1.8rem rgba(0, 0, 0, 0.45)) drop-shadow(0 0.3rem 0.4rem rgba(0, 0, 0, 0.35));
-  animation: nokia-in 0.65s cubic-bezier(0.3, 1.25, 0.5, 1) both;
-
-  svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  .nokia.is-closing & { animation: nokia-out 0.3s ease-in both; }
-}
-
-@keyframes nokia-in {
-  from { transform: translateY(calc(50vh + 70%)) rotate(-10deg); }
-}
-
-@keyframes nokia-out {
-  to { transform: translateY(calc(50vh + 70%)) rotate(8deg); }
-}
-
-@keyframes nokia-fade {
-  from { opacity: 0; }
-}
-
-@keyframes nokia-fade-out {
-  to { opacity: 0; }
-}
-
-// The display: grey-green, with the green backlight on and the glass
-// with the shadow of the window's edge over the pixels.
-.nokia-screen {
-  position: absolute;
-  left: percentage(nth($nokia-screen, 1) / 200);
-  top: percentage(nth($nokia-screen, 2) / 462);
-  width: percentage(nth($nokia-screen, 3) / 200);
-  height: percentage(nth($nokia-screen, 4) / 462);
-  border-radius: 1.7% 1.7% 7.5% 7.5% / 2.6% 2.6% 11% 11%;
-  background: radial-gradient(120% 110% at 50% 35%, #a3b78a, #8a9e72);
-  overflow: hidden;
-  cursor: pointer;
-  touch-action: none;
-
-  &::before, &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-  }
-
-  &::before {
-    background:
-      radial-gradient(45% 70% at 4% 100%, rgba(214, 255, 150, 0.7), transparent),
-      radial-gradient(45% 70% at 96% 100%, rgba(214, 255, 150, 0.7), transparent),
-      radial-gradient(120% 110% at 50% 35%, #bde394, #9fcc78);
-    opacity: 0;
-    transition: opacity 0.5s;
-  }
-
-  &::after {
-    z-index: 2;
-    background: linear-gradient(112deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04) 42%, transparent 42.2%);
-    box-shadow: inset 0 0.35rem 0.5rem -0.15rem rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(0, 0, 0, 0.4);
-  }
-
-  .is-lit &::before { opacity: 1; }
-
-  // 84 × 48 pixels, a bit taller than wide, as on the real display.
-  canvas {
-    position: absolute;
-    z-index: 1;
-    left: 2.75%;
-    top: 4.6%;
-    width: 94.5%;
-    height: 90.1%;
-  }
-}
-
-// The links the screen shows, for the keyboard and screen readers only.
+// Over Keywords while it is open; the current page is filled with yellow.
 .menu-list {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  z-index: 15;
+  top: calc(100% + 0.5rem);
+  left: -0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
   margin: 0;
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
+  padding: 0.6rem;
+  border: 1.5px solid black;
+  border-radius: 2px;
+  background: white;
+  box-shadow: 3px 3px 0 black;
+  list-style: none;
+
+  &[hidden] { display: none; }
+
+  li {
+    margin: 0;
+    animation: keywords-card-in 0.45s ease-out both;
+    animation-delay: calc(var(--i) * 0.05s);
+  }
+
+  a {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border: 1.5px solid black;
+    border-radius: 2px;
+    background: white;
+    box-shadow: 2px 2px 0 black;
+    font-size: 0.8rem;
+    color: black;
+    text-decoration: none;
+    transition: transform 0.15s;
+
+    &:hover, &:focus-visible {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 black;
+      text-decoration: underline;
+    }
+
+    &[aria-current="page"] { background: #ffe14d; }
+  }
 }
 
-// Without the right column the word is only for screen readers.
+// Without the right column the word is only for screen readers,
+// and the menu opens under the box from its right edge.
 @media not all and (min-width: $wide-screen) {
   .bento { width: 2.85rem; height: 2.25rem; }
 
@@ -960,6 +875,8 @@ html:has(.nokia[open]) { overflow: hidden; }
     clip-path: inset(50%);
     white-space: nowrap;
   }
+
+  .menu-list { left: auto; right: -0.6rem; }
 }
 
 // The turtle in the bottom right corner of the window (see _includes/turtle.html):
@@ -1038,7 +955,8 @@ html:has(.nokia[open]) { overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-toggle + .filter-count, .keywords-list a, .turtle-btn { transition: none; }
-  .keywords-list li, .filter-options button, .filter-heading, .nokia-phone, .nokia::backdrop { animation: none; }
+  .keywords-list li, .filter-options button, .filter-heading, .menu-list li { animation: none; }
+  .menu-list a { transition: none; }
   // The bento rules for carrying a sushi are more specific.
   .b-item, .b-food, .b-sticks { transition: none !important; }
 }

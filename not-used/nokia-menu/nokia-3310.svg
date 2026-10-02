@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 462" aria-hidden="true">
-<!-- Nokia 3310 for the header menu (assets/js/nokia.js). Keys with data-key are pressed by the script. -->
+<!-- Nokia 3310 for the menu (nokia.js). Keys with data-key are pressed by the script. -->
 <style>
   .n-hole { fill: #04060d; opacity: .72; }
   .n-light { fill: url(#n-glow-fill); opacity: 0; transition: opacity .5s; }

@@ -1,16 +1,22 @@
-// The bento box of the menu in the header (see _includes/menu.html).
-// A click on it (or the word "Menu") brings up the phone with the menu
-// (assets/js/nokia.js); the chopsticks carry away the sushi they hold,
-// the rest move up and a new one slides in from the other side.
-// Without hover (a tap) the chopsticks first come and pick it up.
+// The menu in the header (see _includes/menu.html). A click on the bento box
+// (or the word "Menu") opens or closes the menu; the chopsticks carry away
+// the sushi they hold, the rest move up and a new one slides in from the other
+// side. Without hover (a tap) the chopsticks first come and pick it up.
+// A click elsewhere or Escape closes the menu.
 (function () {
   var toggle = document.querySelector(".menu-toggle");
+  var list = document.getElementById("menu-list");
   var row = toggle && toggle.querySelector(".b-row");
-  if (!toggle || !row) return;
+  if (!toggle || !list || !row) return;
 
   // How long the chopsticks carry a sushi away ($bento-carry in assets/css/main.scss).
   var carry = 550;
   var busy = false;
+
+  function show(open) {
+    toggle.setAttribute("aria-expanded", String(open));
+    list.hidden = !open;
+  }
 
   // The last sushi goes with the chopsticks; the others move a slot up,
   // and the next kind comes in at the first slot from beyond the box.
@@ -39,6 +45,7 @@
   }
 
   toggle.addEventListener("click", function () {
+    show(list.hidden);
     if (busy) return;
     busy = true;
     if (toggle.matches(":hover, :focus-visible")) {
@@ -46,6 +53,17 @@
     } else {
       toggle.classList.add("is-holding");
       setTimeout(take, 350);
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (!list.hidden && !e.target.closest(".menu")) show(false);
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !list.hidden) {
+      show(false);
+      toggle.focus();
     }
   });
 })();

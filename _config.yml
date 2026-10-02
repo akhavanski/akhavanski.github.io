@@ -48,3 +48,4 @@ exclude:
   - vendor
   - README.md
   - CLAUDE.md
+  - not-used # tried and put aside, kept apart from the site

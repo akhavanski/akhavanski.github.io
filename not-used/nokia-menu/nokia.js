@@ -1,6 +1,6 @@
-// The menu in the header as a Nokia 3310 (see _includes/menu.html): a click
-// on the bento box brings the phone up from the bottom of the window.
-// The phone itself is assets/img/nokia-3310.svg, loaded on the first hover.
+// A menu on a Nokia 3310 (see index.html): a click on the Menu button
+// brings the phone up from the bottom of the window.
+// The phone itself is nokia-3310.svg, loaded on the first hover.
 // Its screen is an 84 × 48 canvas drawn pixel by pixel like the real display,
 // with the same slow fade of the pixels; it shows the menu one item at a time:
 // the name, the number and the scroll bar on top, a picture, "Select" below.

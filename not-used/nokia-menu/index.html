@@ -1,0 +1,33 @@
+<!doctype html>
+<!--
+  The menu on a Nokia 3310, tried in the header of the blog on 2026-10-02
+  and not used. It stands apart from the site: the folder is excluded from
+  the build (_config.yml). To look at it, serve the folder, e.g.
+  `python3 -m http.server -d not-used/nokia-menu`, and open the page.
+  The phone is nokia-3310.svg, made by gen_nokia.py; the screen and the keys
+  are nokia.js, the dialog nokia.css. data-icon on a link is its picture
+  on the screen: blog, now or about.
+-->
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nokia menu</title>
+<link rel="stylesheet" href="nokia.css">
+<style>
+  body { margin: 0; padding: 2rem; font-family: monospace; }
+  .menu-toggle { padding: 0; border: 0; background: none; font: inherit; cursor: pointer; }
+  .menu-toggle:hover { text-decoration: underline; }
+</style>
+<button class="menu-toggle" type="button" aria-haspopup="dialog" aria-controls="nokia">Menu</button>
+<dialog class="nokia" id="nokia" aria-label="Menu" data-svg="nokia-3310.svg">
+  <div class="nokia-phone">
+    <div class="nokia-screen"><canvas></canvas></div>
+    <ul class="menu-list">
+      <li><a href="https://akh.cx/" data-icon="blog">Blog</a></li>
+      <li><a href="https://akh.cx/now" data-icon="now">Now</a></li>
+      <li><a href="https://akh.cx/about" data-icon="about">About</a></li>
+    </ul>
+  </div>
+</dialog>
+<script src="nokia.js" defer></script>
+</html>
