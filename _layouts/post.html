@@ -12,15 +12,8 @@ layout: default
 {%- assign heads = h2s | plus: h3s %}
 
 <article>
-  {%- if heads >= 2 %}
-  <nav class="toc" id="toc" aria-label="Table of contents"></nav>
-  {%- endif %}
-
   <div class="post-head">
     <a class="to-blog" href="{{ "/" | relative_url }}">← to blog</a>
-    {%- if heads >= 2 %}
-    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc">Table of contents</button>
-    {%- endif %}
     <h1>{{ page.title }}</h1>
 
     {%- if keywords.size > 0 %}
@@ -38,6 +31,14 @@ layout: default
     </div>
     {%- endif %}
   </div>
+
+  {%- if heads >= 2 %}
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-rail">
+      <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc">Table of contents</button>
+    </div>
+  </nav>
+  {%- endif %}
 
   {{ content }}
 

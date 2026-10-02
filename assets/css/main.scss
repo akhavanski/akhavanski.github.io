@@ -279,13 +279,9 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   a.social-email:hover, a.social-email:focus-visible { color: #ea4335; }
 }
 
-// The way back to the blog from a post: a quiet white card with a grey outline,
-// the grey a bit darker on hover.
-// It stands left of the post title, in the empty column left of the 640px wide text,
-// so on narrow screens, where there is no such column, it goes.
-// The button "Table of contents" is the same card right under it.
-.to-blog, .toc-toggle {
-  display: none;
+// A quiet white card with a grey outline, the grey a bit darker on hover:
+// the way back to the blog and the button "Table of contents" in a post.
+@mixin quiet-card {
   padding: 0.1rem 0.4rem;
   border: 1.5px solid #aaa;
   border-radius: 2px;
@@ -304,6 +300,14 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   }
 
   &:focus-visible { outline: 1px dotted grey; outline-offset: 3px; }
+}
+
+// The way back to the blog from a post.
+// It stands left of the post title, in the empty column left of the 640px wide text,
+// so on narrow screens, where there is no such column, it goes.
+.to-blog {
+  display: none;
+  @include quiet-card;
 
   @media (min-width: 60rem) {
     display: inline-block;
@@ -314,12 +318,46 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   }
 }
 
+// The table of contents of a post (see assets/js/toc.js): the button "Table of contents"
+// under "← to blog" stays at the top of the window while you read, and a click
+// on it slides a printed page with the sections, set in Computer Modern, the LaTeX
+// font, out from under the post below it. The section being read is marked
+// with a highlighter. Like "← to blog", it lives in the empty column left of the text.
+article { position: relative; }
+
+.toc {
+  display: none;
+
+  @media (min-width: 60rem) {
+    display: block;
+    position: absolute;
+    // Right under "← to blog", down to the end of the post.
+    top: 2.65rem;
+    bottom: 0;
+    // The page is under the post 1.25rem left of the text: the post's edge hides it.
+    right: calc(100% + 1.25rem);
+    width: calc(50vw - 320px - 3.25rem);
+    clip-path: inset(-3rem 0 -100vh -3rem);
+    pointer-events: none;
+  }
+}
+
+// The button and the page under it go along while you read.
+.toc-rail {
+  position: sticky;
+  top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  // The button's right edge in line with "← to blog".
+  padding-right: 1.25rem;
+}
+
 .toc-toggle {
+  @include quiet-card;
   font-family: inherit;
   line-height: inherit;
   cursor: pointer;
-
-  @media (min-width: 60rem) { top: 2.65rem; }
+  pointer-events: auto;
 
   // Pressed in while the table of contents is out.
   &[aria-expanded="true"] {
@@ -330,38 +368,18 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   }
 }
 
-// The table of contents of a post (see assets/js/toc.js): a printed page set in
-// Computer Modern, the LaTeX font. It slides out from under the post into
-// the empty column left of it, under the button, and goes along while you read;
-// the section being read is marked with a highlighter.
-article { position: relative; }
-
-.toc {
-  display: none;
-
-  @media (min-width: 60rem) {
-    display: block;
-    position: absolute;
-    top: 4.6rem;
-    bottom: 0;
-    // The sheet is under the post 1.25rem left of the text: the post's edge hides it.
-    right: calc(100% + 1.25rem);
-    width: calc(50vw - 320px - 3.25rem);
-    clip-path: inset(-1rem 0 -3rem -3rem);
-    pointer-events: none;
-  }
-}
-
 .toc-sheet {
-  position: sticky;
-  top: 1.5rem;
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 0;
+  // Its right edge in line with the button.
+  right: 1.25rem;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  // Its right edge in line with the buttons.
-  width: calc(100% - 1.25rem);
-  max-height: calc(100vh - 3rem);
-  padding: 1.2rem 1.4rem 1.1rem;
+  // The window less the button above and a margin below.
+  max-height: calc(100vh - 5.2rem);
+  padding: 1.1rem 1.4rem;
   background: white;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18), 0 8px 20px rgba(0, 0, 0, 0.08);
   font-family: "Computer Modern Serif", serif;
@@ -399,12 +417,7 @@ article { position: relative; }
 
     > a { font-weight: bold; }
 
-    &:first-child {
-      margin-top: 0;
-
-      // Clear of the cross.
-      > a { padding-right: 1.2rem; }
-    }
+    &:first-child { margin-top: 0; }
   }
 
   a {
@@ -423,23 +436,6 @@ article { position: relative; }
   }
 }
 
-.toc-close {
-  position: absolute;
-  top: 0.35rem;
-  right: 0.5rem;
-  padding: 0 0.2rem;
-  border: 0;
-  background: none;
-  font: inherit;
-  font-size: 1.4rem;
-  line-height: 1;
-  color: grey;
-  cursor: pointer;
-
-  &:hover, &:focus-visible { color: black; }
-  &:focus-visible { outline: 1px dotted black; }
-}
-
 // The heading a post is opened at (from the table of contents or a link) is
 // highlighted with a stroke of a marker (assets/img/marker.svg), not the theme's
 // yellow fill. The stroke starts a little before the words; the text stays put.
@@ -448,7 +444,7 @@ article :is(h2, h3, h4):target {
   // The stroke goes under the text, but not under the page's white.
   isolation: isolate;
   background: none;
-  // Level with the top of the table of contents.
+  // Level with the button "Table of contents".
   scroll-margin-top: 1.5rem;
 
   // The letters sit high in the line, so the stroke reaches above it.

@@ -1,11 +1,11 @@
-// Table of contents of a post: a click on "Table of contents" (under "← to blog")
-// slides a sheet with the post's sections and subsections out from under the post.
-// While you read, the sheet goes along and marks the section you are in.
-// A second click on the button, the cross on the sheet or Escape slides it back.
+// Table of contents of a post: the button "Table of contents" (under "← to blog")
+// stays at the top of the window while you read; a click on it slides a page with
+// the post's sections and subsections out from under the post, below the button.
+// The page marks the section you are in. A second click or Escape slides it back.
 // The post layout loads this script only when the post has two headings or more.
 (function () {
   var toggle = document.querySelector(".toc-toggle");
-  var nav = document.getElementById("toc");
+  var nav = document.querySelector(".toc");
   if (!toggle || !nav) return;
   var article = nav.parentNode;
 
@@ -24,11 +24,7 @@
 
   var sheet = document.createElement("div");
   sheet.className = "toc-sheet";
-  var close = sheet.appendChild(document.createElement("button"));
-  close.className = "toc-close";
-  close.type = "button";
-  close.setAttribute("aria-label", "Close the table of contents");
-  close.textContent = "×";
+  sheet.id = "toc";
   var list = sheet.appendChild(document.createElement("ol"));
 
   // Subsections go inside their section; one before any section counts as a section.
@@ -44,7 +40,7 @@
       sub.appendChild(entry(h));
     }
   });
-  nav.appendChild(sheet);
+  toggle.parentNode.appendChild(sheet);
 
   function show(open) {
     toggle.setAttribute("aria-expanded", String(open));
@@ -53,11 +49,6 @@
 
   toggle.addEventListener("click", function () {
     show(!nav.classList.contains("is-open"));
-  });
-
-  close.addEventListener("click", function () {
-    show(false);
-    toggle.focus();
   });
 
   document.addEventListener("keydown", function (e) {
