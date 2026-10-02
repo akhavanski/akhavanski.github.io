@@ -179,6 +179,8 @@ $toon-line: 2.5px solid $ink;
 // The cabinet is modelled at full size and scaled down as a whole.
 $cabinet-scale: scale3d(0.5, 0.5, 0.5);
 $spring: cubic-bezier(0.34, 1.5, 0.64, 1);
+// The turn to profile; the keywords come out during the same time.
+$turn: 0.6s;
 
 .post-head { position: relative; }
 
@@ -300,7 +302,7 @@ $spring: cubic-bezier(0.34, 1.5, 0.64, 1);
     top: 1.35rem;
     transform-style: preserve-3d;
     transform: $cabinet-scale;
-    transition: transform 0.6s cubic-bezier(0.34, 1.35, 0.64, 1);
+    transition: transform $turn cubic-bezier(0.34, 1.35, 0.64, 1);
   }
 
   // Front: four drawers, A–D, E–J, K–P and Q–Z; K–P is a separate box below.
@@ -333,7 +335,7 @@ $spring: cubic-bezier(0.34, 1.5, 0.64, 1);
     @include wood(#cf8f55);
     transform: rotateY(-90deg) translateZ(3.2rem);
     visibility: hidden;
-    transition: visibility 0s 0.6s;
+    transition: visibility 0s $turn;
 
     .grain {
       left: 0.7rem;
@@ -438,8 +440,9 @@ $spring: cubic-bezier(0.34, 1.5, 0.64, 1);
 
   li {
     margin: 0;
-    animation: keywords-card-in 0.2s ease-out both;
-    animation-delay: calc(var(--i) * 0.04s);
+    // Starts with the turn; the last of four keywords ends with it.
+    animation: keywords-card-in ($turn - 0.15s) ease-out both;
+    animation-delay: calc(var(--i) * 0.05s);
   }
 
   a {
