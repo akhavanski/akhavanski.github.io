@@ -666,29 +666,6 @@ $turn: 0.6s;
   from { opacity: 0; transform: translateX(-3rem); }
 }
 
-// The tags page: the line of the tag someone came for is highlighted
-// with a stroke of a marker (assets/img/marker.svg). The stroke starts
-// a little before the word; the text stays where it was.
-.tags h2 {
-  scroll-margin-top: 1rem;
-
-  &:target {
-    position: relative;
-    // The stroke goes under the text, but not under the page's white.
-    isolation: isolate;
-    background: none;
-
-    // The letters sit high in the line, so the stroke reaches above it.
-    &::before {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      inset: -0.2em -0.15em 0 -0.6em;
-      background: url("../img/marker.svg") 0 0 / 100% 100% no-repeat;
-    }
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-list a { transition: none; }
   .keywords-list li { animation: none; }
