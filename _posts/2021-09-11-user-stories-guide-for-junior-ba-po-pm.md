@@ -9,12 +9,6 @@ lang: ru
 
 *Впервые опубликовано на [Хабре](https://habr.com/ru/articles/577420/).*
 
-## Содержание
-{:.no_toc}
-
-* TOC
-{:toc}
-
 ## Вводная информация о User Stories
 
 ### Что такое User Stories
