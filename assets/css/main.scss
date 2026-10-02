@@ -221,32 +221,35 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   @media (max-width: $tiny-screen) { display: none; }
 }
 
-// The way back to the blog from a post: a quiet grey card,
-// black on hover. On wide screens it stands left of the post title,
-// in the empty column left of the 640px wide text; on narrow ones, above the title.
+// The way back to the blog from a post: a quiet grey card, a bit darker on hover.
+// It stands left of the post title, in the empty column left of the 640px wide text,
+// so on narrow screens, where there is no such column, it goes.
 .to-blog {
-  display: inline-block;
+  display: none;
   padding: 0.1rem 0.4rem;
-  border: 1.5px solid #aaa;
+  border: 1.5px solid #bbb;
   border-radius: 2px;
-  box-shadow: 2px 2px 0 #ddd;
+  background: #eee;
+  box-shadow: 2px 2px 0 #ccc;
   font-size: 0.8rem;
-  color: grey;
+  color: #777;
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.15s, border-color 0.15s, box-shadow 0.15s;
+  transition: color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
 
   &:hover, &:focus-visible {
-    border-color: black;
-    box-shadow: 2px 2px 0 black;
-    color: black;
+    border-color: #888;
+    background: #e2e2e2;
+    box-shadow: 2px 2px 0 #aaa;
+    color: #444;
   }
 
-  &:focus-visible { outline: 1px dotted black; outline-offset: 3px; }
+  &:focus-visible { outline: 1px dotted grey; outline-offset: 3px; }
 
-  // Level with the first line of the title (2em at a line height of 1.4).
   @media (min-width: 60rem) {
+    display: inline-block;
     position: absolute;
+    // Level with the first line of the title (2em at a line height of 1.4).
     top: 0.65rem;
     right: calc(100% + 2.5rem);
   }
