@@ -509,6 +509,7 @@ $quiet-time: 0.3s;
 // The heading a post is opened at (from the table of contents or a link) is
 // highlighted with a stroke of a marker (assets/img/marker.svg), not the theme's
 // yellow fill. The stroke starts a little before the words; the text stays put.
+// It holds for a moment, then fades away.
 article :is(h2, h3, h4):target {
   position: relative;
   // The stroke goes under the text, but not under the page's white.
@@ -524,7 +525,12 @@ article :is(h2, h3, h4):target {
     z-index: -1;
     inset: -0.2em -0.15em 0 -0.6em;
     background: url("../img/marker.svg") 0 0 / 100% 100% no-repeat;
+    animation: marker-fade 1.5s ease-in 1.5s forwards;
   }
+}
+
+@keyframes marker-fade {
+  to { opacity: 0; }
 }
 
 // Author's signature at the end of each post: smaller, grey, on the right.
