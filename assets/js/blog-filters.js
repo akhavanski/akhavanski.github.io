@@ -1,8 +1,6 @@
 // Filters on the home page. A click on the name of a filter (Language, Keywords)
 // opens a menu with its options; a second click, a click anywhere else
-// or Escape closes it. On wide screens, where the filters stand in the column
-// right of the list, a filter with chosen options stays open: only a click
-// on its name closes it. A click on an option turns it on or off.
+// or Escape closes it. A click on an option turns it on or off.
 // Several languages and several keywords can be on at once. A post is shown
 // if it is in one of the chosen languages (any language if none is chosen)
 // and has one of the chosen keywords, that is tags (any if none is chosen).
@@ -15,10 +13,8 @@
   var names = box.querySelectorAll(".filter-name");
   var buttons = box.querySelectorAll("button[data-filter]");
   var posts = document.querySelectorAll(".blog-posts li");
-  var status = box.querySelector(".filter-status");
+  var status = document.querySelector(".filter-status");
   var count = status.querySelector("span");
-  // The width of $wide-screen in assets/css/main.scss.
-  var wide = window.matchMedia("(min-width: 72rem)");
 
   function chosen(filter) {
     var values = [];
@@ -30,34 +26,13 @@
     return values;
   }
 
-  function menu(name) {
-    return document.getElementById(name.getAttribute("aria-controls"));
-  }
-
   function show(name, open) {
     name.setAttribute("aria-expanded", String(open));
-    menu(name).classList.toggle("is-open", open);
+    document.getElementById(name.getAttribute("aria-controls")).classList.toggle("is-open", open);
   }
 
-  // A filter with chosen options stays open on wide screens.
-  function kept(name) {
-    return wide.matches && menu(name).querySelector('[aria-pressed="true"]') !== null;
-  }
-
-  // Closes the menus, all but the kept ones.
   function closeAll() {
-    names.forEach(function (name) {
-      if (!kept(name)) show(name, false);
-    });
-  }
-
-  // Opens the filters with chosen options on wide screens,
-  // on narrow ones closes all (the menus would cover the list).
-  function showKept() {
-    names.forEach(function (name) {
-      if (kept(name)) show(name, true);
-      else if (!wide.matches) show(name, false);
-    });
+    names.forEach(function (name) { show(name, false); });
   }
 
   function apply() {
@@ -103,40 +78,37 @@
     var button = e.target.closest("button");
     if (!button) return;
     if (button.classList.contains("filter-name")) {
-      // One menu at a time, besides the kept ones.
+      // One menu at a time.
       var open = button.getAttribute("aria-expanded") !== "true";
       closeAll();
       show(button, open);
       return;
     }
-    if (button.classList.contains("filter-reset")) {
-      buttons.forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
-      // The reset button hides now, so the focus goes to the first filter's name.
-      names[0].focus();
-    } else {
-      button.setAttribute("aria-pressed", String(button.getAttribute("aria-pressed") !== "true"));
-    }
+    button.setAttribute("aria-pressed", String(button.getAttribute("aria-pressed") !== "true"));
     apply();
+  });
+
+  status.querySelector(".filter-reset").addEventListener("click", function () {
+    buttons.forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+    apply();
+    // The reset button hides now, so the focus goes to the first filter's name.
+    names[0].focus();
   });
 
   document.addEventListener("click", function (e) {
     if (!e.target.closest(".filter")) closeAll();
   });
 
-  // Escape closes the open menu, unless it is kept;
-  // the focus goes back to its name.
+  // Escape closes the open menu; the focus goes back to its name.
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Escape") return;
     names.forEach(function (name) {
-      if (name.getAttribute("aria-expanded") !== "true" || kept(name)) return;
+      if (name.getAttribute("aria-expanded") !== "true") return;
       show(name, false);
       name.focus();
     });
   });
 
-  wide.addEventListener("change", showKept);
-
   box.hidden = false;
   apply();
-  showKept();
 })();
