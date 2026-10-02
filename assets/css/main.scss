@@ -438,8 +438,8 @@ $spring: cubic-bezier(0.34, 1.5, 0.64, 1);
 
   li {
     margin: 0;
-    animation: keywords-card-in 0.3s ease-out both;
-    animation-delay: calc(0.7s + var(--i) * 0.1s);
+    animation: keywords-card-in 0.2s ease-out both;
+    animation-delay: calc(var(--i) * 0.04s);
   }
 
   a {
