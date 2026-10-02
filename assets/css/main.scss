@@ -930,6 +930,40 @@ $turn: 0.6s;
   .keywords-toggle:hover .keywords-label { transform: none; }
 }
 
+// On phones, like the filter on the home page, it is the cabinet alone,
+// right of the first line of the title, under the bento box;
+// the keywords open under the title.
+@media (max-width: 30rem) {
+  // Room for the cabinet in the first line of the title only.
+  .post-head:has(.keywords) h1::before {
+    content: "";
+    float: right;
+    width: 3.35rem;
+    height: 2.5rem;
+  }
+
+  .post-head .keywords-toggle {
+    position: absolute;
+    // Centred on the first line of the title (2em at a line height of 1.4).
+    top: 0.275rem;
+    // The cabinet's right edge under the bento box's.
+    right: -0.05rem;
+
+    .catalog { display: block; }
+  }
+
+  .post-head .keywords-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .keywords-list { margin-top: 0; }
+}
+
 // The keyword filter on the home page: on narrow screens it is a plain name,
 // the cabinet shows only in the right column. There it needs no arrow,
 // and the number of chosen options moves aside with the word.
