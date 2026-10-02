@@ -1103,7 +1103,7 @@ $bento-turn: 1.4s;
   88%, 100% { transform: none; opacity: 1; }
 }
 
-// Over Keywords while it is open; the current page is filled with yellow.
+// Over Keywords while it is open.
 .menu-list {
   position: absolute;
   z-index: 15;
@@ -1146,8 +1146,6 @@ $bento-turn: 1.4s;
       box-shadow: 3px 3px 0 black;
       text-decoration: underline;
     }
-
-    &[aria-current="page"] { background: #ffe14d; }
   }
 }
 
