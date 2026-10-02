@@ -4,8 +4,45 @@ layout: default
 
 {%-include header.html-%}
 
+{%- comment -%} "English" marks the language of a post, it is not a keyword. {%- endcomment -%}
+{%- assign keywords = page.tags | where_exp: "tag", "tag != 'English'" %}
+
 <article>
+  {%- if keywords.size > 0 %}
+  <div class="post-head">
+    <h1>{{ page.title }} <button class="keys" type="button" aria-expanded="false" aria-controls="keywords" aria-label="Keywords" title="Keywords">
+      <svg viewBox="3 5 26 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="keys-gold" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fbe38e"/>
+            <stop offset="0.5" stop-color="#e0aa2e"/>
+            <stop offset="1" stop-color="#a87412"/>
+          </linearGradient>
+          <g id="keys-key" fill="url(#keys-gold)" stroke="#7a5208" stroke-width="0.7" stroke-linejoin="round">
+            <path fill-rule="evenodd" d="M7 10.2a5.8 5.8 0 1 0 0 11.6a5.8 5.8 0 1 0 0-11.6zM7 12.8a3.2 3.2 0 1 1 0 6.4a3.2 3.2 0 1 1 0-6.4z"/>
+            <path d="M13 14.8H29V20.6H26.8V17.2H25V19.6H22.8V17.2H13z"/>
+            <rect x="12" y="13.8" width="1.8" height="4.4" rx="0.4"/>
+          </g>
+        </defs>
+        <use href="#keys-key" transform="rotate(-45 16 16)"/>
+        <use href="#keys-key" transform="translate(32 0) scale(-1 1) rotate(-45 16 16)"/>
+      </svg>
+    </button></h1>
+
+    <div class="catalog" id="keywords" hidden>
+      <div class="catalog-frame">
+        <ul class="catalog-card">
+          {%- for keyword in keywords %}
+          <li>{{ keyword }}</li>
+          {%- endfor %}
+        </ul>
+      </div>
+      <span class="catalog-lock"></span>
+    </div>
+  </div>
+  {%- else %}
   <h1>{{ page.title }}</h1>
+  {%- endif %}
 
   {{ content }}
 
@@ -13,6 +50,10 @@ layout: default
 </article>
 
 <p class="post-footer">Published <time datetime="{{ page.date }}">{{ page.date | date: site.theme_config.date_format }}</time>. If you don’t agree or think I made a mistake, drop me an <a href="mailto:{{ site.contact_email }}">email</a>.</p>
+
+{%- if keywords.size > 0 %}
+<script src="{{ "/assets/js/keywords.js" | relative_url }}"></script>
+{%- endif %}
 
 {%- if content contains 'href="#fix"' %}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap">
