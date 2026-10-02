@@ -42,26 +42,6 @@ a { color: black; }
 
 pre.mermaid { text-align: center; }
 
-// Posts on the home page: the title, a grey line with the date and reading time,
-// and the beginning of the text.
-.post-previews {
-  list-style: none;
-  padding: 0;
-
-  li { margin: 0 0 1.75rem; }
-
-  li > a { font-weight: bold; }
-
-  p { margin: 0.4rem 0 0; }
-}
-
-.post-preview-meta {
-  display: block;
-  margin-top: 0.2rem;
-  font-size: 0.85em;
-  color: grey;
-}
-
 // Contact icons: black by default, brand colour on hover.
 .social {
   display: flex;
