@@ -14,27 +14,7 @@ layout: default
     {%- if keywords.size > 0 %}
     <div class="keywords">
       <button class="keywords-toggle" type="button" aria-expanded="false" aria-controls="keywords">
-        <span class="catalog" aria-hidden="true">
-          <span class="cabinet">
-            <span class="front">
-              <span class="dr dr-tl"><span class="lbl">A–D</span><span class="knob"></span></span>
-              <span class="dr dr-tr"><span class="lbl">E–J</span><span class="knob"></span></span>
-              <span class="slot"></span>
-              <span class="dr dr-br"><span class="lbl">Q–Z</span><span class="knob"></span></span>
-            </span>
-            <span class="side"><span class="grain"></span><span class="grain grain-2"></span></span>
-            <span class="drawer">
-              <span class="d-bottom"></span>
-              <span class="d-back"></span>
-              <span class="d-right"></span>
-              {%- for i in (0..2) %}
-              <span class="card" style="--i: {{ i }}"></span>
-              {%- endfor %}
-              <span class="d-left"></span>
-              <span class="d-front"><span class="lbl">K–P</span><span class="knob"></span></span>
-            </span>
-          </span>
-        </span>
+        {%- include catalog.html %}
         <span class="keywords-label">Keywords</span>
       </button>
 

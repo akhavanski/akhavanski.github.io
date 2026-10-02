@@ -161,6 +161,8 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
 .filter-names {
   display: flex;
   flex-wrap: wrap;
+  // Language stands level with the middle of the keyword cabinet.
+  align-items: center;
   gap: 0.5rem 3ch;
 }
 
@@ -181,8 +183,14 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   &:focus-visible { outline: 1px dotted black; outline-offset: 2px; }
 }
 
+// Keywords is the catalogue cabinet from the posts, which opens by itself,
+// so it needs no arrow.
+.filter-name.keywords-toggle::after { content: none; }
+
 // How many options of a filter are chosen, e.g. (2).
+// Inline-block, so the underline of the name on hover does not cross it.
 .filter-count {
+  display: inline-block;
   margin-left: 0.5ch;
   color: grey;
 }
@@ -419,6 +427,7 @@ mark.fix {
 // turns a little; a click turns it to profile, pulls out the K–P drawer
 // and brings the keywords out under it, one by one from the left.
 // On narrow screens it is under the title, on wide ones right of the post.
+// The keyword filter on the blog page has the same cabinet.
 $ink: #2b2b2b;
 $toon-line: 2.5px solid $ink;
 // The cabinet is modelled at full size and scaled down as a whole.

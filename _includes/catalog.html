@@ -1,0 +1,27 @@
+{%- comment -%}
+  The library catalogue cabinet next to the word "Keywords": in a post
+  (_layouts/post.html) and in the keyword filter on the blog page (blog.html).
+  It goes inside a button with the class keywords-toggle; the button's
+  aria-expanded turns the cabinet and pulls out the drawer (assets/css/main.scss).
+{%- endcomment -%}
+<span class="catalog" aria-hidden="true">
+  <span class="cabinet">
+    <span class="front">
+      <span class="dr dr-tl"><span class="lbl">A–D</span><span class="knob"></span></span>
+      <span class="dr dr-tr"><span class="lbl">E–J</span><span class="knob"></span></span>
+      <span class="slot"></span>
+      <span class="dr dr-br"><span class="lbl">Q–Z</span><span class="knob"></span></span>
+    </span>
+    <span class="side"><span class="grain"></span><span class="grain grain-2"></span></span>
+    <span class="drawer">
+      <span class="d-bottom"></span>
+      <span class="d-back"></span>
+      <span class="d-right"></span>
+      {%- for i in (0..2) %}
+      <span class="card" style="--i: {{ i }}"></span>
+      {%- endfor %}
+      <span class="d-left"></span>
+      <span class="d-front"><span class="lbl">K–P</span><span class="knob"></span></span>
+    </span>
+  </span>
+</span>
