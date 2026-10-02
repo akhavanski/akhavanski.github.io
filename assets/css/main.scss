@@ -59,9 +59,6 @@ pre.mermaid { text-align: center; }
     grid-template-columns: 10ch 1fr;
     column-gap: 1ch;
     margin: 0.6rem 0;
-
-    // Posts the blog filters leave out.
-    &[hidden] { display: none; }
   }
 
   span { color: grey; }
@@ -78,6 +75,43 @@ pre.mermaid { text-align: center; }
       display: block;
       font-size: 0.85em;
     }
+  }
+}
+
+// Posts on the blog page: the title in bold, the start of the text,
+// the date and the keywords in grey; a thin line between posts.
+.blog-posts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  // The line goes only between the posts the filters leave in.
+  li:not([hidden]) ~ li:not([hidden]) {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #ddd;
+  }
+}
+
+.post-title { font-weight: bold; }
+
+.post-excerpt {
+  margin: 0.5rem 0 0;
+  font-size: 0.9em;
+  line-height: 1.5;
+  color: #555;
+}
+
+.post-info {
+  margin: 0.6rem 0 0;
+  font-size: 0.85em;
+  color: grey;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover, &:focus-visible { text-decoration: underline; }
   }
 }
 
