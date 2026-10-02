@@ -1,0 +1,55 @@
+---
+layout: page
+title: Blog
+permalink: /blog
+---
+
+{%- comment -%}
+  All posts with filters by language and by keyword, that is a post's tag
+  (see assets/js/blog-filters.js). Several languages and several keywords
+  can be chosen: a post is shown if it is in one of the chosen languages
+  and has one of the chosen keywords.
+  The names of both filters are in one line; a click on a name opens
+  a menu with its options, the number after the name tells how many are chosen.
+  Each option has its own fill colour for when it is chosen: data-fill counts
+  the options of both filters in a row (the colours are in assets/css/main.scss).
+  Without the script the filters stay hidden and the whole list is shown.
+{%- endcomment -%}
+{%- capture langs %}{% for post in site.posts %}{{ post.lang }}|{% endfor %}{% endcapture %}
+{%- assign langs = langs | split: "|" | uniq | sort %}
+{%- comment -%} Tag names in alphabetical order, whatever their case. {%- endcomment -%}
+{%- capture tags %}{% for tag in site.tags %}{{ tag[0] }}|{% endfor %}{% endcapture %}
+{%- assign tags = tags | split: "|" | sort_natural %}
+
+<div class="blog-filters" hidden>
+  <div class="filter-names">
+    <div class="filter">
+      <button type="button" class="filter-name" aria-expanded="false" aria-controls="filter-lang">Language</button><span class="filter-count" data-filter="lang"></span>
+      <div class="filter-options" id="filter-lang" role="group" aria-label="Language">
+        {%- for lang in langs %}
+        <button type="button" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ forloop.index0 | modulo: 8 }}">{{ site.data.languages[lang] | default: lang }}</button>
+        {%- endfor %}
+      </div>
+    </div>
+    <div class="filter">
+      <button type="button" class="filter-name" aria-expanded="false" aria-controls="filter-keywords">Keywords</button><span class="filter-count" data-filter="tag"></span>
+      <div class="filter-options" id="filter-keywords" role="group" aria-label="Keywords">
+        {%- for tag in tags %}
+        <button type="button" aria-pressed="false" data-filter="tag" data-value="{{ tag | slugify }}" data-fill="{{ forloop.index0 | plus: langs.size | modulo: 8 }}">{{ tag }}</button>
+        {%- endfor %}
+      </div>
+    </div>
+  </div>
+  <p class="filter-status" aria-live="polite"><span></span> <button type="button" class="filter-reset">Reset</button></p>
+</div>
+
+<div class="home-posts">
+  <ul class="blog-posts">
+    {%- for post in site.posts %}
+    {%- capture post_tags %}{% for tag in post.tags %}{{ tag | slugify }} {% endfor %}{% endcapture %}
+    <li data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}"><span>{{ post.date | date: site.theme_config.date_format }}</span> <a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+    {%- endfor %}
+  </ul>
+</div>
+
+<script src="{{ "/assets/js/blog-filters.js" | relative_url }}"></script>

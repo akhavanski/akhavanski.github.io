@@ -59,6 +59,9 @@ pre.mermaid { text-align: center; }
     grid-template-columns: 10ch 1fr;
     column-gap: 1ch;
     margin: 0.6rem 0;
+
+    // Posts the blog filters leave out.
+    &[hidden] { display: none; }
   }
 
   span { color: grey; }
@@ -76,6 +79,119 @@ pre.mermaid { text-align: center; }
       font-size: 0.85em;
     }
   }
+}
+
+// Filters on the blog page (see assets/js/blog-filters.js): the names
+// of the filters in one line, a click on a name opens a menu under it.
+// In the menu the options are cards like the post keywords, several in a line;
+// a chosen one is filled with its own colour. The colours are bright
+// but light enough for black text (a contrast of 9:1 and more).
+$filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #ff8ad8;
+
+.blog-filters {
+  margin-bottom: 2rem;
+
+  &[hidden] { display: none; }
+}
+
+.filter-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 3ch;
+}
+
+.filter { position: relative; }
+
+.filter-name {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+
+  &::after { content: " \25B8"; }
+  &[aria-expanded="true"]::after { content: " \25BE"; }
+
+  &:hover { text-decoration: underline; }
+  &:focus-visible { outline: 1px dotted black; outline-offset: 2px; }
+}
+
+// How many options of a filter are chosen, e.g. (2).
+.filter-count {
+  margin-left: 0.5ch;
+  color: grey;
+}
+
+.filter-options {
+  display: none;
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.5rem);
+  left: -0.6rem;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: 22rem;
+  padding: 0.6rem;
+  border: 1.5px solid black;
+  border-radius: 2px;
+  background: white;
+  box-shadow: 3px 3px 0 black;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.45rem;
+
+  &.is-open { display: flex; }
+
+  button {
+    padding: 0.1rem 0.4rem;
+    border: 1.5px solid black;
+    border-radius: 2px;
+    background: white;
+    box-shadow: 2px 2px 0 black;
+    font: inherit;
+    font-size: 0.8rem;
+    color: black;
+    cursor: pointer;
+
+    &:hover { text-decoration: underline; }
+    &:focus-visible { outline: 1px dotted black; outline-offset: 3px; }
+  }
+
+  // On phones a menu would not fit right of its name,
+  // so it opens under the line of names, from its left edge.
+  @media (max-width: 30rem) {
+    left: 0;
+    max-width: 100%;
+  }
+}
+
+@for $i from 1 through length($filter-fills) {
+  .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { background: nth($filter-fills, $i); }
+}
+
+@media (max-width: 30rem) {
+  .filter-names { position: relative; }
+  .filter { position: static; }
+}
+
+.filter-status {
+  margin: 1rem 0 0;
+  font-size: 0.85em;
+  color: grey;
+
+  &[hidden] { display: none; }
+}
+
+.filter-reset {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover, &:focus-visible { color: black; }
 }
 
 // Contact icons: black by default, brand colour on hover.
