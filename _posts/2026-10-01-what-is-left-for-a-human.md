@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "What is left for a human?"
-tags: [AI, English]
+tags: [AI, agency]
 ---
 
 There's a panic: what'll be left for a human in the LLM-ish world? I assume it is an existential question for some (me!), and those who feel threatened are neither the first nor the last.

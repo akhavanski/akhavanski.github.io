@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Definition of Ready used by my team on a “Big Three” firm’s projects"
-tags: [Business Analysis, Requirements Management, English]
+tags: [requirements]
 ---
 
 I was working on their projects for a long time and have started when there were no requirements at all captured in internal system: not in team’s Jira, not in team’s Confluence, not in other sources were team members could access it. But before we cure this problem, let’s dive into the basics.
