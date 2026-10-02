@@ -2,12 +2,21 @@
 // stays at the top of the window while you read; a click on it slides a page with
 // the post's sections and subsections out from under the post, below the button.
 // The page marks the section you are in. A second click or Escape slides it back.
+// Once "← to blog" has scrolled away, the button is alone left of the text and goes quiet.
 // The post layout loads this script only when the post has two headings or more.
 (function () {
   var toggle = document.querySelector(".toc-toggle");
   var nav = document.querySelector(".toc");
   if (!toggle || !nav) return;
   var article = nav.parentNode;
+
+  // While "← to blog" is out of the window, the button gets the class is-alone.
+  var back = document.querySelector(".to-blog");
+  if (back && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      nav.classList.toggle("is-alone", !entries[0].isIntersecting);
+    }).observe(back);
+  }
 
   var heads = [].filter.call(article.querySelectorAll("h2, h3"), function (h) {
     return !h.classList.contains("no_toc");

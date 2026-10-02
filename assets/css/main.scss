@@ -368,6 +368,76 @@ article { position: relative; }
   }
 }
 
+// Once "← to blog" has scrolled away, the button is the only one left of the text
+// (the class is-alone, see assets/js/toc.js) and goes quiet: it slips under the post
+// the way the table of contents does, and only its edge peeks out, a slip of paper
+// with a section mark set in Computer Modern. On hover or focus it slides out whole.
+// While the table of contents is out, it is bare dark underlined text, no card.
+$tab: 1.35rem;
+$quiet-time: 0.3s;
+
+.toc-toggle {
+  position: relative;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition: color $quiet-time, border-color $quiet-time, box-shadow $quiet-time,
+    text-decoration-color $quiet-time, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  // The section mark on the edge that peeks out; "/ ''" keeps it out of the name.
+  &::before {
+    content: "§" / "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: calc(#{$tab} - 3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Computer Modern Serif", serif;
+    font-size: 1.1rem;
+    color: #666;
+    opacity: 0;
+    transition: opacity $quiet-time;
+  }
+
+  // The mouse stays on the button while it slides out from under the post.
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    width: 1.5rem;
+  }
+}
+
+.toc.is-alone .toc-toggle {
+  &:not(:hover, :focus-visible, [aria-expanded="true"]) {
+    // The post's edge is 1.25rem right of the button.
+    transform: translateX(calc(100% + 1.25rem - #{$tab}));
+    color: transparent;
+    border-color: transparent;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.06);
+
+    &::before { opacity: 1; }
+  }
+
+  &[aria-expanded="true"] {
+    transform: none;
+    border-color: transparent;
+    box-shadow: 2px 2px 0 transparent;
+    background: transparent;
+    color: #444;
+    text-decoration-color: currentColor;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toc-toggle { transition: none; }
+}
+
 .toc-sheet {
   position: absolute;
   top: calc(100% + 0.6rem);
