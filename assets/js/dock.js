@@ -43,12 +43,9 @@
   function draw() {
     var h = here.getBoundingClientRect(), m = dock.getBoundingClientRect();
     var x = h.right + 4 + scrollX, y = h.top + h.height * 0.6 + scrollY;
-    var top = m.top + scrollY, left = m.left + scrollX;
-    // From the side of the dock if there is room on its left, else from above.
-    var side = left - x > 70;
-    var ex = side ? left - 8 : Math.max(x + 60, left + 40);
-    var ey = side ? top + m.height * 0.45 : top - 8;
-    var c1 = side ? [ex - 70, ey] : [ex, ey - 50];
+    // The dock is right under the text: the arrow curls and comes down onto its middle.
+    var ex = m.left + m.width / 2 + scrollX, ey = m.top + scrollY - 8;
+    var c1 = [ex, ey - 50];
     line.setAttribute("d",
       "M" + x + " " + y +
       " c18 -2 34 -14 26 -24 c-8 -10 -22 4 -8 20" +
