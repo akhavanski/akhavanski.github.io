@@ -14,7 +14,7 @@ $wide-screen: 72rem;
 $term-red: #e0352b;
 
 // Puts a block in that column, $top below the top of the title's box,
-// which is its positioned parent. Used by the post keywords and the blog filters.
+// which is its positioned parent. Used by the blog filters.
 @mixin right-column($top) {
   @media (min-width: $wide-screen) {
     position: absolute;
@@ -101,9 +101,9 @@ pre.mermaid { text-align: center; }
 
 // The filter on the home page (see assets/js/blog-filters.js). On narrow screens
 // it is the cabinet right of the title, a click opens a menu under it. On wide
-// screens it is right of the list, like the keywords in a post: a click on the name
+// screens it is right of the list: a click on the name
 // brings its options out under it, one by one from the left.
-// The options are cards like the post keywords, several in a line, the keywords
+// The options are cards, several in a line, the keywords
 // and under them the languages with a small heading; a chosen one is filled
 // with its own colour. The colours are bright
 // but light enough for black text (a contrast of 9:1 and more).
@@ -604,6 +604,12 @@ article :is(h2, h3, h4):target {
   a { color: inherit; }
 }
 
+// The post's tags in the note, after the date: a key, then the tags,
+// each a link to the blog filtered by it (see _includes/key.html).
+.post-tags .key {
+  vertical-align: -0.2em;
+}
+
 // Author's notes in posts (see assets/js/notes.js).
 // A comment: the text is highlighted like with a real marker
 // (the ink is a bit darker where the stroke ends),
@@ -713,27 +719,20 @@ mark.fix {
   }
 }
 
-// Keywords of a post (see assets/js/keywords.js): a small cartoon library
-// catalogue cabinet with the word "Keywords" next to it. On hover the cabinet
+// The keyword filter on the home page: a small cartoon library catalogue
+// cabinet with the word "Keywords" next to it. On hover the cabinet
 // turns a little; a click turns it to profile, pulls out the K–P drawer
-// and brings the keywords out under it, one by one from the left.
-// On narrow screens it is right of the title, under the menu, on wide ones
-// right of the post. The keyword filter on the home page has the same cabinet.
+// and brings the options out under it.
 $ink: #2b2b2b;
 $toon-line: 2.5px solid $ink;
 // The cabinet is modelled at full size and scaled down as a whole,
 // smaller without the right column.
 $cabinet-scale: var(--cabinet-scale);
 $spring: cubic-bezier(0.34, 1.5, 0.64, 1);
-// The turn to profile; the keywords come out during the same time.
+// The turn to profile.
 $turn: 0.6s;
 
 .post-head { position: relative; }
-
-.keywords {
-  margin: -0.5rem 0 1.5rem;
-  @include right-column(0.2rem);
-}
 
 .keywords-toggle {
   display: flex;
@@ -981,57 +980,9 @@ $turn: 0.6s;
   .keywords-toggle:hover .keywords-label { transform: none; }
 }
 
-// Without the right column, like the filter on the home page, it is the cabinet alone,
-// right of the first line of the title, under the menu;
-// the keywords open under the title.
+// Without the right column the cabinet is alone, right of the first line
+// of the title, under the menu.
 @media not all and (min-width: $wide-screen) {
-  // Room for the cabinet in the first line of the title only.
-  .post-head:has(.keywords) h1::before {
-    content: "";
-    float: right;
-    width: 3.35rem;
-    height: 2.5rem;
-  }
-
-  .post-head .keywords-toggle {
-    position: absolute;
-    // Centred on the first line of the title (2em at a line height of 1.4).
-    top: 0.275rem;
-    // The cabinet's right edge in line with the menu's.
-    right: -0.05rem;
-
-    .catalog { display: block; }
-  }
-
-  .post-head .keywords-label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  // The keywords open in a card under the cabinet, from its right edge,
-  // over the title and the text, like the options of the filter,
-  // so nothing moves.
-  .post-head .keywords-list {
-    position: absolute;
-    z-index: 5;
-    // As far under the cabinet as the options of the filter.
-    top: 3.5rem;
-    right: 0;
-    box-sizing: border-box;
-    width: max-content;
-    max-width: 100%;
-    margin: 0;
-    padding: 0.6rem;
-    border: 1.5px solid black;
-    border-radius: 2px;
-    background: white;
-    box-shadow: 3px 3px 0 black;
-  }
-
   // At the right edge the cabinet turns the other way, so the drawer comes out
   // to the left; the right side shows instead of the left.
   .catalog .side { transform: rotateY(90deg) translateZ(3.2rem); }
@@ -1104,45 +1055,6 @@ $turn: 0.6s;
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
-  }
-}
-
-// The keywords: a card each, several in a line.
-.keywords-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 0.45rem;
-  margin: 0.8rem 0 0;
-  padding: 0;
-  list-style: none;
-
-  // display: flex would show the list even while it is hidden.
-  &[hidden] { display: none; }
-
-  li {
-    margin: 0;
-    // Starts with the turn; the last of four keywords ends with it.
-    animation: keywords-card-in ($turn - 0.15s) ease-out both;
-    animation-delay: calc(var(--i) * 0.05s);
-  }
-
-  a {
-    display: inline-block;
-    padding: 0.1rem 0.4rem;
-    border: 1.5px solid black;
-    border-radius: 2px;
-    background: white;
-    box-shadow: 2px 2px 0 black;
-    font-size: 0.8rem;
-    color: black;
-    text-decoration: none;
-    transition: transform 0.15s;
-
-    &:hover, &:focus-visible {
-      transform: translate(-1px, -1px);
-      box-shadow: 3px 3px 0 black;
-      text-decoration: underline;
-    }
   }
 }
 
@@ -1251,14 +1163,14 @@ $turn: 0.6s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-toggle + .filter-count, .keywords-list a, .turtle-btn { transition: none; }
-  .keywords-list li, .filter-options button, .filter-heading { animation: none; }
+  .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-toggle + .filter-count, .turtle-btn { transition: none; }
+  .filter-options button, .filter-heading { animation: none; }
 }
 
 // Terms explained in posts (see assets/js/glossary.js):
 // the term is underlined with red dots, a click on it slides out
 // a library catalogue card with a typewritten dictionary entry,
-// from the same cabinet as the keywords.
+// from the same cabinet as the keyword filter.
 $card-ink: #6b6250;
 $card-line: 1.5rem;
 

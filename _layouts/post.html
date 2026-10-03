@@ -15,21 +15,6 @@ layout: default
   <div class="post-head">
     <a class="to-blog" href="{{ "/" | relative_url }}">← to blog</a>
     <h1>{{ page.title }}</h1>
-
-    {%- if keywords.size > 0 %}
-    <div class="keywords">
-      <button class="keywords-toggle" type="button" aria-expanded="false" aria-controls="keywords">
-        {%- include catalog.html %}
-        <span class="keywords-label">Keywords</span>
-      </button>
-
-      <ul class="keywords-list" id="keywords" hidden>
-        {%- for keyword in keywords %}
-        <li style="--i: {{ forloop.index0 }}"><a href="{{ "/" | relative_url }}?tag={{ keyword | slugify }}">{{ keyword }}</a></li>
-        {%- endfor %}
-      </ul>
-    </div>
-    {%- endif %}
   </div>
 
   {%- if heads >= 2 %}
@@ -45,11 +30,11 @@ layout: default
   <p class="post-signature">— {{ site.author | split: " " | first }}</p>
 </article>
 
-<p class="post-footer">Published <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: site.theme_config.date_format }}</time>. If you don’t agree or think I made a mistake, drop me an <a href="mailto:{{ site.contact_email }}">email</a>.</p>
-
+<p class="post-footer">Published <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: site.theme_config.date_format }}</time>.
 {%- if keywords.size > 0 %}
-<script src="{{ "/assets/js/keywords.js" | relative_url }}"></script>
-{%- endif %}
+<span class="post-tags">{% include key.html %}
+  {%- for keyword in keywords %} <a href="{{ "/" | relative_url }}?tag={{ keyword | slugify }}">{{ keyword }}</a>{% unless forloop.last %},{% endunless %}{% endfor %}.</span>
+{%- endif %} If you don’t agree or think I made a mistake, drop me an <a href="mailto:{{ site.contact_email }}">email</a>.</p>
 
 {%- if heads >= 2 %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@333f55ec19733c28cdc43567ecf72eafd6b0af61/font/Serif/cmun-serif.css">
