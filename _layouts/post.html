@@ -66,6 +66,10 @@ layout: default
 <script src="{{ "/assets/js/glossary.js" | relative_url }}"></script>
 {%- endif %}
 
+{%- if content contains '<h2 id="sources">' %}
+<script src="{{ "/assets/js/sources.js" | relative_url }}"></script>
+{%- endif %}
+
 {%-include turtle.html-%}
 
 {%-include goatcounter.html-%}

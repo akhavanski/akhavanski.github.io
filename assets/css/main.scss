@@ -1348,3 +1348,60 @@ $card-line: 1.5rem;
 @media (prefers-reduced-motion: reduce) {
   .term-card.out { animation: none; }
 }
+
+// Sources of a post (see assets/js/sources.js): a number in the text is a small
+// grey superscript, a link to its source in the list at the end.
+.cite {
+  font-size: 0.68em;
+  line-height: 0;
+  margin-left: 0.1em;
+  color: grey;
+
+  a {
+    padding: 0 0.1em;
+    border-radius: 2px;
+    color: grey;
+    text-decoration: none;
+
+    &:hover { color: black; background: rgba(255, 230, 0, 0.45); }
+  }
+}
+
+// The list at the end: the number in its own column, the way back under the reference.
+ol.sources {
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+
+  li {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    margin-bottom: 0.8rem;
+    scroll-margin-top: 1.5rem;
+  }
+
+  .source-n { grid-row: span 2; font-weight: bold; }
+  cite { font-style: italic; }
+  .source-url { color: grey; }
+
+  .source-back {
+    grid-column: 2;
+    font-size: 0.75rem;
+    color: grey;
+
+    a { color: grey; }
+    a:hover { color: black; }
+  }
+}
+
+// A source or a citation jumped to is highlighted for a moment.
+ol.sources li:target, .cite a:target {
+  background: rgba(255, 230, 0, 0.5);
+  animation: marker-fade-bg 1.5s ease-in 1.5s forwards;
+}
+
+.cite a:target { scroll-margin-top: 40vh; }
+
+@keyframes marker-fade-bg {
+  to { background: transparent; }
+}
