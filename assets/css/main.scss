@@ -330,6 +330,10 @@ article { position: relative; }
 // at the bottom right of the window, and the window's edge does what the post's
 // edge does on a wide one: the button slips under it, and the page comes out
 // from under it, above the button.
+
+// The width of the button's edge that peeks out with the §.
+$tab: 1.35rem;
+
 .toc {
   @media not all and (min-width: 60rem) {
     position: fixed;
@@ -342,8 +346,26 @@ article { position: relative; }
 
     .toc-rail { position: static; }
 
-    // Over the text, the pressed button keeps its white.
-    &.is-alone .toc-rail .toc-toggle[aria-expanded="true"] { background: white; }
+    // The button is always tucked under the window's edge, only the § peeks out:
+    // it doesn't slide out on load, on a tap or while the page is out.
+    // While the page is out, the § is black.
+    &, &.is-alone {
+      .toc-rail .toc-toggle {
+        &, &:is(:hover, :focus-visible, [aria-expanded="true"]) {
+          transform: translateX(calc(100% + 1.25rem - #{$tab}));
+          transition: none;
+          color: transparent;
+          background: white;
+          border-color: transparent;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.06);
+          text-decoration-color: transparent;
+
+          &::before { opacity: 1; transition: none; }
+        }
+
+        &[aria-expanded="true"]::before { color: black; }
+      }
+    }
 
     .toc-sheet {
       top: auto;
@@ -399,7 +421,6 @@ article { position: relative; }
 // the way the table of contents does, and only its edge peeks out, a slip of paper
 // with a section mark set in Computer Modern. On hover or focus it slides out whole.
 // While the table of contents is out, it is bare dark underlined text, no card.
-$tab: 1.35rem;
 $quiet-time: 0.3s;
 
 .toc-toggle {
