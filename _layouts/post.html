@@ -66,7 +66,7 @@ layout: default
 <script src="{{ "/assets/js/glossary.js" | relative_url }}"></script>
 {%- endif %}
 
-{%- if content contains '<h2 id="sources">' %}
+{%- if content contains '<h2 id="sources">' or content contains '<h2 id="источники">' %}
 <script src="{{ "/assets/js/sources.js" | relative_url }}"></script>
 {%- endif %}
 

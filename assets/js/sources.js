@@ -1,10 +1,11 @@
 // Links the numbers in square brackets in a post, [1], to its sources: the numbered
-// list under the heading "Sources" at the end, each item “Title”, — Author. URL: <link>.
+// list under the heading "Sources" (or "Источники") at the end,
+// each item “Title”, — Author. URL: <link> (the quotes and the author may be left out).
 // A number becomes a small superscript, a link to its source; the source links back
 // to each place it is cited from (a, b, c…).
-// The post layout loads this script only when the post has the heading "Sources".
+// The post layout loads this script only when the post has such a heading.
 (function () {
-  var head = document.getElementById("sources");
+  var head = document.getElementById("sources") || document.getElementById("источники");
   var list = head && head.nextElementSibling;
   if (!list || list.tagName !== "OL") return;
   var article = head.parentNode;
@@ -12,10 +13,10 @@
   var sources = [].map.call(list.children, function (li, i) {
     var link = li.querySelector('a[href^="http"]');
     var text = li.textContent.replace(/\s*URL:[\s\S]*$/, "").trim();
-    var m = text.match(/^“([^”]+)”,?\s*—\s*(.+?)\.?$/);
+    var m = text.match(/^[“«]?(.+?)[”»]?(?:,\s*—\s*(.+?))?\.?$/);
     return {
       n: i + 1, li: li, cites: [],
-      title: m ? m[1] : text, author: m ? m[2] : "",
+      title: m[1], author: m[2] || "",
       url: link && link.href
     };
   });
@@ -62,6 +63,8 @@
     node.replaceWith(frag);
   });
 
+  var backWord = document.documentElement.lang === "ru" ? "назад" : "back";
+
   // The list at the end: the number, Author. Title. site.com ↗,
   // and under it the way back to each citation.
   list.className = "sources";
@@ -71,7 +74,7 @@
     li.textContent = "";
     var ref = el("span", "source-ref");
     if (s.author) ref.append(el("span", "source-author", s.author), ". ");
-    ref.append(el("cite", "", s.title), ".");
+    ref.append(el("cite", "", s.title), /[.?!]$/.test(s.title) ? "" : ".");
     if (s.url) {
       var a = el("a", "source-url", new URL(s.url).hostname.replace(/^www\./, "") + " ↗");
       a.href = s.url;
@@ -83,7 +86,7 @@
     if (s.cites.length) {
       var back = el("span", "source-back", "↑ ");
       s.cites.forEach(function (c, i) {
-        var b = el("a", "", s.cites.length > 1 ? String.fromCharCode(97 + i) : "back");
+        var b = el("a", "", s.cites.length > 1 ? String.fromCharCode(97 + i) : backWord);
         b.href = "#" + c.id;
         back.append(b, " ");
       });
