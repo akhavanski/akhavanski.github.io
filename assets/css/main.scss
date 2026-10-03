@@ -961,13 +961,15 @@ $turn: 0.6s;
     white-space: nowrap;
   }
 
-  // The keywords open in a card under the title, over the text,
-  // like the options of the filter, so nothing moves.
+  // The keywords open in a card under the cabinet, from its right edge,
+  // over the title and the text, like the options of the filter,
+  // so nothing moves.
   .post-head .keywords-list {
     position: absolute;
     z-index: 5;
-    top: 100%;
-    left: 0;
+    // As far under the cabinet as the options of the filter.
+    top: 3.5rem;
+    right: 0;
     box-sizing: border-box;
     width: max-content;
     max-width: 100%;
