@@ -34,7 +34,8 @@ layout: default
 {%- if keywords.size > 0 %}
 <span class="post-tags">{% include key.html %}
   {%- for keyword in keywords %} <a href="{{ "/" | relative_url }}?tag={{ keyword | slugify }}">{{ keyword }}</a>{% unless forloop.last %},{% endunless %}{% endfor %}.</span>
-{%- endif %} If you don’t agree or think I made a mistake, drop me an <a href="mailto:{{ site.contact_email }}">email</a>.</p>
+{%- endif %}<br>
+If you don’t agree or think I made a mistake, drop me an <a href="mailto:{{ site.contact_email }}">email</a>.</p>
 
 {%- if heads >= 2 %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@333f55ec19733c28cdc43567ecf72eafd6b0af61/font/Serif/cmun-serif.css">
