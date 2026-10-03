@@ -33,7 +33,7 @@ layout: default
 <p class="post-footer">Published <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: site.theme_config.date_format }}</time>. If you don’t agree or think I made a mistake, drop me an <a href="mailto:{{ site.contact_email }}">email</a>.
 {%- if keywords.size > 0 %}<br><br>
 <span class="post-tags">{% include key.html %}
-  {%- for keyword in keywords %} <span class="tag" style="--i: {{ forloop.index0 }}"><a href="{{ "/" | relative_url }}?tag={{ keyword | slugify }}">{{ keyword }}</a>{% unless forloop.last %},{% endunless %}</span>{% endfor %}</span>
+  {%- for keyword in keywords %} <a href="{{ "/" | relative_url }}?tag={{ keyword | slugify }}">{{ keyword }}</a>{% unless forloop.last %},{% endunless %}{% endfor %}</span>
 {%- endif %}</p>
 
 {%- if keywords.size > 0 %}
