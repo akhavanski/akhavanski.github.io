@@ -32,27 +32,27 @@ Job stories are written based on interviews’ results. Interviewee indicates al
 
 Jobs to be done is based on one important idea that is worth mentioning [7]. People recruit product to complete jobs. If an existing solution doesn’t work well or has issues, people tend to open the job and start looking for better candidates. When found, they move to it. Why could someone move to another solution? Let’s take a look on some (*not all!*) mechanics you could use to create value of your product.
 
-### 1/ Kill unnecessary jobs needed to get the job done [5]
+### 1. Kill unnecessary jobs needed to get the job done [5]
 
 New solution’s value could consist in having less smaller jobs needed to accomplish the initial one. For example, when I send something using Polish InPost service I tend not to print the label: they allowed sending without adding the label. That eliminated a job (or the job was given back to the service) and makes less steps to complete the initial one. Saves time and nerves (and sometimes even money).
 
 An example could be catering services, they have : When I want to eat healthy food AND I don’t want to spend time cooking (I don’t know how to prepare food, I don’t want to select what to cook), I want my dish to be delivered to me, so I can
 
-### 2/ Uncover new jobs [5]
+### 2. Uncover new jobs [5]
 
 Zamesin calls this type of Jobs ‘sleeping’ [5]. A customer, future user doesn’t know that these even exist and that they would need something for this need. This same notion is also mentioned by Drucker. He says: “*Markets are not created by God, nature, or economic forces but by businesspeople. … The want may have been unfelt by the potential customer; **no one knew that he wanted a Xerox machine or a computer until these became available**. There may have been no want at all until business action created it — by innovation, by credit, by advertising, or by salesmanship. In every case, it is business action that creates the customer*” [8].
 
 There is no way to systematically uncover sleeping jobs. This combines a lot of factors like luck, entrepreneur talent, and just having good skills of observation. If you find a way to uncover these type of jobs, I could only congratulate you: you’re a millionaire now.
 
-### 3/ Get rid of ‘tax’ jobs [5]
+### 3. Get rid of ‘tax’ jobs [5]
 
 Tax jobs are those that a person does saying ‘meh’ instead of ‘yeah’. When you get rid of it, more ‘yeah’ could appear, or at least less barriers are encountered in your product. If we get back to the AirPods, then Apple has removed wires: now you don’t have to unravel them before talking. They also added a better mic so that you don’t have to hold the mic right way to be heard.
 
-### 4/ Open new segments for the same jobs [5]
+### 4. Open new segments for the same jobs [5]
 
 When you already have your product, you can make segment pivot to completely change your user persona. But you can also enhance your persona vision by adding a new segment and incorporate their jobs into your product. Going to AirPods again. Apple has added new segment by adding Pro and Max products to their line. *Fun fact: IT people hire AirPods Max so that they look better on calls, not for any quality like reason (someone has made a research on it)*.
 
-### 5/ Add new jobs to your product [5]
+### 5. Add new jobs to your product [5]
 
 Probably, the simplest one. When you already have a product that covers some set of jobs, you can (probably) make this product better by enhancing it with more jobs it covers for users.
 
