@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Гайд по User Stories для Junior BA / PO / PM"
-tags: [requirements]
+tags: [software requirements]
 lang: ru
 ---
 
