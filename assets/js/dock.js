@@ -6,7 +6,7 @@
   var dock = document.querySelector(".dock");
   if (!dock) return;
   var apps = dock.querySelectorAll(".dock-app");
-  var BASE = 44, MAX = 80, RANGE = 110;
+  var BASE = 32, MAX = 58, RANGE = 85;
 
   dock.addEventListener("mousemove", function (e) {
     dock.classList.add("dock-hover");

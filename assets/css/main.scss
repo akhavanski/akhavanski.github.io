@@ -1510,14 +1510,14 @@ $card-line: 1.5rem;
   position: relative;
   display: flex;
   align-items: flex-end;
-  gap: 5px;
+  gap: 4px;
   box-sizing: border-box;
   width: fit-content;
   // The height stays that of small apps, so the grown ones stick out upwards,
   // into the room above, and the page under the dock does not move.
-  height: calc(44px + 9px);
-  margin: 5rem auto 2rem;
-  padding: 0 16px 9px;
+  height: calc(32px + 7px);
+  margin: 4rem auto 2rem;
+  padding: 0 12px 7px;
   font-family: "Lucida Grande", "Lucida Sans Unicode", Tahoma, sans-serif;
 
   // The glass shelf of Leopard, seen from above at an angle.
@@ -1525,8 +1525,8 @@ $card-line: 1.5rem;
     content: "";
     position: absolute;
     inset: auto 0 0;
-    height: 24px;
-    transform: perspective(50px) rotateX(30deg);
+    height: 18px;
+    transform: perspective(40px) rotateX(30deg);
     transform-origin: bottom;
     border: 1px solid rgba(140, 150, 165, 0.7);
     border-bottom: 0;
@@ -1547,7 +1547,7 @@ $card-line: 1.5rem;
 }
 
 .dock-app {
-  --size: 44px;
+  --size: 32px;
   position: relative;
   z-index: 1;
   width: var(--size);
@@ -1567,7 +1567,7 @@ $card-line: 1.5rem;
   &::after {
     content: "";
     position: absolute;
-    bottom: -6px;
+    bottom: -5px;
     left: 50%;
     width: 4px;
     height: 3px;
@@ -1589,7 +1589,7 @@ $card-line: 1.5rem;
   padding: 1px 8px;
   border-radius: 9px;
   background: rgba(30, 30, 30, 0.75);
-  font-size: 11px;
+  font-size: 10px;
   color: white;
   white-space: nowrap;
   opacity: 0;
