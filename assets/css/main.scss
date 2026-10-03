@@ -961,7 +961,23 @@ $turn: 0.6s;
     white-space: nowrap;
   }
 
-  .keywords-list { margin-top: 0; }
+  // The keywords open in a card under the title, over the text,
+  // like the options of the filter, so nothing moves.
+  .post-head .keywords-list {
+    position: absolute;
+    z-index: 5;
+    top: 100%;
+    left: 0;
+    box-sizing: border-box;
+    width: max-content;
+    max-width: 100%;
+    margin: 0;
+    padding: 0.6rem;
+    border: 1.5px solid black;
+    border-radius: 2px;
+    background: white;
+    box-shadow: 3px 3px 0 black;
+  }
 
   // At the right edge the cabinet turns the other way, so the drawer comes out
   // to the left; the right side shows instead of the left.
