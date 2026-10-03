@@ -10,6 +10,9 @@ $tiny-screen: 20.5rem;
 // From this width there is an empty column right of the 640px wide text.
 $wide-screen: 72rem;
 
+// The red of terms and of the current page in the menu.
+$term-red: #e0352b;
+
 // Puts a block in that column, $top below the top of the title's box,
 // which is its positioned parent. Used by the post keywords and the blog filters.
 @mixin right-column($top) {
@@ -28,23 +31,24 @@ $wide-screen: 72rem;
 // Links stay black, opened ones too (the browser would make them purple).
 a { color: black; }
 
-// The same header on every page: the title and the bento box menu share one line;
-// on wide screens the menu moves to the right column.
+// The same header on every page: the title and the menu share one line.
 .title-row {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
   margin-bottom: 2.5rem;
 }
 
 // Keep the site title on one line on narrow screens.
 // The title is 18 monospace characters (about 10.8em wide),
 // so the font shrinks with the viewport minus the 2rem side padding
-// and the bento box (2.85rem, 1rem gap to the title).
+// and the menu (about 6.5rem, 1rem gap to the title);
+// on the narrowest screens the menu goes under the title.
 .brand {
-  font-size: clamp(1rem, calc((100vw - 8rem) / 11), 1.25em);
+  font-size: clamp(1rem, calc((100vw - 11.5rem) / 11), 1.25em);
 
   a {
     color: black;
@@ -687,12 +691,12 @@ mark.fix {
 // catalogue cabinet with the word "Keywords" next to it. On hover the cabinet
 // turns a little; a click turns it to profile, pulls out the K–P drawer
 // and brings the keywords out under it, one by one from the left.
-// On narrow screens it is right of the title, under the bento box, on wide ones
+// On narrow screens it is right of the title, under the menu, on wide ones
 // right of the post. The keyword filter on the home page has the same cabinet.
 $ink: #2b2b2b;
 $toon-line: 2.5px solid $ink;
 // The cabinet is modelled at full size and scaled down as a whole,
-// to the width of the bento box (smaller without the right column, like it).
+// smaller without the right column.
 $cabinet-scale: var(--cabinet-scale);
 $spring: cubic-bezier(0.34, 1.5, 0.64, 1);
 // The turn to profile; the keywords come out during the same time.
@@ -952,7 +956,7 @@ $turn: 0.6s;
 }
 
 // Without the right column, like the filter on the home page, it is the cabinet alone,
-// right of the first line of the title, under the bento box;
+// right of the first line of the title, under the menu;
 // the keywords open under the title.
 @media not all and (min-width: $wide-screen) {
   // Room for the cabinet in the first line of the title only.
@@ -967,7 +971,7 @@ $turn: 0.6s;
     position: absolute;
     // Centred on the first line of the title (2em at a line height of 1.4).
     top: 0.275rem;
-    // The cabinet's right edge under the bento box's.
+    // The cabinet's right edge in line with the menu's.
     right: -0.05rem;
 
     .catalog { display: block; }
@@ -1035,7 +1039,7 @@ $turn: 0.6s;
 }
 
 // Without the right column the filter is the cabinet alone, without the word, right of the
-// title Blog, under the bento box; the number of chosen options is left of it.
+// title Blog, under the menu; the number of chosen options is left of it.
 // The menu still opens under the title, from the left edge.
 @media not all and (min-width: $wide-screen) {
   .filter-names {
@@ -1060,7 +1064,7 @@ $turn: 0.6s;
 
   .filter .keywords-toggle {
     display: block;
-    // The cabinet's right edge under the bento box's.
+    // The cabinet's right edge in line with the menu's.
     margin-right: -0.05rem;
 
     .catalog { display: block; }
@@ -1120,174 +1124,32 @@ $turn: 0.6s;
   from { opacity: 0; transform: translateX(-3rem); }
 }
 
-// The menu in the header (see _includes/menu.html and _includes/bento.html):
-// a cartoon wooden bento box with a row of sushi and the word "Menu".
-// On hover chopsticks come and pick up the last sushi; a click carries it away,
-// and another pair on the left pushes the rest up and puts a new one
-// in the first slot (assets/js/menu.js); the menu opens under the box,
-// cards like the post keywords.
-// On wide screens it stands in the right column, right above Keywords;
-// on narrow ones only the box is in the title, a bit smaller.
-$bento-carry: 0.55s;
-// The whole turn of the left chopsticks: the push takes its second quarter.
-$bento-turn: 1.4s;
-
+// The menu in the header (see _includes/menu.html): two text links,
+// the current page underlined with red dots, like a term.
 .menu {
-  position: relative;
-
-  @media (min-width: $wide-screen) {
-    position: absolute;
-    top: 50%;
-    left: calc(100% + 2.5rem);
-    margin-top: -1.5rem;
-  }
-}
-
-.menu-toggle {
   display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  color: black;
-  cursor: pointer;
-
-  &:hover .menu-label { text-decoration: underline; }
-  &:focus-visible { outline: 1px dotted black; outline-offset: 4px; }
-}
-
-.bento {
-  position: relative;
-  display: block;
-  flex: none;
-  width: 3.8rem;
-  height: 3rem;
-
-  // The chopsticks reach out of the box.
-  svg {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    fill: none;
-    stroke: $ink;
-    stroke-width: 1.6;
-    stroke-linejoin: round;
-    stroke-linecap: round;
-  }
-}
-
-// The sushi stand in slots one --step apart (set on the row).
-.b-item { transform: translateX(calc(var(--slot) * var(--step))); }
-
-.b-food { transition: transform 0.25s ease-out; }
-
-// The left chopsticks and the sushi they bring show only during a click.
-.b-left, .b-new { opacity: 0; }
-
-// The chopsticks wait up and to the right, out of sight.
-.b-sticks {
-  transform: translate(22px, -22px);
-  opacity: 0;
-  transition: transform 0.3s ease-out, opacity 0.2s;
-}
-
-// The script holds the sushi the same way when there is no hover (a tap).
-.menu-toggle:is(:hover, :focus-visible, .is-holding) {
-  .b-sticks { transform: none; opacity: 1; }
-  .b-item:last-child .b-food { transform: translateY(-4px); transition-delay: 0.15s; }
-}
-
-// Carried away up and to the right, the chopsticks with it.
-.menu-toggle.is-taking {
-  .b-sticks, .b-item:last-child .b-food {
-    opacity: 0;
-    transition: transform $bento-carry ease-in, opacity 0.2s ($bento-carry - 0.2s);
-  }
-
-  .b-sticks { transform: translate(26px, -26px); }
-  .b-item:last-child .b-food { transform: translate(26px, -30px); }
-
-  // Pushed by the left chopsticks.
-  .b-item { transition: transform ($bento-turn / 4) ease-in-out ($bento-turn / 4); }
-  .b-left { animation: bento-left $bento-turn both; }
-  .b-new { animation: bento-new $bento-turn both; }
-}
-
-// The left chopsticks come down by the first sushi, push the row a slot up
-// with it, go up for the next sushi and bring it down into the first slot.
-@keyframes bento-left {
-  0%, 7% { transform: translate(-30px, -30px); opacity: 0; }
-  25% { transform: translate(-8px, 2px); opacity: 1; animation-timing-function: ease-in-out; }
-  50% { transform: translate(10.5px, 2px); opacity: 1; }
-  62% { transform: translate(0, -30px); opacity: 0; }
-  82% { transform: translate(0, -4px); opacity: 1; }
-  88% { transform: none; opacity: 1; }
-  100% { transform: translate(-26px, -26px); opacity: 0; }
-}
-
-@keyframes bento-new {
-  0%, 62% { transform: translate(0, -30px); opacity: 0; }
-  82% { transform: translate(0, -4px); opacity: 1; }
-  88%, 100% { transform: none; opacity: 1; }
-}
-
-// Over Keywords while it is open; the cards are as wide as the longest one,
-// their names on the left.
-.menu-list {
-  position: absolute;
-  z-index: 15;
-  top: calc(100% + 0.5rem);
-  left: -0.6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin: 0;
-  padding: 0.6rem;
-  border: 1.5px solid black;
-  border-radius: 2px;
-  background: white;
-  box-shadow: 3px 3px 0 black;
-  list-style: none;
-
-  &[hidden] { display: none; }
-
-  li {
-    margin: 0;
-    animation: keywords-card-in 0.45s ease-out both;
-    animation-delay: calc(var(--i) * 0.05s);
-  }
+  gap: 1.5ch;
 
   a {
-    display: block;
-    padding: 0.1rem 0.4rem;
-    border: 1.5px solid black;
-    border-radius: 2px;
-    background: white;
-    box-shadow: 2px 2px 0 black;
-    font-size: 0.8rem;
-    text-align: left;
     color: black;
     text-decoration: none;
-    transition: transform 0.15s;
 
-    &:hover, &:focus-visible {
-      transform: translate(-1px, -1px);
-      box-shadow: 3px 3px 0 black;
-      text-decoration: underline;
-    }
+    &:hover { text-decoration: underline; }
+    &:focus-visible { outline: 1px dotted black; outline-offset: 3px; }
+  }
+
+  // Longhands: Safari drops the shorthand with a style or a colour in it.
+  a[aria-current] {
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: $term-red;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
   }
 }
 
-// Without the right column the word is only for screen readers,
-// and the menu opens under the box from its right edge.
+// Without the right column the keyword cabinet is smaller.
 @media not all and (min-width: $wide-screen) {
-  .bento { width: 2.85rem; height: 2.25rem; }
-
   .catalog {
     --cabinet-scale: scale3d(0.405, 0.405, 0.405);
     width: 2.85rem;
@@ -1295,17 +1157,6 @@ $bento-turn: 1.4s;
 
     .cabinet { top: 1.0125rem; }
   }
-
-  .menu-label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  .menu-list { left: auto; right: -0.6rem; }
 }
 
 // The turtle in the bottom right corner of the window (see _includes/turtle.html):
@@ -1384,18 +1235,13 @@ $bento-turn: 1.4s;
 
 @media (prefers-reduced-motion: reduce) {
   .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-toggle + .filter-count, .keywords-list a, .turtle-btn { transition: none; }
-  .keywords-list li, .filter-options button, .filter-heading, .menu-list li { animation: none; }
-  .menu-list a { transition: none; }
-  // The bento rules for carrying a sushi are more specific.
-  .b-item, .b-food, .b-sticks { transition: none !important; }
-  .b-left, .b-new { animation: none !important; }
+  .keywords-list li, .filter-options button, .filter-heading { animation: none; }
 }
 
 // Terms explained in posts (see assets/js/glossary.js):
 // the term is underlined with red dots, a click on it slides out
 // a library catalogue card with a typewritten dictionary entry,
 // from the same cabinet as the keywords.
-$term-red: #e0352b;
 $card-ink: #6b6250;
 $card-line: 1.5rem;
 

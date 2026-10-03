@@ -1,20 +1,10 @@
 {%- comment -%}
-  The menu in the header: a bento box with the word "Menu" next to it
-  (_includes/bento.html, assets/js/menu.js). On hover chopsticks come
-  and pick up a sushi; a click carries it away, another one slides in
-  from the other side, and the menu opens under the box.
-  On wide screens it stands in the right column, right above Keywords.
+  The menu in the header: two text links, the current page underlined
+  with red dots, like a term (assets/css/main.scss). Blog is current
+  on the home page and in posts.
 {%- endcomment -%}
 {%- assign here = page.url | remove: ".html" -%}
-<div class="menu">
-  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-list">
-    {%- include bento.html %}
-    <span class="menu-label">Menu</span>
-  </button>
-  <ul class="menu-list" id="menu-list" hidden>
-    <li style="--i: 0"><a href="{{ "/" | relative_url }}"{% if here == "/" or here == "/index" %} aria-current="page"{% endif %}>Blog</a></li>
-    <li style="--i: 1"><a href="{{ "/now" | relative_url }}"{% if here == "/now" %} aria-current="page"{% endif %}>Now</a></li>
-    <li style="--i: 2"><a href="{{ "/about" | relative_url }}"{% if here == "/about" %} aria-current="page"{% endif %}>About</a></li>
-  </ul>
-</div>
-<script src="{{ "/assets/js/menu.js" | relative_url }}" defer></script>
+<nav class="menu" aria-label="Menu">
+  <a href="{{ "/" | relative_url }}"{% if here == "/" or here == "/index" %} aria-current="page"{% elsif page.layout == "post" %} aria-current="true"{% endif %}>Blog</a>
+  <a href="{{ "/about" | relative_url }}"{% if here == "/about" %} aria-current="page"{% endif %}>About</a>
+</nav>

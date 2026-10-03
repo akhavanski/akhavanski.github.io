@@ -1,0 +1,203 @@
+.menu {
+  position: relative;
+  display: inline-block;
+}
+
+.menu-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: black;
+  cursor: pointer;
+}
+.menu-toggle:hover .menu-label {
+  text-decoration: underline;
+}
+.menu-toggle:focus-visible {
+  outline: 1px dotted black;
+  outline-offset: 4px;
+}
+
+.bento {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 3.8rem;
+  height: 3rem;
+}
+.bento svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: #2b2b2b;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.b-item {
+  transform: translateX(calc(var(--slot) * var(--step)));
+}
+
+.b-food {
+  transition: transform 0.25s ease-out;
+}
+
+.b-left, .b-new {
+  opacity: 0;
+}
+
+.b-sticks {
+  transform: translate(22px, -22px);
+  opacity: 0;
+  transition: transform 0.3s ease-out, opacity 0.2s;
+}
+
+.menu-toggle:is(:hover, :focus-visible, .is-holding) .b-sticks {
+  transform: none;
+  opacity: 1;
+}
+.menu-toggle:is(:hover, :focus-visible, .is-holding) .b-item:last-child .b-food {
+  transform: translateY(-4px);
+  transition-delay: 0.15s;
+}
+
+.menu-toggle.is-taking .b-sticks, .menu-toggle.is-taking .b-item:last-child .b-food {
+  opacity: 0;
+  transition: transform 0.55s ease-in, opacity 0.2s 0.35s;
+}
+.menu-toggle.is-taking .b-sticks {
+  transform: translate(26px, -26px);
+}
+.menu-toggle.is-taking .b-item:last-child .b-food {
+  transform: translate(26px, -30px);
+}
+.menu-toggle.is-taking .b-item {
+  transition: transform 0.35s ease-in-out 0.35s;
+}
+.menu-toggle.is-taking .b-left {
+  animation: bento-left 1.4s both;
+}
+.menu-toggle.is-taking .b-new {
+  animation: bento-new 1.4s both;
+}
+
+@keyframes bento-left {
+  0%, 7% {
+    transform: translate(-30px, -30px);
+    opacity: 0;
+  }
+  25% {
+    transform: translate(-8px, 2px);
+    opacity: 1;
+    animation-timing-function: ease-in-out;
+  }
+  50% {
+    transform: translate(10.5px, 2px);
+    opacity: 1;
+  }
+  62% {
+    transform: translate(0, -30px);
+    opacity: 0;
+  }
+  82% {
+    transform: translate(0, -4px);
+    opacity: 1;
+  }
+  88% {
+    transform: none;
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-26px, -26px);
+    opacity: 0;
+  }
+}
+@keyframes bento-new {
+  0%, 62% {
+    transform: translate(0, -30px);
+    opacity: 0;
+  }
+  82% {
+    transform: translate(0, -4px);
+    opacity: 1;
+  }
+  88%, 100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+.menu-list {
+  position: absolute;
+  z-index: 15;
+  top: calc(100% + 0.5rem);
+  left: -0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.6rem;
+  border: 1.5px solid black;
+  border-radius: 2px;
+  background: white;
+  box-shadow: 3px 3px 0 black;
+  list-style: none;
+}
+.menu-list[hidden] {
+  display: none;
+}
+.menu-list li {
+  margin: 0;
+  animation: keywords-card-in 0.45s ease-out both;
+  animation-delay: calc(var(--i) * 0.05s);
+}
+.menu-list a {
+  display: block;
+  padding: 0.1rem 0.4rem;
+  border: 1.5px solid black;
+  border-radius: 2px;
+  background: white;
+  box-shadow: 2px 2px 0 black;
+  font-size: 0.8rem;
+  text-align: left;
+  color: black;
+  text-decoration: none;
+  transition: transform 0.15s;
+}
+.menu-list a:hover, .menu-list a:focus-visible {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 black;
+  text-decoration: underline;
+}
+
+@keyframes keywords-card-in {
+  from {
+    opacity: 0;
+    transform: translateX(-3rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-list li {
+    animation: none;
+  }
+
+  .menu-list a {
+    transition: none;
+  }
+
+  .b-item, .b-food, .b-sticks {
+    transition: none !important;
+  }
+
+  .b-left, .b-new {
+    animation: none !important;
+  }
+}

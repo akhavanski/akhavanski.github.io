@@ -18,10 +18,6 @@ turtle:
   show: false
   text: "Hi! You found the turtle."
 
-# On posts tagged AI the bento box in the menu holds app icons of AI models
-# instead of sushi (see _includes/bento.html): `true` turns it on.
-ai_bento: false
-
 remote_theme: riggraz/no-style-please
 
 theme_config:
