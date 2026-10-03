@@ -6,6 +6,8 @@
 // for three seconds, when the focus has left it, and when the post has scrolled
 // half a window with the mouse elsewhere. A jump to a section doesn't count as scrolling.
 // Once "← to blog" has scrolled away, the button is alone left of the text and goes quiet.
+// On a narrow screen the button is at the bottom right of the window and the page
+// comes out above it (the styles do that, the script is the same).
 // The post layout loads this script only when the post has two headings or more.
 (function () {
   var toggle = document.querySelector(".toc-toggle");

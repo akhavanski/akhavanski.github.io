@@ -322,11 +322,37 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
 // under "← to blog" stays at the top of the window while you read, and a click
 // on it slides a printed page with the sections, set in Computer Modern, the LaTeX
 // font, out from under the post below it. The section being read is marked
-// with a highlighter. Like "← to blog", it lives in the empty column left of the text.
+// with a highlighter. Like "← to blog", it lives in the empty column left of the text;
+// on a narrow screen it is at the bottom of the window.
 article { position: relative; }
 
+// On a narrow screen there is no column left of the text, so the button sits
+// at the bottom right of the window, and the window's edge does what the post's
+// edge does on a wide one: the button slips under it, and the page comes out
+// from under it, above the button.
 .toc {
-  display: none;
+  @media not all and (min-width: 60rem) {
+    position: fixed;
+    right: 0;
+    bottom: 1rem;
+    z-index: 10;
+    // The window's right edge hides the button and the page.
+    clip-path: inset(-100vh 0 -3rem -100vw);
+    pointer-events: none;
+
+    .toc-rail { position: static; }
+
+    // Over the text, the pressed button keeps its white.
+    &.is-alone .toc-rail .toc-toggle[aria-expanded="true"] { background: white; }
+
+    .toc-sheet {
+      top: auto;
+      bottom: calc(100% + 0.6rem);
+      left: auto;
+      width: min(20rem, calc(100vw - 2.5rem));
+      max-height: calc(100vh - 5.2rem);
+    }
+  }
 
   @media (min-width: 60rem) {
     display: block;
