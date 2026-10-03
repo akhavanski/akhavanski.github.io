@@ -24,5 +24,5 @@ title: Now
 
 - Looking for a job as PdM/PjM/BA
 
-Updated on the 1st of October, 2026
+Updated on the 1st of October, 2026. It is a [Now](https://nownownow.com/) page.
 {: .post-footer}
