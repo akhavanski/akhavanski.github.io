@@ -85,7 +85,34 @@ pre.mermaid { text-align: center; }
   // The grid would show the posts the filters hide.
   li[hidden] { display: none; }
 
-  time { color: grey; }
+  time {
+    color: grey;
+    transition: color 0.2s;
+  }
+
+  // Pointing at a post darkens its date, and an arrow slides out
+  // 3px to the right after the title.
+  a::after {
+    content: "→";
+    display: inline-block;
+    margin-left: 0.4em;
+    opacity: 0;
+    transform: translateX(-3px);
+    transition: opacity 0.2s, transform 0.2s ease-out;
+  }
+
+  li:is(:hover, :focus-within) {
+    time { color: #333; }
+
+    a::after {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    time, a::after { transition: none; }
+  }
 
   // On phones the date column leaves too little room for titles,
   // so the date goes above the title.

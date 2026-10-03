@@ -1,7 +1,15 @@
 ---
 layout: default
 ---
+{%- comment -%}
+  The home page: the header, a few words about me (the text of index.md)
+  and the list of posts.
+{%- endcomment -%}
 {%-include header.html home=true-%}
+
+<div class="intro">
+{{ content }}
+</div>
 
 {%-include posts.html-%}
 
