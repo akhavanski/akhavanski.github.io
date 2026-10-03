@@ -962,6 +962,12 @@ $turn: 0.6s;
   }
 
   .keywords-list { margin-top: 0; }
+
+  // At the right edge the cabinet turns the other way, so the drawer comes out
+  // to the left; the right side shows instead of the left.
+  .catalog .side { transform: rotateY(90deg) translateZ(3.2rem); }
+  .keywords-toggle:hover .cabinet { transform: $cabinet-scale rotateY(-22deg); }
+  .keywords-toggle[aria-expanded="true"] .cabinet { transform: $cabinet-scale rotateY(-72deg); }
 }
 
 // The keyword filter on the home page: on narrow screens it is a plain name,
