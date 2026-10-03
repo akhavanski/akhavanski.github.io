@@ -35,7 +35,8 @@
         </button><span class="filter-count"></span>
         <div class="filter-options" id="filter-keywords" role="group" aria-label="Keywords">
           {%- for tag in tags %}
-          <button type="button" aria-pressed="false" data-filter="tag" data-value="{{ tag | slugify }}" data-fill="{{ forloop.index0 | modulo: 8 }}" style="--i: {{ forloop.index0 }}">{{ tag }}</button>
+          {%- assign slug = tag | slugify %}
+          <button type="button" aria-pressed="false" data-filter="tag" data-value="{{ slug }}" data-fill="{{ forloop.index0 | modulo: 8 }}" style="--i: {{ forloop.index0 }}"{% if slug == "ai" %} class="has-sparkles"{% endif %}>{{ tag }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}</button>
           {%- endfor %}
           {%- if langs.size > 1 %}
           <p class="filter-heading" style="--i: {{ tags.size }}">Languages</p>
