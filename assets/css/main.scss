@@ -256,29 +256,6 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   &:hover, &:focus-visible { color: black; }
 }
 
-// Contact icons: black by default, brand colour on hover.
-.social {
-  display: flex;
-  gap: 0.75rem;
-
-  a {
-    display: block;
-    color: black;
-    transition: color 0.2s;
-  }
-
-  svg {
-    display: block;
-    width: 1rem;
-    height: 1rem;
-    fill: currentColor;
-  }
-
-  a.social-linkedin:hover, a.social-linkedin:focus-visible { color: #0a66c2; }
-  a.social-telegram:hover, a.social-telegram:focus-visible { color: #26a5e4; }
-  a.social-email:hover, a.social-email:focus-visible { color: #ea4335; }
-}
-
 // A quiet white card with a grey outline, the grey a bit darker on hover:
 // the way back to the blog and the button "Table of contents" in a post.
 @mixin quiet-card {
@@ -641,9 +618,6 @@ mark.fix {
   &:hover, &[aria-expanded="true"] { text-decoration-thickness: 2px; }
   &:focus-visible { outline: 1px dotted black; }
 }
-
-// The contact icons on the About page, under the text.
-.about-contacts .social { margin-top: 1.5rem; }
 
 .note {
   position: absolute;
@@ -1511,3 +1485,125 @@ $card-line: 1.5rem;
 @media (prefers-reduced-motion: reduce) {
   .term-card.out { animation: none; }
 }
+
+// The arrow from the word "here" on the About page to the dock (assets/js/dock.js).
+.here-arrow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+
+  path {
+    fill: none;
+    stroke: #d42020;
+    stroke-width: 1.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+// The dock of Mac OS X Leopard with the contacts (_includes/social.html).
+.dock {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  box-sizing: border-box;
+  width: fit-content;
+  // The height stays that of small apps, so the grown ones stick out upwards,
+  // into the room above, and the page under the dock does not move.
+  height: calc(44px + 9px);
+  margin: 5rem auto 2rem;
+  padding: 0 16px 9px;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Tahoma, sans-serif;
+
+  // The glass shelf of Leopard, seen from above at an angle.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 24px;
+    transform: perspective(50px) rotateX(30deg);
+    transform-origin: bottom;
+    border: 1px solid rgba(140, 150, 165, 0.7);
+    border-bottom: 0;
+    border-radius: 3px 3px 0 0;
+    background: linear-gradient(rgba(235, 240, 248, 0.6), rgba(185, 195, 210, 0.75));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  // The bright front edge of the shelf.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 2px;
+    background: white;
+    box-shadow: 0 1px 0 rgba(120, 130, 145, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
+  }
+}
+
+.dock-app {
+  --size: 44px;
+  position: relative;
+  z-index: 1;
+  width: var(--size);
+  height: var(--size);
+  transition: width 0.25s, height 0.25s;
+
+  .dock-hover & { transition: width 0.08s, height 0.08s; }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    -webkit-box-reflect: below 0 linear-gradient(transparent 70%, rgba(255, 255, 255, 0.35));
+  }
+
+  // The light of a running app on the shelf.
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    width: 4px;
+    height: 3px;
+    margin-left: -2px;
+    border-radius: 50%;
+    background: #4fb3ff;
+    box-shadow: 0 0 3px 1px #5cc0ff;
+  }
+
+  &:focus-visible { outline: 1px dotted black; outline-offset: 2px; }
+}
+
+// The name of the app above it, as in the dock.
+.dock-label {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1px 8px;
+  border-radius: 9px;
+  background: rgba(30, 30, 30, 0.75);
+  font-size: 11px;
+  color: white;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+
+  .dock-app:hover &, .dock-app:focus-visible & { opacity: 1; }
+}
+
+.dock-bounce svg { animation: dock-bounce 0.9s ease-in-out; }
+
+@keyframes dock-bounce {
+  0%, 33%, 66%, 100% { transform: translateY(0); }
+  16%, 50% { transform: translateY(-45%); }
+  83% { transform: translateY(-15%); }
+}
+
