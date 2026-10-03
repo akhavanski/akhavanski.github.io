@@ -7,8 +7,16 @@ title: About
   (_includes/social.html).
   The About item of the menu in the header leads here.
 {%- endcomment %}
-Product Manager and Business Analyst with 7+ YoE, including 1.5+ years as a PdM/PjM. Strong in product discovery, customer and stakeholder interviews, e-commerce purchase flows, data analytics, UX, and complex legacy domains.
+I'm a Product Manager and Business Analyst with 7+ years of experience in IT. I'm good at turning ideas into products and scattered information into knowledge bases.
 
-Currently, I am involved in [these projects](/now).
+I live in Vilnius, Lithuania.
+
+I work at 21vek.by as a Product Owner and I'm building [certificate.tips](https://certificate.tips). More on what I'm doing [now](/now). Previously, I was a Business Analyst at an outsourcing agency. My favourite project there was building data analysis pipelines for an MBB consulting firm.
+
+I hold a master's degree in Linguistics and speak Russian, English, Spanish, and Polish.
+
+I love books, chess (my Elo is lower than my heart rate), cycling (so is my FTP), and time with my family.
+
+In this blog, I mostly write about my work experience and mental models. Occasionally, I share unfiltered takes on things that bother me.
 
 You can find me here:{% include social.html %}
