@@ -96,7 +96,7 @@ pre.mermaid { text-align: center; }
 }
 
 // The filter on the home page (see assets/js/blog-filters.js). On narrow screens
-// it is under the title, a click on its name opens a menu under it. On wide
+// it is the cabinet right of the title, a click opens a menu under it. On wide
 // screens it is right of the list, like the keywords in a post: a click on the name
 // brings its options out under it, one by one from the left.
 // The options are cards like the post keywords, several in a line, the keywords
@@ -184,9 +184,9 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
     &:focus-visible { outline: 1px dotted black; outline-offset: 3px; }
   }
 
-  // On phones a menu would not fit right of its name,
+  // Without the right column a menu would not fit right of its name,
   // so it opens under the line of names, from its left edge.
-  @media (max-width: 30rem) {
+  @media not all and (min-width: $wide-screen) {
     left: 0;
     max-width: 100%;
   }
@@ -204,7 +204,7 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { background: nth($filter-fills, $i); }
 }
 
-@media (max-width: 30rem) {
+@media not all and (min-width: $wide-screen) {
   .filter-names { position: relative; }
   .filter { position: static; }
 }
@@ -713,8 +713,8 @@ mark.fix {
 // catalogue cabinet with the word "Keywords" next to it. On hover the cabinet
 // turns a little; a click turns it to profile, pulls out the K–P drawer
 // and brings the keywords out under it, one by one from the left.
-// On narrow screens it is under the title, on wide ones right of the post.
-// The keyword filter on the home page has the same cabinet on wide screens.
+// On narrow screens it is right of the title, under the bento box, on wide ones
+// right of the post. The keyword filter on the home page has the same cabinet.
 $ink: #2b2b2b;
 $toon-line: 2.5px solid $ink;
 // The cabinet is modelled at full size and scaled down as a whole,
@@ -977,10 +977,10 @@ $turn: 0.6s;
   .keywords-toggle:hover .keywords-label { transform: none; }
 }
 
-// On phones, like the filter on the home page, it is the cabinet alone,
+// Without the right column, like the filter on the home page, it is the cabinet alone,
 // right of the first line of the title, under the bento box;
 // the keywords open under the title.
-@media (max-width: 30rem) {
+@media not all and (min-width: $wide-screen) {
   // Room for the cabinet in the first line of the title only.
   .post-head:has(.keywords) h1::before {
     content: "";
@@ -1035,14 +1035,8 @@ $turn: 0.6s;
   .keywords-toggle[aria-expanded="true"] .cabinet { transform: $cabinet-scale rotateY(-72deg); }
 }
 
-// The keyword filter on the home page: on narrow screens it is a plain name,
-// the cabinet shows only in the right column. There it needs no arrow,
+// The keyword filter on the home page: in the right column it needs no arrow,
 // and the number of chosen options moves aside with the word.
-.filter .keywords-toggle {
-  display: inline-block;
-
-  .catalog { display: none; }
-}
 
 @media (min-width: $wide-screen) {
   .filter .keywords-toggle {
@@ -1066,10 +1060,10 @@ $turn: 0.6s;
   }
 }
 
-// On phones the filter is the cabinet alone, without the word, right of the
+// Without the right column the filter is the cabinet alone, without the word, right of the
 // title Blog, under the bento box; the number of chosen options is left of it.
 // The menu still opens under the title, from the left edge.
-@media (max-width: 30rem) {
+@media not all and (min-width: $wide-screen) {
   .filter-names {
     position: absolute;
     top: 0;
