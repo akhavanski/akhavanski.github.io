@@ -8,10 +8,10 @@
   on the left pushes the row up and puts the next sushi (.b-new) in the first slot
   (assets/css/main.scss, assets/js/menu.js). Of each pair the back chopstick
   is drawn behind the sushi, the front one over the box.
-  On a post tagged AI the box holds app icons of AI models instead of sushi
+  With ai_bento on in _config.yml, on a post tagged AI the box holds app icons of AI models instead of sushi
   (taken from LobeHub Icons, @lobehub/icons-static-svg, MIT).
 {%- endcomment -%}
-{%- if page.tags contains "AI" -%}
+{%- if site.ai_bento and page.tags contains "AI" -%}
   {%- assign b_kinds = "b-claude b-openai b-gemini b-mistral b-meta b-deepseek" | split: " " -%}
 {%- else -%}
   {%- assign b_kinds = "b-maguro b-kappa-maki b-sake b-tamago b-sake-maki b-ebi" | split: " " -%}
