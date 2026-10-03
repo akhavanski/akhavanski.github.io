@@ -10,7 +10,7 @@ $tiny-screen: 20.5rem;
 // From this width there is an empty column right of the 640px wide text.
 $wide-screen: 72rem;
 
-// The red of terms and of the current page in the menu.
+// The red of terms.
 $term-red: #e0352b;
 
 // Puts a block in that column, $top below the top of the title's box,
@@ -1125,7 +1125,7 @@ $turn: 0.6s;
 }
 
 // The menu in the header (see _includes/menu.html): two text links,
-// the current page underlined with red dots, like a term.
+// the current page underlined.
 .menu {
   display: flex;
   gap: 1.5ch;
@@ -1134,17 +1134,8 @@ $turn: 0.6s;
     color: black;
     text-decoration: none;
 
-    &:hover { text-decoration: underline; }
+    &:hover, &[aria-current] { text-decoration: underline; }
     &:focus-visible { outline: 1px dotted black; outline-offset: 3px; }
-  }
-
-  // Longhands: Safari drops the shorthand with a style or a colour in it.
-  a[aria-current] {
-    text-decoration-line: underline;
-    text-decoration-style: dotted;
-    text-decoration-color: $term-red;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 3px;
   }
 }
 
