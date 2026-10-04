@@ -1,30 +1,11 @@
 {%- comment -%}
   The business card with contacts at the end of the About page.
-  On hover it straightens and lifts off the page. The paper is crumpled
-  and worn: the filter below bends the paper and the print along the same
-  creases, lights them from the side and frays the edges.
+  On hover it straightens and lifts off the page. The paper is worn and
+  crumpled, made by _tools/bcard-paper.py (see assets/css/main.scss).
   It is set in Computer Modern, the LaTeX font: the name in plain
   letters, the rest in small capitals.
 {%- endcomment -%}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@333f55ec19733c28cdc43567ecf72eafd6b0af61/font/Serif/cmun-serif.css">
-<svg class="bcard-filter" aria-hidden="true">
-  <filter id="bcard-crumple" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
-    <feTurbulence type="turbulence" baseFrequency=".007 .01" numOctaves="3" seed="4" result="crease"/>
-    <feDisplacementMap in="SourceGraphic" in2="crease" scale="9" xChannelSelector="R" yChannelSelector="G" result="bent"/>
-    <feDiffuseLighting in="crease" surfaceScale="7" lighting-color="#fff" result="light">
-      <feDistantLight azimuth="235" elevation="60"/>
-    </feDiffuseLighting>
-    <feComponentTransfer in="light" result="shade">
-      <feFuncR type="linear" slope=".45" intercept=".55"/>
-      <feFuncG type="linear" slope=".45" intercept=".55"/>
-      <feFuncB type="linear" slope=".45" intercept=".55"/>
-    </feComponentTransfer>
-    <feBlend in="bent" in2="shade" mode="multiply" result="lit"/>
-    <feTurbulence type="fractalNoise" baseFrequency=".12" numOctaves="4" seed="2" result="fray"/>
-    <feDisplacementMap in="bent" in2="fray" scale="8" xChannelSelector="R" yChannelSelector="G" result="torn"/>
-    <feComposite in="lit" in2="torn" operator="in"/>
-  </filter>
-</svg>
 <div class="bcard"><div class="bcard-paper">
   <div class="bcard-name">{{ site.author }}</div>
   <div class="bcard-role">Product Manager &amp; Business Analyst</div>

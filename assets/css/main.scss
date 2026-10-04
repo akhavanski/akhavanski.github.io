@@ -305,12 +305,11 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
 
 // The business card with contacts at the end of the About page
 // (_includes/social.html): cream paper, a little askew; on hover it
-// straightens and lifts off the page. The paper is crumpled and worn:
-// the SVG filter #bcard-crumple in social.html bends it and the print along
-// the creases, shades the creases and frays the edges; the shadow follows
-// the frayed edge.
-.bcard-filter { position: absolute; width: 0; height: 0; }
-
+// straightens and lifts off the page. The paper is a crumpled and smoothed
+// out sheet, worn at the edges, made by _tools/bcard-paper.py: its colour is
+// the background, the light on its creases lies over the print with multiply,
+// so the print is part of the paper, and its worn outline is the mask; the
+// shadow follows the outline.
 .bcard {
   width: 26rem;
   max-width: 100%;
@@ -325,6 +324,8 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   }
 
   .bcard-paper {
+    position: relative;
+    isolation: isolate;
     aspect-ratio: 1.75;
     box-sizing: border-box;
     padding: 1.5rem;
@@ -332,8 +333,18 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    background: #fbf7ec;
-    filter: url(#bcard-crumple);
+    background: #f8f3e6 url(/assets/img/bcard-paper.jpg) center / 100% 100%;
+    -webkit-mask: url(/assets/img/bcard-shape.png) center / 100% 100%;
+    mask: url(/assets/img/bcard-shape.png) center / 100% 100%;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url(/assets/img/bcard-light.jpg) center / 100% 100%;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+    }
   }
 
   .bcard-name { font-family: "Computer Modern Serif", serif; font-size: 1.6rem; letter-spacing: .02em; }
@@ -1707,7 +1718,7 @@ html[data-theme="dark"] {
   *:target, ol.sources li:target, .cite a:target { background: rgba(255, 230, 0, 0.25); }
   .catalog { color: #1a1a1a; }
 
-  .bcard .bcard-paper { background: #141414; box-shadow: 0 0 0 1px #333; }
+  .bcard .bcard-paper { background: #141414; }
   .bcard, .bcard a { color: #d8cfb4; }
   .bcard .bcard-name { color: #e8d9a8; letter-spacing: 0.04em; }
   .bcard .bcard-role { color: #9a8f72; }
