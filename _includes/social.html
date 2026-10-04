@@ -1,40 +1,42 @@
 {%- comment -%}
   The business card with contacts at the end of the About page: white,
-  85×55 mm in proportion, set in IBM Plex. Contacts at the top, an orange
-  square in the corner, the name, role and city under a line at the bottom.
-  A contact under the pointer or in focus gets an orange box.
-  The email has a button that copies it (assets/js/bcard.js).
-  "Book a call" is on the card only when `book_call.show` in _config.yml is true.
+  85×55 mm in proportion, set in IBM Plex, an orange square in the corner.
+  It lies a little turned and straightens on hover or focus. A link under
+  the pointer gets an arrow ↗, the email a copy mark and the button COPY
+  (assets/js/bcard.js). "Book a call →" is on the card only when
+  `book_call.show` in _config.yml is true.
 {%- endcomment -%}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&display=swap">
-<section class="bcard-wrap" aria-label="Contact card">
-  <div class="bcard">
+{%- capture arrow -%}
+<svg class="bcard-arrow" viewBox="0 0 10 10" fill="none" stroke-width="1.6" aria-hidden="true"><path d="M2 8L8 2M3 2H8V7"></path></svg>
+{%- endcapture %}
+<div class="bcard-wrap">
+  <section class="bcard" aria-label="Contact card">
     <div class="bcard-top">
       <div class="bcard-links">
-        <span class="bcard-email">
-          <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a>
-          <button type="button" class="bcard-copy" aria-label="Copy email address" data-email="{{ site.contact_email }}">
-            <svg class="bcard-icon-copy" viewBox="0 0 12 12" aria-hidden="true"><rect x="3.75" y="0.75" width="7.5" height="7.5"/><path d="M8.25 8.25v3H.75v-7.5h3"/></svg>
-            <svg class="bcard-icon-done" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6.5l3.25 3.25L11 3"/></svg>
-          </button>
-          <span class="bcard-copied" aria-hidden="true">Copied</span>
-        </span>
-        <a href="https://www.linkedin.com/in/akhavanski" target="_blank" rel="noopener noreferrer">linkedin.com/in/akhavanski</a>
-        <a href="https://t.me/achowanski" target="_blank" rel="noopener noreferrer">t.me/achowanski</a>
-        <a href="https://akh.cx" target="_blank" rel="noopener noreferrer">akh.cx</a>
+        <div class="bcard-row">
+          <a class="bcard-link" href="mailto:{{ site.contact_email }}">{{ site.contact_email }}<svg class="bcard-arrow" viewBox="0 0 12 12" fill="none" stroke-width="1.5" aria-hidden="true"><path d="M4 4H11V11H4Z"></path><path d="M8 1H1V8"></path></svg></a>
+          <button type="button" class="bcard-copy" aria-label="Copy email address" data-email="{{ site.contact_email }}"><span class="bcard-label">Copy</span></button>
+        </div>
+        <a class="bcard-link" href="https://www.linkedin.com/in/akhavanski" target="_blank" rel="noopener noreferrer">linkedin.com/in/akhavanski{{ arrow }}</a>
+        <a class="bcard-link" href="https://t.me/achowanski" target="_blank" rel="noopener noreferrer">t.me/achowanski{{ arrow }}</a>
+        <a class="bcard-link" href="https://akh.cx" target="_blank" rel="noopener noreferrer">akh.cx{{ arrow }}</a>
         {%- if site.book_call.show %}
-        <a class="bcard-book" href="{{ site.book_call.url }}" target="_blank" rel="noopener noreferrer">Book a call →</a>
+        <a class="bcard-book" href="{{ site.book_call.url }}" target="_blank" rel="noopener noreferrer">Book a call <span class="bcard-book-arrow" aria-hidden="true">→</span></a>
         {%- endif %}
       </div>
-      <span class="bcard-square" aria-hidden="true"></span>
+      <span class="bcard-mark" aria-hidden="true"></span>
     </div>
     <div class="bcard-bottom">
       <h2 class="bcard-name">{{ site.author | split: " " | join: "<br>" }}</h2>
-      <p class="bcard-role"><span>Product Manager</span><span>Vilnius, LT</span></p>
+      <div class="bcard-meta">
+        <span class="bcard-role">Product Manager</span>
+        <span class="bcard-city">Vilnius, LT</span>
+      </div>
     </div>
-  </div>
-  <span class="bcard-status" aria-live="polite"></span>
-</section>
+    <span class="bcard-status" aria-live="polite"></span>
+  </section>
+</div>
 <script src="{{ "/assets/js/bcard.js" | relative_url }}"></script>
