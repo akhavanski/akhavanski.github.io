@@ -1,7 +1,8 @@
 {%- comment -%}
   The posts on the home page (the five latest, include.limit=5, without
-  the heading Blog) and on the Blog page (all), with a filter by keyword, that is a post's tag,
-  and by language (see assets/js/blog-filters.js). Several keywords and several
+  the heading Blog and the filter) and on the Blog page (all, with a filter
+  by keyword, that is a post's tag,
+  and by language, see assets/js/blog-filters.js). Several keywords and several
   languages can be chosen: a post is shown if it has one of the chosen keywords
   and is in one of the chosen languages.
   The languages are under the keywords, in the same options, with a small
@@ -24,10 +25,9 @@
 {%- capture tags %}{% for tag in site.tags %}{{ tag[0] }}|{% endfor %}{% endcapture %}
 {%- assign tags = tags | split: "|" | sort_natural %}
 
+{%- unless include.limit %}
 <div class="blog-head">
-  {%- unless include.limit %}
   <h2>Blog</h2>
-  {%- endunless %}
 
   <div class="blog-filters" hidden>
     <div class="filter-names">
@@ -53,20 +53,26 @@
     <p class="filter-status" aria-live="polite"><span></span> <button type="button" class="filter-reset">Reset</button></p>
   </div>
 </div>
+{%- endunless %}
 
 {%- comment -%}
   The posts: the title, and left of the text the date, small and light grey.
-  Under the title the first 25 words of the post, small and grey.
+  On the Blog page, under the title the first 25 words of the post,
+  small and grey.
 {%- endcomment %}
-<ul class="blog-posts">
+<ul class="blog-posts{% unless include.limit %} with-excerpts{% endunless %}">
   {%- for post in site.posts limit: include.limit %}
   {%- capture post_tags %}{% for tag in post.tags %}{{ tag | slugify }} {% endfor %}{% endcapture %}
   <li data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}">
     <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time>
     <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    {%- unless include.limit %}
     <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 25 }}</p>
+    {%- endunless %}
   </li>
   {%- endfor %}
 </ul>
 
+{%- unless include.limit %}
 <script src="{{ "/assets/js/blog-filters.js" | relative_url }}"></script>
+{%- endunless %}

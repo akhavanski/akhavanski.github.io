@@ -70,7 +70,7 @@ pre.mermaid { text-align: center; }
 // The latest posts on the home page (_includes/posts.html): no bullets,
 // the titles start where the text does, the date small and light grey
 // left of the text; on narrow screens there is no room left of the text,
-// so it stands over the title.
+// so it stands in the line, before the title.
 .blog-posts {
   margin: 0;
   padding: 0;
@@ -78,10 +78,12 @@ pre.mermaid { text-align: center; }
 
   li {
     position: relative;
-    margin: 1.1rem 0;
+    margin: 0.6rem 0;
   }
 
-  // The start of the post under its title.
+  &.with-excerpts li { margin: 1.1rem 0; }
+
+  // The start of the post under its title, on the Blog page.
   .post-excerpt {
     margin: 0.15rem 0 0;
     font-size: 0.85em;
@@ -102,7 +104,8 @@ pre.mermaid { text-align: center; }
 
     @media not all and (min-width: 52rem) {
       position: static;
-      display: block;
+      margin-right: 1ch;
+      line-height: inherit;
     }
   }
 
