@@ -1422,5 +1422,5 @@ article p, article li, .intro p, main .w > p, main .w > ul:not(.blog-posts) li, 
   hyphens: auto;
   -webkit-hyphens: auto;
 }
-// Links and code stay whole: certificate.tips, not certifi-cate.tips.
-article a, article code, main a, main code { hyphens: manual; -webkit-hyphens: manual; }
+// Code stays whole; links break like any other word.
+article code, main code { hyphens: manual; -webkit-hyphens: manual; }
