@@ -303,11 +303,11 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   &:hover, &:focus-visible { color: black; }
 }
 
-// The business card with contacts at the top of the About page
+// The business card with contacts at the end of the About page
 // (_includes/social.html): cream paper, a little askew; on hover it
 // straightens and lifts off the page.
 .bcard {
-  width: 24rem;
+  width: 26rem;
   max-width: 100%;
   aspect-ratio: 1.75;
   box-sizing: border-box;
@@ -329,7 +329,7 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   }
 
   .bcard-name { font-family: Georgia, serif; font-size: 1.4rem; letter-spacing: .04em; }
-  .bcard-role { margin: .3rem 0 1.2rem; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: #777; }
+  .bcard-role { margin: .3rem 0 1.2rem; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #777; }
   .bcard-links { font-size: .8rem; }
 }
 
