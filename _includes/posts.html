@@ -52,13 +52,17 @@
   </div>
 </div>
 
-{%- comment -%} The posts: the title, and left of the text the date, small and light grey. {%- endcomment %}
+{%- comment -%}
+  The posts: the title, and left of the text the date, small and light grey.
+  Under the title the first 25 words of the post, small and grey.
+{%- endcomment %}
 <ul class="blog-posts">
   {%- for post in site.posts limit: include.limit %}
   {%- capture post_tags %}{% for tag in post.tags %}{{ tag | slugify }} {% endfor %}{% endcapture %}
   <li data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}">
     <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time>
     <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 25 }}</p>
   </li>
   {%- endfor %}
 </ul>

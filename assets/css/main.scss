@@ -78,7 +78,14 @@ pre.mermaid { text-align: center; }
 
   li {
     position: relative;
-    margin: 0.6rem 0;
+    margin: 1.1rem 0;
+  }
+
+  // The start of the post under its title.
+  .post-excerpt {
+    margin: 0.15rem 0 0;
+    font-size: 0.85em;
+    color: #888;
   }
 
   // The filters hide posts with it.
