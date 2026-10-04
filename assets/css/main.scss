@@ -305,46 +305,27 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
 
 // The business card with contacts at the end of the About page
 // (_includes/social.html): cream paper, a little askew; on hover it
-// straightens and lifts off the page. The paper is a crumpled and smoothed
-// out sheet, worn at the edges, made by _tools/bcard-paper.py: its colour is
-// the background, the light on its creases lies over the print with multiply,
-// so the print is part of the paper, and its worn outline is the mask; the
-// shadow follows the outline.
+// straightens and lifts off the page.
 .bcard {
   width: 26rem;
   max-width: 100%;
+  aspect-ratio: 1.75;
+  box-sizing: border-box;
   margin: 2rem auto 2.5rem;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .18)) drop-shadow(0 8px 12px rgba(0, 0, 0, .12));
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  background: #fbf7ec;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .15), 0 8px 18px rgba(0, 0, 0, .12);
   transform: rotate(-2deg);
-  transition: transform .3s, filter .3s;
+  transition: transform .3s, box-shadow .3s;
 
   &:hover {
     transform: rotate(0) scale(1.05);
-    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, .12)) drop-shadow(0 22px 22px rgba(0, 0, 0, .18));
-  }
-
-  .bcard-paper {
-    position: relative;
-    isolation: isolate;
-    aspect-ratio: 1.75;
-    box-sizing: border-box;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    background: #f8f3e6 url(/assets/img/bcard-paper.jpg) center / 100% 100%;
-    -webkit-mask: url(/assets/img/bcard-shape.png) center / 100% 100%;
-    mask: url(/assets/img/bcard-shape.png) center / 100% 100%;
-
-    &::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: url(/assets/img/bcard-light.jpg) center / 100% 100%;
-      mix-blend-mode: multiply;
-      pointer-events: none;
-    }
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .12), 0 22px 40px rgba(0, 0, 0, .18);
   }
 
   .bcard-name { font-family: "Computer Modern Serif", serif; font-size: 1.6rem; letter-spacing: .02em; }
@@ -1739,7 +1720,7 @@ html[data-theme="dark"] {
   *:target, ol.sources li:target, .cite a:target { background: rgba(255, 230, 0, 0.25); }
   .catalog { color: #1a1a1a; }
 
-  .bcard .bcard-paper { background: #141414; }
+  .bcard { background: #141414; box-shadow: 0 0 0 1px #333, 0 10px 22px rgba(0, 0, 0, 0.6); }
   .bcard, .bcard a { color: #d8cfb4; }
   .bcard .bcard-name { color: #e8d9a8; letter-spacing: 0.04em; }
   .bcard .bcard-role { color: #9a8f72; }

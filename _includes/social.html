@@ -1,7 +1,6 @@
 {%- comment -%}
   The business card with contacts at the end of the About page.
-  On hover it straightens and lifts off the page. The paper is worn and
-  crumpled, made by _tools/bcard-paper.py (see assets/css/main.scss).
+  On hover it straightens and lifts off the page.
   It is set in Computer Modern, the LaTeX font: the name in plain
   letters, the role in small capitals, the contacts in Computer Modern
   Bright, its sans for screens, easy to read small. A contact under the
@@ -9,7 +8,7 @@
 {%- endcomment -%}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@333f55ec19733c28cdc43567ecf72eafd6b0af61/font/Serif/cmun-serif.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@333f55ec19733c28cdc43567ecf72eafd6b0af61/font/Bright/cmun-bright.css">
-<div class="bcard"><div class="bcard-paper">
+<div class="bcard">
   <div class="bcard-name">{{ site.author }}</div>
   <div class="bcard-role">Product Manager &amp; Business Analyst</div>
   <div class="bcard-links">
@@ -17,4 +16,4 @@
     <a href="https://t.me/achowanski" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0zM19.61 4.98c.13-.003 .417 .03 .605 .182a.658 .658 0 0 1 .222 .423c.021 .121 .047 .398 .026 .614-.234 2.467-1.251 8.453-1.768 11.215-.218 1.17-.649 1.561-1.066 1.599-.905 .085-1.593-.598-2.47-1.173-1.373-.901-2.149-1.461-3.481-2.34-1.541-1.014-.542-1.573 .335-2.483 .23-.239 4.221-3.87 4.299-4.199 .009-.042 .018-.195-.073-.276s-.226-.053-.324-.031c-.138 .031-2.331 1.482-6.579 4.349-.624 .429-1.187 .637-1.693 .624-.556-.01-1.628-.313-2.425-.572-.978-.319-1.754-.486-1.686-1.026 .035-.281 .423-.568 1.161-.862 4.547-1.981 7.579-3.288 9.097-3.918 4.332-1.802 5.233-2.115 5.819-2.126z"/></svg>telegram</a><br>
     <a href="mailto:{{ site.contact_email }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0zM19.2 4.8H4.8c-.99 0-1.791 .81-1.791 1.8L3 17.4c0 .99 .81 1.8 1.8 1.8h14.4c.99 0 1.8-.81 1.8-1.8V6.6c0-.99-.81-1.8-1.8-1.8zm0 3.6l-7.2 4.5-7.2-4.5V6.6l7.2 4.5 7.2-4.5v1.8z"/></svg>{{ site.contact_email }}</a>
   </div>
-</div></div>
+</div>
