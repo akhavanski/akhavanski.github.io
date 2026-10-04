@@ -1552,3 +1552,114 @@ article code, main code { hyphens: manual; -webkit-hyphens: manual; }
   p { margin: 0; text-align: justify; hyphens: auto; }
   a { color: inherit; }
 }
+
+// The dark theme, by the system setting: graphite, not black.
+// The catalogue cabinet stays wood; the business card and the cards of notes
+// and terms turn into outlines with a hard shadow, like the filter cards;
+// a chosen filter card is its colour's outline with a faint fill.
+$night: #1e1e1e;
+$night-ink: #e4e4e4;
+$night-muted: #8c8c8c;
+$night-faint: #4a4a4a;
+$night-card: #2a2a2a;
+$night-red: #ff6b5e;
+$night-yellow: #ffd84d;
+
+@media (prefers-color-scheme: dark) {
+  html, body { background: $night; }
+  body { color: $night-ink; }
+  a, .brand a, .menu a, .social a, .keywords-toggle, .toc-sheet a { color: $night-ink; }
+  .brand a:hover, .brand a:focus-visible { color: $night-muted; }
+  :focus-visible { outline-color: $night-ink !important; }
+
+  .blog-posts {
+    .post-excerpt { color: $night-muted; }
+    time { color: $night-faint; }
+    li:is(:hover, :focus-within) time { color: $night-muted; }
+  }
+
+  .filter-count, .filter-heading, .filter-status, .post-signature, .post-footer,
+  .cite, .cite a, ol.sources .source-url, ol.sources .source-back, ol.sources .source-back a { color: $night-muted; }
+  .filter-reset:hover, .cite a:hover, ol.sources .source-back a:hover { color: $night-ink; }
+  .cite a:hover { background: rgba(255, 230, 0, 0.25); }
+
+  .filter-options, .turtle-bubble {
+    background: $night-card;
+    border-color: $night-ink;
+    box-shadow: 3px 3px 0 $night-ink;
+  }
+  @media (min-width: $wide-screen) { .filter-options { background: none; box-shadow: none; } }
+  .filter-options button {
+    background: $night-card;
+    border-color: $night-ink;
+    box-shadow: 2px 2px 0 $night-ink;
+    color: $night-ink;
+  }
+  @for $i from 1 through length($filter-fills) {
+    $f: nth($filter-fills, $i);
+    .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] {
+      background: rgba($f, 0.2);
+      border-color: $f;
+      box-shadow: 2px 2px 0 $f;
+      color: $f;
+    }
+    .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] .sparkles i { background-image: sparkle-card(mix($f, $night, 35%)); }
+  }
+  .turtle-bubble::after { background: $night-card; border-color: $night-ink; }
+
+  .to-blog, .toc-toggle {
+    background: $night-card;
+    border-color: $night-faint;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
+    color: $night-muted;
+    &:hover, &:focus-visible, &[aria-expanded="true"] { border-color: $night-muted; color: $night-ink; }
+  }
+  .toc-sheet {
+    background: $night-card;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 8px 20px rgba(0, 0, 0, 0.4);
+    a[aria-current] span { background: rgba(255, 230, 0, 0.3); }
+  }
+
+  code { color: $night-ink; background: $night-card; }
+  table, th, td, blockquote { border-color: $night-muted; }
+  *:target, ol.sources li:target, .cite a:target { background: rgba(255, 230, 0, 0.25); }
+  .catalog { color: #1a1a1a; }
+
+  .bcard {
+    background: $night;
+    border: 1.5px solid $night-ink;
+    box-shadow: 4px 4px 0 $night-ink;
+    &:hover { box-shadow: 7px 7px 0 $night-ink; }
+  }
+  .bcard, .bcard a { color: $night-ink; }
+  .bcard .bcard-role { color: $night-muted; }
+
+  mark.comment {
+    background: rgba($night-yellow, 0.1);
+    color: $night-yellow;
+    &:hover, &[aria-expanded="true"] { background: rgba($night-yellow, 0.2); }
+  }
+  .note {
+    background: $night;
+    color: #ffe68a;
+    border: 1.5px solid $night-yellow;
+    box-shadow: 3px 3px 0 $night-yellow;
+  }
+  .note::before { background: rgba(255, 255, 255, 0.2); }
+  .note-card { color: $night-ink; border-color: $night-red; box-shadow: 3px 3px 0 $night-red; }
+  .note-card::before { content: none; }
+
+  mark.fix, .term { text-decoration-color: $night-red; -webkit-text-decoration-color: $night-red; }
+  .term:hover, .term[aria-expanded="true"] { background-color: rgba($night-red, 0.12); }
+  .term-card {
+    background: $night;
+    color: $night-ink;
+    border: 1.5px solid $night-ink;
+    box-shadow: 3px 3px 0 $night-ink;
+    &::after { background: $night; box-shadow: none; border: 1.5px solid $night-ink; }
+  }
+  .term-head { color: $night-muted; border-bottom-color: $night-red; }
+  .term-word { color: #fff; }
+  .term-body { background: repeating-linear-gradient(transparent 0 calc(#{$card-line} - 1px), rgba(255, 255, 255, 0.12) calc(#{$card-line} - 1px) $card-line); }
+  .term-example, .term-more { color: $night-muted; }
+}
