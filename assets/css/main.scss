@@ -113,11 +113,30 @@ pre.mermaid { text-align: center; }
     }
   }
 
-  // Pointing at a post darkens its date.
-  li:is(:hover, :focus-within) time { color: #333; }
+  // Pointing at a post darkens its date, and an arrow slides out
+  // 3px to the right after the title (not after the excerpt). The arrow takes
+  // no room in the line, so it never moves to a line of its own under a long title.
+  a:not(.post-excerpt)::after {
+    content: "→";
+    display: inline-block;
+    width: 1em;
+    margin: 0 -1.4em 0 0.4em;
+    opacity: 0;
+    transform: translateX(-3px);
+    transition: opacity 0.2s, transform 0.2s ease-out;
+  }
+
+  li:is(:hover, :focus-within) {
+    time { color: #333; }
+
+    a:not(.post-excerpt)::after {
+      opacity: 1;
+      transform: none;
+    }
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    time { transition: none; }
+    time, a::after { transition: none; }
   }
 }
 
