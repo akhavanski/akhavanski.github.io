@@ -4,6 +4,14 @@
   If a post ever needs formulas, bring KaTeX back for that post only.
 {%- endcomment -%}
 <head>
+  {%- if site.dark_theme %}
+  <script>
+    // The theme before the page is drawn, so it does not flash light:
+    // the choice saved by the theme dot (assets/js/theme.js), else the system's.
+    try { var theme = localStorage.getItem("theme"); } catch (e) {}
+    document.documentElement.dataset.theme = theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  </script>
+  {%- endif %}
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />

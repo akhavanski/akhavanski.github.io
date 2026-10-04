@@ -18,6 +18,10 @@ turtle:
   show: false
   text: "Hi! You found the turtle."
 
+# The dark theme (see assets/js/theme.js): `true` turns on the dot in the bottom
+# left corner that switches it; the first time the theme follows the system.
+dark_theme: true
+
 remote_theme: riggraz/no-style-please
 
 theme_config:

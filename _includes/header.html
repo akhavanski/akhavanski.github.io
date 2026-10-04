@@ -1,6 +1,8 @@
 {%- comment -%}
   The same header on every page: the site title and the menu
   (_includes/menu.html), two text links. The contact icons are on the About page.
+  In the bottom left corner of the window a dot switches the theme (assets/js/theme.js),
+  if the dark theme is on in _config.yml.
 {%- endcomment -%}
 <header>
   <div class="title-row">
@@ -14,3 +16,12 @@
     {%-include menu.html-%}
   </div>
 </header>
+{%- if site.dark_theme %}
+<button class="theme-dot" type="button">
+  <span class="theme-pill">
+    <span class="theme-sky" aria-hidden="true"><i class="theme-sun"></i></span>
+    <span class="theme-label">switch to dark theme</span>
+  </span>
+</button>
+<script src="{{ "/assets/js/theme.js" | relative_url }}"></script>
+{%- endif %}
