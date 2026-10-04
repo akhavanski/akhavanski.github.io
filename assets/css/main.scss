@@ -303,70 +303,183 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   &:hover, &:focus-visible { color: black; }
 }
 
-// The pencil line under a contact on the business card, a little uneven.
-@function bcard-pencil($color) {
-  $color: "%23" + str-slice(inspect($color), 2);
-  @return url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M1 4.2C20 2.6 38 4.6 58 3.4S88 2.4 99 3.6' fill='none' stroke='#{$color}' stroke-width='1.3' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+// The business card with contacts at the end of the About page
+// (_includes/social.html): 85×55 mm in proportion, white, flat.
+// All sizes are for a card 321px wide and shrink with it: bcard(10) is 10px
+// on a 321px card. The width is that of .bcard-wrap, a size container.
+$bcard-width: 401px; // 1.25 × 321: at 321px the 10px contacts are too small beside the 16px text
+@function bcard($px) { @return calc(#{$px} * 100cqw / 321); }
+
+.bcard-wrap {
+  container-type: inline-size;
+  max-width: $bcard-width;
+  margin: 2rem auto 2.5rem;
 }
 
-// The business card with contacts at the end of the About page
-// (_includes/social.html): cream paper, a little askew; on hover it
-// straightens and lifts off the page.
 .bcard {
-  width: 26rem;
-  max-width: 100%;
-  aspect-ratio: 1.75;
+  --accent: #E4572E;
+  aspect-ratio: 321 / 208;
   box-sizing: border-box;
-  margin: 2rem auto 2.5rem;
-  padding: 1.5rem;
+  padding: bcard(18) bcard(20);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  background: #fbf7ec;
-  border-radius: 2px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .15), 0 8px 18px rgba(0, 0, 0, .12);
-  transform: rotate(-2deg);
-  transition: transform .3s, box-shadow .3s;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid #E5E5E5;
+  color: #111;
 
-  &:hover {
-    transform: rotate(0) scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, .12), 0 22px 40px rgba(0, 0, 0, .18);
+  a { color: #111; text-decoration: none; }
+
+  // A contact under the pointer or in focus gets a square orange box;
+  // the padding is always there and the margin takes it back, so nothing moves.
+  a, .bcard-copy {
+    padding: bcard(1) bcard(4);
+    margin: bcard(-1) bcard(-4);
+    border-radius: 0;
+    transition: background-color 120ms ease, box-shadow 120ms ease;
+
+    &:hover, &:focus-visible {
+      background-color: color-mix(in srgb, var(--accent) 14%, transparent);
+      box-shadow: 0 0 0 1px var(--accent);
+      outline: none;
+    }
+    @media (prefers-reduced-motion: reduce) { transition: none; }
   }
+}
 
-  .bcard-name { font-family: "Computer Modern Serif", serif; font-size: 1.6rem; letter-spacing: .02em; }
-  .bcard-role {
-    margin: .3rem 0 1.2rem;
-    font-family: "Computer Modern Serif", serif;
-    font-size: .85rem;
-    font-variant: small-caps;
-    letter-spacing: .05em;
-    white-space: nowrap;
-    color: #777;
+.bcard-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: bcard(12);
+}
+
+.bcard-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: bcard(3);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: bcard(10);
+  line-height: 1.3;
+}
+
+.bcard .bcard-book {
+  margin-top: bcard(4); // 5px over the gap, less the box's 1px
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: bcard(2);
+  text-underline-offset: bcard(3);
+}
+
+.bcard-square {
+  flex-shrink: 0;
+  width: bcard(8);
+  height: bcard(8);
+  background: var(--accent);
+}
+
+// The copy button stands 4px right of the email and shows on hover or focus
+// (always on touch screens). Its box is 24×24 for a finger, but only
+// the 12px icon takes room in the line. "Copied" stands to its right.
+.bcard-email {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  a { flex-shrink: 0; }
+}
+
+.bcard-copy {
+  position: relative;
+  display: inline-flex;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+
+  &::after { content: ""; position: absolute; inset: bcard(-5) bcard(-2); }
+
+  svg {
+    width: bcard(12);
+    height: bcard(12);
+    fill: none;
+    stroke: #111;
+    stroke-width: 1.5;
+    overflow: visible;
   }
+}
+.bcard .bcard-copy { margin-left: 0; } // 4px from the email, less the box's 4px
+.bcard-email:hover .bcard-copy, .bcard-email:focus-within .bcard-copy, .is-copied .bcard-copy {
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (hover: none) {
+  .bcard-copy { opacity: 1; pointer-events: auto; }
+}
+.bcard-icon-done, .is-copied .bcard-icon-copy { display: none; }
+.is-copied .bcard-icon-done { display: block; }
 
-  // The contacts are in Computer Modern Sans, easy to read small. Under the
-  // pointer a pencil line is drawn under the contact and the others fade.
-  .bcard-links { font-family: "Computer Modern Sans", sans-serif; font-size: .95rem; line-height: 2; }
-  .bcard-links a {
-    margin: 0 .5rem;
-    padding-bottom: .15em;
-    white-space: nowrap;
-    text-decoration: none;
-    background: bcard-pencil(#444) left bottom / 0 .4em no-repeat;
-    transition: background-size .35s ease-out, opacity .25s;
+.bcard-copied {
+  position: absolute;
+  left: 100%;
+  margin-left: bcard(8);
+  white-space: nowrap;
+  font-size: bcard(9.5);
+  color: #4A4A4A;
+  visibility: hidden;
+  .is-copied & { visibility: visible; }
+}
 
-    &:hover, &:focus-visible { background-size: 100% .4em; outline: none; }
+.bcard-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: bcard(12);
+  padding-top: bcard(10);
+  border-top: 1px solid #111;
+}
+
+.bcard-name {
+  margin: 0;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: bcard(26);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #111;
+}
+
+.bcard-role {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: bcard(3);
+  margin: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: bcard(9.5);
+  line-height: 1.3;
+  text-align: right;
+  color: #4A4A4A;
+
+  span:first-child {
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #111;
   }
-  .bcard-links:has(a:hover, a:focus-visible) a:not(:hover, :focus-visible) { opacity: .3; }
+}
 
-  .bcard-links svg {
-    width: .8rem;
-    height: .8rem;
-    margin-right: .3rem;
-    vertical-align: -.1rem;
-    fill: currentColor;
-  }
+// Read out by screen readers only: "Email copied".
+.bcard-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 // A quiet white card with a grey outline, the grey a bit darker on hover:
@@ -1440,8 +1553,8 @@ $card-line: 1.5rem;
   text-decoration-line: underline;
   text-decoration-style: dotted;
   text-decoration-color: $term-red;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
+  text-decoration-thickness: bcard(2);
+  text-underline-offset: bcard(3);
   cursor: pointer;
 
   &:hover, &[aria-expanded="true"] { background-color: rgba($term-red, 0.08); }
@@ -1719,12 +1832,6 @@ html[data-theme="dark"] {
   table, th, td, blockquote { border-color: $night-muted; }
   *:target, ol.sources li:target, .cite a:target { background: rgba(255, 230, 0, 0.25); }
   .catalog { color: #1a1a1a; }
-
-  .bcard { background: #141414; box-shadow: 0 0 0 1px #333, 0 10px 22px rgba(0, 0, 0, 0.6); }
-  .bcard, .bcard a { color: #d8cfb4; }
-  .bcard .bcard-name { color: #e8d9a8; letter-spacing: 0.04em; }
-  .bcard .bcard-role { color: #9a8f72; }
-  .bcard .bcard-links a { background-image: bcard-pencil(#d8cfb4); }
 
   mark.comment {
     background: linear-gradient(100deg, rgba(230, 200, 0, 0) 1%, rgba(230, 200, 0, 0.3) 4%, rgba(230, 200, 0, 0.18) 50%,

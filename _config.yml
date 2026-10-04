@@ -18,6 +18,12 @@ turtle:
   show: false
   text: "Hi! You found the turtle."
 
+# "Book a call →" on the business card on the About page (_includes/social.html):
+# `show: true` puts the link on the card, `url` is where it leads.
+book_call:
+  show: true
+  url: "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ3X_hbFc-nlNDdioHhTEOSCxFuyOZTuleysNWsLjKQfn9L12z8KZZQbnT_yP6MmQoT5xOyhRmwf"
+
 # The dark theme (see assets/js/theme.js): `true` turns on the dot in the bottom
 # left corner that switches it; the first time the theme follows the system.
 dark_theme: false
