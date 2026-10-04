@@ -15,7 +15,7 @@ I work at 21vek.by as a Product Owner and I'm building [certificate.tips](https:
 
 Previously, I was a Business Analyst at an outsourcing agency. My favourite project there was building data analysis pipelines for an MBB consulting firm.
 
-I hold a master's degree in Linguistics and speak Russian, English, Spanish, and Polish.
+I hold a master's degree in Linguistics and certifications from IIBA (AAC, CBDA) and Scrum.org (PSPO I and PSPO II). I speak Russian, English, Spanish, and Polish.
 
 I love books, chess (my Elo is lower than my heart rate), cycling (so is my FTP), and time with my family.
 
