@@ -303,30 +303,34 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   &:hover, &:focus-visible { color: black; }
 }
 
-// Contact icons: black by default, brand colour on hover.
-// On the About page they stand in the line of the text, after "You can find me here:".
-.social {
-  display: inline-flex;
-  gap: 0.75rem;
-  margin-left: 0.4rem;
-  vertical-align: -0.1rem;
+// The business card with contacts at the top of the About page
+// (_includes/social.html): cream paper, a little askew; on hover it
+// straightens and lifts off the page.
+.bcard {
+  width: 24rem;
+  max-width: 100%;
+  aspect-ratio: 1.75;
+  box-sizing: border-box;
+  margin: 2rem auto 2.5rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  background: #fbf7ec;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .15), 0 8px 18px rgba(0, 0, 0, .12);
+  transform: rotate(-2deg);
+  transition: transform .3s, box-shadow .3s;
 
-  a {
-    display: block;
-    color: black;
-    transition: color 0.2s;
+  &:hover {
+    transform: rotate(0) scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .12), 0 22px 40px rgba(0, 0, 0, .18);
   }
 
-  svg {
-    display: block;
-    width: 1rem;
-    height: 1rem;
-    fill: currentColor;
-  }
-
-  a.social-linkedin:hover, a.social-linkedin:focus-visible { color: #0a66c2; }
-  a.social-telegram:hover, a.social-telegram:focus-visible { color: #26a5e4; }
-  a.social-email:hover, a.social-email:focus-visible { color: #ea4335; }
+  .bcard-name { font-family: Georgia, serif; font-size: 1.4rem; letter-spacing: .04em; }
+  .bcard-role { margin: .3rem 0 1.2rem; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: #777; }
+  .bcard-links { font-size: .8rem; }
 }
 
 // A quiet white card with a grey outline, the grey a bit darker on hover:
