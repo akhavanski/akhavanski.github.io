@@ -1,11 +1,11 @@
 ---
 layout: page
 title: Now
+badge: Open to work
 ---
 
-<div class="classified">
-  <p>Open to PdM/PjM/BA roles. My experience and contacts are on the <a href="/about">About</a> page.</p>
-</div>
+Looking for PdM/PjM/BA roles. [My experience and contacts](/about).
+{: .title-note}
 
 ## Work
 

@@ -1774,26 +1774,33 @@ article code, main code { hyphens: manual; -webkit-hyphens: manual; }
   100% { translate: -1px 1px; rotate: 10deg; }
 }
 
-// The job line on Now, set as a classified ad cut out of a newspaper:
-// yellowed newsprint, a serif face, a double rule and a ragged edge.
-.classified {
-  max-width: 17rem;
-  margin: 2rem 0 2.5rem;
-  padding: 0.7rem 0.9rem 0.8rem;
-  background: #f3ecd9;
-  color: #222;
-  font-family: Georgia, "Times New Roman", Times, serif;
-  font-size: 0.9rem;
-  line-height: 1.35;
-  border-top: 3px double #222;
-  border-bottom: 3px double #222;
-  transform: rotate(-1deg);
-  clip-path: polygon(0 1%, 4% 0, 9% 1%, 15% 0, 22% 1%, 30% 0, 38% 1%, 46% 0, 55% 1%, 63% 0, 71% 1%, 79% 0, 87% 1%, 94% 0, 100% 1%,
-    99.5% 50%, 100% 99%, 93% 100%, 85% 99%, 76% 100%, 68% 99%, 59% 100%, 50% 99%, 41% 100%, 32% 99%, 24% 100%, 15% 99%, 7% 100%, 0 99%, 0.5% 50%);
+// The badge next to the title of a page with `badge:` in its front matter
+// (Now: "Open to work"): a pale green tag with a green triangle,
+// and the line under the title that explains it.
+h1.has-badge { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
 
-  p { margin: 0; text-align: justify; hyphens: auto; }
-  a { color: inherit; }
+.title-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 0.3rem;
+  background: #e9f6ec;
+  color: #17692f;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.4;
 }
+
+.title-badge-mark {
+  width: 0;
+  height: 0;
+  border-left: 0.45rem solid #22a447;
+  border-top: 0.3rem solid transparent;
+  border-bottom: 0.3rem solid transparent;
+}
+
+.title-note { margin: -0.5rem 0 2.5rem; font-size: 0.9rem; }
 
 // The dark theme, on when <html data-theme="dark">: set in _includes/head.html
 // from the saved choice or the system setting, switched by the theme dot.
@@ -1895,6 +1902,9 @@ html[data-theme="dark"] {
   .term-word { color: #f4f4f4; }
   .term-body { background: repeating-linear-gradient(transparent 0 calc(#{$card-line} - 1px), rgba(120, 170, 230, 0.22) calc(#{$card-line} - 1px) $card-line); }
   .term-example, .term-more { color: #9a9a9a; }
+
+  .title-badge { background: rgba(61, 220, 106, 0.12); color: #7ddc95; }
+  .title-badge-mark { border-left-color: #3ddc6a; }
 }
 
 // Sunset and sunrise over the theme pill: a small sun sinks behind the pill

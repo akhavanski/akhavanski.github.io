@@ -1,10 +1,17 @@
 ---
 layout: default
 ---
-
+{%- comment -%}
+  A plain page (About, Now, 404): the header, the title and the text.
+  With `badge:` in the front matter a tag stands next to the title.
+{%- endcomment -%}
 {%-include header.html-%}
 
+{%- if page.badge %}
+<h1 class="has-badge">{{ page.title }} <span class="title-badge"><span class="title-badge-mark" aria-hidden="true"></span>{{ page.badge }}</span></h1>
+{%- else %}
 <h1>{{ page.title }}</h1>
+{%- endif %}
 
 {{ content }}
 
