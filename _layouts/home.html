@@ -2,8 +2,9 @@
 layout: default
 ---
 {%- comment -%}
-  The home page: the header, a few words about me (the text of index.md)
-  and the list of posts.
+  The home page: the header, a few words about me (the text of index.md),
+  the five latest posts and, small and grey like the note under a post,
+  a link to the Blog page with all of them.
 {%- endcomment -%}
 {%-include header.html home=true-%}
 
@@ -12,6 +13,8 @@ layout: default
 </div>
 
 {%-include posts.html limit=5-%}
+
+<p class="post-footer">These are 5 last notes. More in the <a href="{{ "/blog" | relative_url }}">blog</a>.</p>
 
 {%-include turtle.html-%}
 
