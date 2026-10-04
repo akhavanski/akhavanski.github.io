@@ -663,10 +663,13 @@ article :is(h2, h3, h4):target {
 // and in the note under a post: while one points at the keyword, they light
 // up and go out in turn. They are placed over the keyword, so it takes
 // no more room than before. On a card they sit on its frame and look like
-// the card: white with a black line and a black shadow; in the note they are
+// the card: white (or the fill of a chosen card) with a black line and a black shadow; in the note they are
 // a line of the text colour, like the key.
 $sparkle-path: "M12 3c.6 4.6 3.4 8.4 9 9-5.6.6-8.4 4.4-9 9-.6-4.6-3.4-8.4-9-9 5.6-.6 8.4-4.4 9-9z";
-$sparkle-card: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='#{$sparkle-path}' fill='white' stroke='black' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E");
+@function sparkle-card($fill: white) {
+  $fill: if(type-of($fill) == color, "%23" + str-slice(inspect($fill), 2), $fill);
+  @return url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='#{$sparkle-path}' fill='#{$fill}' stroke='black' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
 $sparkle-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='#{$sparkle-path}' fill='none' stroke='black' stroke-width='2.6' stroke-linejoin='round'/%3E%3C/svg%3E");
 $sparkle-cycle: 1.8s;
 
@@ -688,12 +691,17 @@ $sparkle-cycle: 1.8s;
 
 .filter-options .sparkles i {
   z-index: 1;
-  background: $sparkle-card center / contain no-repeat;
+  background: sparkle-card() center / contain no-repeat;
   filter: drop-shadow(1px 1px 0 black);
 
   &:nth-child(1) { top: -0.45rem; right: -0.45rem; }
   &:nth-child(2) { top: -0.3rem; right: 0.6rem; width: 0.5rem; height: 0.5rem; }
   &:nth-child(3) { bottom: -0.3rem; left: -0.3rem; width: 0.6rem; height: 0.6rem; }
+}
+
+// On a chosen card they take its fill.
+@for $i from 1 through length($filter-fills) {
+  .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] .sparkles i { background-image: sparkle-card(nth($filter-fills, $i)); }
 }
 
 .post-tags .sparkles i {
