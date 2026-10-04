@@ -328,9 +328,18 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
     box-shadow: 0 4px 8px rgba(0, 0, 0, .12), 0 22px 40px rgba(0, 0, 0, .18);
   }
 
-  .bcard-name { font-family: Georgia, serif; font-size: 1.4rem; letter-spacing: .04em; }
+  .bcard-name { font-family: "Computer Modern Serif", serif; font-size: 1.6rem; letter-spacing: .02em; }
   .bcard-role { margin: .3rem 0 1.2rem; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #777; }
-  .bcard-links { font-size: .8rem; }
+  .bcard-links { font-size: .8rem; line-height: 1.8; }
+  .bcard-links a { white-space: nowrap; }
+
+  .bcard-links svg {
+    width: .8rem;
+    height: .8rem;
+    margin-right: .3rem;
+    vertical-align: -.1rem;
+    fill: currentColor;
+  }
 }
 
 // A quiet white card with a grey outline, the grey a bit darker on hover:
