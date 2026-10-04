@@ -26,3 +26,5 @@ title: Now
 
 Updated on the 1st of October, 2026. It is a [Now](https://nownownow.com/) page.
 {: .post-footer}
+
+{% include delorean.html %}

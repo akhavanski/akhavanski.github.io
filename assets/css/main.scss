@@ -1273,8 +1273,38 @@ $turn: 0.6s;
   }
 }
 
+// The DeLorean sticker at the bottom of the Now page (see _includes/delorean.html):
+// on hover the photo with open doors replaces the one with closed doors.
+// Both stand on the same bottom line, so the car does not move.
+.delorean {
+  display: grid;
+  align-items: end;
+  width: min(20rem, 100%);
+  margin: 2.5rem auto 1rem;
+  transform: rotate(-3deg);
+  transition: transform 0.3s ease;
+  filter: drop-shadow(1px 3px 3px rgba(0, 0, 0, 0.3));
+  outline: none;
+
+  img {
+    grid-area: 1 / 1;
+    width: 100%;
+    height: auto;
+    transition: opacity 0.25s ease;
+  }
+
+  .delorean-open { opacity: 0; }
+
+  &:hover, &:focus-visible {
+    transform: rotate(-1.5deg) translateY(-0.2rem);
+
+    .delorean-open { opacity: 1; }
+    .delorean-closed { opacity: 0; }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-toggle + .filter-count, .turtle-btn { transition: none; }
+  .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-toggle + .filter-count, .turtle-btn, .delorean, .delorean img { transition: none; }
   .filter-options button, .filter-heading, .post-tags .key { animation: none; }
   // The sparkles just show, without twinkling.
   .has-sparkles:hover .sparkles i, .has-sparkles:focus-visible .sparkles i { animation: none; opacity: 1; transform: none; }

@@ -1,0 +1,9 @@
+{%- comment -%}
+  A DeLorean sticker at the bottom of the Now page: a photo cut out
+  with a coloured edge. On hover the photo with open gull-wing doors
+  replaces the one with closed doors. Styles in assets/css/main.scss.
+{%- endcomment -%}
+<div class="delorean" tabindex="0">
+  <img class="delorean-closed" src="{{ "/assets/img/delorean-closed.png" | relative_url }}" alt="DeLorean">
+  <img class="delorean-open" src="{{ "/assets/img/delorean-open.png" | relative_url }}" alt="" aria-hidden="true">
+</div>
