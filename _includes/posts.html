@@ -1,6 +1,6 @@
 {%- comment -%}
-  The posts on the home page (the five latest, include.limit=5) and on
-  the Blog page (all), with a filter by keyword, that is a post's tag,
+  The posts on the home page (the five latest, include.limit=5, without
+  the heading Blog) and on the Blog page (all), with a filter by keyword, that is a post's tag,
   and by language (see assets/js/blog-filters.js). Several keywords and several
   languages can be chosen: a post is shown if it has one of the chosen keywords
   and is in one of the chosen languages.
@@ -25,7 +25,9 @@
 {%- assign tags = tags | split: "|" | sort_natural %}
 
 <div class="blog-head">
+  {%- unless include.limit %}
   <h2>Blog</h2>
+  {%- endunless %}
 
   <div class="blog-filters" hidden>
     <div class="filter-names">
