@@ -20,7 +20,7 @@ turtle:
 
 # The dark theme (see assets/js/theme.js): `true` turns on the dot in the bottom
 # left corner that switches it; the first time the theme follows the system.
-dark_theme: true
+dark_theme: false
 
 remote_theme: riggraz/no-style-please
 
