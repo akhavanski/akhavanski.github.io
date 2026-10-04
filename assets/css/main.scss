@@ -379,7 +379,7 @@ $bcard-width: 401px; // 1.25 × 321: at 321px the 10px contacts are too small be
 .bcard-row {
   display: flex;
   align-items: center;
-  gap: calc(14 * var(--u));
+  gap: calc(16 * var(--u));
 }
 
 // A link under the pointer or in focus gets an arrow ↗ on its right,
@@ -411,6 +411,8 @@ $bcard-width: 401px; // 1.25 × 321: at 321px the 10px contacts are too small be
   pointer-events: none;
 
   path { stroke: var(--accent); }
+
+  .bcard-row & { right: calc(-14 * var(--u)); } // the copy mark stands a little further from the email
 
   .bcard-link:hover &, .bcard-link:focus-visible &,
   .bcard-row:hover &, .bcard-row:focus-within &, .bcard-row.is-done & {
