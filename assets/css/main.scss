@@ -1414,3 +1414,13 @@ ol.sources li:target, .cite a:target {
 @keyframes marker-fade-bg {
   to { background: transparent; }
 }
+
+// Text paragraphs fill the whole line, long words break with a hyphen.
+// Posts set their lang, so Russian breaks by Russian rules.
+article p, article li, .intro p, main .w > p, main .w > ul:not(.blog-posts) li, main .w > ol li {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+// Links and code stay whole: certificate.tips, not certifi-cate.tips.
+article a, article code, main a, main code { hyphens: manual; -webkit-hyphens: manual; }
