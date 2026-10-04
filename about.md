@@ -1,6 +1,7 @@
 ---
 layout: page
 title: About
+badge: Open to work
 ---
 {%- comment -%}
   The text about me, then the business card with contacts
