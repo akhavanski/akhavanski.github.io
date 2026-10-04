@@ -1828,13 +1828,6 @@ h1.has-badge { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
   a.social-email:hover, a.social-email:focus-visible { color: #ea4335; }
 }
 
-// On a wide screen the icons take no room in the line under the title:
-// they stand right after "My contacts" and stick out of the column,
-// so the text stays one line.
-@media (min-width: 48rem) {
-  .title-note .social { position: absolute; }
-}
-
 // The dark theme, on when <html data-theme="dark">: set in _includes/head.html
 // from the saved choice or the system setting, switched by the theme dot.
 // Turned on and off by `dark_theme` in _config.yml.

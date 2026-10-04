@@ -4,7 +4,9 @@ title: Now
 badge: Open to work
 ---
 
-Looking for Product Manager or Business Analyst roles. My contacts{% include contact-icons.html %}
+Looking for Product Manager or Business Analyst roles.\\
+\\
+My contacts{% include contact-icons.html %}
 {: .title-note}
 
 ## Work
