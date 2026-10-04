@@ -36,6 +36,12 @@ theme_config:
   show_description: false # show blog description in home page
   lowercase_titles: false # show titles in lowercase in lists
 
+# Versions of the Now page, one file per update in _now/ (the date is the name,
+# `version:` counts from 0). Not on the site yet: kept for the page's history.
+collections:
+  now:
+    output: false
+
 # Posts are in English unless a post says otherwise, e.g. `lang: ru`.
 defaults:
   - scope:
