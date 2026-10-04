@@ -85,9 +85,13 @@ pre.mermaid { text-align: center; }
 
   // The start of the post under its title, on the Blog page.
   .post-excerpt {
+    display: block;
     margin: 0.15rem 0 0;
     font-size: 0.85em;
     color: #888;
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
   }
 
   // The filters hide posts with it.
@@ -233,12 +237,14 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   }
 }
 
-// The heading of the languages takes a line of its own.
+// The headings of the tags and the languages take a line of their own.
 .filter-heading {
   flex-basis: 100%;
   margin: 0.4rem 0 -0.1rem;
   font-size: 0.75rem;
   color: grey;
+
+  &:first-child { margin-top: 0; }
 }
 
 @for $i from 1 through length($filter-fills) {

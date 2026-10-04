@@ -1,4 +1,4 @@
-// The filter on the home page. A click on its name (Keywords) opens a menu
+// The filter on the home page. A click on its name (Filters) opens a menu
 // with its options, the keywords and under them the languages; a second click,
 // a click anywhere else or Escape closes it. On wide screens, where the filter
 // stands in the column right of the list, a filter with chosen options stays

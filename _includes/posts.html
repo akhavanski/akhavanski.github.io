@@ -5,15 +5,15 @@
   and by language, see assets/js/blog-filters.js). Several keywords and several
   languages can be chosen: a post is shown if it has one of the chosen keywords
   and is in one of the chosen languages.
-  The languages are under the keywords, in the same options, with a small
-  heading Languages; when all posts are in one language, they are not shown.
+  The options start with a small heading Tags, the languages are under the
+  keywords, in the same options, with a small heading Languages; when all posts are in one language, they are not shown.
   On wide screens the filter stands right of the list like the keywords
   in a post, in the same place as there: a click on the name shows the options
   under it. On narrow screens it is under the title: a click on the name opens
   a menu with the options. On phones the name is the cabinet alone, right of
   the title, under the menu.
   The number after the name tells how many options are chosen.
-  On wide screens Keywords has the catalogue cabinet from the posts:
+  On wide screens the filter (named Filters) has the catalogue cabinet from the posts:
   when its options are open, the cabinet is turned and its drawer is pulled out.
   Each option has its own fill colour for when it is chosen: data-fill counts
   the keywords and then the languages in a row (the colours are in assets/css/main.scss).
@@ -34,17 +34,18 @@
       <div class="filter">
         <button type="button" class="filter-name keywords-toggle" aria-expanded="false" aria-controls="filter-keywords">
           {%- include catalog.html %}
-          <span class="keywords-label">Keywords</span>
+          <span class="keywords-label">Filters</span>
         </button><span class="filter-count"></span>
-        <div class="filter-options" id="filter-keywords" role="group" aria-label="Keywords">
+        <div class="filter-options" id="filter-keywords" role="group" aria-label="Filters">
+          <p class="filter-heading" style="--i: 0">Tags</p>
           {%- for tag in tags %}
           {%- assign slug = tag | slugify %}
-          <button type="button" aria-pressed="false" data-filter="tag" data-value="{{ slug }}" data-fill="{{ forloop.index0 | modulo: 8 }}" style="--i: {{ forloop.index0 }}"{% if slug == "ai" %} class="has-sparkles"{% endif %}>{{ tag }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}</button>
+          <button type="button" aria-pressed="false" data-filter="tag" data-value="{{ slug }}" data-fill="{{ forloop.index0 | modulo: 8 }}" style="--i: {{ forloop.index }}"{% if slug == "ai" %} class="has-sparkles"{% endif %}>{{ tag }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}</button>
           {%- endfor %}
           {%- if langs.size > 1 %}
-          <p class="filter-heading" style="--i: {{ tags.size }}">Languages</p>
+          <p class="filter-heading" style="--i: {{ tags.size | plus: 1 }}">Languages</p>
           {%- for lang in langs %}
-          <button type="button" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ forloop.index0 | plus: tags.size | modulo: 8 }}" style="--i: {{ forloop.index | plus: tags.size }}">{{ site.data.languages[lang] | default: lang }}</button>
+          <button type="button" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ forloop.index0 | plus: tags.size | modulo: 8 }}" style="--i: {{ forloop.index | plus: tags.size | plus: 1 }}">{{ site.data.languages[lang] | default: lang }}</button>
           {%- endfor %}
           {%- endif %}
         </div>
@@ -58,7 +59,7 @@
 {%- comment -%}
   The posts: the title, and left of the text the date, small and light grey.
   On the Blog page, under the title the first 25 words of the post,
-  small and grey.
+  small and grey; it is a link to the post too.
 {%- endcomment %}
 <ul class="blog-posts{% unless include.limit %} with-excerpts{% endunless %}">
   {%- for post in site.posts limit: include.limit %}
@@ -67,7 +68,7 @@
     <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time>
     <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
     {%- unless include.limit %}
-    <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 25 }}</p>
+    <a class="post-excerpt" href="{{ post.url | relative_url }}" tabindex="-1">{{ post.excerpt | strip_html | truncatewords: 25 }}</a>
     {%- endunless %}
   </li>
   {%- endfor %}
