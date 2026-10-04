@@ -1,19 +1,16 @@
 ---
-layout: null
+layout: default
+title: Blog
 permalink: /blog
-sitemap: false
 ---
 {%- comment -%}
-  The blog is on the home page now: the old address leads there,
-  with the filters from the address kept, e.g. /blog?tag=ai.
+  All posts with the filter (_includes/posts.html). The keywords
+  under a post lead here, e.g. /blog?tag=ai.
 {%- endcomment -%}
-<!doctype html>
-<html lang="en">
-<meta charset="utf-8">
-<title>{{ site.title }}</title>
-<link rel="canonical" href="{{ "/" | absolute_url }}">
-<meta name="robots" content="noindex">
-<script>location.replace("{{ "/" | relative_url }}" + location.search + location.hash);</script>
-<noscript><meta http-equiv="refresh" content="0; url={{ "/" | relative_url }}"></noscript>
-<p>The blog is on the <a href="{{ "/" | relative_url }}">home page</a> now.</p>
-</html>
+{%-include header.html-%}
+
+{%-include posts.html-%}
+
+{%-include turtle.html-%}
+
+{%-include goatcounter.html-%}

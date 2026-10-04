@@ -13,7 +13,7 @@ layout: default
 
 <article lang="{{ page.lang | default: "en" }}">
   <div class="post-head">
-    <a class="to-blog" href="{{ "/" | relative_url }}">← to blog</a>
+    <a class="to-blog" href="{{ "/blog" | relative_url }}">← to blog</a>
     <h1>{{ page.title }}</h1>
   </div>
 
@@ -33,7 +33,7 @@ layout: default
 <p class="post-footer">Published <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: site.theme_config.date_format }}</time>. If you don’t agree or think I made a mistake, drop me an <a href="mailto:{{ site.contact_email }}">email</a>.
 {%- if keywords.size > 0 %}<br><br>
 <span class="post-tags">{% include key.html %}
-  {%- for keyword in keywords %}{% assign slug = keyword | slugify %} <a href="{{ "/" | relative_url }}?tag={{ slug }}"{% if slug == "ai" %} class="has-sparkles"{% endif %}>{{ keyword }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}</a>{% unless forloop.last %},{% endunless %}{% endfor %}</span>
+  {%- for keyword in keywords %}{% assign slug = keyword | slugify %} <a href="{{ "/blog" | relative_url }}?tag={{ slug }}"{% if slug == "ai" %} class="has-sparkles"{% endif %}>{{ keyword }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}</a>{% unless forloop.last %},{% endunless %}{% endfor %}</span>
 {%- endif %}</p>
 
 {%- if keywords.size > 0 %}
