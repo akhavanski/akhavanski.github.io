@@ -1512,3 +1512,24 @@ article code, main code { hyphens: manual; -webkit-hyphens: manual; }
   50% { translate: 1px -2px; rotate: 6deg; }
   100% { translate: -1px 1px; rotate: 10deg; }
 }
+
+// The job line on Now, set as a classified ad cut out of a newspaper:
+// yellowed newsprint, a serif face, a double rule and a ragged edge.
+.classified {
+  max-width: 17rem;
+  margin: 2rem 0 2.5rem;
+  padding: 0.7rem 0.9rem 0.8rem;
+  background: #f3ecd9;
+  color: #222;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  border-top: 3px double #222;
+  border-bottom: 3px double #222;
+  transform: rotate(-1deg);
+  clip-path: polygon(0 1%, 4% 0, 9% 1%, 15% 0, 22% 1%, 30% 0, 38% 1%, 46% 0, 55% 1%, 63% 0, 71% 1%, 79% 0, 87% 1%, 94% 0, 100% 1%,
+    99.5% 50%, 100% 99%, 93% 100%, 85% 99%, 76% 100%, 68% 99%, 59% 100%, 50% 99%, 41% 100%, 32% 99%, 24% 100%, 15% 99%, 7% 100%, 0 99%, 0.5% 50%);
+
+  p { margin: 0; text-align: justify; hyphens: auto; }
+  a { color: inherit; }
+}

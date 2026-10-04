@@ -3,9 +3,9 @@ layout: page
 title: Now
 ---
 
-## Looking for a job
-
-- Open to PdM/PjM/BA roles. My experience and contacts are on the [About](/about) page.
+<div class="classified">
+  <p>Open to PdM/PjM/BA roles. My experience and contacts are on the <a href="/about">About</a> page.</p>
+</div>
 
 ## Work
 
