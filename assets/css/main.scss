@@ -1470,3 +1470,37 @@ article p, article li, .intro p, main .w > p, main .w > ul:not(.blog-posts) li, 
 }
 // Code stays whole; links break like any other word.
 article code, main code { hyphens: manual; -webkit-hyphens: manual; }
+
+// The "now" link on About: on hover red exclamation marks and yellow
+// lightning bolts fly out from the word to its corners and wobble there
+// while the cursor stays.
+.zap {
+  position: relative;
+  display: inline-block;
+}
+.zap-fx i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-style: normal;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  font-size: 0.9em;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.35s cubic-bezier(0.3, 1.6, 0.5, 1), opacity 0.2s;
+}
+.zap:hover .zap-fx i {
+  opacity: 1;
+  animation: zap-wobble 0.9s ease-in-out 0.35s infinite alternate;
+}
+.zap:hover .zap-fx i:nth-child(1) { transform: translate(-50%, -50%) translate(-1.5em, -0.9em) rotate(-20deg) scale(1); }
+.zap:hover .zap-fx i:nth-child(2) { transform: translate(-50%, -50%) translate(1.5em, -0.9em) rotate(15deg) scale(1); animation-duration: 0.7s; animation-delay: 0.45s; }
+.zap:hover .zap-fx i:nth-child(3) { transform: translate(-50%, -50%) translate(1.5em, 0.8em) rotate(20deg) scale(1); animation-duration: 1s; animation-direction: alternate-reverse; }
+.zap:hover .zap-fx i:nth-child(4) { transform: translate(-50%, -50%) translate(-1.5em, 0.8em) rotate(-15deg) scale(1); animation-duration: 0.8s; animation-delay: 0.5s; }
+@keyframes zap-wobble {
+  0% { translate: 0 0; rotate: -8deg; }
+  50% { translate: 1px -2px; rotate: 6deg; }
+  100% { translate: -1px 1px; rotate: 10deg; }
+}
