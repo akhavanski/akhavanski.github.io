@@ -67,27 +67,36 @@ a { color: black; }
 
 pre.mermaid { text-align: center; }
 
-// All posts on the home page (_includes/posts.html): no bullets,
-// the date in grey in its own column, a long title wraps under itself,
-// not under the date.
+// The latest posts on the home page (_includes/posts.html): no bullets,
+// the titles start where the text does, the date small and light grey
+// left of the text; on narrow screens there is no room left of the text,
+// so it stands over the title.
 .blog-posts {
   margin: 0;
   padding: 0;
   list-style: none;
 
   li {
-    display: grid;
-    grid-template-columns: 10ch 1fr;
-    column-gap: 1ch;
+    position: relative;
     margin: 0.6rem 0;
   }
 
-  // The grid would show the posts the filters hide.
+  // The filters hide posts with it.
   li[hidden] { display: none; }
 
   time {
-    color: grey;
+    position: absolute;
+    right: calc(100% + 2ch);
+    white-space: nowrap;
+    font-size: 0.7em;
+    line-height: 1.95rem;
+    color: #aaa;
     transition: color 0.2s;
+
+    @media not all and (min-width: 52rem) {
+      position: static;
+      display: block;
+    }
   }
 
   // Pointing at a post darkens its date, and an arrow slides out
