@@ -4,7 +4,8 @@ title: Now
 badge: Open to work
 ---
 
-Looking for PdM/PjM/BA roles. [My experience and contacts](/about).
+Looking for Product Manager or Business Analyst roles.\\
+My contacts{% include contact-icons.html %}
 {: .title-note}
 
 ## Work

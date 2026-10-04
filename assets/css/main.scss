@@ -1802,6 +1802,32 @@ h1.has-badge { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
 
 .title-note { margin: -0.5rem 0 2.5rem; font-size: 0.9rem; }
 
+// Contact icons: black by default, brand colour on hover.
+// On the Now page they stand in the line under the title, after "My contacts".
+.social {
+  display: inline-flex;
+  gap: 0.75rem;
+  margin-left: 0.4rem;
+  vertical-align: -0.1rem;
+
+  a {
+    display: block;
+    color: black;
+    transition: color 0.2s;
+  }
+
+  svg {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+  }
+
+  a.social-linkedin:hover, a.social-linkedin:focus-visible { color: #0a66c2; }
+  a.social-telegram:hover, a.social-telegram:focus-visible { color: #26a5e4; }
+  a.social-email:hover, a.social-email:focus-visible { color: #ea4335; }
+}
+
 // The dark theme, on when <html data-theme="dark">: set in _includes/head.html
 // from the saved choice or the system setting, switched by the theme dot.
 // Turned on and off by `dark_theme` in _config.yml.
