@@ -781,7 +781,6 @@ $quiet-time: 0.3s;
   right: 1.25rem;
   width: max-content;
   max-width: min(18rem, calc(100% - 1.25rem));
-  text-align: left;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -818,7 +817,13 @@ $quiet-time: 0.3s;
 
   ol ol { padding-left: 1em; }
 
-  li { margin: 0; }
+  // Not justified and not hyphenated like the post's lists.
+  li {
+    margin: 0;
+    text-align: left;
+    hyphens: manual;
+    -webkit-hyphens: manual;
+  }
 
   .toc-section {
     margin-top: 0.55em;
