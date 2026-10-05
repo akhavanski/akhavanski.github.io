@@ -1,6 +1,8 @@
 // Table of contents of a post: the button "Table of contents" (under "← to blog")
 // stays at the top of the window while you read; a click on it slides a page with
 // the post's sections and subsections out from under the post, below the button.
+// The page is set like a LaTeX table of contents: "Contents" on top, the sections
+// numbered 1, 2, … and the subsections 4.1, 4.2, … ("Sources" goes without a number).
 // The page marks the section you are in. A second click or Escape slides it back.
 // It also goes back by itself: on a click outside it, when the mouse has left it
 // for three seconds, when the focus has left it, and when the post has scrolled
@@ -29,10 +31,14 @@
     return !h.classList.contains("no_toc");
   });
 
-  function entry(h) {
+  // The heading's own number ("1. ") and source references ("[5]") stay out.
+  function entry(h, num) {
     var a = document.createElement("a");
     a.href = "#" + h.id;
-    a.appendChild(document.createElement("span")).textContent = h.textContent;
+    a.appendChild(document.createElement("span")).className = "toc-num";
+    a.lastChild.textContent = num;
+    a.appendChild(document.createElement("span")).textContent = h.textContent
+      .replace(/^\d+\.\s+/, "").replace(/\s*\[\d+(,\s*\d+)*\]$/, "");
     var li = document.createElement("li");
     li.appendChild(a);
     return li;
@@ -41,19 +47,24 @@
   var sheet = document.createElement("div");
   sheet.className = "toc-sheet";
   sheet.id = "toc";
+  var title = sheet.appendChild(document.createElement("p"));
+  title.className = "toc-title";
+  title.textContent = "Contents";
   var list = sheet.appendChild(document.createElement("ol"));
 
   // Subsections go inside their section; one before any section counts as a section.
-  var section = null, sub = null;
+  var section = null, sub = null, n = 0, m = 0;
   heads.forEach(function (h, i) {
     if (!h.id) h.id = "section-" + (i + 1);
     if (h.tagName === "H2" || !section) {
-      section = list.appendChild(entry(h));
+      var plain = /^(Sources|Источники)$/.test(h.textContent.trim());
+      if (!plain) { n++; m = 0; }
+      section = list.appendChild(entry(h, plain ? "" : String(n)));
       section.className = "toc-section";
       sub = null;
     } else {
       if (!sub) sub = section.appendChild(document.createElement("ol"));
-      sub.appendChild(entry(h));
+      sub.appendChild(entry(h, n + "." + ++m));
     }
   });
   var corner = sheet.appendChild(document.createElement("button"));
