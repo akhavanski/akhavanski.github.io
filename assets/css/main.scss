@@ -99,10 +99,12 @@ pre.mermaid { text-align: center; }
 
   // The title's underline: thin, a little below the letters, broken by
   // their tails, light grey; it darkens with the date when one points at the post.
-  // Where the date stands left of the text, the lines of a long title are
-  // made about equal in length.
+  // A long title fills the whole line and long words break with a hyphen,
+  // as in the text of a post (the li has the post's lang for that).
   .post-title {
-    @media (min-width: 52rem) { text-wrap: balance; }
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
 
     > a {
       text-decoration-thickness: 1px;
@@ -126,7 +128,7 @@ pre.mermaid { text-align: center; }
 
     @media not all and (min-width: 52rem) {
       position: static;
-      margin-right: 1ch;
+      margin-right: calc(1ch + 1ch / 0.7); // 1ch and the title's space, which is not in the markup
       line-height: inherit;
     }
   }
@@ -158,13 +160,16 @@ pre.mermaid { text-align: center; }
   }
 }
 
-// Links in posts, on the home page, under the titles on the Blog page and in
-// the menu are underlined as the post titles above: thin, a little below the
+// Links in posts, on the home page, under the titles on the Blog page, in
+// the text of About and Now, in the note under a post and in the menu are
+// underlined as the post titles above: thin, a little below the
 // letters, broken by their tails, light grey; under the pointer or in focus
 // the line takes the colour of the text. Links to a place on the page
-// (fixes, comments, terms, source numbers, the table of contents) and
-// the way back to the blog keep their own look.
-$thin-links: 'article a:not(.to-blog):not([href^="#"]), ol.sources a, .intro a, .blog-posts .post-excerpt, .menu a';
+// (fixes, comments, terms, source numbers, the table of contents),
+// the way back to the blog, the contact icons and the business card
+// keep their own look.
+$thin-links: 'article a:not(.to-blog):not([href^="#"]), ol.sources a, .intro a, .blog-posts .post-excerpt, .menu a, '
+  + 'main .w > p a:not(.social a), main .w > ul:not(.blog-posts) a, main .w > ol a';
 
 #{$thin-links} {
   text-decoration-thickness: 1px;
