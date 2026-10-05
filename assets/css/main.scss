@@ -97,6 +97,24 @@ pre.mermaid { text-align: center; }
   // The filters hide posts with it.
   li[hidden] { display: none; }
 
+  // The title's underline: thin, a little below the letters, broken by
+  // their tails, light grey; it darkens with the date when one points at the post.
+  // Where the date stands left of the text, the lines of a long title are
+  // made about equal in length.
+  .post-title {
+    @media (min-width: 52rem) { text-wrap: balance; }
+
+    > a {
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.22em;
+      text-decoration-skip-ink: auto;
+      text-decoration-color: #bbb;
+      transition: text-decoration-color 0.2s;
+    }
+  }
+
+  li:is(:hover, :focus-within) .post-title > a { text-decoration-color: currentColor; }
+
   time {
     position: absolute;
     right: calc(100% + 2ch);
@@ -136,7 +154,7 @@ pre.mermaid { text-align: center; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    time, a::after { transition: none; }
+    time, a::after, .post-title > a { transition: none; }
   }
 }
 
@@ -1859,6 +1877,8 @@ html[data-theme="dark"] {
     .post-excerpt { color: $night-muted; }
     time { color: $night-faint; }
     li:is(:hover, :focus-within) time { color: $night-muted; }
+    .post-title > a { text-decoration-color: $night-faint; }
+    li:is(:hover, :focus-within) .post-title > a { text-decoration-color: currentColor; }
   }
 
   .filter-count, .filter-heading, .filter-status, .post-signature, .post-footer,
