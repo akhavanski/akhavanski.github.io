@@ -89,9 +89,9 @@ pre.mermaid { text-align: center; }
     margin: 0.15rem 0 0;
     font-size: 0.85em;
     color: #888;
-    text-decoration: none;
+    text-decoration-line: none;
 
-    &:hover { text-decoration: underline; }
+    &:hover { text-decoration-line: underline; }
   }
 
   // The filters hide posts with it.
@@ -156,6 +156,26 @@ pre.mermaid { text-align: center; }
   @media (prefers-reduced-motion: reduce) {
     time, a::after, .post-title > a { transition: none; }
   }
+}
+
+// Links in posts, on the home page, under the titles on the Blog page and in
+// the menu are underlined as the post titles above: thin, a little below the
+// letters, broken by their tails, light grey; under the pointer or in focus
+// the line takes the colour of the text. Links to a place on the page
+// (fixes, comments, terms, source numbers, the table of contents) and
+// the way back to the blog keep their own look.
+$thin-links: 'article a:not(.to-blog):not([href^="#"]), ol.sources a, .intro a, .blog-posts .post-excerpt, .menu a';
+
+#{$thin-links} {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-skip-ink: auto;
+  text-decoration-color: #bbb;
+  transition: text-decoration-color 0.2s;
+
+  &:hover, &:focus-visible { text-decoration-color: currentColor; }
+
+  @media (prefers-reduced-motion: reduce) { transition: none; }
 }
 
 // The filter on the home page (see assets/js/blog-filters.js). On narrow screens
@@ -1398,9 +1418,9 @@ $turn: 0.6s;
 
   a {
     color: black;
-    text-decoration: none;
+    text-decoration-line: none;
 
-    &:hover, &[aria-current] { text-decoration: underline; }
+    &:hover, &[aria-current] { text-decoration-line: underline; }
     &:focus-visible { outline: 1px dotted black; outline-offset: 3px; }
   }
 }
@@ -1879,6 +1899,11 @@ html[data-theme="dark"] {
     li:is(:hover, :focus-within) time { color: $night-muted; }
     .post-title > a { text-decoration-color: $night-faint; }
     li:is(:hover, :focus-within) .post-title > a { text-decoration-color: currentColor; }
+  }
+
+  #{$thin-links} {
+    text-decoration-color: $night-faint;
+    &:hover, &:focus-visible { text-decoration-color: currentColor; }
   }
 
   .filter-count, .filter-heading, .filter-status, .post-signature, .post-footer,
