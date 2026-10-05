@@ -60,20 +60,17 @@
   The posts: the title, and left of the text the date, small and light grey.
   On the Blog page, under the title the first 25 words of the post,
   small and grey; it is a link to the post too.
-  In the title, words of one or two letters (a, to, по, /) are tied to the next
-  word and the last word to the one before, with a no-break space, so a line
-  never ends with a short word and the last line is never a single word.
+  The title breaks like the text of a post, with no no-break spaces:
+  words tied by them would never be hyphenated.
   There is no space between the date and the title: the title is justified,
   and a space would stretch with it; the gap is the date's margin.
 {%- endcomment %}
 <ul class="blog-posts{% unless include.limit %} with-excerpts{% endunless %}">
   {%- for post in site.posts limit: include.limit %}
   {%- capture post_tags %}{% for tag in post.tags %}{{ tag | slugify }} {% endfor %}{% endcapture %}
-  {%- assign words = post.title | split: " " %}
-  {%- capture title %}{% for word in words %}{{ word }}{% unless forloop.last %}{% if word.size <= 2 or forloop.rindex == 2 %}&nbsp;{% else %} {% endif %}{% endunless %}{% endfor %}{% endcapture %}
   <li lang="{{ post.lang }}" data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}">
     <div class="post-title">
-      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ post.url | relative_url }}">{{ title }}</a>
+      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ post.url | relative_url }}">{{ post.title }}</a>
     </div>
     {%- unless include.limit %}
     <a class="post-excerpt" href="{{ post.url | relative_url }}" tabindex="-1">{{ post.excerpt | strip_html | truncatewords: 25 }}</a>
