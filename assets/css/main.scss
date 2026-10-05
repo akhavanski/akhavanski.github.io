@@ -70,7 +70,7 @@ pre.mermaid { text-align: center; }
 // The latest posts on the home page (_includes/posts.html): no bullets,
 // the titles start where the text does, the date small and light grey
 // left of the text; on narrow screens there is no room left of the text,
-// so it stands in the line, before the title.
+// so it stands in the line, before the title, darker: there is no pointing there.
 .blog-posts {
   margin: 0;
   padding: 0;
@@ -131,6 +131,9 @@ pre.mermaid { text-align: center; }
       margin-right: calc(1ch + 1ch / 0.7); // 1ch and the title's space, which is not in the markup
       line-height: inherit;
     }
+
+    // Where nothing can be pointed at, the date is as grey as the excerpts.
+    @media not all and (min-width: 52rem), (hover: none) { color: #888; }
   }
 
   // Pointing at a post darkens its date, and an arrow slides out
@@ -1905,6 +1908,7 @@ html[data-theme="dark"] {
   .blog-posts {
     .post-excerpt { color: $night-muted; }
     time { color: $night-faint; }
+    @media not all and (min-width: 52rem), (hover: none) { time { color: $night-muted; } }
     li:is(:hover, :focus-within) time { color: $night-muted; }
     .post-title > a { text-decoration-color: $night-faint; }
     li:is(:hover, :focus-within) .post-title > a { text-decoration-color: currentColor; }
