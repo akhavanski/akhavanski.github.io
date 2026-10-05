@@ -656,6 +656,7 @@ $tab: 1.35rem;
       bottom: calc(100% + 0.6rem);
       left: auto;
       width: min(20rem, calc(100vw - 2.5rem));
+      max-width: none;
       max-height: calc(100vh - 5.2rem);
     }
   }
@@ -772,9 +773,12 @@ $quiet-time: 0.3s;
 .toc-sheet {
   position: absolute;
   top: calc(100% + 0.6rem);
-  left: 0;
-  // Its right edge in line with the button.
+  // Its right edge in line with the button; as wide as the sections need,
+  // but no wider than 18rem, so it doesn't fill the whole column.
   right: 1.25rem;
+  width: max-content;
+  max-width: min(18rem, calc(100% - 1.25rem));
+  text-align: left;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
