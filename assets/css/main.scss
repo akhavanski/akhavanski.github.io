@@ -661,7 +661,11 @@ $tab: 1.35rem;
       width: min(20rem, calc(100vw - 2.5rem));
       max-width: none;
       max-height: calc(100vh - 5.2rem);
+      // No dog-ear on a narrow screen.
+      --dog-ear: 0px;
     }
+
+    .toc-corner, .toc-love { display: none; }
   }
 
   @media (min-width: 60rem) {
@@ -776,6 +780,7 @@ $quiet-time: 0.3s;
 $dog-ear: 0.95rem;
 
 .toc-sheet {
+  --dog-ear: #{$dog-ear};
   position: absolute;
   top: calc(100% + 0.6rem);
   // Its right edge in line with the button; as wide as the sections need,
@@ -806,7 +811,7 @@ $dog-ear: 0.95rem;
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(45deg, transparent calc(#{$dog-ear} / 1.4142), white 0);
+    background: linear-gradient(45deg, transparent calc(var(--dog-ear) / 1.4142), white 0);
     filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.2)) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.08));
   }
 
@@ -2024,7 +2029,7 @@ html[data-theme="dark"] {
   }
   .toc-sheet {
     &::before {
-      background: linear-gradient(45deg, transparent calc(#{$dog-ear} / 1.4142), $night-card 0);
+      background: linear-gradient(45deg, transparent calc(var(--dog-ear) / 1.4142), $night-card 0);
       filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.5)) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4));
     }
     a[aria-current] span { background: rgba(255, 230, 0, 0.3); }
