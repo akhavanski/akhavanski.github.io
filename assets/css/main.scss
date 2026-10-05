@@ -779,6 +779,13 @@ $quiet-time: 0.3s;
 
 $dog-ear: 0.95rem;
 
+// So that the corner can unfold smoothly.
+@property --dog-ear {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
 .toc-sheet {
   --dog-ear: #{$dog-ear};
   position: absolute;
@@ -801,7 +808,9 @@ $dog-ear: 0.95rem;
   pointer-events: auto;
   visibility: hidden;
   transform: translateX(calc(100% + 3rem));
-  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s 0.55s;
+  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s 0.55s, --dog-ear 0.4s ease-in;
+
+  &.is-unfolded { --dog-ear: 0px; }
 
   // The paper, its bottom left corner cut off: it is folded over (.toc-corner).
   // The shadow is a filter, so it follows the cut; on the paper, not on the
@@ -868,19 +877,20 @@ $dog-ear: 0.95rem;
 }
 
 // The page's bottom left corner is dog-eared like a page of a book (see
-// assets/js/toc.js): the corner is folded over onto the page, its back a little
-// darker at the crease, and it casts a faint shadow. A click on it shows
-// "I love how LaTeX looks" in small grey letters under the page, which fade away.
+// assets/js/toc.js): the corner is folded over onto the page, its back barely
+// shaded towards the crease, and it casts a soft shadow. A click on it unfolds it
+// for good and shows "I love how LaTeX looks." in small grey letters under the page,
+// which fade away.
 .toc-corner {
   position: absolute;
   left: 0;
   bottom: 0;
-  width: $dog-ear;
-  height: $dog-ear;
+  width: var(--dog-ear);
+  height: var(--dog-ear);
   padding: 0;
   border: 0;
   background: none;
-  filter: drop-shadow(1px -1px 1px rgba(0, 0, 0, 0.14));
+  filter: drop-shadow(0.5px -0.5px 0.6px rgba(0, 0, 0, 0.1)) drop-shadow(1.5px -1.5px 2px rgba(0, 0, 0, 0.05));
   cursor: pointer;
 
   &::before {
@@ -888,15 +898,15 @@ $dog-ear: 0.95rem;
     position: absolute;
     inset: 0;
     clip-path: polygon(0 0, 100% 0, 100% 100%);
-    background: linear-gradient(225deg, #f6f6f6 0%, #e4e4e4 40%, #cbcbcb 50%);
+    background: linear-gradient(225deg, #fcfcfc 0%, #f3f3f3 30%, #e8e8e8 50%);
   }
 }
 
 .toc-love {
   position: absolute;
   left: 0.2rem;
-  bottom: -1.5rem;
-  font-size: 0.7rem;
+  bottom: -1.6rem;
+  font-size: 0.8rem;
   color: #999;
   white-space: nowrap;
   opacity: 0;
@@ -2034,7 +2044,7 @@ html[data-theme="dark"] {
     }
     a[aria-current] span { background: rgba(255, 230, 0, 0.3); }
   }
-  .toc-corner::before { background: linear-gradient(225deg, #383838 0%, #323232 40%, #262626 50%); }
+  .toc-corner::before { background: linear-gradient(225deg, #2f2f2f 0%, #2c2c2c 30%, #262626 50%); }
   .toc-love { color: $night-muted; }
 
   code { color: $night-ink; background: $night-card; }

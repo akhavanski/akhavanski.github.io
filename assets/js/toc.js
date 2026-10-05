@@ -8,8 +8,8 @@
 // Once "← to blog" has scrolled away, the button is alone left of the text and goes quiet.
 // On a narrow screen the button is at the bottom right of the window and the page
 // comes out above it (the styles do that, the script is the same).
-// The page's bottom left corner is dog-eared; a click on it shows a small grey line
-// "I love how LaTeX looks" for a few seconds.
+// The page's bottom left corner is dog-eared; a click on it unfolds it for good
+// and shows a small grey line "I love how LaTeX looks." for a few seconds.
 // The post layout loads this script only when the post has two headings or more.
 (function () {
   var toggle = document.querySelector(".toc-toggle");
@@ -63,12 +63,12 @@
   var love = sheet.appendChild(document.createElement("span"));
   love.className = "toc-love";
   love.setAttribute("role", "status");
-  var hiding = null;
   corner.addEventListener("click", function () {
-    clearTimeout(hiding);
-    love.innerHTML = 'I love how <span class="latex">L<span class="latex-a">a</span>T<span class="latex-e">e</span>X</span> looks';
+    love.innerHTML = 'I love how <span class="latex">L<span class="latex-a">a</span>T<span class="latex-e">e</span>X</span> looks.';
     love.classList.add("is-shown");
-    hiding = setTimeout(function () { love.classList.remove("is-shown"); }, 3500);
+    sheet.classList.add("is-unfolded");
+    setTimeout(function () { love.classList.remove("is-shown"); }, 3500);
+    setTimeout(function () { corner.remove(); }, 500);
   });
   toggle.parentNode.appendChild(sheet);
 
