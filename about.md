@@ -18,7 +18,7 @@ Previously, I was a Business Analyst at an outsourcing agency. My favourite proj
 
 I hold a master's degree in Linguistics and certifications from IIBA (AAC, CBDA) and Scrum.org (PSPO I and PSPO II). I speak Russian, English, Spanish, and Polish.
 
-I love books, chess (my Elo is lower than my heart rate), cycling (so is my FTP), and time with my family.
+I love books, chess, cycling, and time with my family.
 
 In this blog, I mostly write about my work experience and mental models. Occasionally, I share unfiltered takes on things that bother me.
 
