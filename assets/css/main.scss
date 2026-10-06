@@ -2644,11 +2644,23 @@ $tc-sticky: #fff8a8;
 // .anatomy: what a card contains. When it comes into view the context
 // goes in first, then the design and the ACs; the knowledge base and
 // the design system drift out of the card.
+// The card stays in the middle column, the clouds sit to the right of it
+// (under it on a phone).
 .anatomy {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 19rem) 1fr;
   gap: 1.5rem 2rem;
   align-items: center;
+
+  .an-stack { grid-column: 2; }
+  .an-outside { grid-column: 3; }
+
+  @media (max-width: 36rem) {
+    grid-template-columns: minmax(0, 19rem);
+    justify-content: center;
+
+    .an-stack, .an-outside { grid-column: 1; }
+  }
   margin: 2rem 0;
   font-size: 0.85rem;
 }
@@ -2788,8 +2800,6 @@ $tc-sticky: #fff8a8;
   position: relative;
   display: grid;
   align-items: start;
-  flex: 1 1 15rem;
-  max-width: 19rem;
 
   > .an-card { grid-area: 1 / 1; }
 }
@@ -2823,11 +2833,7 @@ $tc-sticky: #fff8a8;
   .an-new .an-row { animation: none; opacity: 1; }
 }
 
-.an-swap.flown {
-  justify-content: center;
-
-  .an-outside { display: none; }
-}
+.an-swap.flown .an-outside { display: none; }
 
 .an-swap.still .an-new, .an-swap.still .an-old { animation-duration: 0s !important; animation-delay: 0s !important; }
 
