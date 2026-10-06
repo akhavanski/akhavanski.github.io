@@ -4,8 +4,10 @@
 // the steps by setting `data-step` on the block; the first round the talk
 // sends the card back and it changes, the second round it is confirmed.
 // Hovering the card opens it as a ticket and stops the play.
+// .alt: the switch of examples, text on the left and a picture on the right;
+// the prototype in it can be clicked through.
 // .anatomy: gets `play` when it comes into view, CSS does the rest.
-// The "How I see it" button shows .an-mine, the same card with the design among the ACs.
+// The "How I see it" button turns .an-swap to the card where all it links to is among the ACs.
 (function () {
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -66,7 +68,7 @@
     }, { threshold: 0.4 }).observe(box);
   });
 
-  document.querySelectorAll(".anatomy:not(.an-mine)").forEach(function (box) {
+  document.querySelectorAll(".anatomy").forEach(function (box) {
     if (reduced) { box.classList.add("play", "still"); return; }
     new IntersectionObserver(function (entries, observer) {
       if (!entries[0].isIntersecting) return;
@@ -75,14 +77,84 @@
     }, { threshold: 0.5 }).observe(box);
   });
 
-  document.querySelectorAll(".see-it").forEach(function (button) {
-    var box = document.getElementById(button.getAttribute("aria-controls"));
+  // "How I see it": the new card pushes the old one out, then the clouds
+  // outside fly to their scraps among the ACs.
+  document.querySelectorAll(".an-swap").forEach(function (box) {
+    var button = box.nextElementSibling.querySelector(".see-it");
+    var came = box.querySelectorAll(".an-came");
+    var timer;
+
+    function fly() {
+      came.forEach(function (scrap) {
+        var cloud = box.querySelector("." + scrap.dataset.from);
+        var from = cloud.getBoundingClientRect(), to = scrap.getBoundingClientRect();
+        scrap.style.transition = "none";
+        scrap.style.transform = "translate(" + (from.left - to.left) + "px, " + (from.top - to.top) + "px) rotate(0deg)";
+        scrap.style.opacity = 1;
+        cloud.style.visibility = "hidden";
+        scrap.getBoundingClientRect();
+        scrap.style.transition = reduced ? "none" : "transform 0.7s cubic-bezier(.3, 1.3, .5, 1)";
+        scrap.style.transform = "";
+      });
+      // The clouds are all in the card now: the card takes the middle.
+      timer = setTimeout(function () {
+        came.forEach(function (scrap) { scrap.style.transition = "none"; });
+        box.classList.add("flown");
+      }, reduced ? 0 : 750);
+    }
+
+    // One way only: the button goes once the card has turned.
     button.addEventListener("click", function () {
-      var open = box.hidden;
-      box.hidden = !open;
-      button.setAttribute("aria-expanded", open);
-      box.classList.toggle("play", open);
+      button.parentElement.hidden = true;
+      box.classList.add("swapped");
+      box.querySelector(".an-new").setAttribute("aria-hidden", false);
+      box.querySelector(".an-old").setAttribute("aria-hidden", true);
       if (reduced) box.classList.add("still");
+      timer = setTimeout(fly, reduced ? 0 : 750);
+    });
+  });
+
+  document.querySelectorAll(".alt").forEach(function (box) {
+    var tabs = box.querySelectorAll("[role=tab]");
+
+    function show(name) {
+      box.dataset.alt = name;
+      tabs.forEach(function (tab) { tab.setAttribute("aria-selected", tab.dataset.for === name); });
+      box.querySelectorAll(".alt-panel").forEach(function (panel) {
+        var on = panel.dataset.panel === name;
+        panel.hidden = !on;
+        // Replay the panel's animation each time it is shown.
+        panel.classList.remove("play");
+        if (on) { panel.getBoundingClientRect(); panel.classList.add("play"); }
+      });
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () { show(tab.dataset.for); });
+    });
+
+    // The first panel plays when the block comes into view.
+    new IntersectionObserver(function (entries, observer) {
+      if (!entries[0].isIntersecting) return;
+      observer.disconnect();
+      show(box.dataset.alt);
+    }, { threshold: 0.4 }).observe(box);
+
+    // The prototype: pay, then order again; a ticked "Save card"
+    // brings the saved card first next time.
+    var proto = box.querySelector(".proto");
+    if (!proto) return;
+    var saved = false;
+    proto.addEventListener("click", function (e) {
+      var go = e.target.closest("[data-go]");
+      if (!go) return;
+      if (go.dataset.go === "paid") {
+        if (proto.dataset.screen === "form") saved = proto.querySelector(".pr-check input").checked;
+        proto.querySelector(".pr-note").textContent = saved ? "Your card is saved" : "";
+        proto.dataset.screen = "paid";
+      } else {
+        proto.dataset.screen = saved ? "saved" : "form";
+      }
     });
   });
 })();
