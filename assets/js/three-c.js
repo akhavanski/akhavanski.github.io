@@ -1,11 +1,11 @@
-// The animations of the post on acceptance criteria.
+// The pictures of the post on acceptance criteria, styles in assets/css/main.scss.
 // Turn it on for a post with `custom_js: [three-c]` in the front matter.
 // .three-c: Card → Conversation → Confirmation, a still picture;
 // hovering the card opens it as a ticket.
+// .anatomy: gets `play` when it comes into view, CSS does the rest;
+// the "How I see it" button turns it to the card where all it links to is among the ACs.
 // .alt: the switch of examples, text on the left and a picture on the right;
 // the prototype in it can be clicked through.
-// .anatomy: gets `play` when it comes into view, CSS does the rest.
-// The "How I see it" button turns .an-swap to the card where all it links to is among the ACs.
 (function () {
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -45,7 +45,6 @@
   document.querySelectorAll(".an-swap").forEach(function (box) {
     var button = box.nextElementSibling.querySelector(".see-it");
     var came = box.querySelectorAll(".an-came");
-    var timer;
 
     function fly() {
       came.forEach(function (scrap) {
@@ -60,7 +59,7 @@
         scrap.style.transform = "";
       });
       // The clouds are all in the card now: the card takes the middle.
-      timer = setTimeout(function () {
+      setTimeout(function () {
         came.forEach(function (scrap) { scrap.style.transition = "none"; });
         box.classList.add("flown");
       }, reduced ? 0 : 750);
@@ -73,7 +72,7 @@
       box.querySelector(".an-new").setAttribute("aria-hidden", false);
       box.querySelector(".an-old").setAttribute("aria-hidden", true);
       if (reduced) box.classList.add("still");
-      timer = setTimeout(fly, reduced ? 0 : 750);
+      setTimeout(fly, reduced ? 0 : 750);
     });
   });
 
@@ -81,7 +80,6 @@
     var tabs = box.querySelectorAll("[role=tab]");
 
     function show(name) {
-      box.dataset.alt = name;
       tabs.forEach(function (tab) { tab.setAttribute("aria-selected", tab.dataset.for === name); });
       box.querySelectorAll(".alt-panel").forEach(function (panel) {
         panel.hidden = panel.dataset.panel !== name;

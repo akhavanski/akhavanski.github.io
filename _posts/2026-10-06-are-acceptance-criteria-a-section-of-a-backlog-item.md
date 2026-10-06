@@ -3,7 +3,6 @@ layout: post
 title: "Are Acceptance Criteria a section of a backlog item?"
 tags: [software requirements]
 custom_js: [three-c]
-published: false
 ---
 
 I don’t agree, and hear me out.
@@ -17,7 +16,7 @@ My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-
     <div class="tc-node tc-card-node">
       <div class="tc-card" tabindex="0">
         <div class="tc-sticky">
-          <span class="tc-sticky-text">Save my card <s>to pay faster</s> for one-tap pay</span>
+          <span>Save my card <s>to pay faster</s> for one-tap pay</span>
         </div>
         <div class="tc-ticket" aria-hidden="true">
           <div class="tc-ticket-top">
@@ -26,7 +25,7 @@ My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-
             <span class="tc-status">To do</span>
           </div>
           <div class="tc-ticket-title">Save a bank card for one-tap checkout</div>
-          <div class="tc-ticket-body">
+          <div>
             <div class="tc-section">Description</div>
             <p><b>As a</b> returning customer, <b>I want</b> to save my card <b>so that</b> I pay in one tap next time.</p>
             <div class="tc-section">Acceptance criteria</div>
@@ -48,9 +47,9 @@ My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-
       <div class="tc-label">Card</div>
     </div>
 
-    <div class="tc-arrow tc-a1"></div>
+    <div class="tc-arrow"></div>
 
-    <div class="tc-node tc-talk-node">
+    <div class="tc-node">
       <div class="tc-talk">
         <span class="tc-bubble tc-b1"><i></i><i></i><i></i></span>
         <span class="tc-bubble tc-b2"><i></i><i></i><i></i></span>
@@ -58,9 +57,9 @@ My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-
       <div class="tc-label">Conversation</div>
     </div>
 
-    <div class="tc-arrow tc-a2"></div>
+    <div class="tc-arrow"></div>
 
-    <div class="tc-node tc-ok-node">
+    <div class="tc-node">
       <div class="tc-ok"><img src="/assets/img/epic-handshake.webp" alt="Two arms in a handshake: the team and the client agree"></div>
       <div class="tc-label">Confirmation</div>
     </div>
@@ -124,7 +123,7 @@ If you do not mention in ACs “The result follows the design” — but add a l
 
 ## Examples
 
-<div class="alt" data-alt="redlines">
+<div class="alt">
   <div class="alt-tabs" role="tablist" aria-label="Kind of a picture">
     <button type="button" role="tab" aria-selected="true" data-for="redlines">Redlines</button>
     <button type="button" role="tab" aria-selected="false" data-for="uml">UML activity</button>
