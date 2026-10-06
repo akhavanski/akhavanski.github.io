@@ -2821,7 +2821,7 @@ $tc-sticky: #fff8a8;
 
 // .alt, the examples: a switch of three kinds of a picture. Left, the ACs
 // as text; right, the same as a picture (assets/js/three-c.js switches them
-// and adds `play` to the shown panel, so its animation runs again).
+// and lets the prototype be clicked through).
 $red-pen: #e0352b;
 
 // The switch and both columns sit in the middle.
@@ -2961,7 +2961,7 @@ $red-pen: #e0352b;
   position: absolute;
   top: 50%;
   left: -0.15rem;
-  width: 0;
+  width: calc(100% + 0.3rem);
   height: 2px;
   background: $red-pen;
   transform: rotate(-4deg);
@@ -2977,7 +2977,6 @@ $red-pen: #e0352b;
   line-height: 1;
   white-space: nowrap;
   transform: rotate(-3deg);
-  clip-path: inset(0 100% 0 0);
 }
 
 .rl-pay {
@@ -2989,15 +2988,7 @@ $red-pen: #e0352b;
   font-weight: 600;
 }
 
-.alt-panel.play {
-  .rl-strike { animation: rl-strike 0.4s 0.4s ease-out both; }
-  .rl-new { animation: rl-write 0.9s 0.9s steps(14) both; }
-}
-
-@keyframes rl-strike { to { width: calc(100% + 0.3rem); } }
-@keyframes rl-write { to { clip-path: inset(0 0 0 0); } }
-
-// UML activity: the nodes come in, the edges draw themselves.
+// UML activity.
 .uml {
   display: block;
   width: 100%;
@@ -3022,19 +3013,6 @@ $red-pen: #e0352b;
     .uml-solid { fill: $ink; stroke: none; }
     .uml-end { fill: #fff; stroke: $ink; stroke-width: 1.2; }
   }
-}
-
-.alt-panel.play .uml {
-  .uml-edges path { stroke-dasharray: 200; animation: uml-draw 1.6s 0.3s ease-in-out both; }
-  .uml-nodes > * { animation: an-in 0.4s ease-out both; }
-  @for $i from 1 through 30 {
-    .uml-nodes > :nth-child(#{$i}) { animation-delay: #{$i * 0.05}s; }
-  }
-}
-
-@keyframes uml-draw {
-  from { stroke-dashoffset: 200; }
-  to { stroke-dashoffset: 0; }
 }
 
 // The prototype: a phone with three screens, `data-screen` picks one.
@@ -3180,7 +3158,6 @@ $red-pen: #e0352b;
 .pr-again:hover { background: #deebff; }
 
 @media (prefers-reduced-motion: reduce) {
-  .alt-panel.play * { animation-duration: 0s !important; animation-delay: 0s !important; }
   .pr-btn { animation: none; }
 }
 

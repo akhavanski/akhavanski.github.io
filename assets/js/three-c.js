@@ -84,24 +84,13 @@
       box.dataset.alt = name;
       tabs.forEach(function (tab) { tab.setAttribute("aria-selected", tab.dataset.for === name); });
       box.querySelectorAll(".alt-panel").forEach(function (panel) {
-        var on = panel.dataset.panel === name;
-        panel.hidden = !on;
-        // Replay the panel's animation each time it is shown.
-        panel.classList.remove("play");
-        if (on) { panel.getBoundingClientRect(); panel.classList.add("play"); }
+        panel.hidden = panel.dataset.panel !== name;
       });
     }
 
     tabs.forEach(function (tab) {
       tab.addEventListener("click", function () { show(tab.dataset.for); });
     });
-
-    // The first panel plays when the block comes into view.
-    new IntersectionObserver(function (entries, observer) {
-      if (!entries[0].isIntersecting) return;
-      observer.disconnect();
-      show(box.dataset.alt);
-    }, { threshold: 0.4 }).observe(box);
 
     // The prototype: pay, then order again; a ticked "Save card"
     // brings the saved card first next time.
