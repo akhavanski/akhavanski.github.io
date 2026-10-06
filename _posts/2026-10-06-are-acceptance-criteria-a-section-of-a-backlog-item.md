@@ -66,9 +66,9 @@ My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-
 
     <div class="tc-loop" aria-hidden="true">
       <svg viewBox="0 0 100 30" preserveAspectRatio="none">
-        <path class="tc-loop-line" d="M 100 28 C 88 2, 12 2, 0 28" pathLength="1" />
+        <path class="tc-loop-line" d="M 100 28 C 100 -6, 0 -6, 0 28" pathLength="1" />
       </svg>
-      <svg class="tc-loop-head" viewBox="0 0 10 10"><path d="M 1 9 L 3 0 L 10 6 Z" /></svg>
+      <svg class="tc-loop-head" viewBox="0 0 10 10"><path d="M 0 1 L 10 1 L 5 10 Z" /></svg>
     </div>
     <span class="tc-loop-label">changes the card</span>
   </div>

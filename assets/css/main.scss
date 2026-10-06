@@ -2408,18 +2408,6 @@ $tc-sticky: #fff8a8;
   line-height: 1;
   transition: transform 0.35s cubic-bezier(.2, .7, .2, 1.4), box-shadow 0.35s;
 
-  // The tape on top.
-  &::before {
-    content: "";
-    position: absolute;
-    top: -7px;
-    left: 50%;
-    width: 2.2rem;
-    height: 0.8rem;
-    transform: translateX(-50%) rotate(4deg);
-    background: rgba(225, 225, 215, 0.8);
-  }
-
   s { color: $term-red; }
 }
 
@@ -2494,14 +2482,14 @@ $tc-sticky: #fff8a8;
     vector-effect: non-scaling-stroke;
   }
 
-  // The head, pointing down at the card.
+  // The head, pointing straight down at the card, as the line ends straight down.
   .tc-loop-head {
     position: absolute;
     left: 0;
-    bottom: -0.3rem;
+    bottom: -0.1rem;
     width: 0.65rem;
     height: 0.65rem;
-    transform: translateX(-40%);
+    transform: translateX(-50%);
 
     path { fill: $term-red; }
   }
