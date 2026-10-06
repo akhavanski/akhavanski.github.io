@@ -36,6 +36,8 @@ layout: default
   {%- for keyword in keywords %}{% assign slug = keyword | slugify %} <a href="{{ "/blog" | relative_url }}?tag={{ slug }}"{% if slug == "ai" %} class="has-sparkles"{% endif %}>{{ keyword }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}</a>{% unless forloop.last %},{% endunless %}{% endfor %}</span>
 {%- endif %}</p>
 
+{%-include share.html-%}
+
 {%- if keywords.size > 0 %}
 <script src="{{ "/assets/js/post-tags.js" | relative_url }}"></script>
 {%- endif %}

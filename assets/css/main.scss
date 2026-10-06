@@ -552,8 +552,8 @@ $bcard-width: 401px; // 1.25 × 321: at 321px the 10px contacts are too small be
 .bcard-role { font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
 .bcard-city { color: var(--ink-2); }
 
-// Read out by screen readers only: "Email copied".
-.bcard-status {
+// Read out by screen readers only: "Email copied", "Link copied".
+.bcard-status, .share-status {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -1638,7 +1638,10 @@ html[data-theme="dark"] {
 
   .turtle:hover &, &[aria-expanded="true"], &:focus-visible { transform: translateY(-0.3rem); }
   &:focus-visible { outline: 1px dotted black; outline-offset: 2px; }
+}
 
+// The turtle drawing, in the corner and at the bottom of a post.
+.turtle-btn, .share-turtle-btn {
   svg {
     display: block;
     width: 3.5rem;
@@ -1691,6 +1694,153 @@ html[data-theme="dark"] {
   }
 }
 
+// Sharing the post, at the very bottom of the page (see _includes/share.html).
+// On a phone: a quiet "Share" button, like "← to blog".
+.share {
+  position: relative;
+  margin-top: 2.5rem;
+}
+
+.share-btn {
+  @include quiet-card;
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.share-turtle { display: none; }
+
+// On a wide screen: the turtle at the bottom edge of the page, only the top
+// of its shell peeks out; on hover it climbs out and says "Share".
+@media (min-width: $wide-screen) {
+  .share-btn { display: none; }
+
+  // The page ends right under the turtle.
+  .w:has(> .share) { padding-bottom: 0; }
+
+  .share-turtle {
+    display: block;
+    position: relative;
+    width: 4rem;
+    height: 3rem;
+    margin-left: auto;
+  }
+
+  // Cuts the turtle at the page's bottom edge.
+  .share-peek {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .share-turtle-btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    transform: translateY(62%);
+    transition: transform 0.45s $spring;
+
+    .share-turtle:hover &, &[aria-expanded="true"], &:focus-visible { transform: translateY(-0.3rem); }
+    &:focus-visible { outline: 1px dotted black; outline-offset: -2px; }
+  }
+
+  // The comic bubble "Share", from the turtle's mouth up to the left.
+  .share-bubble {
+    position: absolute;
+    right: -0.4rem;
+    bottom: 3.2rem;
+    min-width: 4.6rem;
+    padding: 0.3rem 0.6rem;
+    border: 1.5px solid black;
+    border-radius: 1rem;
+    background: white;
+    box-shadow: 3px 3px 0 black;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    opacity: 0;
+    transform: scale(0.4) rotate(-4deg);
+    transform-origin: 100% 100%;
+    transition: opacity 0.15s, transform 0.3s $spring;
+    pointer-events: none;
+
+    &::after {
+      content: "";
+      position: absolute;
+      right: 1.1rem;
+      bottom: -0.5rem;
+      width: 0.75rem;
+      height: 0.75rem;
+      background: white;
+      border-right: 1.5px solid black;
+      border-bottom: 1.5px solid black;
+      transform: rotate(45deg) skew(12deg, 12deg);
+    }
+
+    .share-turtle:hover &, .share-turtle:focus-within &, .is-copied & {
+      opacity: 1;
+      transform: rotate(-4deg);
+    }
+  }
+
+  .is-copied .share-turtle-btn { transform: translateY(-0.3rem); animation: share-hop 0.35s $spring; }
+
+  // After a click the bubble holds the buttons instead of the word.
+  .share-links { display: none; }
+
+  .share.is-open {
+    .share-turtle-btn { transform: translateY(-0.3rem); }
+    .share-bubble {
+      padding: 0.45rem 0.75rem;
+      opacity: 1;
+      transform: rotate(-4deg);
+      pointer-events: auto;
+      animation: share-grow 0.3s $spring;
+    }
+    .share-word { display: none; }
+    .share-links { display: flex; gap: 0.7rem; }
+  }
+
+  .share-links {
+    a, button {
+      display: block;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: black;
+      cursor: pointer;
+      transition: color 0.2s, transform 0.2s $spring;
+
+      &:hover, &:focus-visible { transform: translateY(-2px); }
+      &:focus-visible { outline: 1px dotted black; outline-offset: 2px; }
+    }
+
+    svg {
+      display: block;
+      width: 1.25rem;
+      height: 1.25rem;
+      fill: currentColor;
+    }
+
+    .share-linkedin:hover, .share-linkedin:focus-visible { color: #0a66c2; }
+    .share-telegram:hover, .share-telegram:focus-visible { color: #26a5e4; }
+    .share-email:hover, .share-email:focus-visible { color: #ea4335; }
+    .share-copy:hover, .share-copy:focus-visible { color: #7bc67e; }
+  }
+}
+
+@keyframes share-hop {
+  40% { transform: translateY(-0.9rem); }
+}
+@keyframes share-grow {
+  from { transform: scale(0.6) rotate(-4deg); }
+}
+
 // The DeLorean sticker at the bottom of the Now page (see _includes/delorean.html):
 // on hover the photo with open doors replaces the one with closed doors.
 // Both stand on the same bottom line, so the car does not move.
@@ -1722,7 +1872,8 @@ html[data-theme="dark"] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-toggle + .filter-count, .turtle-btn, .delorean, .delorean img { transition: none; }
+  .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-toggle + .filter-count, .turtle-btn, .share-turtle-btn, .share-bubble, .delorean, .delorean img { transition: none; }
+  .share-turtle-btn, .share-bubble { animation: none !important; }
   .filter-options button, .filter-heading, .post-tags .key { animation: none; }
   // The sparkles just show, without twinkling.
   .has-sparkles:hover .sparkles i, .has-sparkles:focus-visible .sparkles i { animation: none; opacity: 1; transform: none; }
@@ -2000,7 +2151,7 @@ $night-red: #ff6b5e;
 html[data-theme="dark"] {
   &, body { background: $night; }
   body { color: $night-ink; }
-  a, .brand a, .menu a, .social a, .keywords-toggle, .toc-sheet a { color: $night-ink; }
+  a, .brand a, .menu a, .social a, .share-links a, .share-links button, .keywords-toggle, .toc-sheet a { color: $night-ink; }
   .brand a:hover, .brand a:focus-visible { color: $night-muted; }
   :focus-visible { outline-color: $night-ink !important; }
 
@@ -2023,7 +2174,7 @@ html[data-theme="dark"] {
   .filter-reset:hover, .cite a:hover, ol.sources .source-back a:hover { color: $night-ink; }
   .cite a:hover { background: rgba(255, 230, 0, 0.25); }
 
-  .filter-options, .turtle-bubble {
+  .filter-options, .turtle-bubble, .share-bubble {
     background: $night-card;
     border-color: $night-ink;
     box-shadow: 3px 3px 0 $night-ink;
@@ -2041,9 +2192,9 @@ html[data-theme="dark"] {
     .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] .sparkles i { background-image: sparkle-card-night($f); }
   }
   .filter-options .sparkles i { background-image: sparkle-card-night(); filter: drop-shadow(1px 1px 0 $night-ink); }
-  .turtle-bubble::after { background: $night-card; border-color: $night-ink; }
+  .turtle-bubble::after, .share-bubble::after { background: $night-card; border-color: $night-ink; }
 
-  .to-blog, .toc-toggle {
+  .to-blog, .toc-toggle, .share-btn {
     background: $night-card;
     border-color: $night-faint;
     box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
