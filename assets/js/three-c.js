@@ -4,7 +4,8 @@
 // the steps by setting `data-step` on the block; the first round the talk
 // sends the card back and it changes, the second round it is confirmed.
 // Hovering the card opens it as a ticket and stops the play.
-// .anatomy and .hidden-ac: get `play` when they come into view, CSS does the rest.
+// .anatomy: gets `play` when it comes into view, CSS does the rest.
+// The "How I see it" button shows .an-mine, the same card with the design among the ACs.
 (function () {
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -65,29 +66,23 @@
     }, { threshold: 0.4 }).observe(box);
   });
 
-  // The ghost line flies from the design link to its place among the ACs.
-  function placeGhost(box) {
-    var ticket = box.querySelector(".ha-ticket").getBoundingClientRect();
-    var link = box.querySelector(".ha-link").getBoundingClientRect();
-    var line = box.querySelector(".ha-new").getBoundingClientRect();
-    var ghost = box.querySelector(".ha-ghost").style;
-    ghost.setProperty("--gx", link.left - ticket.left + "px");
-    ghost.setProperty("--gy", link.top - ticket.top + "px");
-    ghost.setProperty("--hx", line.left - ticket.left + "px");
-    ghost.setProperty("--hy", line.top - ticket.top + "px");
-  }
-
-  document.querySelectorAll(".hidden-ac").forEach(function (box) {
-    placeGhost(box);
-    addEventListener("resize", function () { placeGhost(box); });
-  });
-
-  document.querySelectorAll(".anatomy, .hidden-ac").forEach(function (box) {
+  document.querySelectorAll(".anatomy:not(.an-mine)").forEach(function (box) {
     if (reduced) { box.classList.add("play", "still"); return; }
     new IntersectionObserver(function (entries, observer) {
       if (!entries[0].isIntersecting) return;
       observer.disconnect();
       box.classList.add("play");
     }, { threshold: 0.5 }).observe(box);
+  });
+
+  document.querySelectorAll(".see-it").forEach(function (button) {
+    var box = document.getElementById(button.getAttribute("aria-controls"));
+    button.addEventListener("click", function () {
+      var open = box.hidden;
+      box.hidden = !open;
+      button.setAttribute("aria-expanded", open);
+      box.classList.toggle("play", open);
+      if (reduced) box.classList.add("still");
+    });
   });
 })();
