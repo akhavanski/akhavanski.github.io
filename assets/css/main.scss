@@ -2381,11 +2381,18 @@ $tc-sticky: #fff8a8;
 }
 
 // The card: a sticky note, changed after a talk.
+// The opened card goes above the loop arrow, and stays there till the ticket folds.
 .tc-card {
   position: relative;
   z-index: 3;
   cursor: pointer;
   outline: none;
+  transition: z-index 0s 0.35s;
+}
+
+.tc-open .tc-card {
+  z-index: 5;
+  transition: z-index 0s;
 }
 
 .tc-sticky {
