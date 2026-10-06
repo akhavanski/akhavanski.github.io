@@ -2257,7 +2257,7 @@ html[data-theme="dark"] {
   .title-badge { background: rgba(61, 220, 106, 0.12); color: #7ddc95; }
   .title-badge-mark { border-left-color: #3ddc6a; }
   .compare { background: rgba(255, 255, 255, 0.1); color: #bbb; }
-  .compare:hover, .compare[aria-pressed="true"] { background: rgba(255, 255, 255, 0.16); }
+  .compare:hover { background: rgba(255, 255, 255, 0.16); }
   .compare-mark { border-left-color: #999; }
 }
 
@@ -2751,10 +2751,8 @@ $tc-sticky: #fff8a8;
   transition: background 0.2s;
 
   &[hidden] { display: none; }
-  &:hover, &[aria-pressed="true"] { background: #e2e2e2; }
+  &:hover { background: #e2e2e2; }
   &:focus-visible { outline: 2px dotted #555; outline-offset: 2px; }
-  // Pressed, the triangle points down: both cards are out.
-  &[aria-pressed="true"] .compare-mark { transform: rotate(90deg); }
 }
 
 .compare-mark {
@@ -2763,7 +2761,6 @@ $tc-sticky: #fff8a8;
   border-left: 0.45rem solid #888;
   border-top: 0.3rem solid transparent;
   border-bottom: 0.3rem solid transparent;
-  transition: transform 0.2s;
 }
 
 .an-acs-box {

@@ -104,7 +104,7 @@ A card should contain ‘all necessary information to complete it’.
   </div>
 </div>
 
-<div class="see-it-row"><button class="see-it" type="button">How I see it</button><button class="compare" type="button" aria-pressed="false" hidden><span class="compare-mark" aria-hidden="true"></span>Compare</button></div>
+<div class="see-it-row"><button class="see-it" type="button">How I see it</button><button class="compare" type="button" hidden><span class="compare-mark" aria-hidden="true"></span>Compare</button></div>
 
 For me the must is Context. A description in any wording of why a card exists, what problem it solves and for whom. The rest can actually live somewhere outside the card: in a knowledge base, in a design system.
 

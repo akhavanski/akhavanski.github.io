@@ -4,7 +4,7 @@
 // hovering the card opens it as a ticket.
 // .anatomy: gets `play` when it comes into view, CSS does the rest;
 // the "How I see it" button turns it to the card where all it links to is among the ACs,
-// then "Compare" shows both cards side by side and, pressed again, the new one only.
+// then "Compare" shows both cards side by side and goes.
 // .alt: the switch of examples, text on the left and a picture on the right;
 // the prototype in it can be clicked through.
 (function () {
@@ -68,11 +68,12 @@
       }, reduced ? 0 : 750);
     }
 
-    // "Compare" comes once the card has settled and switches both cards on and off.
+    // "Compare" comes once the card has settled; one way too: it brings
+    // the old card back next to the new one and goes.
     compare.addEventListener("click", function () {
-      var on = box.classList.toggle("comparing");
-      compare.setAttribute("aria-pressed", on);
-      box.querySelector(".an-old").setAttribute("aria-hidden", !on);
+      compare.parentElement.hidden = true;
+      box.classList.add("comparing");
+      box.querySelector(".an-old").setAttribute("aria-hidden", false);
     });
 
     // One way only: the button goes once the card has turned.
