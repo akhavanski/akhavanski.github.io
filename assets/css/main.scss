@@ -168,7 +168,7 @@ pre.mermaid { text-align: center; }
 // underlined as the post titles above: thin, a little below the
 // letters, broken by their tails, light grey; under the pointer or in focus
 // the line takes the colour of the text. Links to a place on the page
-// (fixes, comments, terms, source numbers, the table of contents),
+// (fixes, comments, footnotes, source numbers, the table of contents),
 // the way back to the blog, the contact icons and the business card
 // keep their own look.
 $thin-links: 'article a:not(.to-blog):not([href^="#"]), ol.sources a, .intro a, .blog-posts .post-excerpt, .menu a, '
@@ -1920,100 +1920,6 @@ html[data-theme="dark"] {
   .has-sparkles:hover .sparkles i, .has-sparkles:focus-visible .sparkles i { animation: none; opacity: 1; transform: none; }
 }
 
-// Terms explained in posts (see assets/js/glossary.js):
-// the term is underlined with red dots, a click on it slides out
-// a library catalogue card with a typewritten dictionary entry,
-// from the same cabinet as the keyword filter.
-$card-ink: #6b6250;
-$card-line: 1.5rem;
-
-.term {
-  // Longhands: Safari drops the shorthand with a style or a colour in it.
-  text-decoration-line: underline;
-  text-decoration-style: dotted;
-  text-decoration-color: $term-red;
-  text-decoration-thickness: bcard(2);
-  text-underline-offset: bcard(3);
-  cursor: pointer;
-
-  &:hover, &[aria-expanded="true"] { background-color: rgba($term-red, 0.08); }
-  &:focus-visible { outline: 1px dotted black; }
-}
-
-.term-card {
-  position: absolute;
-  z-index: 10;
-  box-sizing: border-box;
-  width: min(23rem, calc(100vw - 2rem));
-  padding: 0.6rem 0 2.1rem;
-  border-radius: 3px;
-  background: #fbf4df;
-  box-shadow: 0 1px 0 #e6dcc0, 0 12px 14px -8px rgba(0, 0, 0, 0.35);
-  transform: rotate(-0.8deg);
-  font-family: "Courier New", Courier, monospace;
-  font-size: 0.88rem;
-  line-height: $card-line;
-
-  &.out { animation: term-card-out 0.35s $spring; }
-
-  p { margin: 0; }
-
-  // The hole for the rod that holds the cards in the drawer.
-  &::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: 0.55rem;
-    width: 0.85rem;
-    height: 0.85rem;
-    transform: translateX(-50%);
-    border-radius: 50%;
-    background: white;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
-  }
-}
-
-// The heading line, above the red rule of the card.
-.term-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  column-gap: 0.6em;
-  padding: 0 1rem 0.15rem;
-  border-bottom: 2px solid #d9534f;
-  color: $card-ink;
-}
-
-.term-word {
-  font-size: 1.35em;
-  letter-spacing: 0.05em;
-  color: black;
-}
-
-// The text is typed on the blue lines of the card.
-.term-body {
-  padding: 0 1rem;
-  background: repeating-linear-gradient(transparent 0 calc(#{$card-line} - 1px), rgba(70, 130, 200, 0.3) calc(#{$card-line} - 1px) $card-line);
-}
-
-.term-full {
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.term-example, .term-more { color: $card-ink; }
-.term-example::before { content: "e.g. "; }
-// A blank line of the card between the definition and the example.
-.term-card .term-example { margin-top: $card-line; }
-
-@keyframes term-card-out {
-  from { opacity: 0; transform: translateY(18px) rotate(2deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .term-card.out { animation: none; }
-}
-
 // Sources of a post (see assets/js/sources.js): a number in the text is a small
 // grey superscript, a link to its source in the list at the end.
 .cite {
@@ -2173,7 +2079,7 @@ h1.has-badge { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
 // from the saved choice or the system setting, switched by the theme dot.
 // Turned on and off by `dark_theme` in _config.yml.
 // The background is graphite, not black; a chosen filter card is its colour,
-// dimmed; the cards of notes and terms are dark paper; the business card is
+// dimmed; the business card is
 // black with gold lettering, as if embossed.
 $night: #1e1e1e;
 $night-ink: #e4e4e4;
@@ -2273,18 +2179,7 @@ html[data-theme="dark"] {
   .fn-ref.lit, .fn-ref.open, .fn-ref:hover { color: $night-ink; background: rgba(255, 230, 0, 0.25); }
   mark.fix:focus-visible, mark.comment:focus-visible, .fn-ref:focus-visible { outline-color: $night-ink; }
 
-  mark.fix, .term { text-decoration-color: $night-red; -webkit-text-decoration-color: $night-red; }
-  .term:hover, .term[aria-expanded="true"] { background-color: rgba($night-red, 0.12); }
-  .term-card {
-    background: #272727;
-    color: $night-ink;
-    box-shadow: 0 0 0 1px #383838, 0 12px 14px -8px rgba(0, 0, 0, 0.7);
-    &::after { background: $night; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8); }
-  }
-  .term-head { color: #9a9a9a; border-bottom-color: #c0443f; }
-  .term-word { color: #f4f4f4; }
-  .term-body { background: repeating-linear-gradient(transparent 0 calc(#{$card-line} - 1px), rgba(120, 170, 230, 0.22) calc(#{$card-line} - 1px) $card-line); }
-  .term-example, .term-more { color: #9a9a9a; }
+  mark.fix { text-decoration-color: $night-red; -webkit-text-decoration-color: $night-red; }
 
   .title-badge { background: rgba(61, 220, 106, 0.12); color: #7ddc95; }
   .title-badge-mark { border-left-color: #3ddc6a; }

@@ -5,7 +5,7 @@ tags: [requirements]
 custom_js: [three-c]
 ---
 
-From project to project I see that acceptance criteria for a [PBI](#glossary) are in 99% of cases just a section in the task description. Those who write requirements add sections like [User Story](/2021-09-11-user-stories-guide-for-junior-ba-po-pm.html), links to designs or diagrams.
+From project to project I see that acceptance criteria for a PBI[^pbi] are in 99% of cases just a section in the task description. Those who write requirements add sections like [User Story](/2021-09-11-user-stories-guide-for-junior-ba-po-pm.html), links to designs or diagrams.
 
 I don’t agree, and hear me out.
 
@@ -279,3 +279,5 @@ Are ACs the only ACs? If you do not mention in ACs “The result follows the des
 </div>
 
 > An AC is anything you’ll use to accept or reject the work.
+
+[^pbi]: *Product Backlog Item.* It is something you add to your task tracker.

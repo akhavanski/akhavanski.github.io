@@ -42,15 +42,4 @@ text[^name]
 [^name]: Note.
 ```
 
-On the site the text gets a small grey number over the line, and the note with the same number stands in the right margin, like a fix or a comment (on a narrow screen it opens with a tap on the number). The list of footnotes at the end of the post is not shown. Also made by `assets/js/notes.js`.
-
-## Glossary terms
-
-A term in a post is written as a link to `#glossary`. Its entry lives in `_data/glossary.yml`, where only `def` is required:
-
-```markdown
-[PBI](#glossary)
-[PBIs](#glossary "PBI")
-```
-
-Use the second form when the word in the text differs from the term in the glossary. On the site the term is underlined with red dots, and a click slides out a catalog card with the entry (`assets/js/glossary.js`, styles in `assets/css/main.scss`). If the term is not in the glossary, the word stays plain text. Mark only the first occurrence of a term in a post.
+On the site the text gets a small grey number over the line, and the note with the same number stands in the right margin, like a fix or a comment (on a narrow screen it opens with a tap on the number). The list of footnotes at the end of the post is not shown. A term is explained with a footnote too. Also made by `assets/js/notes.js`.

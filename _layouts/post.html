@@ -58,10 +58,6 @@ layout: default
 <script src="{{ "/assets/js/notes.js" | relative_url }}"></script>
 {%- endif %}
 
-{%- if content contains 'href="#glossary"' %}
-<script type="application/json" id="glossary-data">{{ site.data.glossary | jsonify }}</script>
-<script src="{{ "/assets/js/glossary.js" | relative_url }}"></script>
-{%- endif %}
 
 {%- if content contains '<h2 id="sources">' or content contains '<h2 id="источники">' %}
 <script src="{{ "/assets/js/sources.js" | relative_url }}"></script>
