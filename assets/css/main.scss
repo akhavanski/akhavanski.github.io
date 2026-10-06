@@ -2920,21 +2920,53 @@ $tc-sticky: #fff8a8;
   letter-spacing: 0.04em;
 }
 
+// Centred, with nothing outside the card: all it has is in the ACs.
+.an-mine { justify-content: center; }
+
+.an-scraps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.4rem;
+  padding: 0.5rem 0 0.2rem;
+}
+
+// Scraps of paper like the old text on the card of a fix (.note-cutout).
+.an-scrap {
+  display: block;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
+  transform: rotate(var(--r, -2deg));
+
+  span {
+    display: block;
+    padding: 0.35rem 0.75rem 0.4rem;
+    background: white;
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: black;
+    clip-path: polygon(0% 10%, 7% 0%, 31% 6%, 56% 1%, 81% 7%, 100% 0%, 97% 48%, 100% 100%, 74% 93%, 49% 100%, 23% 92%, 4% 100%, 2% 52%);
+  }
+
+  &:nth-child(2) { --r: 2.5deg; }
+  &:nth-child(3) { --r: -1deg; }
+  &:nth-child(4) { --r: 1.5deg; }
+  &:nth-child(5) { --r: -3deg; }
+}
+
 .an-mine {
-  .an-acs-box { opacity: 0; }
+  .an-acs-box, .an-scrap { opacity: 0; }
 
   &.play {
     .an-acs-box { animation: an-in 0.5s 1.3s ease-out both; }
-    .an-acs { animation: an-in 0.5s 1.5s ease-out both; }
-    .an-design { animation: an-drop 0.9s 2s cubic-bezier(.3, 1.4, .5, 1) both; }
-    .an-kb { animation-delay: 3s, 3.8s; }
-    .an-heads { animation-delay: 3.2s, 4.2s; }
-    .an-ds { animation-delay: 3.4s, 4.6s; }
+    .an-scrap { animation: an-drop 0.7s cubic-bezier(.3, 1.4, .5, 1) both; }
+    .an-scrap:nth-child(1) { animation-delay: 1.9s; }
+    .an-scrap:nth-child(2) { animation-delay: 2.2s; }
+    .an-scrap:nth-child(3) { animation-delay: 2.5s; }
+    .an-scrap:nth-child(4) { animation-delay: 2.8s; }
+    .an-scrap:nth-child(5) { animation-delay: 3.1s; }
   }
 }
 
 @keyframes an-drop {
-  0% { opacity: 0; transform: translateY(-4rem) rotate(-6deg); background: $tc-sticky; }
-  60% { opacity: 1; background: #c9f2d6; }
-  100% { opacity: 1; transform: none; background: rgba(255, 255, 255, 0.7); }
+  0% { opacity: 0; transform: translateY(-3rem) rotate(-15deg); }
+  100% { opacity: 1; transform: rotate(var(--r, -2deg)); }
 }

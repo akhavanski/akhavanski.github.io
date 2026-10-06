@@ -110,18 +110,18 @@ If you do not mention in ACs “The result follows the design” — but add a l
 
 <button class="see-it" type="button" aria-expanded="false" aria-controls="an-mine">How I see it</button>
 
-<div class="anatomy an-mine" id="an-mine" hidden aria-label="The same card, but the design link is one of the acceptance criteria">
+<div class="anatomy an-mine" id="an-mine" hidden aria-label="The same card, but everything attached to it is one of the acceptance criteria">
   <div class="an-card">
     <div class="an-row an-context"><b>Context</b> why, what problem, for whom <em class="an-must">must</em></div>
     <div class="an-acs-box">
       <div class="an-acs-title">Acceptance criteria</div>
-      <div class="an-row an-acs">☑ Written ACs</div>
-      <div class="an-row an-design">☑ 🔗 Design, screenshot or flow</div>
+      <div class="an-scraps">
+        <span class="an-scrap"><span>Scenarios</span></span>
+        <span class="an-scrap"><span>Design</span></span>
+        <span class="an-scrap"><span>Screenshots</span></span>
+        <span class="an-scrap"><span>Description in Confluence</span></span>
+        <span class="an-scrap"><span>NFRs</span></span>
+      </div>
     </div>
-  </div>
-  <div class="an-outside">
-    <span class="an-cloud an-kb">knowledge base</span>
-    <span class="an-cloud an-heads">heads</span>
-    <span class="an-cloud an-ds">design system</span>
   </div>
 </div>
