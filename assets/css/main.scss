@@ -1694,78 +1694,140 @@ html[data-theme="dark"] {
   }
 }
 
-// Sharing the post, at the very bottom of the page (see _includes/share.html).
-// On a phone: a quiet "Share" button, like "← to blog".
+// Sharing the post, at the very bottom of the page (see _includes/share.html):
+// a turtle with a comic bubble, with buttons for LinkedIn, Telegram, WhatsApp, X, email
+// and copying the link on a wide screen and the word "Share" on a phone.
 .share {
   position: relative;
-  margin-top: 2.5rem;
+  margin-top: 4rem;
 }
 
-.share-btn {
-  @include quiet-card;
-  font: inherit;
-  font-size: 0.8rem;
-  cursor: pointer;
+.share-bubble {
+  box-sizing: border-box;
+  padding: 0.45rem 0.75rem;
+  border: 1.5px solid black;
+  border-radius: 1rem;
+  background: white;
+  box-shadow: 3px 3px 0 black;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
 }
 
-.share-turtle { display: none; }
+// After copying the link the bubble says "Thank you!" instead of the buttons.
+.share-word { display: none; }
+.share-links { display: flex; gap: 0.7rem; }
+.is-copied {
+  .share-word { display: block; }
+  .share-links { display: none; }
+}
 
-// On a wide screen: the turtle at the bottom edge of the page, only the top
-// of its shell peeks out; on hover it climbs out and says "Share".
-@media (min-width: $wide-screen) {
-  .share-btn { display: none; }
-
-  // The page ends right under the turtle.
-  .w:has(> .share) { padding-bottom: 0; }
-
-  .share-turtle {
+.share-links {
+  a, button {
     display: block;
-    position: relative;
-    width: 4rem;
-    height: 3rem;
-    margin-left: auto;
-  }
-
-  // Cuts the turtle at the page's bottom edge.
-  .share-peek {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-  }
-
-  .share-turtle-btn {
-    position: absolute;
-    right: 0;
-    bottom: 0;
     padding: 0;
     border: 0;
     background: none;
+    color: black;
     cursor: pointer;
-    transform: translateY(62%);
-    transition: transform 0.45s $spring;
+    transition: color 0.2s, transform 0.2s $spring;
 
-    .share-turtle:hover &, &[aria-expanded="true"], &:focus-visible { transform: translateY(-0.3rem); }
-    &:focus-visible { outline: 1px dotted black; outline-offset: -2px; }
+    &:hover, &:focus-visible { transform: translateY(-2px); }
+    &:focus-visible { outline: 1px dotted black; outline-offset: 2px; }
   }
 
-  // The comic bubble with the buttons, from the turtle's mouth up to the left.
-  .share-bubble {
+  svg {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: currentColor;
+  }
+
+  .share-linkedin:hover, .share-linkedin:focus-visible { color: #0a66c2; }
+  .share-telegram:hover, .share-telegram:focus-visible { color: #26a5e4; }
+  .share-whatsapp:hover, .share-whatsapp:focus-visible { color: #25d366; }
+  .share-email:hover, .share-email:focus-visible { color: #ea4335; }
+  .share-copy:hover, .share-copy:focus-visible { color: #7bc67e; }
+}
+
+// The turtle at the bottom edge of the page, only the top of its shell peeks out.
+// The page ends right under it.
+.w:has(> .share) { padding-bottom: 0; }
+
+.share-turtle {
+  position: relative;
+  width: 5rem;
+  height: 3.8rem;
+  margin-left: auto;
+}
+
+// Cuts the turtle at the page's bottom edge.
+.share-peek {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.share-turtle-btn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform: translateY(62%);
+  transition: transform 0.45s $spring;
+
+  svg { width: 4.6rem; }
+
+  &:focus-visible { outline: 1px dotted black; outline-offset: -2px; }
+}
+
+// The bubble comes from the turtle's mouth up to the left.
+.share-bubble {
+  position: absolute;
+  right: -0.4rem;
+  bottom: 4rem;
+  min-width: 4.6rem;
+  transform: rotate(-4deg);
+  transform-origin: 100% 100%;
+
+  &::after {
+    content: "";
     position: absolute;
-    right: -0.4rem;
-    bottom: 3.2rem;
-    min-width: 4.6rem;
-    padding: 0.45rem 0.75rem;
-    border: 1.5px solid black;
-    border-radius: 1rem;
+    right: 1.4rem;
+    bottom: -0.5rem;
+    width: 0.75rem;
+    height: 0.75rem;
     background: white;
-    box-shadow: 3px 3px 0 black;
-    font-size: 0.85rem;
-    font-weight: bold;
-    text-align: center;
-    white-space: nowrap;
+    border-right: 1.5px solid black;
+    border-bottom: 1.5px solid black;
+    transform: rotate(45deg) skew(12deg, 12deg);
+  }
+}
+
+// On a phone the turtle is out all the time and says "Share";
+// a tap opens the system share menu.
+@media not all and (min-width: $wide-screen) {
+  .share-turtle { margin-right: 2.5rem; } // clear of the "§" button at the window's edge
+  .share-turtle-btn { transform: translateY(-0.3rem); }
+  .share-bubble { cursor: pointer; }
+  .share-word { display: block; }
+  .share-links { display: none; }
+}
+
+// On a wide screen it climbs out on hover with the buttons in the bubble,
+// and hides a while after the pointer leaves (see assets/js/share.js).
+@media (min-width: $wide-screen) {
+  .share-turtle-btn {
+    .share-turtle:hover &, &[aria-expanded="true"], &:focus-visible { transform: translateY(-0.3rem); }
+  }
+
+  .share-bubble {
     opacity: 0;
     transform: scale(0.4) rotate(-4deg);
-    transform-origin: 100% 100%;
     transition: opacity 0.15s, transform 0.3s $spring;
     pointer-events: none;
 
@@ -1774,19 +1836,6 @@ html[data-theme="dark"] {
       content: "";
       position: absolute;
       inset: 100% 0 -0.8rem;
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      right: 1.1rem;
-      bottom: -0.5rem;
-      width: 0.75rem;
-      height: 0.75rem;
-      background: white;
-      border-right: 1.5px solid black;
-      border-bottom: 1.5px solid black;
-      transform: rotate(45deg) skew(12deg, 12deg);
     }
 
     .is-copied &, .is-open & {
@@ -1799,41 +1848,6 @@ html[data-theme="dark"] {
   .is-copied .share-turtle-btn { transform: translateY(-0.3rem); animation: share-hop 0.35s $spring; }
 
   .is-open .share-turtle-btn { transform: translateY(-0.3rem); }
-
-  // After copying the link the bubble says "Thank you!" instead of the buttons.
-  .share-word { display: none; }
-  .share-links { display: flex; gap: 0.7rem; }
-  .is-copied {
-    .share-word { display: block; }
-    .share-links { display: none; }
-  }
-
-  .share-links {
-    a, button {
-      display: block;
-      padding: 0;
-      border: 0;
-      background: none;
-      color: black;
-      cursor: pointer;
-      transition: color 0.2s, transform 0.2s $spring;
-
-      &:hover, &:focus-visible { transform: translateY(-2px); }
-      &:focus-visible { outline: 1px dotted black; outline-offset: 2px; }
-    }
-
-    svg {
-      display: block;
-      width: 1.25rem;
-      height: 1.25rem;
-      fill: currentColor;
-    }
-
-    .share-linkedin:hover, .share-linkedin:focus-visible { color: #0a66c2; }
-    .share-telegram:hover, .share-telegram:focus-visible { color: #26a5e4; }
-    .share-email:hover, .share-email:focus-visible { color: #ea4335; }
-    .share-copy:hover, .share-copy:focus-visible { color: #7bc67e; }
-  }
 }
 
 @keyframes share-hop {
@@ -2193,7 +2207,7 @@ html[data-theme="dark"] {
   .filter-options .sparkles i { background-image: sparkle-card-night(); filter: drop-shadow(1px 1px 0 $night-ink); }
   .turtle-bubble::after, .share-bubble::after { background: $night-card; border-color: $night-ink; }
 
-  .to-blog, .toc-toggle, .share-btn {
+  .to-blog, .toc-toggle {
     background: $night-card;
     border-color: $night-faint;
     box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);

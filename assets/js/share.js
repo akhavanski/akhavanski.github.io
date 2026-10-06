@@ -1,16 +1,15 @@
-// Sharing the post (see _includes/share.html). On a phone the button "Share"
-// opens the system share menu, or copies the link where there is none.
-// On a wide screen the turtle climbs out on hover (or focus, or a click) with
-// a bubble of buttons: each opens a new post or message with the link, the last
-// one copies it and the bubble says "Thank you!". A while after the pointer
-// leaves, both hide again; Escape or a click elsewhere hides them at once.
+// Sharing the post (see _includes/share.html). On a wide screen the turtle
+// climbs out on hover (or focus, or a click) with a bubble of buttons: each opens
+// a new post or message with the link, the last one copies it and the bubble
+// says "Thank you!". A while after the pointer leaves, both hide again; Escape
+// or a click elsewhere hides them at once. On a phone the turtle says "Share",
+// and a tap opens the system share menu, or copies the link where there is none.
 (function () {
   var box = document.querySelector(".share");
   if (!box) return;
   var url = box.dataset.url;
   var title = box.dataset.title;
 
-  var btn = box.querySelector(".share-btn");
   var turtle = box.querySelector(".share-turtle-btn");
   var word = box.querySelector(".share-word");
   var copyBtn = box.querySelector(".share-copy");
@@ -21,6 +20,7 @@
   var targets = {
     linkedin: "https://www.linkedin.com/feed/?shareActive=true&text=" + encodeURIComponent(title + " " + url),
     telegram: "https://t.me/share/url?url=" + u + "&text=" + t,
+    whatsapp: "https://wa.me/?text=" + encodeURIComponent(title + " " + url),
     x: "https://x.com/intent/post?url=" + u + "&text=" + t,
     email: "mailto:?subject=" + t + "&body=" + u
   };
@@ -69,12 +69,19 @@
     }, 1500);
   }
 
-  btn.addEventListener("click", function () {
+  var wide = window.matchMedia("(min-width: 72rem)");
+  var bubble = box.querySelector(".share-bubble");
+
+  function shareNative() {
     if (navigator.share) {
       navigator.share({ title: title, url: url }).catch(function () {});
     } else {
-      copy(btn, function () { flash(btn, "Share"); });
+      copy(turtle, function () { flash(word, "Share"); });
     }
+  }
+
+  bubble.addEventListener("click", function () {
+    if (!wide.matches) shareNative();
   });
 
   var hideTimer = null;
@@ -91,7 +98,7 @@
   }
 
   var area = box.querySelector(".share-turtle");
-  area.addEventListener("mouseenter", function () { set(true); });
+  area.addEventListener("mouseenter", function () { if (wide.matches) set(true); });
   area.addEventListener("mouseleave", hideLater);
   area.addEventListener("focusin", function () { set(true); });
   area.addEventListener("focusout", function (e) {
@@ -99,13 +106,14 @@
   });
 
   turtle.addEventListener("click", function () {
+    if (!wide.matches) return shareNative();
     set(true);
     box.querySelector(".share-links a").focus();
   });
 
   copyBtn.addEventListener("click", function () {
     copy(copyBtn, function () {
-      flash(word, "Thank you!", function () {
+      flash(word, "Share", function () {
         if (!area.matches(":hover")) hideLater();
       });
     });
