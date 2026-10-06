@@ -257,3 +257,5 @@ If you do not mention in ACs “The result follows the design” — but add a l
 
 1. **Changes.** Your links to sources should point to a specific version. You can do it both in Figma and in Confluence.
 2. **Inertia.** For decades people have thought that an AC is a short text describing a feature, while in fact it is something we use for judgement: accept or not.
+
+> An AC is anything you’ll use to accept or reject the work.
