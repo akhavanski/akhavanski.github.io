@@ -3161,3 +3161,14 @@ $red-pen: #e0352b;
   .pr-btn { animation: none; }
 }
 
+// A hand-drawn divider: a thin line with a leafy sprig at each end.
+.divider {
+  margin: 2.5rem auto 1.5rem;
+  max-width: 20rem;
+
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+  .divider-line { fill: none; stroke: $ink; stroke-width: 1.2; stroke-linecap: round; }
+  .divider-leaves path { fill: $ink; }
+}
+
