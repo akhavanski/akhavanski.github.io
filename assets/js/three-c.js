@@ -3,7 +3,8 @@
 // .three-c: Card → Conversation → Confirmation, a still picture;
 // hovering the card opens it as a ticket.
 // .anatomy: gets `play` when it comes into view, CSS does the rest;
-// the "How I see it" button turns it to the card where all it links to is among the ACs.
+// the "How I see it" button turns it to the card where all it links to is among the ACs,
+// then "Compare" shows both cards side by side and, pressed again, the new one only.
 // .alt: the switch of examples, text on the left and a picture on the right;
 // the prototype in it can be clicked through.
 (function () {
@@ -45,6 +46,7 @@
   document.querySelectorAll(".an-swap").forEach(function (box) {
     var button = box.nextElementSibling.querySelector(".see-it");
     var came = box.querySelectorAll(".an-came");
+    var compare = button.parentElement.querySelector(".compare");
 
     function fly() {
       came.forEach(function (scrap) {
@@ -62,12 +64,20 @@
       setTimeout(function () {
         came.forEach(function (scrap) { scrap.style.transition = "none"; });
         box.classList.add("flown");
+        compare.hidden = false;
       }, reduced ? 0 : 750);
     }
 
+    // "Compare" comes once the card has settled and switches both cards on and off.
+    compare.addEventListener("click", function () {
+      var on = box.classList.toggle("comparing");
+      compare.setAttribute("aria-pressed", on);
+      box.querySelector(".an-old").setAttribute("aria-hidden", !on);
+    });
+
     // One way only: the button goes once the card has turned.
     button.addEventListener("click", function () {
-      button.parentElement.hidden = true;
+      button.hidden = true;
       box.classList.add("swapped");
       box.querySelector(".an-new").setAttribute("aria-hidden", false);
       box.querySelector(".an-old").setAttribute("aria-hidden", true);
