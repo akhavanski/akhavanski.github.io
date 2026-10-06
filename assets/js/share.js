@@ -20,6 +20,7 @@
   var targets = {
     linkedin: "https://www.linkedin.com/feed/?shareActive=true&text=" + encodeURIComponent(title + " " + url),
     telegram: "https://t.me/share/url?url=" + u + "&text=" + t,
+    whatsapp: "https://wa.me/?text=" + encodeURIComponent(title + " " + url),
     x: "https://x.com/intent/post?url=" + u + "&text=" + t,
     email: "mailto:?subject=" + t + "&body=" + u
   };

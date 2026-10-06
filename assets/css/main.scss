@@ -1695,7 +1695,7 @@ html[data-theme="dark"] {
 }
 
 // Sharing the post, at the very bottom of the page (see _includes/share.html):
-// a turtle with a comic bubble, with buttons for LinkedIn, Telegram, X, email
+// a turtle with a comic bubble, with buttons for LinkedIn, Telegram, WhatsApp, X, email
 // and copying the link on a wide screen and the word "Share" on a phone.
 .share {
   position: relative;
@@ -1746,6 +1746,7 @@ html[data-theme="dark"] {
 
   .share-linkedin:hover, .share-linkedin:focus-visible { color: #0a66c2; }
   .share-telegram:hover, .share-telegram:focus-visible { color: #26a5e4; }
+  .share-whatsapp:hover, .share-whatsapp:focus-visible { color: #25d366; }
   .share-email:hover, .share-email:focus-visible { color: #ea4335; }
   .share-copy:hover, .share-copy:focus-visible { color: #7bc67e; }
 }
@@ -1810,6 +1811,7 @@ html[data-theme="dark"] {
 // On a phone the turtle is out all the time and says "Share";
 // a tap opens the system share menu.
 @media not all and (min-width: $wide-screen) {
+  .share-turtle { margin-right: 2.5rem; } // clear of the "§" button at the window's edge
   .share-turtle-btn { transform: translateY(-0.3rem); }
   .share-bubble { cursor: pointer; }
   .share-word { display: block; }
