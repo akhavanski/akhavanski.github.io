@@ -2725,6 +2725,8 @@ $tc-sticky: #fff8a8;
   background: $tc-sticky;
   font: inherit;
   font-size: 0.85rem;
+  // Without a colour of its own a button takes the system blue on iOS.
+  color: $ink;
   cursor: pointer;
   box-shadow: 2px 2px 0 $ink;
 
@@ -2748,16 +2750,19 @@ $tc-sticky: #fff8a8;
   letter-spacing: 0.04em;
 }
 
+// The scraps lie as if thrown in: each at its own tilt and a bit off the line.
 .an-scraps {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 0.4rem;
-  padding: 0.5rem 0 0.2rem;
+  align-items: flex-start;
+  gap: 0.3rem 0.35rem;
+  padding: 0.5rem 0 0.4rem;
 }
 
 // Scraps of paper like the old text on the card of a fix (.note-cutout).
 .an-scrap {
   display: block;
+  margin: var(--y, 0) 0 0 var(--x, 0);
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
   transform: rotate(var(--r, -2deg));
 
@@ -2771,12 +2776,12 @@ $tc-sticky: #fff8a8;
     clip-path: polygon(0% 10%, 7% 0%, 31% 6%, 56% 1%, 81% 7%, 100% 0%, 97% 48%, 100% 100%, 74% 93%, 49% 100%, 23% 92%, 4% 100%, 2% 52%);
   }
 
-  &:nth-child(2) { --r: 2.5deg; }
-  &:nth-child(3) { --r: -1deg; }
-  &:nth-child(4) { --r: 1.5deg; }
-  &:nth-child(5) { --r: -3deg; }
-  &:nth-child(6) { --r: 2deg; }
-  &:nth-child(7) { --r: -1.5deg; }
+  &:nth-child(1) { --r: -3deg; --x: 0.2rem; --y: 0.25rem; }
+  &:nth-child(2) { --r: 4deg; --y: 0.6rem; }
+  &:nth-child(3) { --r: -1deg; --x: 0.5rem; }
+  &:nth-child(4) { --r: 2deg; --x: 0.9rem; --y: 0.35rem; }
+  &:nth-child(5) { --r: -4.5deg; --y: 0.1rem; }
+  &:nth-child(6) { --r: 1.5deg; --x: 0.4rem; --y: 0.5rem; }
 }
 
 // "How I see it" turns the card: the new one pushes the old one out,
@@ -2862,6 +2867,7 @@ $tc-sticky: #fff8a8;
     background: #fff;
     font: inherit;
     font-size: 0.8rem;
+    color: $ink;
     cursor: pointer;
 
     &:last-child { border-right: 0; }
