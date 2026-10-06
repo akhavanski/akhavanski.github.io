@@ -92,7 +92,6 @@ A card should contain ‘all necessary information to complete it’.
           <span class="an-scrap"><span>Scenarios</span></span>
           <span class="an-scrap"><span>Design</span></span>
           <span class="an-scrap"><span>Screenshots</span></span>
-          <span class="an-scrap"><span>Description in Confluence</span></span>
           <span class="an-scrap"><span>NFRs</span></span>
           <span class="an-scrap an-came" data-from="an-kb"><span>Knowledge base</span></span>
           <span class="an-scrap an-came" data-from="an-ds"><span>Design system</span></span>
