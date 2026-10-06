@@ -1,9 +1,7 @@
 // The animations of the post on acceptance criteria.
 // Turn it on for a post with `custom_js: [three-c]` in the front matter.
-// .three-c: Card → Conversation → Confirmation → Backlog. The script plays
-// the steps by setting `data-step` on the block; the first round the talk
-// sends the card back and it changes, the second round it is confirmed.
-// Hovering the card opens it as a ticket and stops the play.
+// .three-c: Card → Conversation → Confirmation, a still picture;
+// hovering the card opens it as a ticket.
 // .alt: the switch of examples, text on the left and a picture on the right;
 // the prototype in it can be clicked through.
 // .anatomy: gets `play` when it comes into view, CSS does the rest.
@@ -17,55 +15,20 @@
   font.href = "https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap";
   document.head.appendChild(font);
 
-  // Each step: its name and how long it lasts, in ms.
-  var steps = [
-    ["card", 900], ["to-talk", 700], ["talk", 1500],
-    ["back", 1100], ["changed", 1100],
-    ["to-talk", 700], ["talk", 1300],
-    ["to-ok", 700], ["ok", 1000], ["to-backlog", 900], ["done", 1600]
-  ];
-
-  document.querySelectorAll(".three-c").forEach(function (box) {
-    var card = box.querySelector(".tc-card");
-    var i = 0, timer = null, paused = false;
-
-    function show(n) {
-      box.dataset.step = steps[n][0];
-      // The card stays changed from the step it changed (4) till the round ends.
-      box.classList.toggle("tc-is-changed", n >= 4);
-    }
-
-    function next() {
-      if (paused) return;
-      show(i);
-      timer = setTimeout(function () {
-        i = (i + 1) % steps.length;
-        next();
-      }, steps[i][1]);
-    }
+  // Hovering or focusing the card opens it as a ticket.
+  document.querySelectorAll(".three-c .tc-card").forEach(function (card) {
+    var box = card.closest(".three-c");
+    var ticket = card.querySelector(".tc-ticket");
 
     function open(on) {
       box.classList.toggle("tc-open", on);
-      card.querySelector(".tc-ticket").setAttribute("aria-hidden", on ? "false" : "true");
-      if (reduced) return;
-      paused = on;
-      clearTimeout(timer);
-      if (!on) next();
+      ticket.setAttribute("aria-hidden", on ? "false" : "true");
     }
 
     card.addEventListener("mouseenter", function () { open(true); });
     card.addEventListener("mouseleave", function () { open(false); });
     card.addEventListener("focus", function () { open(true); });
     card.addEventListener("blur", function () { open(false); });
-
-    if (reduced) { box.dataset.step = "done"; return; }
-
-    // Start when the block is seen, so the reader catches the first round.
-    new IntersectionObserver(function (entries, observer) {
-      if (!entries[0].isIntersecting) return;
-      observer.disconnect();
-      next();
-    }, { threshold: 0.4 }).observe(box);
   });
 
   document.querySelectorAll(".anatomy").forEach(function (box) {

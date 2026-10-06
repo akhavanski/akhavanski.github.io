@@ -2295,27 +2295,26 @@ html[data-theme="dark"] {
 }
 
 
-// The animations of the post on acceptance criteria (see assets/js/three-c.js).
-// .three-c: Card → Conversation → Confirmation → Backlog, with the loop back
-// from the talk to the card. The script sets `data-step`, the styles below
-// show each step; hovering the card opens it as a ticket in a task tracker.
+// The pictures of the post on acceptance criteria (see assets/js/three-c.js).
+// .three-c: Card → Conversation → Confirmation, still. The talk may send
+// the card back (the red loop, the struck-out words on it) or end in
+// a handshake. Hovering the card opens it as a ticket in a task tracker.
 $tc-green: #2e9d57;
 $tc-sticky: #fff8a8;
 
 .three-c {
   --n: 7rem;
-  --b: calc(var(--n) * 0.5);
   margin: 2.5rem 0 2rem;
 
-  @media (max-width: 30rem) { --n: 4.6rem; }
+  @media (max-width: 30rem) { --n: 5rem; }
 }
 
 .tc-stage {
   position: relative;
   display: grid;
-  grid-template-columns: var(--n) 1fr var(--n) 1fr var(--n) 0.6fr var(--b);
+  grid-template-columns: var(--n) 1fr var(--n) 1fr var(--n);
   align-items: start;
-  padding-top: 3.2rem;
+  padding-top: 4.2rem;
 }
 
 .tc-node {
@@ -2330,10 +2329,9 @@ $tc-sticky: #fff8a8;
   font-family: ui-monospace, Menlo, monospace;
   font-size: 0.8rem;
   white-space: nowrap;
-  color: #777;
-  transition: color 0.3s;
+  color: $ink;
 
-  @media (max-width: 30rem) { font-size: 0.6rem; }
+  @media (max-width: 30rem) { font-size: 0.65rem; }
 }
 
 .tc-card-node > .tc-card,
@@ -2342,22 +2340,7 @@ $tc-sticky: #fff8a8;
   height: var(--n);
 }
 
-// The backlog is small: it is where the card ends up, not one of the 3C.
-.tc-backlog {
-  width: var(--b);
-  height: var(--b);
-  margin-top: calc((var(--n) - var(--b)) / 2);
-}
-
-.tc-backlog-node .tc-label {
-  align-self: flex-end;
-  margin-top: calc((var(--n) - var(--b)) / 2 + 0.6rem);
-  font-size: 0.65rem;
-
-  @media (max-width: 30rem) { font-size: 0.55rem; }
-}
-
-// Arrows between the nodes: a line with a head and a dot that runs along it.
+// Arrows between the nodes.
 .tc-arrow {
   position: relative;
   height: var(--n);
@@ -2380,30 +2363,9 @@ $tc-sticky: #fff8a8;
     border-left: 7px solid #bbb;
     border-right: 0;
   }
-
-  i {
-    position: absolute;
-    top: calc(50% - 4px);
-    left: 0.4rem;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: $ink;
-    opacity: 0;
-  }
 }
 
-.three-c[data-step="to-talk"] .tc-a1 i,
-.three-c[data-step="to-ok"] .tc-a2 i,
-.three-c[data-step="to-backlog"] .tc-a3 i { animation: tc-run 0.7s ease-in-out both; }
-
-@keyframes tc-run {
-  0% { opacity: 0; left: 0.4rem; }
-  15%, 85% { opacity: 1; }
-  100% { opacity: 0; left: calc(100% - 1.2rem); }
-}
-
-// The card: a sticky note.
+// The card: a sticky note, changed after a talk.
 .tc-card {
   position: relative;
   z-index: 3;
@@ -2435,28 +2397,16 @@ $tc-sticky: #fff8a8;
     transform: translateX(-50%) rotate(4deg);
     background: rgba(225, 225, 215, 0.8);
   }
+
+  s { color: $term-red; }
 }
 
-.tc-sticky-text { display: block; transition: opacity 0.3s; }
-.tc-v2 { position: absolute; inset: 0.45rem; opacity: 0; }
-.tc-v2 s { color: $term-red; }
-.tc-is-changed .tc-v1 { opacity: 0; }
-.tc-is-changed .tc-v2 { opacity: 1; }
-
-.three-c[data-step="card"] .tc-sticky {
-  transform: rotate(0deg) scale(1.08);
+.tc-card:hover .tc-sticky, .tc-card:focus-visible .tc-sticky {
+  transform: rotate(0deg) scale(1.05);
   box-shadow: 0 14px 16px -10px rgba(0, 0, 0, 0.45);
 }
-.three-c[data-step="changed"] .tc-sticky { animation: tc-wiggle 0.6s ease-in-out; }
 
-@keyframes tc-wiggle {
-  0%, 100% { transform: rotate(-3deg); }
-  20% { transform: rotate(5deg) scale(1.1); }
-  45% { transform: rotate(-7deg) scale(1.1); }
-  70% { transform: rotate(3deg) scale(1.04); }
-}
-
-// The talk: two bubbles that type in turn.
+// The talk: two bubbles, one speaks, one listens.
 .tc-talk { position: relative; }
 
 .tc-bubble {
@@ -2470,7 +2420,6 @@ $tc-sticky: #fff8a8;
   border: 1.5px solid $ink;
   border-radius: 1rem;
   background: #fff;
-  transition: transform 0.3s cubic-bezier(.2, .7, .2, 1.5), background 0.3s;
 
   i {
     width: 4px;
@@ -2480,123 +2429,31 @@ $tc-sticky: #fff8a8;
   }
 }
 
-.tc-b1 { top: 10%; left: 0; border-bottom-left-radius: 0.2rem; }
+.tc-b1 { top: 10%; left: 0; border-bottom-left-radius: 0.2rem; background: $tc-sticky; }
 .tc-b2 { bottom: 10%; right: 0; border-bottom-right-radius: 0.2rem; }
 
-.three-c[data-step="talk"] {
-  .tc-talk-node .tc-label { color: $ink; }
-  .tc-b1 { animation: tc-pop 1.3s ease-in-out infinite; }
-  .tc-b2 { animation: tc-pop 1.3s 0.65s ease-in-out infinite; }
-  .tc-bubble i { animation: tc-type 0.9s ease-in-out infinite; }
-  .tc-bubble i:nth-child(2) { animation-delay: 0.15s; }
-  .tc-bubble i:nth-child(3) { animation-delay: 0.3s; }
-}
-
-@keyframes tc-pop {
-  0%, 100% { transform: scale(1); background: #fff; }
-  25% { transform: scale(1.15); background: $tc-sticky; }
-}
-
-@keyframes tc-type {
-  0%, 100% { transform: translateY(0); opacity: 0.4; }
-  40% { transform: translateY(-3px); opacity: 1; }
-}
-
-// The confirmation: a stamp.
+// The confirmation: a handshake.
 .tc-ok {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  border: 2px dashed #ccc;
+  overflow: hidden;
   border-radius: 50%;
+  box-shadow: 0 0 0 2px $ink;
 
-  // The handshake: grey till the card is confirmed.
   img {
-    position: absolute;
-    inset: 3px;
-    width: calc(100% - 6px);
-    height: calc(100% - 6px);
-    border-radius: 50%;
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    filter: grayscale(1) opacity(0.45);
-    transition: filter 0.4s;
   }
 }
 
-.tc-stamp {
-  position: relative;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 0.1rem 0.45rem;
-  border: 3px double $tc-green;
-  border-radius: 0.3rem;
-  color: $tc-green;
-  font-family: ui-monospace, Menlo, monospace;
-  font-weight: bold;
-  font-size: calc(var(--n) / 4.5);
-  letter-spacing: 0.05em;
-  transform: rotate(-12deg);
-  opacity: 0;
-}
-
-.three-c:is([data-step="ok"], [data-step="to-backlog"], [data-step="done"]) {
-  .tc-stamp { opacity: 0.9; }
-  .tc-ok { border-color: $tc-green; }
-  .tc-ok img { filter: none; }
-  .tc-ok-node .tc-label { color: $tc-green; }
-}
-.three-c[data-step="ok"] .tc-stamp { animation: tc-stamp 0.45s cubic-bezier(.3, 1.6, .5, 1) both; }
-
-@keyframes tc-stamp {
-  0% { opacity: 0; transform: rotate(-30deg) scale(2.6); }
-  100% { opacity: 0.9; transform: rotate(-12deg) scale(1); }
-}
-
-// The backlog: a stack of cards the confirmed one flies onto.
-.tc-backlog {
-  position: relative;
-
-  span {
-    position: absolute;
-    left: 12%;
-    width: 76%;
-    height: 17%;
-    border-radius: 2px;
-    background: #eee;
-    box-shadow: 0 0 0 1px #ddd;
-  }
-
-  span:nth-child(1) { bottom: 8%; }
-  span:nth-child(2) { bottom: 29%; }
-  span:nth-child(3) { bottom: 50%; }
-}
-
-.tc-backlog .tc-flyer {
-  bottom: 71%;
-  background: $tc-sticky;
-  box-shadow: 0 0 0 1px #e6d870;
-  opacity: 0;
-}
-
-.three-c[data-step="to-backlog"] .tc-flyer { animation: tc-fly 0.9s cubic-bezier(.3, .8, .4, 1) both; }
-.three-c[data-step="done"] .tc-flyer { opacity: 1; }
-.three-c[data-step="done"] .tc-backlog-node .tc-label { color: $ink; }
-
-@keyframes tc-fly {
-  0% { opacity: 0; transform: translate(-180%, -60%) rotate(-25deg) scale(0.6); }
-  40% { opacity: 1; }
-  100% { opacity: 1; transform: none; }
-}
-
-// The loop from the talk back to the card, over the first arrow.
+// The loop from the talk back to the card, over the first arrow:
+// from right of the tape on the card to the middle of the talk.
 .tc-loop {
   position: absolute;
-  top: 0.3rem;
-  // From right of the tape on the card to the middle of the talk.
+  top: 1.3rem;
   left: calc(var(--n) / 2 + 1.2rem);
   z-index: 4;
-  width: calc(var(--n) + (100% - 3 * var(--n) - var(--b)) / 2.6 - 1.2rem);
+  width: calc(var(--n) + (100% - 3 * var(--n)) / 2 - 1.2rem);
   height: 2.8rem;
   pointer-events: none;
 
@@ -2609,54 +2466,35 @@ $tc-sticky: #fff8a8;
 
   .tc-loop-line {
     fill: none;
-    stroke: #ccc;
+    stroke: $term-red;
     stroke-width: 1.5px;
     stroke-dasharray: 0.015 0.015;
     vector-effect: non-scaling-stroke;
+  }
+
+  // The head, pointing down at the card.
+  .tc-loop-head {
+    position: absolute;
+    left: 8%;
+    bottom: -0.3rem;
+    width: 0.65rem;
+    height: 0.65rem;
+    transform: translateX(-40%);
+
+    path { fill: $term-red; }
   }
 }
 
 .tc-loop-label {
   position: absolute;
   top: 0;
-  left: calc(var(--n) / 2);
-  width: calc(var(--n) + (100% - 3 * var(--n) - var(--b)) / 2.6);
+  left: calc(var(--n) / 2 + 1.2rem);
+  width: calc(var(--n) + (100% - 3 * var(--n)) / 2 - 1.2rem);
   font-family: "Caveat", "Comic Sans MS", cursive;
   font-size: 1.1rem;
   white-space: nowrap;
   text-align: center;
   color: $term-red;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.three-c[data-step="back"] {
-  .tc-loop-line {
-    stroke: $term-red;
-    stroke-dasharray: 1;
-    animation: tc-draw 0.9s ease-in-out both;
-  }
-  .tc-loop-label { opacity: 1; }
-}
-.three-c[data-step="changed"] .tc-loop-label { opacity: 1; }
-
-// The head of the loop, pointing down at the card.
-.tc-loop .tc-loop-head {
-  position: absolute;
-  left: 8%;
-  bottom: -0.3rem;
-  width: 0.65rem;
-  height: 0.65rem;
-  transform: translateX(-40%);
-
-  path { fill: #ccc; }
-}
-
-.three-c:is([data-step="back"], [data-step="changed"]) .tc-loop-head path { fill: $term-red; }
-
-@keyframes tc-draw {
-  from { stroke-dashoffset: 1; }
-  to { stroke-dashoffset: 0; }
 }
 
 .tc-hint {
@@ -2986,7 +2824,17 @@ $tc-sticky: #fff8a8;
 // and adds `play` to the shown panel, so its animation runs again).
 $red-pen: #e0352b;
 
-.alt { margin: 2rem 0; }
+// The switch and both columns sit in the middle.
+.alt {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.alt-pic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .alt-tabs {
   display: inline-flex;
@@ -3020,12 +2868,14 @@ $red-pen: #e0352b;
 
   &[hidden] { display: none; }
   > * { min-width: 0; }
+  text-align: left;
 
   @media (max-width: 36rem) { grid-template-columns: 1fr; }
 }
 
 .alt-cap {
   margin-bottom: 0.5rem;
+  text-align: center;
   color: #888;
   font-size: 0.7rem;
   text-transform: uppercase;

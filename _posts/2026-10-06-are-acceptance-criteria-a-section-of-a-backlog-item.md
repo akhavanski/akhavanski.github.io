@@ -12,13 +12,12 @@ From project to project I see that acceptance criteria for a [PBI](#glossary) ar
 
 My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-guide-for-junior-ba-po-pm.html#три-с-в-user-story).
 
-<div class="three-c" aria-label="Card, Conversation, Confirmation: the conversation either sends the card back to be changed, or confirms it and it goes to the backlog">
+<div class="three-c" aria-label="Card, Conversation, Confirmation: the conversation either sends the card back to be changed, or ends in a handshake">
   <div class="tc-stage">
     <div class="tc-node tc-card-node">
       <div class="tc-card" tabindex="0">
         <div class="tc-sticky">
-          <span class="tc-sticky-text tc-v1">Save my card to pay faster</span>
-          <span class="tc-sticky-text tc-v2">Save my card <s>to pay faster</s> for one-tap pay</span>
+          <span class="tc-sticky-text">Save my card <s>to pay faster</s> for one-tap pay</span>
         </div>
         <div class="tc-ticket" aria-hidden="true">
           <div class="tc-ticket-top">
@@ -49,7 +48,7 @@ My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-
       <div class="tc-label">Card</div>
     </div>
 
-    <div class="tc-arrow tc-a1"><i></i></div>
+    <div class="tc-arrow tc-a1"></div>
 
     <div class="tc-node tc-talk-node">
       <div class="tc-talk">
@@ -59,21 +58,11 @@ My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-
       <div class="tc-label">Conversation</div>
     </div>
 
-    <div class="tc-arrow tc-a2"><i></i></div>
+    <div class="tc-arrow tc-a2"></div>
 
     <div class="tc-node tc-ok-node">
-      <div class="tc-ok"><img src="/assets/img/epic-handshake.webp" alt="Two arms in a handshake: the team and the client agree"><span class="tc-stamp">OK</span></div>
+      <div class="tc-ok"><img src="/assets/img/epic-handshake.webp" alt="Two arms in a handshake: the team and the client agree"></div>
       <div class="tc-label">Confirmation</div>
-    </div>
-
-    <div class="tc-arrow tc-a3"><i></i></div>
-
-    <div class="tc-node tc-backlog-node">
-      <div class="tc-backlog">
-        <span></span><span></span><span></span>
-        <span class="tc-flyer"></span>
-      </div>
-      <div class="tc-label">Backlog</div>
     </div>
 
     <div class="tc-loop" aria-hidden="true">
