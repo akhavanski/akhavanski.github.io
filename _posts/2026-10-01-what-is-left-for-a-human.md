@@ -29,9 +29,10 @@ So we can see, each task is solvable and even if it is not solved, it may be sol
 
 I think **agency**[^agency] will stay with humans, while acting can be delegated to an AI system. An agent (ha!) can act, but a human will be the source of action, of finding what can be done, adjusted, redone in a better way, or even invented.
 
-Right now, many of us confuse agency with action. For example, I heard colleagues say "Claude did it, not me", which is not true, if you have this principle in mind, since Claude did it only because you asked.
+Right now, many of us confuse agency with action. For example, I heard colleagues say "Claude did it, not me", which is not true, if you have this principle in mind, since Claude did it only because you asked.[^arendt]
 
-This same notion was discussed decades ago in Hannah Arendt's [Eichmann in Jerusalem](https://en.wikipedia.org/wiki/Eichmann_in_Jerusalem): AI will find a way to complete a task without asking why, but the result is yours.
+But if you really think that Claude did it, then time's against you.
 
 [^frameworks]: Was: <del>Creative Problem Solving</del>. I mean using problem solving frameworks here (TRIZ, SIT, etc.). However, I assume creativity *may* be solved by AI.
 [^agency]: Ability to act according to free will; to be a source of action. Some religions say ([Genesis 2:5](https://bible.by/nasb/1/2/#5)) that a human is created to make the world better. I think agency allows to see how the world can be improved. Similar to Logos.
+[^arendt]: This same notion was discussed decades ago in Hannah Arendt's [Eichmann in Jerusalem](https://en.wikipedia.org/wiki/Eichmann_in_Jerusalem): AI will find a way to complete a task without asking why, but the result is yours.
