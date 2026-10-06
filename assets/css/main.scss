@@ -2403,9 +2403,9 @@ $tc-sticky: #fff8a8;
   background: $tc-sticky;
   box-shadow: 0 8px 10px -7px rgba(0, 0, 0, 0.4);
   transform: rotate(-3deg);
-  font-family: "Caveat", "Comic Sans MS", cursive;
-  font-size: calc(var(--n) / 6.2);
-  line-height: 1;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: calc(var(--n) / 9);
+  line-height: 1.2;
   transition: transform 0.35s cubic-bezier(.2, .7, .2, 1.4), box-shadow 0.35s;
 
   s { color: $term-red; }
@@ -2500,8 +2500,8 @@ $tc-sticky: #fff8a8;
   top: 0;
   left: calc(var(--n) / 2);
   width: calc(var(--n) + (100% - 3 * var(--n)) / 2);
-  font-family: "Caveat", "Comic Sans MS", cursive;
-  font-size: 1.1rem;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.8rem;
   white-space: nowrap;
   text-align: center;
   color: $term-red;

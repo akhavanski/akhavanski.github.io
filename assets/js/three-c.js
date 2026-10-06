@@ -9,7 +9,7 @@
 (function () {
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // The sticky notes are handwritten, like the notes in posts.
+  // The redline in the examples is handwritten, like the notes in posts.
   var font = document.createElement("link");
   font.rel = "stylesheet";
   font.href = "https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap";
