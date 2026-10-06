@@ -2294,3 +2294,626 @@ html[data-theme="dark"] {
   100% { opacity: 0; background: #ffe680; transform: translateY(-2rem); }
 }
 
+
+// The animations of the post on acceptance criteria (see assets/js/three-c.js).
+// .three-c: Card → Conversation → Confirmation → Backlog, with the loop back
+// from the talk to the card. The script sets `data-step`, the styles below
+// show each step; hovering the card opens it as a ticket in a task tracker.
+$tc-green: #2e9d57;
+$tc-sticky: #fff8a8;
+
+.three-c {
+  --n: 5.5rem;
+  margin: 2.5rem 0 2rem;
+
+  @media (max-width: 30rem) { --n: 3.9rem; }
+}
+
+.tc-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--n) 1fr var(--n) 1fr var(--n) 1fr var(--n);
+  align-items: start;
+  padding-top: 3.2rem;
+}
+
+.tc-node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tc-label {
+  margin-top: 0.6rem;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  color: #777;
+  transition: color 0.3s;
+
+  @media (max-width: 30rem) { font-size: 0.6rem; }
+}
+
+.tc-card-node > .tc-card,
+.tc-talk, .tc-ok, .tc-backlog {
+  width: var(--n);
+  height: var(--n);
+}
+
+// Arrows between the nodes: a line with a head and a dot that runs along it.
+.tc-arrow {
+  position: relative;
+  height: var(--n);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0.4rem;
+    right: 0.5rem;
+    border-top: 1.5px solid #bbb;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 4px);
+    right: 0.4rem;
+    border: 4.5px solid transparent;
+    border-left: 7px solid #bbb;
+    border-right: 0;
+  }
+
+  i {
+    position: absolute;
+    top: calc(50% - 4px);
+    left: 0.4rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: $ink;
+    opacity: 0;
+  }
+}
+
+.three-c[data-step="to-talk"] .tc-a1 i,
+.three-c[data-step="to-ok"] .tc-a2 i,
+.three-c[data-step="to-backlog"] .tc-a3 i { animation: tc-run 0.7s ease-in-out both; }
+
+@keyframes tc-run {
+  0% { opacity: 0; left: 0.4rem; }
+  15%, 85% { opacity: 1; }
+  100% { opacity: 0; left: calc(100% - 1.2rem); }
+}
+
+// The card: a sticky note.
+.tc-card {
+  position: relative;
+  z-index: 3;
+  cursor: pointer;
+  outline: none;
+}
+
+.tc-sticky {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  padding: 0.45rem;
+  background: $tc-sticky;
+  box-shadow: 0 8px 10px -7px rgba(0, 0, 0, 0.4);
+  transform: rotate(-3deg);
+  font-family: "Caveat", "Comic Sans MS", cursive;
+  font-size: calc(var(--n) / 5.2);
+  line-height: 1;
+  transition: transform 0.35s cubic-bezier(.2, .7, .2, 1.4), box-shadow 0.35s;
+
+  // The tape on top.
+  &::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    width: 2.2rem;
+    height: 0.8rem;
+    transform: translateX(-50%) rotate(4deg);
+    background: rgba(225, 225, 215, 0.8);
+  }
+}
+
+.tc-sticky-text { display: block; transition: opacity 0.3s; }
+.tc-v2 { position: absolute; inset: 0.45rem; opacity: 0; }
+.tc-v2 s { color: $term-red; }
+.tc-is-changed .tc-v1 { opacity: 0; }
+.tc-is-changed .tc-v2 { opacity: 1; }
+
+.three-c[data-step="card"] .tc-sticky {
+  transform: rotate(0deg) scale(1.08);
+  box-shadow: 0 14px 16px -10px rgba(0, 0, 0, 0.45);
+}
+.three-c[data-step="changed"] .tc-sticky { animation: tc-wiggle 0.6s ease-in-out; }
+
+@keyframes tc-wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  20% { transform: rotate(5deg) scale(1.1); }
+  45% { transform: rotate(-7deg) scale(1.1); }
+  70% { transform: rotate(3deg) scale(1.04); }
+}
+
+// The talk: two bubbles that type in turn.
+.tc-talk { position: relative; }
+
+.tc-bubble {
+  position: absolute;
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
+  width: 58%;
+  height: 34%;
+  border: 1.5px solid $ink;
+  border-radius: 1rem;
+  background: #fff;
+  transition: transform 0.3s cubic-bezier(.2, .7, .2, 1.5), background 0.3s;
+
+  i {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: $ink;
+  }
+}
+
+.tc-b1 { top: 10%; left: 0; border-bottom-left-radius: 0.2rem; }
+.tc-b2 { bottom: 10%; right: 0; border-bottom-right-radius: 0.2rem; }
+
+.three-c[data-step="talk"] {
+  .tc-talk-node .tc-label { color: $ink; }
+  .tc-b1 { animation: tc-pop 1.3s ease-in-out infinite; }
+  .tc-b2 { animation: tc-pop 1.3s 0.65s ease-in-out infinite; }
+  .tc-bubble i { animation: tc-type 0.9s ease-in-out infinite; }
+  .tc-bubble i:nth-child(2) { animation-delay: 0.15s; }
+  .tc-bubble i:nth-child(3) { animation-delay: 0.3s; }
+}
+
+@keyframes tc-pop {
+  0%, 100% { transform: scale(1); background: #fff; }
+  25% { transform: scale(1.15); background: $tc-sticky; }
+}
+
+@keyframes tc-type {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-3px); opacity: 1; }
+}
+
+// The confirmation: a stamp.
+.tc-ok {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 1.5px dashed #ccc;
+  border-radius: 50%;
+}
+
+.tc-stamp {
+  padding: 0.1rem 0.45rem;
+  border: 3px double $tc-green;
+  border-radius: 0.3rem;
+  color: $tc-green;
+  font-family: ui-monospace, Menlo, monospace;
+  font-weight: bold;
+  font-size: calc(var(--n) / 4.5);
+  letter-spacing: 0.05em;
+  transform: rotate(-12deg);
+  opacity: 0;
+}
+
+.three-c:is([data-step="ok"], [data-step="to-backlog"], [data-step="done"]) {
+  .tc-stamp { opacity: 0.9; }
+  .tc-ok { border-color: $tc-green; }
+  .tc-ok-node .tc-label { color: $tc-green; }
+}
+.three-c[data-step="ok"] .tc-stamp { animation: tc-stamp 0.45s cubic-bezier(.3, 1.6, .5, 1) both; }
+
+@keyframes tc-stamp {
+  0% { opacity: 0; transform: rotate(-30deg) scale(2.6); }
+  100% { opacity: 0.9; transform: rotate(-12deg) scale(1); }
+}
+
+// The backlog: a stack of cards the confirmed one flies onto.
+.tc-backlog {
+  position: relative;
+
+  span {
+    position: absolute;
+    left: 12%;
+    width: 76%;
+    height: 17%;
+    border-radius: 2px;
+    background: #eee;
+    box-shadow: 0 0 0 1px #ddd;
+  }
+
+  span:nth-child(1) { bottom: 8%; }
+  span:nth-child(2) { bottom: 29%; }
+  span:nth-child(3) { bottom: 50%; }
+}
+
+.tc-backlog .tc-flyer {
+  bottom: 71%;
+  background: $tc-sticky;
+  box-shadow: 0 0 0 1px #e6d870;
+  opacity: 0;
+}
+
+.three-c[data-step="to-backlog"] .tc-flyer { animation: tc-fly 0.9s cubic-bezier(.3, .8, .4, 1) both; }
+.three-c[data-step="done"] .tc-flyer { opacity: 1; }
+.three-c[data-step="done"] .tc-backlog-node .tc-label { color: $ink; }
+
+@keyframes tc-fly {
+  0% { opacity: 0; transform: translate(-180%, -60%) rotate(-25deg) scale(0.6); }
+  40% { opacity: 1; }
+  100% { opacity: 1; transform: none; }
+}
+
+// The loop from the talk back to the card, over the first arrow.
+.tc-loop {
+  position: absolute;
+  top: 0.3rem;
+  left: calc(var(--n) / 2);
+  width: calc(var(--n) + (100% - 4 * var(--n)) / 3);
+  height: 2.8rem;
+  overflow: visible;
+
+  path {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+    stroke-dasharray: 4 4;
+    vector-effect: non-scaling-stroke;
+  }
+}
+
+.tc-loop-label {
+  position: absolute;
+  top: 0;
+  left: calc(var(--n) / 2);
+  width: calc(var(--n) + (100% - 4 * var(--n)) / 3);
+  font-family: "Caveat", "Comic Sans MS", cursive;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  text-align: center;
+  color: $term-red;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.three-c[data-step="back"] {
+  .tc-loop path {
+    stroke: $term-red;
+    stroke-dasharray: 1;
+    animation: tc-draw 0.9s ease-in-out both;
+  }
+  .tc-loop-label { opacity: 1; }
+}
+.three-c[data-step="changed"] .tc-loop-label { opacity: 1; }
+
+@keyframes tc-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+.tc-hint {
+  margin: 0.8rem 0 0;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.75rem;
+  color: #999;
+}
+
+// On a phone the card opens with a tap.
+.tc-hint-tap { display: none; }
+@media (hover: none) {
+  .tc-hint-hover { display: none; }
+  .tc-hint-tap { display: inline; }
+}
+
+// The card opened: a story as a task tracker shows it.
+.tc-ticket {
+  position: absolute;
+  top: -0.5rem;
+  left: -0.5rem;
+  box-sizing: border-box;
+  width: min(23rem, calc(100vw - 2rem));
+  padding: 0.9rem 1rem;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 0 0 1px #dfe1e6, 0 20px 40px -12px rgba(9, 30, 66, 0.35);
+  color: #172b4d;
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  text-align: left;
+  transform-origin: 1.5rem 1.5rem;
+  transform: scale(0.25) rotate(-3deg);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.35s cubic-bezier(.2, .8, .2, 1), opacity 0.2s, visibility 0s 0.35s;
+
+  p { margin: 0 0 0.6rem; text-align: left; }
+  ul { margin: 0 0 0.6rem; padding-left: 1.2rem; }
+  li { margin: 0.1rem 0; }
+}
+
+.tc-open .tc-ticket {
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  transition: transform 0.35s cubic-bezier(.2, .8, .2, 1), opacity 0.2s, visibility 0s;
+}
+
+.tc-ticket-top {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+// Story type: a white bookmark on green.
+.tc-type {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: #63ba3c;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 4px;
+    width: 6px;
+    height: 8px;
+    background: #fff;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 70%, 0 100%);
+  }
+}
+
+.tc-key { color: #5e6c84; }
+
+.tc-status {
+  margin-left: auto;
+  padding: 0.05rem 0.4rem;
+  border-radius: 3px;
+  background: #dfe1e6;
+  color: #42526e;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tc-ticket-title {
+  margin-bottom: 0.7rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.tc-section {
+  margin-bottom: 0.2rem;
+  color: #5e6c84;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.tc-link { color: #0052cc; text-decoration: underline; }
+
+.tc-ticket-side {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid #ebecf0;
+  color: #5e6c84;
+  font-size: 0.72rem;
+
+  b { color: #172b4d; }
+}
+
+.tc-avatar {
+  display: inline-block;
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-left: 0.2rem;
+  border-radius: 50%;
+  background: #ff8b00;
+  color: #fff;
+  font-style: normal;
+  font-size: 0.6rem;
+  line-height: 1.3rem;
+  text-align: center;
+}
+
+// .anatomy: what a task contains. The context goes in first and is stamped
+// "must", then the design and the ACs; the rest drifts out of the card.
+.anatomy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2rem;
+  align-items: center;
+  margin: 2rem 0;
+  font-size: 0.85rem;
+}
+
+.an-card {
+  position: relative;
+  flex: 1 1 15rem;
+  max-width: 19rem;
+  padding: 0.8rem;
+  background: $tc-sticky;
+  box-shadow: 0 10px 12px -8px rgba(0, 0, 0, 0.35);
+  transform: rotate(-1deg);
+}
+
+.an-row {
+  position: relative;
+  padding: 0.45rem 0.6rem;
+  margin: 0.35rem 0;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 3px;
+}
+
+.an-context b { display: block; }
+
+.an-must {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.4rem;
+  padding: 0 0.3rem;
+  border: 2px solid $term-red;
+  border-radius: 3px;
+  color: $term-red;
+  font-family: ui-monospace, Menlo, monospace;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  transform: rotate(8deg);
+}
+
+.an-outside {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  align-items: flex-start;
+}
+
+.an-cloud {
+  padding: 0.3rem 0.8rem;
+  border: 1.5px dashed #aaa;
+  border-radius: 1.2rem;
+  color: #666;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.75rem;
+}
+
+.anatomy {
+  .an-row, .an-must, .an-cloud { opacity: 0; }
+
+  &.play {
+    .an-context { animation: an-in 0.5s ease-out both; }
+    .an-must { animation: an-stamp 0.45s 0.7s cubic-bezier(.3, 1.6, .5, 1) both; }
+    .an-design { animation: an-in 0.5s 1.4s ease-out both; }
+    .an-acs { animation: an-in 0.5s 1.8s ease-out both; }
+    .an-kb { animation: an-out 0.8s 2.4s ease-out both, an-bob 4s 3.2s ease-in-out infinite; }
+    .an-heads { animation: an-out 0.8s 2.6s ease-out both, an-bob 4s 3.6s ease-in-out infinite; }
+    .an-ds { animation: an-out 0.8s 2.8s ease-out both, an-bob 4s 4s ease-in-out infinite; }
+  }
+
+  &.still * { animation: none !important; opacity: 1 !important; }
+}
+
+@keyframes an-stamp {
+  0% { opacity: 0; transform: rotate(-20deg) scale(2.6); }
+  100% { opacity: 1; transform: rotate(8deg) scale(1); }
+}
+
+@keyframes an-in {
+  from { opacity: 0; transform: translateY(-0.6rem); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes an-out {
+  from { opacity: 0; transform: translateX(-4rem) scale(0.7); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes an-bob {
+  0%, 100% { opacity: 1; transform: none; }
+  50% { opacity: 1; transform: translate(0.3rem, -0.25rem); }
+}
+
+// .hidden-ac: the design link in a field drops into the ACs as one more line.
+// The script measures where the ghost line starts (--gx, --gy).
+.hidden-ac { margin: 2rem 0; }
+
+.ha-ticket {
+  position: relative;
+  max-width: 23rem;
+  padding: 0.9rem 1rem;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 0 0 1px #dfe1e6, 0 8px 20px -10px rgba(9, 30, 66, 0.3);
+  color: #172b4d;
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.4;
+
+  ul { margin: 0; padding-left: 1.2rem; }
+  li { margin: 0.15rem 0; }
+}
+
+.ha-field {
+  display: flex;
+  gap: 0.8rem;
+  padding-bottom: 0.6rem;
+  margin-bottom: 0.6rem;
+  border-bottom: 1px solid #ebecf0;
+
+  span:first-child { width: 5rem; color: #5e6c84; font-weight: 600; font-size: 0.72rem; }
+}
+
+.ha-link {
+  padding: 0 0.15rem;
+  border-radius: 2px;
+  color: #0052cc;
+  text-decoration: underline;
+}
+
+.ha-section { margin-bottom: 0.2rem; color: #5e6c84; font-size: 0.72rem; font-weight: 600; }
+
+.ha-new {
+  border-radius: 2px;
+  font-weight: 600;
+  opacity: 0;
+}
+
+.ha-ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  font-weight: 600;
+  color: #0052cc;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.hidden-ac.play {
+  .ha-link { animation: ha-glow 6s ease-in-out infinite; }
+  .ha-ghost { animation: ha-drop 6s ease-in-out infinite; }
+  .ha-new { animation: ha-land 6s ease-in-out infinite; }
+}
+
+.hidden-ac.still {
+  .ha-ghost { display: none; }
+  .ha-new { animation: none; opacity: 1; background: #e3fcef; }
+}
+
+@keyframes ha-glow {
+  0%, 10%, 45%, 100% { background: transparent; }
+  18%, 35% { background: $tc-sticky; }
+}
+
+@keyframes ha-drop {
+  0%, 25% { opacity: 0; transform: translate(var(--gx), var(--gy)); }
+  30% { opacity: 1; transform: translate(var(--gx), var(--gy)); }
+  55% { opacity: 1; transform: translate(var(--hx), var(--hy)); }
+  60%, 100% { opacity: 0; transform: translate(var(--hx), var(--hy)); }
+}
+
+@keyframes ha-land {
+  0%, 55% { opacity: 0; background: transparent; }
+  60% { opacity: 1; background: #abf5d1; }
+  85% { opacity: 1; background: #e3fcef; }
+  95%, 100% { opacity: 0; background: transparent; }
+}
