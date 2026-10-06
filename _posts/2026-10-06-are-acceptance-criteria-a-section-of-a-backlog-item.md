@@ -114,8 +114,9 @@ Are ACs the only ACs? If you do not mention in ACs “The result follows the des
 
 ## Why do I think so?
 
-1. A QA checks the whole card and its context against what is actually done, not the ACs part of the card.
-2. A visualisation may present the same info, but without text. We can use a variety of visualisation techniques to show a requirement, and any of them may be better than pure text: a clickable prototype, UML / BPMN, a screenshot with red-pen redlines showing what to do. If we limit ourselves to text, we ignore a very good way of communication.
+1. A developer creates new feature based on full context, not only several short ACs.
+2. A QA checks the whole card and its context against what is actually done, not the ACs part of the card.
+3. A visualisation may present the same info, but without text. We can use a variety of visualisation techniques to show a requirement, and any of them may be better than pure text: a clickable prototype, UML / BPMN, a screenshot with red-pen redlines showing what to do. If we limit ourselves to text, we ignore a very good way of communication.
 
 ## Examples
 
