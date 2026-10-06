@@ -5,9 +5,9 @@ tags: [software requirements]
 custom_js: [three-c]
 ---
 
-I don’t agree, and hear me out.
-
 From project to project I see that acceptance criteria for a [PBI](#glossary) are in 99% of cases just a section in the task description. Those who write requirements add sections like [User Story](/2021-09-11-user-stories-guide-for-junior-ba-po-pm.html), links to designs or diagrams.
+
+I don’t agree, and hear me out.
 
 My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-guide-for-junior-ba-po-pm.html#три-с-в-user-story).
 
@@ -108,17 +108,15 @@ A card should contain ‘all necessary information to complete it’.
 
 <div class="see-it-row"><button class="see-it" type="button">How I see it</button></div>
 
-For me the must is Context. A description in any wording of why a task exists, what problem it solves and for whom. The rest can actually live somewhere outside the card: in a knowledge base, in heads, in a design system.
+For me the must is Context. A description in any wording of why a card exists, what problem it solves and for whom. The rest can actually live somewhere outside the card: in a knowledge base, in a design system.
 
 Then, I’d add a link to a design, a screenshot, or a flow. And the ACs.
 
-Are ACs the only ACs?
+Are ACs the only ACs? If you do not mention in ACs “The result follows the design” — but add a link inside the card or in a specific field — does it mean that there’s no such requirement? I think, the fact that there’s a link somewhere means that there’s a requirement **and an AC**!
 
-If you do not mention in ACs “The result follows the design” — but add a link inside the task or in a specific field — does it mean that there’s no such requirement? I think, the fact that there’s a link somewhere means that there’s a requirement **and an AC**!
+## Why do I think so?
 
-## Why I think so?
-
-1. A QA checks the whole card and its context against what is actually done, not the ACs part of the task.
+1. A QA checks the whole card and its context against what is actually done, not the ACs part of the card.
 2. A visualisation may present the same info, but without text. We can use a variety of visualisation techniques to show a requirement, and any of them may be better than pure text: a clickable prototype, UML / BPMN, a screenshot with red-pen redlines showing what to do. If we limit ourselves to text, we ignore a very good way of communication.
 
 ## Examples
