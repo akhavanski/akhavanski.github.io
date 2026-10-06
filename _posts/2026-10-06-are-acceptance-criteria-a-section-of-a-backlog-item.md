@@ -72,7 +72,6 @@ My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-
     </div>
     <span class="tc-loop-label">changes the card</span>
   </div>
-  <p class="tc-hint"><span class="tc-hint-hover">Hover</span><span class="tc-hint-tap">Tap</span> the card to open it</p>
 </div>
 
 A card should contain ‘all necessary information to complete it’.

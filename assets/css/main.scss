@@ -2512,20 +2512,6 @@ $tc-sticky: #fff8a8;
   color: $term-red;
 }
 
-.tc-hint {
-  margin: 0.8rem 0 0;
-  font-family: ui-monospace, Menlo, monospace;
-  font-size: 0.75rem;
-  color: #999;
-}
-
-// On a phone the card opens with a tap.
-.tc-hint-tap { display: none; }
-@media (hover: none) {
-  .tc-hint-hover { display: none; }
-  .tc-hint-tap { display: inline; }
-}
-
 // The card opened: a story as a task tracker shows it.
 .tc-ticket {
   position: absolute;
