@@ -42,13 +42,19 @@ layout: default
 <script src="{{ "/assets/js/post-tags.js" | relative_url }}"></script>
 {%- endif %}
 
-{%- if heads >= 2 %}
+{%- comment -%} Side notes: fixes, comments and footnotes. {%- endcomment -%}
+{%- assign notes = false %}
+{%- if content contains 'href="#fix"' or content contains 'href="#comment"' or content contains 'class="footnote"' %}{% assign notes = true %}{% endif %}
+
+{%- if heads >= 2 or notes %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@333f55ec19733c28cdc43567ecf72eafd6b0af61/font/Serif/cmun-serif.css">
+{%- endif %}
+
+{%- if heads >= 2 %}
 <script src="{{ "/assets/js/toc.js" | relative_url }}"></script>
 {%- endif %}
 
-{%- if content contains 'href="#fix"' or content contains 'href="#comment"' %}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap">
+{%- if notes %}
 <script src="{{ "/assets/js/notes.js" | relative_url }}"></script>
 {%- endif %}
 

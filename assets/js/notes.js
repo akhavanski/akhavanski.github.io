@@ -1,125 +1,139 @@
-// Shows author's notes in a post, opened by a click on the marked text.
+// Author's notes in a post, set in the margin like Tufte's side notes.
+// A footnote: text[^name] and [^name]: Note. — a small grey number in the text,
+// the same number before the note.
 // A comment: [text](#comment "Comment") — the text is highlighted,
-// the note is a handwritten sticky note held by a strip of tape.
+// the note has a yellow line on the left.
 // A fix: [new text](#fix "Why"){: data-was="old text"} — the text has a wavy
-// underline, the note is a card with the old text cut out of the page glued on it.
+// underline, the note has a red line and the old text crossed out on top.
 // A picture under the note: [text](#comment "Note"){: data-img="/assets/img/pic.png"}.
-// The post layout loads this script only when the post has such a link.
+// On a wide screen the note stands in the right column, level with its line;
+// on a narrow one it is hidden and a tap on the marked text opens it under the line.
+// The post layout loads this script only when the post has such a link or a footnote.
 (function () {
-  var links = document.querySelectorAll('a[href="#fix"], a[href="#comment"]');
-  if (!links.length) return;
+  var wide = window.matchMedia("(min-width: 72rem)");
+  var pairs = [];
 
-  links.forEach(function (link) {
-    var mark = document.createElement("mark");
-    mark.className = link.getAttribute("href").slice(1);
-    mark.tabIndex = 0;
-    mark.setAttribute("role", "button");
-    mark.setAttribute("aria-expanded", "false");
-    mark.setAttribute("aria-controls", "post-note");
-    mark.dataset.note = link.title;
-    if (link.dataset.img) mark.dataset.img = link.dataset.img;
-    if (link.dataset.was) mark.dataset.was = link.dataset.was;
-    while (link.firstChild) mark.appendChild(link.firstChild);
-    link.replaceWith(mark);
-  });
-
-  // One note for the whole page: it moves to the clicked text
-  // and turns into a sticky note or a card.
-  var note = document.createElement("div");
-  note.className = "note";
-  note.id = "post-note";
-  note.setAttribute("role", "note");
-  note.hidden = true;
-  document.body.appendChild(note);
-
-  // Load the handwriting font now, so the first note opens already in it
-  // (the browser would wait until a note is shown).
-  if (document.fonts) document.fonts.load('500 1em "Caveat"');
-
-  var current = null;
-
-  function open(mark) {
-    if (current) current.setAttribute("aria-expanded", "false");
-    current = mark;
-    mark.setAttribute("aria-expanded", "true");
-    note.classList.toggle("note-card", mark.className === "fix");
-    fill(mark.dataset.note, mark.dataset.img, mark.dataset.was);
-    note.hidden = false;
-    place();
+  // The note goes after the punctuation right behind the marked text,
+  // so on a phone a full stop is not left alone under the opened note.
+  function insertAfter(ref, note) {
+    var next = ref.nextSibling;
+    if (next && next.nodeType === 3) {
+      var punct = next.data.match(/^[.,;:!?…)\]»”’]+/);
+      if (punct) ref = next.splitText(punct[0].length).previousSibling;
+    }
+    ref.after(note);
   }
 
-  // The note is plain text, only *words in stars* become italic.
-  // The old text of a fix, if any, goes on top, a picture goes under the text.
-  function fill(text, img, was) {
-    note.textContent = "";
-    if (was) {
-      var cutout = note.appendChild(document.createElement("div"));
-      cutout.className = "note-cutout";
-      cutout.appendChild(document.createElement("span")).textContent = was;
-    }
+  function makeNote(kind, id) {
+    var note = document.createElement("span");
+    note.className = "sidenote sidenote-" + kind;
+    note.id = id;
+    note.setAttribute("role", "note");
+    return note;
+  }
+
+  // Plain text, only *words in stars* become italic.
+  function addText(note, text) {
     text.split(/\*([^*]+)\*/).forEach(function (part, i) {
-      if (i % 2) {
-        var em = document.createElement("em");
-        em.textContent = part;
-        note.appendChild(em);
-      } else if (part) {
-        note.appendChild(document.createTextNode(part));
+      if (i % 2) note.appendChild(document.createElement("em")).textContent = part;
+      else if (part) note.appendChild(document.createTextNode(part));
+    });
+  }
+
+  function link(trigger, note) {
+    trigger.tabIndex = 0;
+    trigger.setAttribute("role", "button");
+    trigger.setAttribute("aria-controls", note.id);
+    pairs.push({ trigger: trigger, note: note });
+  }
+
+  // #fix and #comment links become marks.
+  document.querySelectorAll('a[href="#fix"], a[href="#comment"]').forEach(function (a, i) {
+    var kind = a.getAttribute("href").slice(1);
+    var mark = document.createElement("mark");
+    mark.className = kind;
+    while (a.firstChild) mark.appendChild(a.firstChild);
+    a.replaceWith(mark);
+
+    var note = makeNote(kind, "note-" + (i + 1));
+    if (a.dataset.was) {
+      note.appendChild(document.createElement("del")).textContent = a.dataset.was;
+    }
+    addText(note.appendChild(document.createElement("span")), a.title);
+    if (a.dataset.img) {
+      var pic = note.appendChild(document.createElement("img"));
+      pic.src = a.dataset.img;
+      pic.alt = "";
+    }
+    insertAfter(mark, note);
+    link(mark, note);
+  });
+
+  // Footnotes: the note takes the text from the list at the end, which then goes.
+  document.querySelectorAll("a.footnote").forEach(function (a) {
+    var item = document.getElementById(decodeURIComponent(a.hash.slice(1)));
+    if (!item) return;
+    var sup = a.closest("sup") || a;
+    var n = a.textContent;
+    var ref = document.createElement("span");
+    ref.className = "fn-ref";
+    ref.textContent = n;
+    ref.setAttribute("aria-label", "Note " + n);
+    sup.replaceWith(ref);
+
+    var note = makeNote("footnote", "fn-note-" + n);
+    note.appendChild(document.createElement("span")).className = "fn-n";
+    note.firstChild.textContent = n;
+    item.querySelectorAll(".reversefootnote").forEach(function (back) { back.remove(); });
+    Array.prototype.forEach.call(item.children, function (block, j) {
+      if (j) note.appendChild(document.createTextNode(" "));
+      while (block.firstChild) note.appendChild(block.firstChild);
+    });
+    // The non-breaking space kramdown leaves before the way back.
+    if (note.lastChild && note.lastChild.nodeType === 3) {
+      note.lastChild.data = note.lastChild.data.replace(/[\s ]+$/, "");
+    }
+    insertAfter(ref, note);
+    link(ref, note);
+  });
+
+  var list = document.querySelector(".footnotes");
+  if (list) list.remove();
+
+  if (!pairs.length) return;
+
+  function setOpen(pair, open) {
+    pair.open = open;
+    pair.note.classList.toggle("open", open);
+    pair.trigger.classList.toggle("open", open);
+    pair.trigger.setAttribute("aria-expanded", String(open || wide.matches));
+  }
+
+  function toggle(pair) {
+    if (!wide.matches) setOpen(pair, !pair.open);
+  }
+
+  function light(pair, on) {
+    pair.trigger.classList.toggle("lit", on);
+    pair.note.classList.toggle("lit", on);
+  }
+
+  pairs.forEach(function (pair) {
+    setOpen(pair, false);
+    pair.trigger.addEventListener("click", function () { toggle(pair); });
+    pair.trigger.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggle(pair);
       }
     });
-    if (img) {
-      var pic = note.appendChild(document.createElement("img"));
-      pic.src = img;
-      pic.alt = "";
-      // The note was placed before the picture loaded and may get wider.
-      pic.onload = function () { if (current) place(); };
-    }
-  }
-
-  function close() {
-    if (!current) return;
-    current.setAttribute("aria-expanded", "false");
-    current = null;
-    note.hidden = true;
-  }
-
-  function toggle(mark) {
-    if (mark === current) close();
-    else open(mark);
-  }
-
-  // Under the last line of the highlighted text, but not off the screen.
-  // The note is a bit higher than the line's bottom, so its tape
-  // goes over the marked text, in the middle of it.
-  function place() {
-    var lines = current.getClientRects();
-    var line = lines[lines.length - 1];
-    var gap = 16;
-    var maxLeft = document.documentElement.clientWidth - note.offsetWidth - gap;
-    var left = Math.max(gap, Math.min(line.left, maxLeft));
-    var middle = (line.left + line.right) / 2 - left;
-    note.style.left = window.scrollX + left + "px";
-    note.style.top = window.scrollY + line.bottom + 4 + "px";
-    note.style.setProperty("--tape-x", Math.max(48, Math.min(middle, note.offsetWidth - 48)) + "px");
-  }
-
-  document.addEventListener("click", function (e) {
-    var mark = e.target.closest("mark.fix, mark.comment");
-    if (mark) toggle(mark);
-    else if (!note.contains(e.target)) close();
+    [pair.trigger, pair.note].forEach(function (el) {
+      el.addEventListener("mouseenter", function () { light(pair, true); });
+      el.addEventListener("mouseleave", function () { light(pair, false); });
+    });
   });
 
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && current) {
-      var mark = current;
-      close();
-      mark.focus();
-    } else if ((e.key === "Enter" || e.key === " ") && e.target.matches("mark.fix, mark.comment")) {
-      e.preventDefault();
-      toggle(e.target);
-    }
-  });
-
-  window.addEventListener("resize", function () {
-    if (current) place();
+  wide.addEventListener("change", function () {
+    pairs.forEach(function (pair) { setOpen(pair, pair.open); });
   });
 })();

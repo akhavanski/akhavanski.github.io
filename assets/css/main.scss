@@ -1071,8 +1071,7 @@ $sparkle-cycle: 1.8s;
 
 // Author's notes in posts (see assets/js/notes.js).
 // A comment: the text is highlighted like with a real marker
-// (the ink is a bit darker where the stroke ends),
-// a click on it opens a handwritten sticky note held by a strip of tape.
+// (the ink is a bit darker where the stroke ends).
 mark.comment {
   background: linear-gradient(100deg,
     rgba(255, 230, 0, 0) 1%,
@@ -1089,12 +1088,11 @@ mark.comment {
   color: inherit;
   cursor: pointer;
 
-  &:hover, &[aria-expanded="true"] { background-color: rgba(255, 230, 0, 0.25); }
+  &:hover, &.lit, &.open { background-color: rgba(255, 230, 0, 0.25); }
   &:focus-visible { outline: 1px dotted black; }
 }
 
-// A fix: the new text has a red wavy underline, like a spell checker's,
-// a click on it opens a card with the old text cut out of the page.
+// A fix: the new text has a red wavy underline, like a spell checker's.
 mark.fix {
   background: none;
   color: inherit;
@@ -1110,72 +1108,102 @@ mark.fix {
   text-decoration-skip-ink: none;
   cursor: pointer;
 
-  &:hover, &[aria-expanded="true"] { text-decoration-thickness: 2px; }
+  &:hover, &.lit, &.open { text-decoration-thickness: 2px; }
   &:focus-visible { outline: 1px dotted black; }
 }
 
-.note {
-  position: absolute;
-  z-index: 10;
-  box-sizing: border-box;
-  max-width: min(20rem, calc(100vw - 2rem));
-  padding: 1.1rem 1rem 0.9rem;
-  background: #fff8a8;
-  box-shadow: 0 10px 12px -8px rgba(0, 0, 0, 0.35);
-  transform: rotate(1.5deg);
-  font-family: "Caveat", "Comic Sans MS", cursive;
-  font-size: 1.35rem;
-  line-height: 1.15;
+// A footnote: a small grey number over the line, as a source's.
+.fn-ref {
+  font-size: 0.68em;
+  line-height: 0;
+  vertical-align: super;
+  margin-left: 0.1em;
+  padding: 0 0.1em;
+  border-radius: 2px;
+  color: grey;
+  cursor: pointer;
 
+  &.lit { color: black; background: rgba(255, 230, 0, 0.45); }
+  &:focus-visible { outline: 1px dotted black; }
+}
+
+// The note itself, set in Computer Modern, as the table of contents.
+// On a wide screen it floats in the empty right column, level with its line;
+// clear keeps notes from running into each other.
+.sidenote {
+  display: none;
+  box-sizing: border-box;
+  font-family: "Computer Modern Serif", serif;
+  font-size: 0.95rem;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1.4;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: normal;
+  color: #555;
+
+  em { font-style: italic; }
+  del {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #999;
+    text-decoration: line-through #d23;
+  }
   img {
     display: block;
     width: 100%;
-    margin-top: 0.6rem;
+    margin-top: 0.5rem;
+  }
+  .fn-n {
+    font-size: 0.68em;
+    vertical-align: super;
+    line-height: 0;
+    margin-right: 0.3em;
   }
 
-  // The strip of tape on top, over the fixed text (the script sets --tape-x).
-  &::before {
-    content: "";
-    position: absolute;
-    top: -10px;
-    left: var(--tape-x, 50%);
-    width: 4.5rem;
-    height: 1.3rem;
-    transform: translateX(-50%) rotate(-3deg);
-    background: rgba(225, 225, 215, 0.75);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
+  &.lit { background: rgba(255, 230, 0, 0.3); }
 }
 
-// The card of a fix: no tape, the old text is glued on top instead.
-.note-card {
-  padding: 0.9rem 1rem;
-  background: #f6f0de;
-  border-radius: 2px;
-  box-shadow: 0 8px 14px -8px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.06);
-  transform: rotate(-1deg);
+.sidenote-comment { border-left: 3px solid rgba(250, 215, 0, 0.85); padding-left: 0.65rem; }
+.sidenote-fix { border-left: 2px solid #d23; padding-left: 0.65rem; }
 
-  &::before { content: none; }
-}
+$note-width: min(17rem, calc(50vw - 320px - 4.5rem));
 
-// The old text, cut out of the page with scissors.
-// The shadow is on the outer box, so the cut edges keep it.
-.note-cutout {
-  display: table;
-  margin: 0 0 0.7rem -0.3rem;
-  transform: rotate(-2.5deg);
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
-
-  span {
+@media (min-width: $wide-screen) {
+  .sidenote {
     display: block;
-    padding: 0.4rem 0.9rem 0.45rem;
-    background: white;
-    font-family: monospace;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    color: black;
-    clip-path: polygon(0% 10%, 7% 0%, 31% 6%, 56% 1%, 81% 7%, 100% 0%, 97% 48%, 100% 100%, 74% 93%, 49% 100%, 23% 92%, 4% 100%, 2% 52%);
+    float: right;
+    clear: right;
+    width: $note-width;
+    margin-right: calc(-1 * #{$note-width} - 2.5rem);
+    margin-bottom: 1rem;
   }
+  // The footnote's number lines up with the text of the other notes.
+  .sidenote-footnote { padding-left: calc(0.65rem + 3px); }
+  .fn-ref:hover { color: black; background: rgba(255, 230, 0, 0.45); }
+}
+
+// Narrow: a tap opens the note under the line, on a grey line.
+@media not all and (min-width: $wide-screen) {
+  .sidenote.open {
+    display: block;
+    margin: 0.5rem 0 0.8rem;
+    padding-left: 0.65rem;
+    border-left: 2px solid #ccc;
+    animation: sidenote-in 0.2s ease-out;
+  }
+  .sidenote-comment.open { border-left: 3px solid rgba(250, 215, 0, 0.85); }
+  .sidenote-fix.open { border-left-color: #d23; }
+  .fn-ref.open { color: black; background: rgba(255, 230, 0, 0.45); }
+}
+
+@keyframes sidenote-in {
+  from { opacity: 0; transform: translateY(-0.3rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidenote.open { animation: none; }
 }
 
 // The keyword filter on the home page: a small cartoon library catalogue
@@ -2233,13 +2261,17 @@ html[data-theme="dark"] {
     background: linear-gradient(100deg, rgba(230, 200, 0, 0) 1%, rgba(230, 200, 0, 0.3) 4%, rgba(230, 200, 0, 0.18) 50%,
       rgba(230, 200, 0, 0.3) 88%, rgba(220, 185, 0, 0.45) 97%, rgba(220, 185, 0, 0) 99%);
     color: $night-ink;
-    &:hover, &[aria-expanded="true"] { background-color: rgba(230, 200, 0, 0.12); }
+    &:hover, &.lit, &.open { background-color: rgba(230, 200, 0, 0.12); }
   }
-  .note { background: #38331f; color: #f0e6b0; box-shadow: 0 0 0 1px #4a442a, 0 10px 12px -8px rgba(0, 0, 0, 0.7); }
-  .note::before { background: rgba(255, 255, 255, 0.14); }
-  .note-card { background: #2c2c2c; color: $night-ink; box-shadow: 0 0 0 1px #3c3c3c, 0 8px 14px -8px rgba(0, 0, 0, 0.7); }
-  .note-card::before { content: none; }
-  .note-cutout span { background: #474747; color: $night-ink; }
+  .sidenote { color: $night-muted; }
+  .sidenote del { color: #6a6a6a; text-decoration-color: $night-red; }
+  .sidenote.lit { background: rgba(230, 200, 0, 0.15); }
+  .sidenote-fix { border-left-color: $night-red; }
+  .sidenote-comment { border-left-color: rgba(230, 200, 0, 0.6); }
+  .sidenote.open:not(.sidenote-fix, .sidenote-comment) { border-left-color: $night-faint; }
+  .fn-ref { color: $night-muted; }
+  .fn-ref.lit, .fn-ref.open, .fn-ref:hover { color: $night-ink; background: rgba(255, 230, 0, 0.25); }
+  mark.fix:focus-visible, mark.comment:focus-visible, .fn-ref:focus-visible { outline-color: $night-ink; }
 
   mark.fix, .term { text-decoration-color: $night-red; -webkit-text-decoration-color: $night-red; }
   .term:hover, .term[aria-expanded="true"] { background-color: rgba($night-red, 0.12); }
