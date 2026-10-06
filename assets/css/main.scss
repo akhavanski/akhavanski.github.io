@@ -1748,13 +1748,13 @@ html[data-theme="dark"] {
     &:focus-visible { outline: 1px dotted black; outline-offset: -2px; }
   }
 
-  // The comic bubble "Share", from the turtle's mouth up to the left.
+  // The comic bubble with the buttons, from the turtle's mouth up to the left.
   .share-bubble {
     position: absolute;
     right: -0.4rem;
     bottom: 3.2rem;
     min-width: 4.6rem;
-    padding: 0.3rem 0.6rem;
+    padding: 0.45rem 0.75rem;
     border: 1.5px solid black;
     border-radius: 1rem;
     background: white;
@@ -1769,6 +1769,13 @@ html[data-theme="dark"] {
     transition: opacity 0.15s, transform 0.3s $spring;
     pointer-events: none;
 
+    // A bridge over the gap down to the turtle, so the pointer can reach the buttons.
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 100% 0 -0.8rem;
+    }
+
     &::after {
       content: "";
       position: absolute;
@@ -1782,28 +1789,23 @@ html[data-theme="dark"] {
       transform: rotate(45deg) skew(12deg, 12deg);
     }
 
-    .share-turtle:hover &, .share-turtle:focus-within &, .is-copied & {
+    .is-copied &, .is-open & {
       opacity: 1;
       transform: rotate(-4deg);
+      pointer-events: auto;
     }
   }
 
   .is-copied .share-turtle-btn { transform: translateY(-0.3rem); animation: share-hop 0.35s $spring; }
 
-  // After a click the bubble holds the buttons instead of the word.
-  .share-links { display: none; }
+  .is-open .share-turtle-btn { transform: translateY(-0.3rem); }
 
-  .share.is-open {
-    .share-turtle-btn { transform: translateY(-0.3rem); }
-    .share-bubble {
-      padding: 0.45rem 0.75rem;
-      opacity: 1;
-      transform: rotate(-4deg);
-      pointer-events: auto;
-      animation: share-grow 0.3s $spring;
-    }
-    .share-word { display: none; }
-    .share-links { display: flex; gap: 0.7rem; }
+  // After copying the link the bubble says "Thank you!" instead of the buttons.
+  .share-word { display: none; }
+  .share-links { display: flex; gap: 0.7rem; }
+  .is-copied {
+    .share-word { display: block; }
+    .share-links { display: none; }
   }
 
   .share-links {
@@ -1836,9 +1838,6 @@ html[data-theme="dark"] {
 
 @keyframes share-hop {
   40% { transform: translateY(-0.9rem); }
-}
-@keyframes share-grow {
-  from { transform: scale(0.6) rotate(-4deg); }
 }
 
 // The DeLorean sticker at the bottom of the Now page (see _includes/delorean.html):

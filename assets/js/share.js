@@ -1,8 +1,9 @@
 // Sharing the post (see _includes/share.html). On a phone the button "Share"
 // opens the system share menu, or copies the link where there is none.
-// On a wide screen a click on the turtle turns its bubble "Share" into buttons:
-// each opens a new post or message with the link, the last one copies it
-// and the bubble says "Thank you!". Escape or a click elsewhere closes them.
+// On a wide screen the turtle climbs out on hover (or focus, or a click) with
+// a bubble of buttons: each opens a new post or message with the link, the last
+// one copies it and the bubble says "Thank you!". A while after the pointer
+// leaves, both hide again; Escape or a click elsewhere hides them at once.
 (function () {
   var box = document.querySelector(".share");
   if (!box) return;
@@ -76,21 +77,37 @@
     }
   });
 
+  var hideTimer = null;
+
   function set(open) {
+    clearTimeout(hideTimer);
     turtle.setAttribute("aria-expanded", open);
     box.classList.toggle("is-open", open);
-    if (open) box.querySelector(".share-links a").focus();
   }
 
+  function hideLater() {
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(function () { set(false); }, 1500);
+  }
+
+  var area = box.querySelector(".share-turtle");
+  area.addEventListener("mouseenter", function () { set(true); });
+  area.addEventListener("mouseleave", hideLater);
+  area.addEventListener("focusin", function () { set(true); });
+  area.addEventListener("focusout", function (e) {
+    if (!area.contains(e.relatedTarget) && !area.matches(":hover")) hideLater();
+  });
+
   turtle.addEventListener("click", function () {
-    set(!box.classList.contains("is-open"));
+    set(true);
+    box.querySelector(".share-links a").focus();
   });
 
   copyBtn.addEventListener("click", function () {
     copy(copyBtn, function () {
-      set(false);
-      turtle.focus();
-      flash(word, "Share");
+      flash(word, "Thank you!", function () {
+        if (!area.matches(":hover")) hideLater();
+      });
     });
   });
 
@@ -101,7 +118,7 @@
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && box.classList.contains("is-open")) {
       set(false);
-      turtle.focus();
+      turtle.blur();
     }
   });
 })();
