@@ -2,7 +2,7 @@
 // opens the system share menu, or copies the link where there is none.
 // On a wide screen a click on the turtle turns its bubble "Share" into buttons:
 // each opens a new post or message with the link, the last one copies it
-// and the bubble says "Copied!". Escape or a click elsewhere closes them.
+// and the bubble says "Thank you!". Escape or a click elsewhere closes them.
 (function () {
   var box = document.querySelector(".share");
   if (!box) return;
@@ -56,7 +56,7 @@
 
   // For 1.5 seconds the element says the link is copied.
   function flash(el, back, after) {
-    el.textContent = "Copied!";
+    el.textContent = "Thank you!";
     status.textContent = "Link copied";
     box.classList.add("is-copied");
     clearTimeout(timer);
