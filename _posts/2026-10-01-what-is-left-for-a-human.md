@@ -19,7 +19,7 @@ I have spoken about it with several people and here's the list of tasks that may
 1. Logic and reasoning
    - Logic and reasoning is already done in AI. It can not only use proper formal logic approach, but also — with appropriate instructions — can use problem solving frameworks.
    - Of course there are nuances to how it is solved. LLM can hallucinate or be based on wrong data (so that output is not logical).
-2. [Using problem solving frameworks](#fix "I mean using problem solving frameworks here (TRIZ, SIT, etc.). However, I assume creativity *may* be solved by AI."){: data-was="Creative Problem Solving"}
+2. Using problem solving frameworks[^frameworks]
    - For example, an LLM can use Theory of Inventive Problem Solving or Systematic Inventive Thinking. E.g. an example of such skills: <https://github.com/tjboudreaux/cc-thinking-skills>.
 3. Communication and selling
    - Communication and selling is partially solved. AI can call a cold lead, rewrite your landing, you can even create a machine that would post to socials for you. It can use Cialdini's persuasion framework.
@@ -33,4 +33,5 @@ Right now, many of us confuse agency with action. For example, I heard colleague
 
 This same notion was discussed decades ago in Hannah Arendt's [Eichmann in Jerusalem](https://en.wikipedia.org/wiki/Eichmann_in_Jerusalem): AI will find a way to complete a task without asking why, but the result is yours.
 
+[^frameworks]: Was: <del>Creative Problem Solving</del>. I mean using problem solving frameworks here (TRIZ, SIT, etc.). However, I assume creativity *may* be solved by AI.
 [^agency]: Ability to act according to free will; to be a source of action. Some religions say ([Genesis 2:5](https://bible.by/nasb/1/2/#5)) that a human is created to make the world better. I think agency allows to see how the world can be improved. Similar to Logos.

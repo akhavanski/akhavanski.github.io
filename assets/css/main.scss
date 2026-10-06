@@ -1150,6 +1150,7 @@ mark.fix {
     color: #999;
     text-decoration: line-through #d23;
   }
+  &.sidenote-footnote del { display: inline; margin: 0; }
   img {
     display: block;
     width: 100%;
