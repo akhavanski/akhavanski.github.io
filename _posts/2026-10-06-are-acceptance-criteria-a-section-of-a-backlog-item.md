@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Are Acceptance Criteria a section of a backlog item?"
-tags: [software requirements]
+tags: [requirements]
 custom_js: [three-c]
 ---
 

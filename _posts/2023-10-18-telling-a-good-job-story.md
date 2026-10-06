@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Telling a good Job Story. User Story alternative to uncover user’s voice"
-tags: [software requirements]
+tags: [requirements]
 ---
 
 User Stories are considered a standard for the requirements catching. I see them mentioned in every open job. You have to tell them if you want to be a PM, PO, or a BA. But what if I tell you they’re not the only and they’re not the best to catch the value of a new feature?
