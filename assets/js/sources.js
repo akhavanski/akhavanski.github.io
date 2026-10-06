@@ -1,7 +1,8 @@
 // Links the numbers in square brackets in a post, [1], to its sources: the numbered
 // list under the heading "Sources" (or "Источники") at the end,
 // each item “Title”, — Author. URL: <link> (the quotes and the author may be left out).
-// A number becomes a small superscript, a link to its source; the source links back
+// A number stays in grey brackets on the line, [3], a link to its source
+// (a small number over the line is a footnote); the source links back
 // to each place it is cited from (a, b, c…).
 // The post layout loads this script only when the post has such a heading.
 (function () {
@@ -45,18 +46,20 @@
     while ((m = re.exec(text))) {
       var nums = m[1].split(/,\s*/).map(Number).filter(function (n) { return sources[n - 1]; });
       if (!nums.length) continue;
-      frag.append(text.slice(at, m.index));
-      var sup = el("sup", "cite");
+      // A non-breaking space, so the brackets never start a line.
+      frag.append(text.slice(at, m.index), "\u00a0");
+      var cite = el("span", "cite", "[");
       nums.forEach(function (n, i) {
         var s = sources[n - 1];
         var a = el("a", "", String(n));
         a.href = "#source-" + n;
         a.id = "cite-" + n + "-" + (s.cites.length + 1);
         s.cites.push(a);
-        if (i) sup.append(",");
-        sup.append(a);
+        if (i) cite.append(", ");
+        cite.append(a);
       });
-      frag.append(sup);
+      cite.append("]");
+      frag.append(cite);
       at = re.lastIndex;
     }
     frag.append(text.slice(at));

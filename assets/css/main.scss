@@ -1920,16 +1920,14 @@ html[data-theme="dark"] {
   .has-sparkles:hover .sparkles i, .has-sparkles:focus-visible .sparkles i { animation: none; opacity: 1; transform: none; }
 }
 
-// Sources of a post (see assets/js/sources.js): a number in the text is a small
-// grey superscript, a link to its source in the list at the end.
+// Sources of a post (see assets/js/sources.js): a number in the text is grey,
+// in square brackets on the line, [3], as in papers, a link to its source
+// in the list at the end. A number over the line is a footnote (see .fn-ref).
 .cite {
-  font-size: 0.68em;
-  line-height: 0;
-  margin-left: 0.1em;
   color: grey;
+  white-space: nowrap;
 
   a {
-    padding: 0 0.1em;
     border-radius: 2px;
     color: grey;
     text-decoration: none;
