@@ -1,0 +1,71 @@
+// Styles of #fix and #comment, taken out of assets/css/main.scss
+// (the dark theme parts went under html[data-theme="dark"]).
+
+// A comment: the text is highlighted like with a real marker
+// (the ink is a bit darker where the stroke ends).
+mark.comment {
+  background: linear-gradient(100deg,
+    rgba(255, 230, 0, 0) 1%,
+    rgba(255, 230, 0, 0.5) 4%,
+    rgba(255, 230, 0, 0.3) 50%,
+    rgba(255, 222, 0, 0.5) 88%,
+    rgba(250, 210, 0, 0.75) 97%,
+    rgba(250, 210, 0, 0) 99%);
+  // Each line of a long comment gets its own stroke.
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  border-radius: 0.6em 0.25em;
+  padding: 0 0.15em;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover, &.lit, &.open { background-color: rgba(255, 230, 0, 0.25); }
+  &:focus-visible { outline: 1px dotted black; }
+}
+
+// A fix: the new text has a red wavy underline, like a spell checker's.
+mark.fix {
+  background: none;
+  color: inherit;
+  // Longhands with the -webkit- prefix: Safari on iPhone ignores the shorthand.
+  -webkit-text-decoration-line: underline;
+  -webkit-text-decoration-style: wavy;
+  -webkit-text-decoration-color: #d23;
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: #d23;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-skip-ink: none;
+  cursor: pointer;
+
+  &:hover, &.lit, &.open { text-decoration-thickness: 2px; }
+  &:focus-visible { outline: 1px dotted black; }
+}
+
+
+.sidenote-comment { border-left: 3px solid rgba(250, 215, 0, 0.85); padding-left: 0.65rem; }
+
+.sidenote-fix { border-left: 2px solid #d23; padding-left: 0.65rem; }
+
+  .sidenote-comment.open { border-left: 3px solid rgba(250, 215, 0, 0.85); }
+
+  .sidenote-fix.open { border-left-color: #d23; }
+
+  .sidenote-fix { border-left-color: $night-red; }
+
+  .sidenote-comment { border-left-color: rgba(230, 200, 0, 0.6); }
+
+
+  mark.fix { text-decoration-color: $night-red; -webkit-text-decoration-color: $night-red; }
+
+  mark.comment {
+    background: linear-gradient(100deg, rgba(230, 200, 0, 0) 1%, rgba(230, 200, 0, 0.3) 4%, rgba(230, 200, 0, 0.18) 50%,
+      rgba(230, 200, 0, 0.3) 88%, rgba(220, 185, 0, 0.45) 97%, rgba(220, 185, 0, 0) 99%);
+    color: $night-ink;
+    &:hover, &.lit, &.open { background-color: rgba(230, 200, 0, 0.12); }
+  }
+
+  // in .sidenote del:
+    display: block;
+    margin-bottom: 0.3rem;

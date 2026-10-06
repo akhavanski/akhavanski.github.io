@@ -168,7 +168,7 @@ pre.mermaid { text-align: center; }
 // underlined as the post titles above: thin, a little below the
 // letters, broken by their tails, light grey; under the pointer or in focus
 // the line takes the colour of the text. Links to a place on the page
-// (fixes, comments, footnotes, source numbers, the table of contents),
+// (footnotes, source numbers, the table of contents),
 // the way back to the blog, the contact icons and the business card
 // keep their own look.
 $thin-links: 'article a:not(.to-blog):not([href^="#"]), ol.sources a, .intro a, .blog-posts .post-excerpt, .menu a, '
@@ -1069,50 +1069,7 @@ $sparkle-cycle: 1.8s;
   100% { opacity: 0; transform: scale(0) rotate(135deg); }
 }
 
-// Author's notes in posts (see assets/js/notes.js).
-// A comment: the text is highlighted like with a real marker
-// (the ink is a bit darker where the stroke ends).
-mark.comment {
-  background: linear-gradient(100deg,
-    rgba(255, 230, 0, 0) 1%,
-    rgba(255, 230, 0, 0.5) 4%,
-    rgba(255, 230, 0, 0.3) 50%,
-    rgba(255, 222, 0, 0.5) 88%,
-    rgba(250, 210, 0, 0.75) 97%,
-    rgba(250, 210, 0, 0) 99%);
-  // Each line of a long comment gets its own stroke.
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  border-radius: 0.6em 0.25em;
-  padding: 0 0.15em;
-  color: inherit;
-  cursor: pointer;
-
-  &:hover, &.lit, &.open { background-color: rgba(255, 230, 0, 0.25); }
-  &:focus-visible { outline: 1px dotted black; }
-}
-
-// A fix: the new text has a red wavy underline, like a spell checker's.
-mark.fix {
-  background: none;
-  color: inherit;
-  // Longhands with the -webkit- prefix: Safari on iPhone ignores the shorthand.
-  -webkit-text-decoration-line: underline;
-  -webkit-text-decoration-style: wavy;
-  -webkit-text-decoration-color: #d23;
-  text-decoration-line: underline;
-  text-decoration-style: wavy;
-  text-decoration-color: #d23;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
-  text-decoration-skip-ink: none;
-  cursor: pointer;
-
-  &:hover, &.lit, &.open { text-decoration-thickness: 2px; }
-  &:focus-visible { outline: 1px dotted black; }
-}
-
-// A footnote: a small grey number over the line, as a source's.
+// Footnotes in posts (see assets/js/notes.js): a small grey number over the line, as a source's.
 .fn-ref {
   font-size: 0.68em;
   line-height: 0;
@@ -1145,12 +1102,9 @@ mark.fix {
 
   em { font-style: italic; }
   del {
-    display: block;
-    margin-bottom: 0.3rem;
     color: #999;
     text-decoration: line-through #d23;
   }
-  &.sidenote-footnote del { display: inline; margin: 0; }
   img {
     display: block;
     width: 100%;
@@ -1166,8 +1120,6 @@ mark.fix {
   &.lit { background: rgba(255, 230, 0, 0.3); }
 }
 
-.sidenote-comment { border-left: 3px solid rgba(250, 215, 0, 0.85); padding-left: 0.65rem; }
-.sidenote-fix { border-left: 2px solid #d23; padding-left: 0.65rem; }
 
 $note-width: min(17rem, calc(50vw - 320px - 4.5rem));
 
@@ -1180,7 +1132,6 @@ $note-width: min(17rem, calc(50vw - 320px - 4.5rem));
     margin-right: calc(-1 * #{$note-width} - 2.5rem);
     margin-bottom: 1rem;
   }
-  // The footnote's number lines up with the text of the other notes.
   .sidenote-footnote { padding-left: calc(0.65rem + 3px); }
   .fn-ref:hover { color: black; background: rgba(255, 230, 0, 0.45); }
 }
@@ -1194,8 +1145,6 @@ $note-width: min(17rem, calc(50vw - 320px - 4.5rem));
     border-left: 2px solid #ccc;
     animation: sidenote-in 0.2s ease-out;
   }
-  .sidenote-comment.open { border-left: 3px solid rgba(250, 215, 0, 0.85); }
-  .sidenote-fix.open { border-left-color: #d23; }
   .fn-ref.open { color: black; background: rgba(255, 230, 0, 0.45); }
 }
 
@@ -2162,23 +2111,13 @@ html[data-theme="dark"] {
   *:target, ol.sources li:target, .cite a:target { background: rgba(255, 230, 0, 0.25); }
   .catalog { color: #1a1a1a; }
 
-  mark.comment {
-    background: linear-gradient(100deg, rgba(230, 200, 0, 0) 1%, rgba(230, 200, 0, 0.3) 4%, rgba(230, 200, 0, 0.18) 50%,
-      rgba(230, 200, 0, 0.3) 88%, rgba(220, 185, 0, 0.45) 97%, rgba(220, 185, 0, 0) 99%);
-    color: $night-ink;
-    &:hover, &.lit, &.open { background-color: rgba(230, 200, 0, 0.12); }
-  }
   .sidenote { color: $night-muted; }
   .sidenote del { color: #6a6a6a; text-decoration-color: $night-red; }
   .sidenote.lit { background: rgba(230, 200, 0, 0.15); }
-  .sidenote-fix { border-left-color: $night-red; }
-  .sidenote-comment { border-left-color: rgba(230, 200, 0, 0.6); }
-  .sidenote.open:not(.sidenote-fix, .sidenote-comment) { border-left-color: $night-faint; }
+  .sidenote.open { border-left-color: $night-faint; }
   .fn-ref { color: $night-muted; }
   .fn-ref.lit, .fn-ref.open, .fn-ref:hover { color: $night-ink; background: rgba(255, 230, 0, 0.25); }
-  mark.fix:focus-visible, mark.comment:focus-visible, .fn-ref:focus-visible { outline-color: $night-ink; }
-
-  mark.fix { text-decoration-color: $night-red; -webkit-text-decoration-color: $night-red; }
+  .fn-ref:focus-visible { outline-color: $night-ink; }
 
   .title-badge { background: rgba(61, 220, 106, 0.12); color: #7ddc95; }
   .title-badge-mark { border-left-color: #3ddc6a; }

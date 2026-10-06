@@ -1,14 +1,9 @@
-// Author's notes in a post, set in the margin like Tufte's side notes.
-// A footnote: text[^name] and [^name]: Note. — a small grey number in the text,
+// Footnotes in a post, set in the margin like Tufte's side notes:
+// text[^name] and [^name]: Note. — a small grey number in the text,
 // the same number before the note.
-// A comment: [text](#comment "Comment") — the text is highlighted,
-// the note has a yellow line on the left.
-// A fix: [new text](#fix "Why"){: data-was="old text"} — the text has a wavy
-// underline, the note has a red line and the old text crossed out on top.
-// A picture under the note: [text](#comment "Note"){: data-img="/assets/img/pic.png"}.
 // On a wide screen the note stands in the right column, level with its line;
-// on a narrow one it is hidden and a tap on the marked text opens it under the line.
-// The post layout loads this script only when the post has such a link or a footnote.
+// on a narrow one it is hidden and a tap on the number opens it under the line.
+// The post layout loads this script only when the post has a footnote.
 (function () {
   var wide = window.matchMedia("(min-width: 72rem)");
   var pairs = [];
@@ -32,42 +27,12 @@
     return note;
   }
 
-  // Plain text, only *words in stars* become italic.
-  function addText(note, text) {
-    text.split(/\*([^*]+)\*/).forEach(function (part, i) {
-      if (i % 2) note.appendChild(document.createElement("em")).textContent = part;
-      else if (part) note.appendChild(document.createTextNode(part));
-    });
-  }
-
   function link(trigger, note) {
     trigger.tabIndex = 0;
     trigger.setAttribute("role", "button");
     trigger.setAttribute("aria-controls", note.id);
     pairs.push({ trigger: trigger, note: note });
   }
-
-  // #fix and #comment links become marks.
-  document.querySelectorAll('a[href="#fix"], a[href="#comment"]').forEach(function (a, i) {
-    var kind = a.getAttribute("href").slice(1);
-    var mark = document.createElement("mark");
-    mark.className = kind;
-    while (a.firstChild) mark.appendChild(a.firstChild);
-    a.replaceWith(mark);
-
-    var note = makeNote(kind, "note-" + (i + 1));
-    if (a.dataset.was) {
-      note.appendChild(document.createElement("del")).textContent = a.dataset.was;
-    }
-    addText(note.appendChild(document.createElement("span")), a.title);
-    if (a.dataset.img) {
-      var pic = note.appendChild(document.createElement("img"));
-      pic.src = a.dataset.img;
-      pic.alt = "";
-    }
-    insertAfter(mark, note);
-    link(mark, note);
-  });
 
   // Footnotes: the note takes the text from the list at the end, which then goes.
   document.querySelectorAll("a.footnote").forEach(function (a) {
