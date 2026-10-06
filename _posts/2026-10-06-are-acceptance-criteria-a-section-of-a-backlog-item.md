@@ -76,35 +76,33 @@ My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-
 
 A card should contain ‘all necessary information to complete it’.
 
-<div class="anatomy an-swap" aria-label="Context is inside the card; the rest can live outside: in a knowledge base, in a design system">
-  <div class="an-stack">
-    <div class="an-card an-old">
-      <div class="an-row an-context"><b>Context</b> why, what problem, for whom</div>
-      <div class="an-row an-design">🔗 Design, screenshot or flow</div>
-      <div class="an-row an-acs">☑ Acceptance criteria</div>
+<div class="anatomy" aria-label="Two cards: the conventional one with context, a design link and ACs; mine with context and everything else among the ACs">
+  <figure class="an-view">
+    <figcaption class="an-view-title">Conventional View</figcaption>
+    <div class="an-card">
+      <div class="an-row"><b>Context</b> why, what problem, for whom</div>
+      <div class="an-row">🔗 Design, screenshot or flow</div>
+      <div class="an-row">☑ Acceptance criteria</div>
     </div>
-    <div class="an-card an-new" aria-hidden="true">
-      <div class="an-row an-context"><b>Context</b> why, what problem, for whom</div>
+  </figure>
+  <figure class="an-view">
+    <figcaption class="an-view-title">My View</figcaption>
+    <div class="an-card">
+      <div class="an-row"><b>Context</b> why, what problem, for whom</div>
       <div class="an-acs-box">
         <div class="an-acs-title">Acceptance criteria</div>
         <div class="an-scraps">
           <span class="an-scrap"><span>Design</span></span>
-          <span class="an-scrap an-came" data-from="an-kb"><span>Knowledge base</span></span>
+          <span class="an-scrap"><span>Knowledge base</span></span>
           <span class="an-scrap"><span>NFRs</span></span>
           <span class="an-scrap"><span>Scenarios</span></span>
-          <span class="an-scrap an-came" data-from="an-ds"><span>Design system</span></span>
+          <span class="an-scrap"><span>Design system</span></span>
           <span class="an-scrap"><span>Screenshots</span></span>
         </div>
       </div>
     </div>
-  </div>
-  <div class="an-outside">
-    <span class="an-cloud an-kb">knowledge base</span>
-    <span class="an-cloud an-ds">design system</span>
-  </div>
+  </figure>
 </div>
-
-<div class="see-it-row"><button class="see-it" type="button">How I see it</button><button class="compare" type="button" hidden><span class="compare-mark" aria-hidden="true"></span>Compare</button></div>
 
 For me the must is Context. A description in any wording of why a card exists, what problem it solves and for whom. The rest can actually live somewhere outside the card: in a knowledge base, in a design system.
 

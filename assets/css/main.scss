@@ -2181,9 +2181,6 @@ html[data-theme="dark"] {
 
   .title-badge { background: rgba(61, 220, 106, 0.12); color: #7ddc95; }
   .title-badge-mark { border-left-color: #3ddc6a; }
-  .compare { background: rgba(255, 255, 255, 0.1); color: #bbb; }
-  .compare:hover { background: rgba(255, 255, 255, 0.16); }
-  .compare-mark { border-left-color: #999; }
 }
 
 // Sunset and sunrise over the theme pill: a small sun sinks behind the pill
@@ -2238,7 +2235,7 @@ html[data-theme="dark"] {
 
 
 // The pictures of the post on acceptance criteria (see assets/js/three-c.js):
-// .three-c, .anatomy with the "How I see it" turn, .alt and .divider.
+// .three-c, .anatomy, .alt and .divider.
 // .three-c: Card → Conversation → Confirmation, still. The talk may send
 // the card back (the red loop, the struck-out words on it) or end in
 // a handshake. Hovering the card opens it as a ticket in a task tracker.
@@ -2550,28 +2547,27 @@ $tc-sticky: #fff8a8;
   text-align: center;
 }
 
-// .anatomy: what a card contains. When it comes into view the context
-// goes in first, then the design and the ACs; the knowledge base and
-// the design system drift out of the card.
-// The card stays in the middle column, the clouds sit to the right of it
-// (under it on a phone).
+// .anatomy: what a card contains, two cards side by side, still:
+// Conventional View on the left, My View on the right (one under the
+// other on a phone).
 .anatomy {
   display: grid;
-  grid-template-columns: 1fr minmax(0, 19rem) 1fr;
+  grid-template-columns: repeat(2, minmax(0, 19rem));
+  justify-content: center;
   gap: 1.5rem 2rem;
-  align-items: center;
-
-  .an-stack { grid-column: 2; }
-  .an-outside { grid-column: 3; }
-
-  @media (max-width: 36rem) {
-    grid-template-columns: minmax(0, 19rem);
-    justify-content: center;
-
-    .an-stack, .an-outside { grid-column: 1; }
-  }
+  align-items: start;
   margin: 2rem 0;
   font-size: 0.85rem;
+
+  @media (max-width: 36rem) { grid-template-columns: minmax(0, 19rem); }
+}
+
+.an-view { margin: 0; }
+
+.an-view-title {
+  margin-bottom: 0.6rem;
+  text-align: center;
+  font-weight: bold;
 }
 
 .an-card {
@@ -2588,104 +2584,8 @@ $tc-sticky: #fff8a8;
   margin: 0.35rem 0;
   background: rgba(255, 255, 255, 0.7);
   border-radius: 3px;
-}
 
-.an-context b { display: block; }
-
-.an-outside {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  align-items: flex-start;
-}
-
-.an-cloud {
-  padding: 0.3rem 0.8rem;
-  border: 1.5px dashed #aaa;
-  border-radius: 1.2rem;
-  color: #666;
-  font-family: ui-monospace, Menlo, monospace;
-  font-size: 0.75rem;
-}
-
-.anatomy {
-  .an-row, .an-cloud { opacity: 0; }
-
-  &.play {
-    .an-context { animation: an-in 0.5s ease-out both; }
-    .an-design { animation: an-in 0.5s 1.4s ease-out both; }
-    .an-acs { animation: an-in 0.5s 1.8s ease-out both; }
-    .an-kb { animation: an-out 0.8s 2.4s ease-out both, an-bob 4s 3.2s ease-in-out infinite; }
-    .an-ds { animation: an-out 0.8s 2.6s ease-out both, an-bob 4s 3.6s ease-in-out infinite; }
-  }
-
-  // Reduced motion: everything in place at once.
-  &.still :is(.an-row, .an-cloud) { animation: none !important; opacity: 1 !important; }
-}
-
-@keyframes an-in {
-  from { opacity: 0; transform: translateY(-0.6rem); }
-  to { opacity: 1; transform: none; }
-}
-
-@keyframes an-out {
-  from { opacity: 0; transform: translateX(-4rem) scale(0.7); }
-  to { opacity: 1; transform: none; }
-}
-
-@keyframes an-bob {
-  0%, 100% { opacity: 1; transform: none; }
-  50% { opacity: 1; transform: translate(0.3rem, -0.25rem); }
-}
-
-// "How I see it": the button under the card that turns it.
-.see-it-row { margin: 1rem 0 1.5rem; text-align: center; }
-
-.see-it {
-  padding: 0.35rem 0.9rem;
-  border: 1.5px solid $ink;
-  border-radius: 2px;
-  background: $tc-sticky;
-  font: inherit;
-  font-size: 0.85rem;
-  // Without a colour of its own a button takes the system blue on iOS.
-  color: $ink;
-  cursor: pointer;
-  box-shadow: 2px 2px 0 $ink;
-
-  &:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 $ink; }
-  &:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 $ink; }
-}
-
-// "Compare", after the turn: a grey tag like "Open to work" on About,
-// with a grey triangle.
-.compare {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.25rem 0.7rem;
-  border: 0;
-  border-radius: 0.3rem;
-  background: #eee;
-  color: #555;
-  font: inherit;
-  font-size: 0.8rem;
-  font-weight: 600;
-  line-height: 1.4;
-  cursor: pointer;
-  transition: background 0.2s;
-
-  &[hidden] { display: none; }
-  &:hover { background: #e2e2e2; }
-  &:focus-visible { outline: 2px dotted #555; outline-offset: 2px; }
-}
-
-.compare-mark {
-  width: 0;
-  height: 0;
-  border-left: 0.45rem solid #888;
-  border-top: 0.3rem solid transparent;
-  border-bottom: 0.3rem solid transparent;
+  b { display: block; }
 }
 
 .an-acs-box {
@@ -2736,87 +2636,6 @@ $tc-sticky: #fff8a8;
   &:nth-child(4) { --r: 2deg; --x: 0.9rem; --y: 0.35rem; }
   &:nth-child(5) { --r: -4.5deg; --y: 0.1rem; }
   &:nth-child(6) { --r: 1.5deg; --x: 0.4rem; --y: 0.5rem; }
-}
-
-// "How I see it" turns the card: the new one pushes the old one out,
-// then the knowledge base and the design system fly into its ACs
-// (assets/js/three-c.js moves them).
-.an-stack {
-  position: relative;
-  display: grid;
-  align-items: start;
-
-  > .an-card { grid-area: 1 / 1; }
-}
-
-.an-new {
-  // Out of the flow until the turn, so it holds no space under the old card.
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(70%) rotate(6deg);
-}
-
-.an-came { opacity: 0; }
-
-.an-swap.swapped {
-  .an-old {
-    animation: an-push-out 0.5s ease-in both;
-    pointer-events: none;
-  }
-
-  .an-new {
-    position: relative;
-    visibility: visible;
-    animation: an-push-in 0.55s 0.15s cubic-bezier(.3, 1.3, .5, 1) both;
-  }
-
-  // The rows of the new card show at once, not with the first play.
-  .an-new .an-row { animation: none; opacity: 1; }
-}
-
-.an-swap.flown .an-outside { display: none; }
-
-// "Compare": the old card comes back to the left of the new one
-// (above it on a phone).
-.an-swap.comparing {
-  .an-stack {
-    grid-column: 1 / -1;
-    grid-template-columns: repeat(2, minmax(0, 19rem));
-    justify-content: center;
-    gap: 1.5rem 2rem;
-
-    @media (max-width: 36rem) { grid-template-columns: minmax(0, 19rem); }
-  }
-
-  .an-old {
-    grid-area: 1 / 1;
-    animation: an-back 0.45s cubic-bezier(.3, 1.3, .5, 1) both;
-  }
-
-  .an-new {
-    grid-area: 1 / 2;
-    @media (max-width: 36rem) { grid-area: 2 / 1; }
-  }
-}
-
-@keyframes an-back {
-  from { opacity: 0; transform: translateX(-30%) rotate(-6deg); }
-  to { opacity: 1; transform: rotate(-1deg); }
-}
-
-.an-swap.still .an-new, .an-swap.still .an-old { animation-duration: 0s !important; animation-delay: 0s !important; }
-
-@keyframes an-push-out {
-  to { opacity: 0; transform: translateX(-60%) rotate(-10deg); }
-}
-
-@keyframes an-push-in {
-  from { opacity: 0; transform: translateX(70%) rotate(6deg); }
-  to { opacity: 1; transform: rotate(-1deg); }
 }
 
 // .alt, the examples: a switch of three kinds of a picture. Left, the ACs

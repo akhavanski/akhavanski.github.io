@@ -2,13 +2,9 @@
 // Turn it on for a post with `custom_js: [three-c]` in the front matter.
 // .three-c: Card → Conversation → Confirmation, a still picture;
 // hovering the card opens it as a ticket.
-// .anatomy: gets `play` when it comes into view, CSS does the rest;
-// the "How I see it" button turns it to the card where all it links to is among the ACs,
-// then "Compare" shows both cards side by side and goes.
 // .alt: the switch of examples, text on the left and a picture on the right;
 // the prototype in it can be clicked through.
 (function () {
-  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // The redline in the examples is handwritten, like the notes in posts.
   var font = document.createElement("link");
@@ -30,61 +26,6 @@
     card.addEventListener("mouseleave", function () { open(false); });
     card.addEventListener("focus", function () { open(true); });
     card.addEventListener("blur", function () { open(false); });
-  });
-
-  document.querySelectorAll(".anatomy").forEach(function (box) {
-    if (reduced) { box.classList.add("play", "still"); return; }
-    new IntersectionObserver(function (entries, observer) {
-      if (!entries[0].isIntersecting) return;
-      observer.disconnect();
-      box.classList.add("play");
-    }, { threshold: 0.5 }).observe(box);
-  });
-
-  // "How I see it": the new card pushes the old one out, then the clouds
-  // outside fly to their scraps among the ACs.
-  document.querySelectorAll(".an-swap").forEach(function (box) {
-    var button = box.nextElementSibling.querySelector(".see-it");
-    var came = box.querySelectorAll(".an-came");
-    var compare = button.parentElement.querySelector(".compare");
-
-    function fly() {
-      came.forEach(function (scrap) {
-        var cloud = box.querySelector("." + scrap.dataset.from);
-        var from = cloud.getBoundingClientRect(), to = scrap.getBoundingClientRect();
-        scrap.style.transition = "none";
-        scrap.style.transform = "translate(" + (from.left - to.left) + "px, " + (from.top - to.top) + "px) rotate(0deg)";
-        scrap.style.opacity = 1;
-        cloud.style.visibility = "hidden";
-        scrap.getBoundingClientRect();
-        scrap.style.transition = reduced ? "none" : "transform 0.7s cubic-bezier(.3, 1.3, .5, 1)";
-        scrap.style.transform = "";
-      });
-      // The clouds are all in the card now: the card takes the middle.
-      setTimeout(function () {
-        came.forEach(function (scrap) { scrap.style.transition = "none"; });
-        box.classList.add("flown");
-        compare.hidden = false;
-      }, reduced ? 0 : 750);
-    }
-
-    // "Compare" comes once the card has settled; one way too: it brings
-    // the old card back next to the new one and goes.
-    compare.addEventListener("click", function () {
-      compare.parentElement.hidden = true;
-      box.classList.add("comparing");
-      box.querySelector(".an-old").setAttribute("aria-hidden", false);
-    });
-
-    // One way only: the button goes once the card has turned.
-    button.addEventListener("click", function () {
-      button.hidden = true;
-      box.classList.add("swapped");
-      box.querySelector(".an-new").setAttribute("aria-hidden", false);
-      box.querySelector(".an-old").setAttribute("aria-hidden", true);
-      if (reduced) box.classList.add("still");
-      setTimeout(fly, reduced ? 0 : 750);
-    });
   });
 
   document.querySelectorAll(".alt").forEach(function (box) {
