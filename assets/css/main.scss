@@ -2785,6 +2785,7 @@ $tc-sticky: #fff8a8;
 // then the knowledge base and the design system fly into its ACs
 // (assets/js/three-c.js moves them).
 .an-stack {
+  position: relative;
   display: grid;
   align-items: start;
   flex: 1 1 15rem;
@@ -2794,6 +2795,11 @@ $tc-sticky: #fff8a8;
 }
 
 .an-new {
+  // Out of the flow until the turn, so it holds no space under the old card.
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   opacity: 0;
   visibility: hidden;
   transform: translateX(70%) rotate(6deg);
@@ -2808,6 +2814,7 @@ $tc-sticky: #fff8a8;
   }
 
   .an-new {
+    position: relative;
     visibility: visible;
     animation: an-push-in 0.55s 0.15s cubic-bezier(.3, 1.3, .5, 1) both;
   }
