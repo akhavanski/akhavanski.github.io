@@ -1,4 +1,4 @@
-// Table of contents of a post: the button "Table of contents" (under "← to blog")
+// Table of contents of a post: the button "ToC" (under "← to blog")
 // stays at the top of the window while you read; a click on it slides a page with
 // the post's sections and subsections out from under the post, below the button.
 // The page is set like a LaTeX table of contents: "Contents" on top, the sections

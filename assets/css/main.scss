@@ -570,7 +570,7 @@ $bcard-width: 401px; // 1.25 × 321: at 321px the 10px contacts are too small be
 }
 
 // A quiet white card with a grey outline, the grey a bit darker on hover:
-// the way back to the blog and the button "Table of contents" in a post.
+// the way back to the blog and the button "ToC" in a post.
 @mixin quiet-card {
   padding: 0.1rem 0.4rem;
   border: 1.5px solid #aaa;
@@ -608,7 +608,7 @@ $bcard-width: 401px; // 1.25 × 321: at 321px the 10px contacts are too small be
   }
 }
 
-// The table of contents of a post (see assets/js/toc.js): the button "Table of contents"
+// The table of contents of a post (see assets/js/toc.js): the button "ToC"
 // under "← to blog" stays at the top of the window while you read, and a click
 // on it slides a printed page with the sections, set in Computer Modern, the LaTeX
 // font, out from under the post below it. The section being read is marked
@@ -963,7 +963,7 @@ article :is(h2, h3, h4):target {
   // The stroke goes under the text, but not under the page's white.
   isolation: isolate;
   background: none;
-  // Level with the button "Table of contents".
+  // Level with the button "ToC".
   scroll-margin-top: 1.5rem;
 
   // The letters sit high in the line, so the stroke reaches above it.
