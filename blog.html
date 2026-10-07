@@ -11,6 +11,9 @@ permalink: /blog
 
 {%-include posts.html-%}
 
+{%- assign ru_posts = site.posts | where: "lang", "ru" %}
+{%- if ru_posts.size > 0 %}{% include hyphenate.html %}{% endif %}
+
 {%-include turtle.html-%}
 
 {%-include goatcounter.html-%}

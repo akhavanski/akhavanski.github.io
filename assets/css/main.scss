@@ -90,6 +90,9 @@ pre.mermaid { text-align: center; }
     font-size: 0.85em;
     color: #888;
     text-decoration-line: none;
+    // Long words break with a hyphen, by the rules of the post's lang.
+    hyphens: auto;
+    -webkit-hyphens: auto;
 
     &:hover { text-decoration-line: underline; }
   }

@@ -63,6 +63,10 @@ layout: default
 <script src="{{ "/assets/js/sources.js" | relative_url }}"></script>
 {%- endif %}
 
+{%- if page.lang == "ru" %}
+{%-include hyphenate.html-%}
+{%- endif %}
+
 {%-include turtle.html-%}
 
 {%-include goatcounter.html-%}
