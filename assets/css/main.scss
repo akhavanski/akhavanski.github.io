@@ -356,8 +356,7 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
 // (_includes/social.html), ported from a prototype as it is:
 // 85×55 mm in proportion, white, set in IBM Plex. All sizes are for a card
 // 321px wide and shrink or grow with it through --u, a 321st of the width
-// of .bcard-wrap, a size container. The card lies a little turned
-// and straightens on hover or focus.
+// of .bcard-wrap, a size container.
 $bcard-width: 401px; // 1.25 × 321: at 321px the 10px contacts are too small beside the 16px text
 
 .bcard-wrap {
@@ -373,7 +372,6 @@ $bcard-width: 401px; // 1.25 × 321: at 321px the 10px contacts are too small be
   --accent: #E4572E;
   --edge: #DADAD5;
   --shadow: rgba(30, 30, 25, 0.10);
-  --shadow-lift: rgba(30, 30, 25, 0.28);
   --sans: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
@@ -390,15 +388,7 @@ $bcard-width: 401px; // 1.25 × 321: at 321px the 10px contacts are too small be
   line-height: normal;
   text-align: left;
   hyphens: manual;
-  transform: rotate(-3deg) scale(0.94);
   box-shadow: 0 0 0 1px var(--edge), 0 2px 6px var(--shadow);
-  transition: transform 320ms cubic-bezier(.2, .7, .2, 1), box-shadow 320ms ease;
-
-  &:hover, &:focus-within {
-    transform: rotate(0deg) scale(1);
-    box-shadow: 0 0 0 1px var(--edge), 0 18px 40px -12px var(--shadow-lift);
-  }
-  @media (hover: none) { transform: none; }
 }
 
 .bcard-top {
@@ -566,7 +556,7 @@ $bcard-width: 401px; // 1.25 × 321: at 321px the 10px contacts are too small be
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bcard-arrow, .bcard-copy, .bcard, .bcard-book, .bcard-book-arrow { transition: none; }
+  .bcard-arrow, .bcard-copy, .bcard-book, .bcard-book-arrow { transition: none; }
 }
 
 // A quiet white card with a grey outline, the grey a bit darker on hover:
