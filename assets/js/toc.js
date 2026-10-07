@@ -1,4 +1,4 @@
-// Table of contents of a post: the button "ToC" (under "← to blog")
+// Table of contents of a post: the button "Table of contents" (under "← to blog")
 // stays at the top of the window while you read; a click on it slides a page with
 // the post's sections and subsections out from under the post, below the button.
 // The page is set like a LaTeX table of contents: "Contents" on top, the sections
@@ -9,6 +9,7 @@
 // half a window with the mouse elsewhere. A jump to a section doesn't count as scrolling.
 // Once "← to blog" has scrolled away, the button is alone left of the text and goes quiet.
 // When the column left of the text is too narrow for the page, the page lies over the text.
+// When it is too narrow for the button, the button says just "Contents".
 // On a narrow screen the button is at the bottom right of the window and the page
 // comes out above it (the styles do that, the script is the same).
 // The page's bottom left corner is dog-eared; a click on it unfolds it for good
@@ -101,6 +102,17 @@
     nav.style.setProperty("--toc-over", over + "px");
   }
   addEventListener("resize", fit);
+
+  // "Table of contents" if it fits in the column 1rem off the window's left edge,
+  // otherwise "Contents".
+  function label() {
+    toggle.textContent = "Table of contents";
+    if (!wide.matches) return;
+    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    if (toggle.offsetWidth + 2.25 * rem > nav.offsetWidth) toggle.textContent = "Contents";
+  }
+  label();
+  addEventListener("resize", label);
 
   function show(open) {
     if (open) fit();
