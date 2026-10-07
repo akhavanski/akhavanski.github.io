@@ -2,7 +2,8 @@
 // text[^name] and [^name]: Note. — a small grey number in the text,
 // the same number before the note.
 // On a wide screen the note stands in the right column, level with its line;
-// on a narrow one it is hidden and a tap on the number opens it under the line.
+// on a narrow one it is hidden and a tap on the number opens it under the line,
+// and all the notes are also listed at the end of the post, before the sources.
 // The post layout loads this script only when the post has a footnote.
 (function () {
   var wide = window.matchMedia("(min-width: 72rem)");
@@ -66,6 +67,18 @@
   if (list) list.remove();
 
   if (!pairs.length) return;
+
+  // On a narrow screen the notes are also listed at the end of the post,
+  // before the sources, so they can be read without tapping.
+  var end = document.createElement("div");
+  end.className = "notes-end";
+  var ol = end.appendChild(document.createElement("ol"));
+  pairs.forEach(function (pair) {
+    var li = ol.appendChild(document.createElement("li"));
+    li.innerHTML = pair.note.innerHTML;
+  });
+  (document.querySelector("article h2#sources, article h2#источники") ||
+    document.querySelector(".post-signature")).before(end);
 
   function setOpen(pair, open) {
     pair.open = open;

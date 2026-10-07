@@ -1167,6 +1167,33 @@ $note-width: min(17rem, calc(50vw - 320px - 4.5rem));
   .sidenote.open { animation: none; }
 }
 
+// Narrow: the notes are also listed at the end of the post, as in a book:
+// a short line, then the notes set as the note under the line.
+.notes-end { display: none; }
+
+@media not all and (min-width: $wide-screen) {
+  .notes-end {
+    display: block;
+    margin-top: 2.5rem;
+    padding-top: 0.8rem;
+    background: linear-gradient(#ccc, #ccc) top left / 6rem 1px no-repeat;
+  }
+  .notes-end ol {
+    padding: 0;
+    list-style: none;
+    font-family: "Computer Modern Serif", serif;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #555;
+
+    li { margin-bottom: 0.6rem; }
+    em { font-style: italic; }
+    .fn-n { font-size: 0.68em; vertical-align: super; line-height: 0; margin-right: 0.3em; }
+    img { display: block; width: 100%; margin-top: 0.5rem; }
+    del { color: #999; text-decoration: line-through #d23; }
+  }
+}
+
 // The keyword filter on the home page: a small cartoon library catalogue
 // cabinet with the word "Keywords" next to it. On hover the cabinet
 // turns a little; a click turns it to profile, pulls out the K–P drawer
@@ -2126,6 +2153,9 @@ html[data-theme="dark"] {
   .sidenote del { color: #6a6a6a; text-decoration-color: $night-red; }
   .sidenote.lit { background: rgba(230, 200, 0, 0.15); }
   .sidenote.open { border-left-color: $night-faint; }
+  .notes-end { background-image: linear-gradient($night-faint, $night-faint); }
+  .notes-end ol { color: $night-muted; }
+  .notes-end del { color: #6a6a6a; text-decoration-color: $night-red; }
   .fn-ref { color: $night-muted; }
   .fn-ref.lit, .fn-ref.open, .fn-ref:hover { color: $night-ink; background: rgba(255, 230, 0, 0.25); }
   .fn-ref:focus-visible { outline-color: $night-ink; }
