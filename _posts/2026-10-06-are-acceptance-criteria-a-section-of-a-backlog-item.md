@@ -252,29 +252,7 @@ Are ACs the only ACs? If you do not mention in ACs “The result follows the des
 1. **Changes.** Your links to sources should point to a specific version. You can do it both in Figma and in Confluence.
 2. **Inertia.** For decades people have thought that an AC is a short text describing a feature, while in fact it is something we use for judgement: accept or not.
 
-<div class="divider" aria-hidden="true">
-  <svg viewBox="0 0 300 30">
-    <path class="divider-line" d="M10 15 C100 21 200 21 290 15" />
-    <g class="divider-leaves">
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(24 15) rotate(-140)" />
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(24 15) rotate(140)" />
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(38 15) rotate(-140)" />
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(38 15) rotate(140)" />
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(52 15) rotate(-140)" />
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(52 15) rotate(140)" />
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(12 15) rotate(180)" />
-    </g>
-    <g class="divider-leaves" transform="translate(300 0) scale(-1 1)">
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(24 15) rotate(-140)" />
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(24 15) rotate(140)" />
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(38 15) rotate(-140)" />
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(38 15) rotate(140)" />
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(52 15) rotate(-140)" />
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(52 15) rotate(140)" />
-      <path d="M0 0 C4 -4 11 -4 15 0 C11 4 4 4 0 0 Z" transform="translate(12 15) rotate(180)" />
-    </g>
-  </svg>
-</div>
+---
 
 > An AC is anything you’ll use to accept or reject the work.
 

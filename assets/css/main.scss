@@ -2178,7 +2178,7 @@ html[data-theme="dark"] {
 
 
 // The pictures of the post on acceptance criteria (see assets/js/three-c.js):
-// .three-c, .anatomy, .alt and .divider.
+// .three-c, .anatomy and .alt.
 // .three-c: Card → Conversation → Confirmation, still. The talk may send
 // the card back (the red loop, the struck-out words on it) or end in
 // a handshake. Hovering the card opens it as a ticket in a task tracker.
@@ -2922,14 +2922,4 @@ $tc-sticky: #fff8a8;
   .pr-btn { animation: none; }
 }
 
-// A hand-drawn divider: a thin line with a leafy sprig at each end.
-.divider {
-  margin: 2.5rem auto 1.5rem;
-  max-width: 20rem;
-
-  svg { display: block; width: 100%; height: auto; overflow: visible; }
-
-  .divider-line { fill: none; stroke: $ink; stroke-width: 1.2; stroke-linecap: round; }
-  .divider-leaves path { fill: $ink; }
-}
 
