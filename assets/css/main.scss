@@ -682,6 +682,14 @@ $tab: 1.35rem;
     width: calc(50vw - 320px - 3.25rem);
     clip-path: inset(-3rem 0 -100vh -3rem);
     pointer-events: none;
+    // When the column is too narrow for the page, the page lies over the text
+    // by --toc-over (see assets/js/toc.js): the post's edge gives way as it comes out.
+    transition: clip-path 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    &.is-open {
+      z-index: 5;
+      clip-path: inset(-3rem calc(-1 * var(--toc-over, 0px)) -100vh -3rem);
+    }
   }
 }
 
@@ -794,10 +802,10 @@ $dog-ear: 0.95rem;
   position: absolute;
   top: calc(100% + 0.6rem);
   // Its right edge in line with the button; as wide as the sections need,
-  // but no wider than 18rem, so it doesn't fill the whole column.
-  right: 1.25rem;
+  // but no wider than 18rem. If the column is narrower, it moves right onto the text.
+  right: calc(1.25rem - var(--toc-over, 0px));
   width: max-content;
-  max-width: min(18rem, calc(100% - 1.25rem));
+  max-width: min(18rem, calc(100vw - 2rem));
   display: flex;
   flex-direction: column;
   box-sizing: border-box;

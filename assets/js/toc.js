@@ -8,6 +8,7 @@
 // for three seconds, when the focus has left it, and when the post has scrolled
 // half a window with the mouse elsewhere. A jump to a section doesn't count as scrolling.
 // Once "← to blog" has scrolled away, the button is alone left of the text and goes quiet.
+// When the column left of the text is too narrow for the page, the page lies over the text.
 // On a narrow screen the button is at the bottom right of the window and the page
 // comes out above it (the styles do that, the script is the same).
 // The page's bottom left corner is dog-eared; a click on it unfolds it for good
@@ -87,7 +88,22 @@
 
   function isOpen() { return nav.classList.contains("is-open"); }
 
+  // How far the page has to lie over the text so that it stays 1rem off
+  // the window's left edge (wide screens only).
+  var wide = matchMedia("(min-width: 60rem)");
+  function fit() {
+    var over = 0;
+    if (wide.matches) {
+      var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+      var left = nav.getBoundingClientRect().right - 1.25 * rem - sheet.offsetWidth;
+      over = Math.max(0, rem - left);
+    }
+    nav.style.setProperty("--toc-over", over + "px");
+  }
+  addEventListener("resize", fit);
+
   function show(open) {
+    if (open) fit();
     clearTimeout(leaving);
     scrollFrom = scrollY;
     toggle.setAttribute("aria-expanded", String(open));
