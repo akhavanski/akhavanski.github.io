@@ -189,6 +189,41 @@ $thin-links: 'article a:not(.to-blog):not([href^="#"]), ol.sources a, .intro a, 
   @media (prefers-reduced-motion: reduce) { transition: none; }
 }
 
+// Quotes (> in Markdown). By default there is no frame (the theme's): a big
+// grey opening quote mark stands left of the italic text.
+// A callout for something important is a quote with {: .callout} on the
+// line under it: upright, a bit larger, centred between two thin rules.
+blockquote {
+  position: relative;
+  margin: 1.5rem 0;
+  padding: 0 0 0 2.25rem;
+  border: none;
+
+  &::before {
+    content: "\201C";
+    position: absolute;
+    top: -0.15em;
+    left: 0;
+    font-size: 2.6em;
+    font-style: normal;
+    line-height: 1;
+    color: #bbb;
+  }
+
+  p + p { margin-top: 0.75rem; }
+
+  &.callout {
+    padding: 1rem 0.5rem;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    font-size: 1.1em;
+    font-style: normal;
+    p { text-align: center; }
+
+    &::before { content: none; }
+  }
+}
+
 // The filter on the home page (see assets/js/blog-filters.js). On narrow screens
 // it is the cabinet right of the title, a click opens a menu under it. On wide
 // screens it is right of the list: a click on the name
@@ -2067,6 +2102,7 @@ html[data-theme="dark"] {
 
   code { color: $night-ink; background: $night-card; }
   table, th, td, blockquote { border-color: $night-muted; }
+  blockquote::before { color: $night-faint; }
   *:target, ol.sources li:target, .cite a:target { background: rgba(255, 230, 0, 0.25); }
   .catalog { color: #1a1a1a; }
 
