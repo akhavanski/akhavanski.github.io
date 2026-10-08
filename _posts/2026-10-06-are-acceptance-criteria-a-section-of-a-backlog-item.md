@@ -9,72 +9,7 @@ From project to project I see that acceptance criteria for a PBI[^pbi] are in 99
 
 I don’t agree, and hear me out.
 
-My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-guide-for-junior-ba-po-pm.html#три-с-в-user-story).
-
-<div class="three-c" aria-label="Card, Conversation, Confirmation: the conversation either sends the card back to be changed, or ends in a handshake">
-  <div class="tc-stage">
-    <div class="tc-node tc-card-node">
-      <div class="tc-card" tabindex="0">
-        <div class="tc-sticky">
-          <span>Save my card <s>to pay faster</s> for one-tap pay</span>
-        </div>
-        <div class="tc-ticket" aria-hidden="true">
-          <div class="tc-ticket-top">
-            <span class="tc-type" title="Story"></span>
-            <span class="tc-key">SHOP-142</span>
-            <span class="tc-status">To do</span>
-          </div>
-          <div class="tc-ticket-title">Save a bank card for one-tap checkout</div>
-          <div>
-            <div class="tc-section">Description</div>
-            <p><b>As a</b> returning customer, <b>I want</b> to save my card <b>so that</b> I pay in one tap next time.</p>
-            <div class="tc-section">Acceptance criteria</div>
-            <ul>
-              <li>A user can tick “Save card” at checkout</li>
-              <li>A saved card is shown first next time</li>
-              <li>A user can delete a saved card</li>
-            </ul>
-            <div class="tc-section">Design</div>
-            <p class="tc-link">figma.com/file/checkout-v3</p>
-          </div>
-          <div class="tc-ticket-side">
-            <span>Assignee <i class="tc-avatar">AK</i></span>
-            <span>Story points <b>3</b></span>
-            <span>Sprint <b>42</b></span>
-          </div>
-        </div>
-      </div>
-      <div class="tc-label">Card</div>
-    </div>
-
-    <div class="tc-arrow"></div>
-
-    <div class="tc-node">
-      <div class="tc-talk">
-        <span class="tc-bubble tc-b1"><i></i><i></i><i></i></span>
-        <span class="tc-bubble tc-b2"><i></i><i></i><i></i></span>
-      </div>
-      <div class="tc-label">Conversation</div>
-    </div>
-
-    <div class="tc-arrow"></div>
-
-    <div class="tc-node">
-      <div class="tc-ok"><img src="/assets/img/epic-handshake.webp" alt="Two arms in a handshake: the team and the client agree"></div>
-      <div class="tc-label">Confirmation</div>
-    </div>
-
-    <div class="tc-loop" aria-hidden="true">
-      <svg viewBox="0 0 100 30" preserveAspectRatio="none">
-        <path class="tc-loop-line" d="M 100 28 C 100 -6, 0 -6, 0 28" pathLength="1" />
-      </svg>
-      <svg class="tc-loop-head" viewBox="0 0 10 10"><path d="M 0 1 L 10 1 L 5 10 Z" /></svg>
-    </div>
-    <span class="tc-loop-label">changes the card</span>
-  </div>
-</div>
-
-A card should contain ‘all necessary information to complete it’.
+My take is that a ticket is a Card from the [3C model](/2021-09-11-user-stories-guide-for-junior-ba-po-pm.html#три-с-в-user-story). So Conversation and Confirmation happen upon a ticket. While a physical card was limited (due to its physical nature), today’s card are not limited and must contain wider amount of context for a task. In other words, a card should contain ‘all necessary information to complete it’.[^upd]
 
 <div class="anatomy" aria-label="Two cards: the conventional one with context, a design link and ACs; mine with context and everything else among the ACs">
   <figure class="an-view">
@@ -256,4 +191,5 @@ Are ACs the only ACs? If you do not mention in ACs “The result follows the des
 
 > An AC is anything you’ll use to accept or reject the work.
 
+[^upd]: Updated on 2026-10-08.
 [^pbi]: *Product Backlog Item.* It is something you add to your task tracker.
