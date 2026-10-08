@@ -190,6 +190,7 @@ Are ACs the only ACs? If you do not mention in ACs “The result follows the des
 ---
 
 > An AC is anything you’ll use to accept or reject the work.
+{: .callout}
 
 [^upd]: Updated on 2026-10-08.
 [^pbi]: *Product Backlog Item.* It is something you add to your task tracker.
