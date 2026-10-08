@@ -69,7 +69,7 @@
   var backWord = document.documentElement.lang === "ru" ? "назад" : "back";
 
   // The list at the end: the number, Author. Title. site.com ↗,
-  // and under it the way back to each citation.
+  // and after it, on the same line, the way back to each citation.
   list.className = "sources";
   sources.forEach(function (s) {
     var li = s.li;

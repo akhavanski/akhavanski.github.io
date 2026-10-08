@@ -1880,26 +1880,28 @@ html[data-theme="dark"] {
   }
 }
 
-// The list at the end: the number in its own column, the way back under the reference.
+// The list at the end, dense: a source a line, the number hanging on the left,
+// the way back right after the reference, on the same line.
 ol.sources {
   padding: 0;
   list-style: none;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  line-height: 1.35;
 
   li {
-    display: grid;
-    grid-template-columns: 2rem 1fr;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.25rem;
+    padding-left: 1.6rem;
+    text-indent: -1.6rem;
+    text-align: left;
     scroll-margin-top: 1.5rem;
   }
 
-  .source-n { grid-row: span 2; font-weight: bold; }
+  .source-n { display: inline-block; width: 1.6rem; text-indent: 0; font-weight: bold; }
   cite { font-style: italic; }
   .source-url { color: grey; }
 
   .source-back {
-    grid-column: 2;
-    font-size: 0.75rem;
+    margin-left: 0.4em;
     color: grey;
 
     a { color: grey; }
