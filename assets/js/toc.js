@@ -12,8 +12,6 @@
 // When it is too narrow for the button, the button says just "Contents".
 // On a narrow screen the button is at the bottom right of the window and the page
 // comes out above it (the styles do that, the script is the same).
-// The page's bottom left corner is dog-eared; a click on it unfolds it for good
-// and shows a small grey line "I love how LaTeX looks." for a few seconds.
 // The post layout loads this script only when the post has two headings or more.
 (function () {
   var toggle = document.querySelector(".toc-toggle");
@@ -68,20 +66,6 @@
       if (!sub) sub = section.appendChild(document.createElement("ol"));
       sub.appendChild(entry(h, n + "." + ++m));
     }
-  });
-  var corner = sheet.appendChild(document.createElement("button"));
-  corner.className = "toc-corner";
-  corner.type = "button";
-  corner.setAttribute("aria-label", "Dog-ear");
-  var love = sheet.appendChild(document.createElement("span"));
-  love.className = "toc-love";
-  love.setAttribute("role", "status");
-  corner.addEventListener("click", function () {
-    love.innerHTML = 'I love how <span class="latex">L<span class="latex-a">a</span>T<span class="latex-e">e</span>X</span> looks.';
-    love.classList.add("is-shown");
-    sheet.classList.add("is-unfolded");
-    setTimeout(function () { love.classList.remove("is-shown"); }, 3500);
-    setTimeout(function () { corner.remove(); }, 500);
   });
   toggle.parentNode.appendChild(sheet);
 

@@ -600,8 +600,7 @@ $bcard-width: 401px; // 1.25 × 321: at 321px the 10px contacts are too small be
 
 // The table of contents of a post (see assets/js/toc.js): the button "Table of contents"
 // under "← to blog" stays at the top of the window while you read, and a click
-// on it slides a printed page with the sections, set in Computer Modern, the LaTeX
-// font, out from under the post below it. The section being read is marked
+// on it slides a printed page with the sections out from under the post below it. The section being read is marked
 // with a highlighter. Like "← to blog", it lives in the empty column left of the text;
 // on a narrow screen it is at the bottom of the window.
 article { position: relative; }
@@ -654,11 +653,7 @@ $tab: 1.35rem;
       width: min(20rem, calc(100vw - 2.5rem));
       max-width: none;
       max-height: calc(100vh - 5.2rem);
-      // No dog-ear on a narrow screen.
-      --dog-ear: 0px;
     }
-
-    .toc-corner, .toc-love { display: none; }
   }
 
   @media (min-width: 60rem) {
@@ -778,17 +773,7 @@ $quiet-time: 0.3s;
   .toc-toggle { transition: none; }
 }
 
-$dog-ear: 0.95rem;
-
-// So that the corner can unfold smoothly.
-@property --dog-ear {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 0px;
-}
-
 .toc-sheet {
-  --dog-ear: #{$dog-ear};
   position: absolute;
   top: calc(100% + 0.6rem);
   // Its right edge in line with the button; as wide as the sections need,
@@ -803,25 +788,22 @@ $dog-ear: 0.95rem;
   max-height: calc(100vh - 5.2rem);
   padding: 1.1rem 1.4rem;
   isolation: isolate;
-  font-family: "Computer Modern Serif", serif;
-  font-size: 1.05rem;
-  line-height: 1.3;
+  // The text's font, smaller and greyer than the text.
+  font-size: 0.8125rem;
+  line-height: 1.5;
   pointer-events: auto;
   visibility: hidden;
   transform: translateX(calc(100% + 3rem));
-  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s 0.55s, --dog-ear 0.4s ease-in;
+  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0s 0.55s;
 
-  &.is-unfolded { --dog-ear: 0px; }
-
-  // The paper, its bottom left corner cut off: it is folded over (.toc-corner).
-  // The shadow is a filter, so it follows the cut; on the paper, not on the
-  // sheet, so the words under the page have none.
+  // The paper. Its shadow is on the paper, not on the sheet,
+  // so the words under the page have none.
   &::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(45deg, transparent calc(var(--dog-ear) / 1.4142), white 0);
+    background: white;
     filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.2)) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.08));
   }
 
@@ -872,8 +854,10 @@ $dog-ear: 0.95rem;
   a {
     display: block;
     padding: 0.12em 0;
-    color: black;
+    color: #777;
     text-decoration: none;
+
+    &:hover, &:focus-visible { color: black; }
 
     &:hover span:not(.toc-num), &:focus-visible span:not(.toc-num) { text-decoration: underline; }
   }
@@ -887,60 +871,6 @@ $dog-ear: 0.95rem;
     background: rgba(255, 230, 0, 0.45);
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
-  }
-}
-
-// The page's bottom left corner is dog-eared like a page of a book (see
-// assets/js/toc.js): the corner is folded over onto the page, its back barely
-// shaded towards the crease, and it casts a soft shadow. A click on it unfolds it
-// for good and shows "I love how LaTeX looks." in small grey letters under the page,
-// which fade away.
-.toc-corner {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: var(--dog-ear);
-  height: var(--dog-ear);
-  padding: 0;
-  border: 0;
-  background: none;
-  filter: drop-shadow(0.5px -0.5px 0.6px rgba(0, 0, 0, 0.1)) drop-shadow(1.5px -1.5px 2px rgba(0, 0, 0, 0.05));
-  cursor: pointer;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    clip-path: polygon(0 0, 100% 0, 100% 100%);
-    background: linear-gradient(225deg, #fcfcfc 0%, #f3f3f3 30%, #e8e8e8 50%);
-  }
-}
-
-.toc-love {
-  position: absolute;
-  left: 0.2rem;
-  bottom: -1.6rem;
-  font-size: 0.8rem;
-  color: #999;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.8s;
-  pointer-events: none;
-
-  &.is-shown { opacity: 1; transition-duration: 0.2s; }
-}
-
-// The LaTeX logo: a small raised A and a lowered E tucked in between the letters.
-.latex {
-  .latex-a, .latex-e { text-transform: uppercase; }
-  .latex-a {
-    font-size: 0.75em;
-    vertical-align: 0.25em;
-    margin: 0 -0.15em 0 -0.36em;
-  }
-  .latex-e {
-    vertical-align: -0.5ex;
-    margin: 0 -0.125em 0 -0.1667em;
   }
 }
 
@@ -1085,21 +1015,21 @@ $sparkle-cycle: 1.8s;
   &:focus-visible { outline: 1px dotted black; }
 }
 
-// The note itself, set in Computer Modern, as the table of contents.
+// The note itself, in the text's font, smaller and greyer than the text.
 // On a wide screen it floats in the empty right column, level with its line;
-// clear keeps notes from running into each other.
+// clear keeps notes from running into each other. On hover it darkens.
 .sidenote {
   display: none;
   box-sizing: border-box;
-  font-family: "Computer Modern Serif", serif;
-  font-size: 0.95rem;
+  font-size: 0.75rem;
   font-weight: normal;
   font-style: normal;
-  line-height: 1.4;
+  line-height: 1.5;
   text-align: left;
   text-transform: none;
   letter-spacing: normal;
-  color: #555;
+  color: #999;
+  transition: color 0.2s;
 
   em { font-style: italic; }
   del {
@@ -1134,6 +1064,7 @@ $note-width: min(17rem, calc(50vw - 320px - 4.5rem));
     margin-bottom: 1rem;
   }
   .sidenote-footnote { padding-left: calc(0.65rem + 3px); }
+  .sidenote:hover { color: #222; }
   .fn-ref:hover { color: black; background: rgba(255, 230, 0, 0.45); }
 }
 
@@ -1171,10 +1102,10 @@ $note-width: min(17rem, calc(50vw - 320px - 4.5rem));
   .notes-end ol {
     padding: 0;
     list-style: none;
-    font-family: "Computer Modern Serif", serif;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    color: #555;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    text-align: left;
+    color: #999;
 
     li { margin-bottom: 0.6rem; }
     em { font-style: italic; }
@@ -2126,13 +2057,13 @@ html[data-theme="dark"] {
   }
   .toc-sheet {
     &::before {
-      background: linear-gradient(45deg, transparent calc(var(--dog-ear) / 1.4142), $night-card 0);
+      background: $night-card;
       filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.5)) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4));
     }
+    a { color: $night-muted; }
+    a:hover, a:focus-visible { color: $night-ink; }
     a[aria-current] span { background: rgba(255, 230, 0, 0.3); }
   }
-  .toc-corner::before { background: linear-gradient(225deg, #2f2f2f 0%, #2c2c2c 30%, #262626 50%); }
-  .toc-love { color: $night-muted; }
 
   code { color: $night-ink; background: $night-card; }
   table, th, td, blockquote { border-color: $night-muted; }
@@ -2140,6 +2071,7 @@ html[data-theme="dark"] {
   .catalog { color: #1a1a1a; }
 
   .sidenote { color: $night-muted; }
+  @media (min-width: $wide-screen) { .sidenote:hover { color: $night-ink; } }
   .sidenote del { color: #6a6a6a; text-decoration-color: $night-red; }
   .sidenote.lit { background: rgba(230, 200, 0, 0.15); }
   .sidenote.open { border-left-color: $night-faint; }
