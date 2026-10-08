@@ -64,7 +64,7 @@ Are ACs the only ACs? If you do not mention in ACs “The result follows the des
     <div class="alt-text">
       <div class="alt-cap">As text</div>
       <div class="alt-ac-title">Acceptance criteria</div>
-      <p>A user sees new text next to the checkbox: <code>Save card for one-tap pay</code></p>
+      <p>The text next to checkbox is changed from “Remember this card” to “Save card for one-tap pay”</p>
     </div>
     <div class="alt-pic">
       <div class="alt-cap">As a picture</div>
