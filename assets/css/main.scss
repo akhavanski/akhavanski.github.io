@@ -2955,6 +2955,7 @@ $tc-sticky: #fff8a8;
 // blog's name right after the title, small and grey, then the arrow,
 // pointing up and out, as grey. Neither is underlined, even under the
 // pointer; the text leads to the post too. It takes no room in the line.
+// On a phone only the arrow shows, without pointing.
 .blog-posts li.external {
   .post-title > a:not(.guest-at)::after { content: none; }
 
@@ -2978,6 +2979,13 @@ $tc-sticky: #fff8a8;
   }
 
   &:is(:hover, :focus-within) .guest-at { opacity: 1; }
+
+  // Where nothing can be pointed at, only the arrow shows, always.
+  @media not all and (min-width: 52rem), (hover: none) {
+    .guest-at { opacity: 1; }
+    .guest-at span { display: none; }
+    .guest-at::after { margin-left: 0; }
+  }
 
   @media (prefers-reduced-motion: reduce) { .guest-at { transition: none; } }
 }

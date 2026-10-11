@@ -92,7 +92,7 @@
   <li lang="{{ post.lang }}" data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}"{% if post.external_url %} class="external"{% endif %}>
     <div class="post-title">
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ href }}"{{ target }}>{{ post.title }}</a>
-      {%- if post.external_url %}<a class="guest-at" href="{{ href }}"{{ target }} tabindex="-1">Guest post at {{ host[2] | remove: "www." }}</a>{% endif %}
+      {%- if post.external_url %}<a class="guest-at" href="{{ href }}"{{ target }} tabindex="-1"><span>Guest post at {{ host[2] | remove: "www." }}</span></a>{% endif %}
     </div>
     {%- unless include.limit %}
     {%- assign parts = post.excerpt | split: '<sup id="fnref:' %}
