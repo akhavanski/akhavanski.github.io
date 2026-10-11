@@ -2931,3 +2931,85 @@ $tc-sticky: #fff8a8;
   white-space: nowrap;
 }
 .blog-posts li.external .post-title > a::after { font-size: 0.85em; color: #888; }
+
+// The study-guide book on the About page (see _includes/study-guide.html):
+// small in the right column on the line of its link; on hover it grows
+// and a red bookmark slides up out of it.
+p:has(> .study-guide) { position: relative; }
+
+.study-guide {
+  position: absolute; // no top: it stays on its line
+  left: calc(100% + 2.5rem);
+  width: 3.75rem;
+  margin-top: -0.4rem;
+  isolation: isolate;
+  transform-origin: left top;
+  transition: transform 0.3s ease;
+  outline: none;
+
+  &:hover { background: none; } // not the theme's yellow
+
+  .sg-book {
+    position: relative;
+    display: block;
+    aspect-ratio: 120 / 160;
+    transform: rotate(4deg);
+    transition: transform 0.3s ease;
+    filter: drop-shadow(1px 3px 3px rgba(0, 0, 0, 0.25));
+
+    svg { position: relative; display: block; width: 100%; height: 100%; }
+  }
+
+  .sg-pages {
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    border: 1.5px solid #1a1a1a;
+    border-radius: 2px 6px 6px 2px;
+    background: #fbf8f1;
+    transform: translate(3px, 3px);
+  }
+
+  // Under the book (z-index -1), only the part above it shows.
+  .sg-mark {
+    position: absolute;
+    z-index: -1;
+    left: 12%;
+    bottom: calc(100% - 1rem);
+    width: 3.2rem;
+    padding: 0.25rem 0.25rem 1.4rem;
+    background: $term-red;
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 0.4rem), 0 100%);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(2rem) rotate(3deg);
+    transition: opacity 0.25s ease, transform 0.3s ease;
+  }
+
+  &:hover, &:focus-visible {
+    transform: scale(1.5);
+
+    .sg-book { transform: rotate(1deg); }
+    .sg-mark { opacity: 1; transform: rotate(3deg); }
+  }
+
+  // No right column: a small book at the right edge of the text, no bookmark.
+  @media not all and (min-width: $wide-screen) {
+    position: static;
+    float: right;
+    width: 2.75rem;
+    margin: 0.3rem 0.3rem 0.4rem 1rem;
+
+    .sg-mark { display: none; }
+    &:hover, &:focus-visible { transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &, .sg-book, .sg-mark { transition: none; }
+  }
+}
