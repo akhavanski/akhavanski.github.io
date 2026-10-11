@@ -339,6 +339,20 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { background: nth($filter-fills, $i); }
 }
 
+// Guest and Local, when chosen, are their colour with white polka dots
+// of three sizes; the three layers have tiles of different sizes,
+// so the dots do not line up in a grid.
+@mixin polka-dots($dot: white) {
+  background-image:
+    radial-gradient(circle, $dot 0 2.6px, transparent 3.1px),
+    radial-gradient(circle, $dot 0 1.6px, transparent 2.1px),
+    radial-gradient(circle, $dot 0 0.9px, transparent 1.4px);
+  background-size: 17px 15px, 11px 12px, 7px 8px;
+  background-position: 2px 1px, 8px 7px, 4px 3px;
+}
+
+.filter-options button[data-filter="source"][aria-pressed="true"] { @include polka-dots; }
+
 @media not all and (min-width: $wide-screen) {
   .filter-names { position: relative; }
   .filter { position: static; }
@@ -2087,6 +2101,7 @@ html[data-theme="dark"] {
     .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] .sparkles i { background-image: sparkle-card-night($f); }
   }
   .filter-options .sparkles i { background-image: sparkle-card-night(); filter: drop-shadow(1px 1px 0 $night-ink); }
+  .filter-options button[data-filter="source"][aria-pressed="true"] { @include polka-dots(rgba(255, 255, 255, 0.8)); }
   .turtle-bubble::after, .share-bubble::after { background: $night-card; border-color: $night-ink; }
 
   .to-blog, .toc-toggle {
