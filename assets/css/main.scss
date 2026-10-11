@@ -146,7 +146,7 @@ pre.mermaid { text-align: center; }
   // Pointing at a post darkens its date, and an arrow slides out
   // 3px to the right after the title (not after the excerpt). The arrow takes
   // no room in the line, so it never moves to a line of its own under a long title.
-  a:not(.post-excerpt, .guest-at)::after {
+  a:not(.post-excerpt)::after {
     content: "→";
     display: inline-block;
     width: 1em;
@@ -159,7 +159,7 @@ pre.mermaid { text-align: center; }
   li:is(:hover, :focus-within) {
     time { color: #333; }
 
-    a:not(.post-excerpt, .guest-at)::after {
+    a:not(.post-excerpt)::after {
       opacity: 1;
       transform: none;
     }
@@ -2951,43 +2951,33 @@ $tc-sticky: #fff8a8;
 
 
 
-// A post on another blog: pointing at it shows "Guest post at" and the
-// blog's name right after the title, small and grey, then the arrow,
-// pointing up and out, as grey. Neither is underlined, even under the
-// pointer; the text leads to the post too. It takes no room in the line.
-// On a phone only the arrow shows, without pointing.
+// A post on another blog: right after the title an arrow pointing up and
+// out, as big as the title, always shown (it replaces the arrow → that slides
+// out after other titles). After it, small and grey, "Guest post at" and the
+// blog's name, always shown too; it is plain text, not a link. It may move
+// to the next line under the title. On narrow screens only the blog's name.
 .blog-posts li.external {
-  .post-title > a:not(.guest-at)::after { content: none; }
+  .post-title > a::after {
+    content: "↗";
+    display: inline-block;
+    width: auto;
+    margin: 0 0 0 0.3em;
+    font-size: 1em;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 
   .guest-at {
-    margin: 0 -100% 0 0.4em;
+    margin-left: 0.3em;
     font-size: 0.85em;
     color: #888;
-    text-decoration: none;
     white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.2s;
-
-    &:hover, &:focus-visible { color: #888; background: none; text-decoration: none; }
-
-    &::after {
-      content: "↗";
-      display: inline-block;
-      margin-left: 0.4em;
-      text-decoration: none;
-    }
   }
 
-  &:is(:hover, :focus-within) .guest-at { opacity: 1; }
-
-  // Where nothing can be pointed at, only the arrow shows, always.
-  @media not all and (min-width: 52rem), (hover: none) {
-    .guest-at { opacity: 1; }
-    .guest-at span { display: none; }
-    .guest-at::after { margin-left: 0; }
+  @media not all and (min-width: 52rem) {
+    .guest-at .guest-long { display: none; }
   }
-
-  @media (prefers-reduced-motion: reduce) { .guest-at { transition: none; } }
 }
 
 // The study-guide book on the About page (see _includes/study-guide.html):

@@ -78,8 +78,9 @@
   The title breaks like the text of a post, with no no-break spaces:
   words tied by them would never be hyphenated.
   A post from another blog (external_url) leads there, in a new tab
-  (on the home page and the Blog page); pointing at it shows ↗ and "Guest post at" with the blog's name,
-  which leads there too (assets/css/main.scss).
+  (on the home page and the Blog page). After its title, always, ↗ and,
+  small and grey, plain text "Guest post at" with the blog's name; on narrow
+  screens only the name (assets/css/main.scss).
   There is no space between the date and the title: the title is justified,
   and a space would stretch with it; the gap is the date's margin.
 {%- endcomment %}
@@ -92,7 +93,7 @@
   <li lang="{{ post.lang }}" data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}"{% if post.external_url %} class="external"{% endif %}>
     <div class="post-title">
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ href }}"{{ target }}>{{ post.title }}</a>
-      {%- if post.external_url %}<a class="guest-at" href="{{ href }}"{{ target }} tabindex="-1"><span>Guest post at {{ host[2] | remove: "www." }}</span></a>{% endif %}
+      {%- if post.external_url %} <span class="guest-at"><span class="guest-long">Guest post at </span>{{ host[2] | remove: "www." }}</span>{% endif %}
     </div>
     {%- unless include.limit %}
     {%- assign parts = post.excerpt | split: '<sup id="fnref:' %}
