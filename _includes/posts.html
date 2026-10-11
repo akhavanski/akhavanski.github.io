@@ -12,8 +12,8 @@
   under it. On narrow screens it is under the title: a click on the name opens
   a menu with the options. On phones the name is the cabinet alone, right of
   the title, under the menu.
-  Under the languages, with a small heading Published at, Guest and Local:
-  Guest is the posts from other blogs (external_url), Local the posts of this one.
+  Under the languages, with a small heading Published on, Other site and This site:
+  Other site is the posts from other blogs (external_url), This site the posts of this one.
   Only one of the two is on at a time; with none on, all posts are shown.
   The number after the name tells how many options are chosen.
   On wide screens the filter (named Filters) has the catalogue cabinet from the posts:
@@ -56,10 +56,10 @@
           {%- else %}
           {%- assign n = tags.size %}
           {%- endif %}
-          <p class="filter-heading" style="--i: {{ n | plus: 1 }}">Published at</p>
+          <p class="filter-heading" style="--i: {{ n | plus: 1 }}">Published on</p>
           {%- assign sources = "guest,local" | split: "," %}
           {%- for source in sources %}
-          <button type="button" aria-pressed="false" data-filter="source" data-value="{{ source }}" data-fill="{{ n | plus: forloop.index0 | modulo: fills }}" style="--i: {{ n | plus: forloop.index | plus: 1 }}">{{ source | capitalize }}</button>
+          <button type="button" aria-pressed="false" data-filter="source" data-value="{{ source }}" data-fill="{{ n | plus: forloop.index0 | modulo: fills }}" style="--i: {{ n | plus: forloop.index | plus: 1 }}">{% if source == "guest" %}Other site{% else %}This site{% endif %}</button>
           {%- endfor %}
         </div>
       </div>

@@ -6,8 +6,8 @@
 // Several keywords and several languages can be on at once. A post is shown
 // if it has one of the chosen keywords, that is tags (any if none is chosen),
 // and is in one of the chosen languages (any language if none is chosen).
-// The posts choice (source) is Guest or Local, one at a time (both posts
-// if none): Guest is the posts from other blogs, Local the posts of this one.
+// The posts choice (source) is Other site (guest) or This site (local),
+// one at a time (both if none): guest is the posts from other blogs.
 // The choice is kept in the address, e.g. /?lang=en&tag=ai&source=guest,
 // so a filtered list can be shared or opened again.
 (function () {
@@ -121,7 +121,7 @@
       names[0].focus();
     } else {
       var on = button.getAttribute("aria-pressed") !== "true";
-      // Guest and Local: turning one on turns the other off.
+      // Other site and This site: turning one on turns the other off.
       if (on && button.dataset.filter === "source") {
         buttons.forEach(function (b) {
           if (b.dataset.filter === "source") b.setAttribute("aria-pressed", "false");
