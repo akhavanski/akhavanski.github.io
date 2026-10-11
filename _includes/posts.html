@@ -59,7 +59,8 @@
 {%- comment -%}
   The posts: the title, and left of the text the date, small and light grey.
   On the Blog page, under the title the first 25 words of the post,
-  small and grey; it is a link to the post too.
+  small and grey; it is a link to the post too. A post from another blog
+  shows its whole excerpt: it is written by hand, not cut from the text.
   The title breaks like the text of a post, with no no-break spaces:
   words tied by them would never be hyphenated.
   A post from another blog (external_url) leads there, on the Blog page in a
@@ -78,7 +79,7 @@
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ href }}"{{ target }}{% if post.external_url %} data-host="{{ host[2] | remove: "www." }}"{% endif %}>{{ post.title }}</a>
     </div>
     {%- unless include.limit %}
-    <a class="post-excerpt" href="{{ href }}"{{ target }} tabindex="-1">{{ post.excerpt | strip_html | truncatewords: 25 }}</a>
+    <a class="post-excerpt" href="{{ href }}"{{ target }} tabindex="-1">{% if post.external_url %}{{ post.excerpt | strip_html }}{% else %}{{ post.excerpt | strip_html | truncatewords: 25 }}{% endif %}</a>
     {%- endunless %}
   </li>
   {%- endfor %}
