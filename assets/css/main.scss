@@ -2952,21 +2952,22 @@ $tc-sticky: #fff8a8;
 
 
 // A post on another blog: pointing at it shows "Guest post at" and the
-// blog's name right after the title, in the title's font and colour, then
-// the arrow, pointing up and out. Neither is underlined, even under the
+// blog's name right after the title, small and grey, then the arrow,
+// pointing up and out, as grey. Neither is underlined, even under the
 // pointer; the text leads to the post too. It takes no room in the line.
 .blog-posts li.external {
   .post-title > a:not(.guest-at)::after { content: none; }
 
   .guest-at {
     margin: 0 -100% 0 0.4em;
-    color: inherit;
+    font-size: 0.85em;
+    color: #888;
     text-decoration: none;
     white-space: nowrap;
     opacity: 0;
     transition: opacity 0.2s;
 
-    &:hover, &:focus-visible { color: inherit; background: none; text-decoration: none; }
+    &:hover, &:focus-visible { color: #888; background: none; text-decoration: none; }
 
     &::after {
       content: "↗";
