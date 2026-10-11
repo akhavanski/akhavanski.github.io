@@ -234,9 +234,12 @@ blockquote {
 // brings its options out under it, one by one from the left.
 // The options are cards, several in a line, the keywords
 // and under them the languages with a small heading; a chosen one is filled
-// with its own colour. The colours are bright
-// but light enough for black text (a contrast of 9:1 and more).
-$filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #ff8ad8;
+// with its own colour. There are 24 colours: 24 hues (15 degrees apart in
+// OKLCH) at three lightness steps, light enough for black text (a contrast
+// of 10:1 and more). In the list each hue is 105 degrees from the one before
+// it and the lightness changes every time, so neighbours never look alike.
+// If the number of colours changes, change $fills in _includes/posts.html too.
+$filter-fills: #fda1a0, #bde07e, #c0e8fd, #f897e4, #fec766, #8ff7ea, #bcb2fd, #fec0b0, #bef2b3, #82c5fd, #fdbbd9, #f6e193, #0cd7e0, #dec3fe, #fed8c4, #61da92, #b9d2fc, #fdd6dd, #c4c642, #71e3fe, #f7d3ff, #fda84d, #6aecc4, #d9e0fd;
 
 .blog-head {
   position: relative;

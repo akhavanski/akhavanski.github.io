@@ -19,7 +19,7 @@
   On wide screens the filter (named Filters) has the catalogue cabinet from the posts:
   when its options are open, the cabinet is turned and its drawer is pulled out.
   Each option has its own fill colour for when it is chosen: data-fill counts
-  the keywords and then the languages in a row (the colours are in assets/css/main.scss).
+  the keywords, the languages and Guest and Local in a row (the colours are in assets/css/main.scss).
   Without the script the filter stays hidden and the whole list is shown.
 {%- endcomment -%}
 {%- capture langs %}{% for post in site.posts %}{{ post.lang }}|{% endfor %}{% endcapture %}
@@ -27,6 +27,8 @@
 {%- comment -%} Tag names in alphabetical order, whatever their case. {%- endcomment -%}
 {%- capture tags %}{% for tag in site.tags %}{{ tag[0] }}|{% endfor %}{% endcapture %}
 {%- assign tags = tags | split: "|" | sort_natural %}
+{%- comment -%} The number of fill colours, as in $filter-fills in assets/css/main.scss. {%- endcomment -%}
+{%- assign fills = 24 %}
 
 {%- unless include.limit %}
 <div class="blog-head">
@@ -43,12 +45,12 @@
           <p class="filter-heading" style="--i: 0">Tags</p>
           {%- for tag in tags %}
           {%- assign slug = tag | slugify %}
-          <button type="button" aria-pressed="false" data-filter="tag" data-value="{{ slug }}" data-fill="{{ forloop.index0 | modulo: 8 }}" style="--i: {{ forloop.index }}"{% if slug == "ai" %} class="has-sparkles"{% endif %}>{{ tag }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}</button>
+          <button type="button" aria-pressed="false" data-filter="tag" data-value="{{ slug }}" data-fill="{{ forloop.index0 | modulo: fills }}" style="--i: {{ forloop.index }}"{% if slug == "ai" %} class="has-sparkles"{% endif %}>{{ tag }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}</button>
           {%- endfor %}
           {%- if langs.size > 1 %}
           <p class="filter-heading" style="--i: {{ tags.size | plus: 1 }}">Languages</p>
           {%- for lang in langs %}
-          <button type="button" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ forloop.index0 | plus: tags.size | modulo: 8 }}" style="--i: {{ forloop.index | plus: tags.size | plus: 1 }}">{{ site.data.languages[lang] | default: lang }}</button>
+          <button type="button" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ forloop.index0 | plus: tags.size | modulo: fills }}" style="--i: {{ forloop.index | plus: tags.size | plus: 1 }}">{{ site.data.languages[lang] | default: lang }}</button>
           {%- endfor %}
           {%- assign n = tags.size | plus: langs.size | plus: 1 %}
           {%- else %}
@@ -57,7 +59,7 @@
           <p class="filter-heading" style="--i: {{ n | plus: 1 }}">Published at</p>
           {%- assign sources = "guest,local" | split: "," %}
           {%- for source in sources %}
-          <button type="button" aria-pressed="false" data-filter="source" data-value="{{ source }}" data-fill="{{ n | plus: forloop.index0 | modulo: 8 }}" style="--i: {{ n | plus: forloop.index | plus: 1 }}">{{ source | capitalize }}</button>
+          <button type="button" aria-pressed="false" data-filter="source" data-value="{{ source }}" data-fill="{{ n | plus: forloop.index0 | modulo: fills }}" style="--i: {{ n | plus: forloop.index | plus: 1 }}">{{ source | capitalize }}</button>
           {%- endfor %}
         </div>
       </div>
