@@ -2957,7 +2957,8 @@ $tc-sticky: #fff8a8;
 // and grey, "Read on" and the blog's name; it is plain text, not a link,
 // and takes no room in the line. Where nothing can be pointed at (narrow
 // screens, touch), only the arrow shows.
-// The whole post (date, title and excerpt) stands on a light grey card.
+// The whole post (date, title and excerpt) stands on a card of a very light
+// Tiffany blue (Tiffany blue itself is #81d8d0).
 // The card is drawn behind the text and takes no room: the text stays where
 // the other posts' text is, and on wide screens the card reaches left over
 // the date (10 digits and the 2ch gap, both at 0.7em: 8.4ch of the title).
@@ -2972,12 +2973,12 @@ $tc-sticky: #fff8a8;
     z-index: -1;
     inset: -0.5em -0.8em -0.55em calc(-8.4ch - 0.8em);
     border-radius: 6px;
-    background: #f3f3f3;
+    background: #ebf8f6;
 
     @media not all and (min-width: 52rem) { inset: -0.5em -0.6em -0.55em; }
   }
 
-  html[data-theme="dark"] &::before { background: $night-card; }
+  html[data-theme="dark"] &::before { background: #1f2d2c; }
 
   // The light grey date of the other posts is lost on the card: it is darker here.
   @media (min-width: 52rem) and (hover: hover) {
