@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+{%- comment -%}
+  A post written on another blog (front matter external_url): it is in the
+  lists with the others, and its own address only sends the reader there.
+{%- endcomment %}
+<html lang="{{ page.lang }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ page.title }}</title>
+  <link rel="canonical" href="{{ page.external_url }}">
+  <meta http-equiv="refresh" content="0; url={{ page.external_url }}">
+</head>
+<body><a href="{{ page.external_url }}">{{ page.title }}</a></body>
+</html>

@@ -2921,3 +2921,13 @@ $tc-sticky: #fff8a8;
 }
 
 
+
+// A post on another blog: the arrow points up and out, and the blog's name
+// shows after it, small and grey.
+.blog-posts li.external a:not(.post-excerpt)::after {
+  content: "↗\00a0" attr(data-host);
+  width: auto;
+  margin-right: -100%;
+  white-space: nowrap;
+}
+.blog-posts li.external .post-title > a::after { font-size: 0.85em; color: #888; }

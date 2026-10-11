@@ -62,18 +62,23 @@
   small and grey; it is a link to the post too.
   The title breaks like the text of a post, with no no-break spaces:
   words tied by them would never be hyphenated.
+  A post from another blog (external_url) leads there, on the Blog page in a
+  new tab; pointing at it shows ↗ and the blog's name (assets/css/main.scss).
   There is no space between the date and the title: the title is justified,
   and a space would stretch with it; the gap is the date's margin.
 {%- endcomment %}
 <ul class="blog-posts{% unless include.limit %} with-excerpts{% endunless %}">
   {%- for post in site.posts limit: include.limit %}
   {%- capture post_tags %}{% for tag in post.tags %}{{ tag | slugify }} {% endfor %}{% endcapture %}
-  <li lang="{{ post.lang }}" data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}">
+  {%- assign href = post.external_url | default: post.url | relative_url %}
+  {%- assign host = post.external_url | split: "/" %}
+  {%- capture target %}{% if post.external_url and include.limit == nil %} target="_blank" rel="noopener"{% endif %}{% endcapture %}
+  <li lang="{{ post.lang }}" data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}"{% if post.external_url %} class="external"{% endif %}>
     <div class="post-title">
-      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ href }}"{{ target }}{% if post.external_url %} data-host="{{ host[2] | remove: "www." }}"{% endif %}>{{ post.title }}</a>
     </div>
     {%- unless include.limit %}
-    <a class="post-excerpt" href="{{ post.url | relative_url }}" tabindex="-1">{{ post.excerpt | strip_html | truncatewords: 25 }}</a>
+    <a class="post-excerpt" href="{{ href }}"{{ target }} tabindex="-1">{{ post.excerpt | strip_html | truncatewords: 25 }}</a>
     {%- endunless %}
   </li>
   {%- endfor %}
