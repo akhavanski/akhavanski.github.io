@@ -12,6 +12,9 @@
   under it. On narrow screens it is under the title: a click on the name opens
   a menu with the options. On phones the name is the cabinet alone, right of
   the title, under the menu.
+  Under the languages, with a small heading Posts, Guest and Local:
+  Guest is the posts from other blogs (external_url), Local the posts of this one.
+  Only one of the two is on at a time; with none on, all posts are shown.
   The number after the name tells how many options are chosen.
   On wide screens the filter (named Filters) has the catalogue cabinet from the posts:
   when its options are open, the cabinet is turned and its drawer is pulled out.
@@ -47,7 +50,15 @@
           {%- for lang in langs %}
           <button type="button" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ forloop.index0 | plus: tags.size | modulo: 8 }}" style="--i: {{ forloop.index | plus: tags.size | plus: 1 }}">{{ site.data.languages[lang] | default: lang }}</button>
           {%- endfor %}
+          {%- assign n = tags.size | plus: langs.size | plus: 1 %}
+          {%- else %}
+          {%- assign n = tags.size %}
           {%- endif %}
+          <p class="filter-heading" style="--i: {{ n | plus: 1 }}">Posts</p>
+          {%- assign sources = "guest,local" | split: "," %}
+          {%- for source in sources %}
+          <button type="button" aria-pressed="false" data-filter="source" data-value="{{ source }}" data-fill="{{ n | plus: forloop.index0 | modulo: 8 }}" style="--i: {{ n | plus: forloop.index | plus: 1 }}">{{ source | capitalize }}</button>
+          {%- endfor %}
         </div>
       </div>
     </div>

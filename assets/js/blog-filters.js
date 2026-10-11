@@ -6,7 +6,9 @@
 // Several keywords and several languages can be on at once. A post is shown
 // if it has one of the chosen keywords, that is tags (any if none is chosen),
 // and is in one of the chosen languages (any language if none is chosen).
-// The choice is kept in the address, e.g. /?lang=en&tag=ai&tag=agency,
+// The posts choice (source) is Guest or Local, one at a time (both posts
+// if none): Guest is the posts from other blogs, Local the posts of this one.
+// The choice is kept in the address, e.g. /?lang=en&tag=ai&source=guest,
 // so a filtered list can be shared or opened again.
 (function () {
   var box = document.querySelector(".blog-filters");
@@ -63,13 +65,15 @@
   function apply() {
     var langs = chosen("lang");
     var tags = chosen("tag");
+    var source = chosen("source")[0] || "all";
     var shown = 0;
 
     posts.forEach(function (post) {
       var postTags = post.dataset.tags.split(" ");
       var fits =
         (!langs.length || langs.indexOf(post.dataset.lang) !== -1) &&
-        (!tags.length || tags.some(function (tag) { return postTags.indexOf(tag) !== -1; }));
+        (!tags.length || tags.some(function (tag) { return postTags.indexOf(tag) !== -1; })) &&
+        (source === "all" || (source === "guest") === post.classList.contains("external"));
       post.hidden = !fits;
       if (fits) shown++;
     });
@@ -79,7 +83,7 @@
       name.nextElementSibling.textContent = n ? "(" + n + ")" : "";
     });
 
-    var active = langs.length + tags.length > 0;
+    var active = langs.length + tags.length > 0 || source !== "all";
     status.hidden = !active;
     count.textContent = shown
       ? "Showing " + shown + " of " + posts.length + (posts.length === 1 ? " post." : " posts.")
@@ -88,6 +92,7 @@
     var params = new URLSearchParams();
     langs.forEach(function (lang) { params.append("lang", lang); });
     tags.forEach(function (tag) { params.append("tag", tag); });
+    if (source !== "all") params.append("source", source);
     var query = params.toString();
     history.replaceState(null, "", location.pathname + (query ? "?" + query : "") + location.hash);
   }
@@ -98,6 +103,7 @@
     var on = params.getAll(button.dataset.filter).indexOf(button.dataset.value) !== -1;
     button.setAttribute("aria-pressed", String(on));
   });
+
 
   box.addEventListener("click", function (e) {
     var button = e.target.closest("button");
@@ -114,7 +120,14 @@
       // The reset button hides now, so the focus goes to the first filter's name.
       names[0].focus();
     } else {
-      button.setAttribute("aria-pressed", String(button.getAttribute("aria-pressed") !== "true"));
+      var on = button.getAttribute("aria-pressed") !== "true";
+      // Guest and Local: turning one on turns the other off.
+      if (on && button.dataset.filter === "source") {
+        buttons.forEach(function (b) {
+          if (b.dataset.filter === "source") b.setAttribute("aria-pressed", "false");
+        });
+      }
+      button.setAttribute("aria-pressed", String(on));
     }
     apply();
   });
