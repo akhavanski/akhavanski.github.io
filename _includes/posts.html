@@ -75,8 +75,8 @@
   The excerpt has no footnote numbers: each <sup id="fnref:…"> is cut out.
   The title breaks like the text of a post, with no no-break spaces:
   words tied by them would never be hyphenated.
-  A post from another blog (external_url) leads there, on the Blog page in a
-  new tab; pointing at it shows ↗ and "Guest post at" with the blog's name,
+  A post from another blog (external_url) leads there, in a new tab
+  (on the home page and the Blog page); pointing at it shows ↗ and "Guest post at" with the blog's name,
   which leads there too (assets/css/main.scss).
   There is no space between the date and the title: the title is justified,
   and a space would stretch with it; the gap is the date's margin.
@@ -86,7 +86,7 @@
   {%- capture post_tags %}{% for tag in post.tags %}{{ tag | slugify }} {% endfor %}{% endcapture %}
   {%- assign href = post.external_url | default: post.url | relative_url %}
   {%- assign host = post.external_url | split: "/" %}
-  {%- capture target %}{% if post.external_url and include.limit == nil %} target="_blank" rel="noopener"{% endif %}{% endcapture %}
+  {%- capture target %}{% if post.external_url %} target="_blank" rel="noopener"{% endif %}{% endcapture %}
   <li lang="{{ post.lang }}" data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}"{% if post.external_url %} class="external"{% endif %}>
     <div class="post-title">
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ href }}"{{ target }}>{{ post.title }}</a>
