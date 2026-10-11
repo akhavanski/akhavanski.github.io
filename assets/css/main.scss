@@ -2961,17 +2961,18 @@ p:has(> .study-guide) { position: relative; }
     svg { position: relative; display: block; width: 100%; height: 100%; }
   }
 
-  // The spine, a darker edge on the left of the cover.
+  // The spine: a short line from the cover's bottom left corner
+  // to the outline of the pages behind it.
   .sg-spine {
     position: absolute;
-    top: 1px;
-    bottom: -2px;
-    left: -0.22rem;
-    width: 0.5rem;
-    box-sizing: border-box;
-    border: 1.5px solid #1a1a1a;
-    border-radius: 3px 0 0 3px;
-    background: #b8591a;
+    z-index: 1;
+    left: 0.5px;
+    top: calc(100% - 1px);
+    width: 4.5px;
+    height: 1.5px;
+    background: #1a1a1a;
+    transform-origin: left center;
+    transform: rotate(42deg);
   }
 
   .sg-pages {
@@ -2989,11 +2990,11 @@ p:has(> .study-guide) { position: relative; }
     position: absolute;
     left: 12%;
     bottom: calc(100% - 0.625rem);
-    width: 1.9rem; // the sizes are before scale(2.4)
-    padding: 0.156rem 0.156rem 0.875rem;
+    width: 1.71rem; // the sizes are before scale(2.4)
+    padding: 0.156rem 0.1rem 0.875rem;
     background: $term-red;
     color: #fff;
-    font-size: 0.344rem;
+    font-size: 0.31rem;
     font-weight: 700;
     line-height: 1.2;
     text-align: center;
