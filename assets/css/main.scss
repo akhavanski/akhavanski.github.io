@@ -2961,6 +2961,19 @@ p:has(> .study-guide) { position: relative; }
     svg { position: relative; display: block; width: 100%; height: 100%; }
   }
 
+  // The spine, a darker edge on the left of the cover.
+  .sg-spine {
+    position: absolute;
+    top: 1px;
+    bottom: -2px;
+    left: -0.22rem;
+    width: 0.5rem;
+    box-sizing: border-box;
+    border: 1.5px solid #1a1a1a;
+    border-radius: 3px 0 0 3px;
+    background: #b8591a;
+  }
+
   .sg-pages {
     position: absolute;
     inset: 0;
@@ -2971,10 +2984,9 @@ p:has(> .study-guide) { position: relative; }
     transform: translate(3px, 3px);
   }
 
-  // Under the book (z-index -1), only the part above it shows.
+  // Between the pages and the cover: only the part above the book shows.
   .sg-mark {
     position: absolute;
-    z-index: -1;
     left: 12%;
     bottom: calc(100% - 0.625rem);
     width: 1.9rem; // the sizes are before scale(2.4)
@@ -2988,7 +3000,7 @@ p:has(> .study-guide) { position: relative; }
     clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 0.25rem), 0 100%);
     opacity: 0;
     pointer-events: none;
-    transform: translateY(1.25rem) rotate(3deg);
+    transform: translateY(1.25rem) rotate(-1deg);
     transition: opacity 0.25s ease, transform 0.3s ease;
   }
 
@@ -2996,7 +3008,7 @@ p:has(> .study-guide) { position: relative; }
     transform: scale(2.4);
 
     .sg-book { transform: rotate(1deg); }
-    .sg-mark { opacity: 1; transform: rotate(3deg); }
+    .sg-mark { opacity: 1; transform: rotate(-1deg); }
   }
 
   @media not all and (min-width: $wide-screen) { display: none; }
