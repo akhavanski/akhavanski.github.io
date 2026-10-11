@@ -2941,7 +2941,7 @@ p:has(> .study-guide) { position: relative; }
 .study-guide {
   position: absolute; // no top: it stays on its line
   left: calc(100% + 2.5rem);
-  width: 2.35rem; // 2.35 × 4/3 ≈ 3.1rem, a bit more than two lines
+  width: 2.45rem; // × 166/125 ≈ 3.25rem, a bit more than two lines
   margin-top: -0.1rem;
   isolation: isolate;
   transform-origin: left top;
@@ -2953,36 +2953,12 @@ p:has(> .study-guide) { position: relative; }
   .sg-book {
     position: relative;
     display: block;
-    aspect-ratio: 120 / 160;
+    aspect-ratio: 125 / 166;
     transform: rotate(4deg);
     transition: transform 0.3s ease;
     filter: drop-shadow(1px 3px 3px rgba(0, 0, 0, 0.25));
 
-    svg { position: relative; display: block; width: 100%; height: 100%; }
-  }
-
-  // The spine: a short line from the cover's bottom left corner
-  // to the outline of the pages behind it.
-  .sg-spine {
-    position: absolute;
-    z-index: 1;
-    left: 0.5px;
-    top: calc(100% - 1px);
-    width: 4.5px;
-    height: 1.5px;
-    background: #1a1a1a;
-    transform-origin: left center;
-    transform: rotate(42deg);
-  }
-
-  .sg-pages {
-    position: absolute;
-    inset: 0;
-    box-sizing: border-box;
-    border: 1.5px solid #1a1a1a;
-    border-radius: 2px 6px 6px 2px;
-    background: #fbf8f1;
-    transform: translate(3px, 3px);
+    svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
   }
 
   // Between the pages and the cover: only the part above the book shows.
