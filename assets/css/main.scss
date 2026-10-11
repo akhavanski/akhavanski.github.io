@@ -2954,8 +2954,10 @@ $tc-sticky: #fff8a8;
 // A post on another blog: right after the title an arrow pointing up and
 // out, as big as the title, always shown (it replaces the arrow → that slides
 // out after other titles). After it, small and grey, "Guest post at" and the
-// blog's name, always shown too; it is plain text, not a link. It may move
-// to the next line under the title. On narrow screens only the blog's name.
+// blog's name, always shown too; it is plain text, not a link. The space in
+// the markup parts it from the arrow. On narrow screens only the blog's name,
+// on its own line under the title (inline, it would stretch the title's last
+// line: the title is justified).
 .blog-posts li.external {
   .post-title > a::after {
     content: "↗";
@@ -2969,13 +2971,13 @@ $tc-sticky: #fff8a8;
   }
 
   .guest-at {
-    margin-left: 0.3em;
     font-size: 0.85em;
     color: #888;
     white-space: nowrap;
   }
 
   @media not all and (min-width: 52rem) {
+    .guest-at { display: block; }
     .guest-at .guest-long { display: none; }
   }
 }
