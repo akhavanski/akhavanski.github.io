@@ -146,7 +146,7 @@ pre.mermaid { text-align: center; }
   // Pointing at a post darkens its date, and an arrow slides out
   // 3px to the right after the title (not after the excerpt). The arrow takes
   // no room in the line, so it never moves to a line of its own under a long title.
-  a:not(.post-excerpt)::after {
+  a:not(.post-excerpt, .guest-at)::after {
     content: "→";
     display: inline-block;
     width: 1em;
@@ -159,7 +159,7 @@ pre.mermaid { text-align: center; }
   li:is(:hover, :focus-within) {
     time { color: #333; }
 
-    a:not(.post-excerpt)::after {
+    a:not(.post-excerpt, .guest-at)::after {
       opacity: 1;
       transform: none;
     }
@@ -2950,21 +2950,24 @@ $tc-sticky: #fff8a8;
 
 // A post on another blog: the arrow points up and out, as large and dark as
 // the usual one, and "Guest post at" and the blog's name show after it, small and grey.
+// That text leads to the post too and does not change under the pointer.
 // The name takes no room in the line either.
 .blog-posts li.external {
-  a:not(.post-excerpt)::after { content: "↗"; }
+  a:not(.post-excerpt, .guest-at)::after { content: "↗"; }
 
-  .post-title::after {
-    content: "Guest post at " attr(data-host);
+  .guest-at {
     margin: 0 -100% 0 1.6em;
     font-size: 0.85em;
     color: #888;
+    text-decoration: none;
     white-space: nowrap;
     opacity: 0;
     transition: opacity 0.2s;
+
+    &:hover, &:focus-visible { color: #888; background: none; text-decoration: none; }
   }
 
-  &:is(:hover, :focus-within) .post-title::after { opacity: 1; }
+  &:is(:hover, :focus-within) .guest-at { opacity: 1; }
 }
 
 // The study-guide book on the About page (see _includes/study-guide.html):
