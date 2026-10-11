@@ -2953,11 +2953,10 @@ $tc-sticky: #fff8a8;
 
 // A post on another blog: right after the title an arrow pointing up and
 // out, as big as the title, always shown (it replaces the arrow → that slides
-// out after other titles). After it, small and grey, "Guest post at" and the
-// blog's name, always shown too; it is plain text, not a link. The space in
-// the markup parts it from the arrow. On narrow screens only the blog's name,
-// on its own line under the title (inline, it would stretch the title's last
-// line: the title is justified).
+// out after other titles). Pointing at the post shows, after the arrow, small
+// and grey, "Guest post at" and the blog's name; it is plain text, not a link,
+// and takes no room in the line. Where nothing can be pointed at (narrow
+// screens, touch), only the arrow shows.
 .blog-posts li.external {
   .post-title > a::after {
     content: "↗";
@@ -2971,15 +2970,21 @@ $tc-sticky: #fff8a8;
   }
 
   .guest-at {
+    margin-right: -100%;
     font-size: 0.85em;
     color: #888;
     white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
   }
 
-  @media not all and (min-width: 52rem) {
-    .guest-at { display: block; }
-    .guest-at .guest-long { display: none; }
+  &:is(:hover, :focus-within) .guest-at { opacity: 1; }
+
+  @media not all and (min-width: 52rem), (hover: none) {
+    .guest-at { display: none; }
   }
+
+  @media (prefers-reduced-motion: reduce) { .guest-at { transition: none; } }
 }
 
 // The study-guide book on the About page (see _includes/study-guide.html):
