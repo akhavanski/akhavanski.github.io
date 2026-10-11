@@ -2927,13 +2927,13 @@ $tc-sticky: #fff8a8;
 
 
 // A post on another blog: the arrow points up and out, as large and dark as
-// the usual one, and the blog's name shows after it, small and grey.
+// the usual one, and "Guest post at" and the blog's name show after it, small and grey.
 // The name takes no room in the line either.
 .blog-posts li.external {
   a:not(.post-excerpt)::after { content: "↗"; }
 
   .post-title::after {
-    content: attr(data-host);
+    content: "Guest post at " attr(data-host);
     margin: 0 -100% 0 1.6em;
     font-size: 0.85em;
     color: #888;
