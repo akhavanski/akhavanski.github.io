@@ -342,7 +342,7 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
 // Guest and Local, when chosen, are their colour with white polka dots
 // of three sizes; the three layers have tiles of different sizes,
 // so the dots do not line up in a grid. The letters have a halo
-// of the fill colour (--fill), so no dot touches them.
+// of the fill colour (--fill), 2px at most, so no dot touches them.
 @mixin polka-dots($dot: white) {
   background-image:
     radial-gradient(circle, $dot 0 2.6px, transparent 3.1px),
@@ -356,9 +356,8 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   @include polka-dots;
   text-shadow:
     1px 0 0 var(--fill), -1px 0 0 var(--fill), 0 1px 0 var(--fill), 0 -1px 0 var(--fill),
-    2px 0 1px var(--fill), -2px 0 1px var(--fill), 0 2px 1px var(--fill), 0 -2px 1px var(--fill),
-    2px 2px 1px var(--fill), -2px 2px 1px var(--fill), 2px -2px 1px var(--fill), -2px -2px 1px var(--fill),
-    0 0 4px var(--fill), 0 0 4px var(--fill);
+    1px 1px 0 var(--fill), -1px 1px 0 var(--fill), 1px -1px 0 var(--fill), -1px -1px 0 var(--fill),
+    2px 0 0 var(--fill), -2px 0 0 var(--fill), 0 2px 0 var(--fill), 0 -2px 0 var(--fill);
 }
 
 @media not all and (min-width: $wide-screen) {
