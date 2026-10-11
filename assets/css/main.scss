@@ -336,12 +336,13 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
 }
 
 @for $i from 1 through length($filter-fills) {
-  .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { background: nth($filter-fills, $i); }
+  .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { background: nth($filter-fills, $i); --fill: #{nth($filter-fills, $i)}; }
 }
 
 // Guest and Local, when chosen, are their colour with white polka dots
 // of three sizes; the three layers have tiles of different sizes,
-// so the dots do not line up in a grid.
+// so the dots do not line up in a grid. The letters have a halo
+// of the fill colour (--fill), so no dot touches them.
 @mixin polka-dots($dot: white) {
   background-image:
     radial-gradient(circle, $dot 0 2.6px, transparent 3.1px),
@@ -351,7 +352,14 @@ $filter-fills: #ff8a80, #ffb74d, #ffe14d, #7ed99a, #4dd0e1, #82b1ff, #b39dff, #f
   background-position: 2px 1px, 8px 7px, 4px 3px;
 }
 
-.filter-options button[data-filter="source"][aria-pressed="true"] { @include polka-dots; }
+.filter-options button[data-filter="source"][aria-pressed="true"] {
+  @include polka-dots;
+  text-shadow:
+    1px 0 0 var(--fill), -1px 0 0 var(--fill), 0 1px 0 var(--fill), 0 -1px 0 var(--fill),
+    2px 0 1px var(--fill), -2px 0 1px var(--fill), 0 2px 1px var(--fill), 0 -2px 1px var(--fill),
+    2px 2px 1px var(--fill), -2px 2px 1px var(--fill), 2px -2px 1px var(--fill), -2px -2px 1px var(--fill),
+    0 0 4px var(--fill), 0 0 4px var(--fill);
+}
 
 @media not all and (min-width: $wide-screen) {
   .filter-names { position: relative; }
@@ -2097,7 +2105,7 @@ html[data-theme="dark"] {
   }
   @for $i from 1 through length($filter-fills) {
     $f: mix(nth($filter-fills, $i), $night, 72%);
-    .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { background: $f; color: #111; }
+    .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { background: $f; color: #111; --fill: #{$f}; }
     .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] .sparkles i { background-image: sparkle-card-night($f); }
   }
   .filter-options .sparkles i { background-image: sparkle-card-night(); filter: drop-shadow(1px 1px 0 $night-ink); }
