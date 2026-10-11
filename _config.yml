@@ -24,6 +24,11 @@ book_call:
   show: true
   url: "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ3X_hbFc-nlNDdioHhTEOSCxFuyOZTuleysNWsLjKQfn9L12z8KZZQbnT_yP6MmQoT5xOyhRmwf"
 
+# The study-guide book next to certificate.tips on the About page
+# (see _includes/study-guide.html): `show: true` puts it there.
+study_guide:
+  show: true
+
 # The dark theme (see assets/js/theme.js): `true` turns on the dot in the bottom
 # left corner that switches it; the first time the theme follows the system.
 dark_theme: false
