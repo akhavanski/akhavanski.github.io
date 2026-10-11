@@ -27,7 +27,7 @@ book_call:
 # The study-guide book next to certificate.tips on the About page
 # (see _includes/study-guide.html): `show: true` puts it there.
 study_guide:
-  show: true
+  show: false
 
 # The dark theme (see assets/js/theme.js): `true` turns on the dot in the bottom
 # left corner that switches it; the first time the theme follows the system.
