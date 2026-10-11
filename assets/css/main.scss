@@ -2962,21 +2962,23 @@ $tc-sticky: #fff8a8;
 // The card is drawn behind the text and takes no room: the text stays where
 // the other posts' text is, and on wide screens the card reaches left over
 // the date (10 digits and the 2ch gap, both at 0.7em: 8.4ch of the title).
-// The post gets more room above and below for the card.
+// The posts keep their usual gap: the card fits inside it, 0.4rem above
+// and below on the Blog page (gap 1.1rem), 0.22rem on the home page (gap 0.6rem).
 .blog-posts li.external {
   isolation: isolate;
-  margin-block: 1.6rem;
 
   &::before {
     content: "";
     position: absolute;
     z-index: -1;
-    inset: -0.5em -0.8em -0.55em calc(-8.4ch - 0.8em);
+    inset: -0.4rem -0.8em -0.4rem calc(-8.4ch - 0.8em);
     border-radius: 6px;
     background: #f4fbfa;
 
-    @media not all and (min-width: 52rem) { inset: -0.5em -0.6em -0.55em; }
+    @media not all and (min-width: 52rem) { left: -0.6em; right: -0.6em; }
   }
+
+  @at-root .blog-posts:not(.with-excerpts) li.external::before { top: -0.22rem; bottom: -0.22rem; }
 
   html[data-theme="dark"] &::before { background: #1f2d2c; }
 
