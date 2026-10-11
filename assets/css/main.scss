@@ -94,7 +94,11 @@ pre.mermaid { text-align: center; }
     hyphens: auto;
     -webkit-hyphens: auto;
 
-    &:hover { text-decoration-line: underline; }
+    // The underline is thinner than a link's: half a pixel, one dot on a sharp screen.
+    &:hover {
+      text-decoration-line: underline;
+      text-decoration-thickness: 0.5px;
+    }
   }
 
   // The filters hide posts with it.
@@ -2926,16 +2930,11 @@ $tc-sticky: #fff8a8;
 // the usual one, and the blog's name shows after it, small and grey.
 // The name takes no room in the line either.
 .blog-posts li.external {
-  // ↗ is drawn smaller than →, so it is enlarged to match.
-  a:not(.post-excerpt)::after {
-    content: "↗";
-    font-size: 1.3em;
-    line-height: 0;
-  }
+  a:not(.post-excerpt)::after { content: "↗"; }
 
   .post-title::after {
     content: attr(data-host);
-    margin: 0 -100% 0 1.8em;
+    margin: 0 -100% 0 1.6em;
     font-size: 0.85em;
     color: #888;
     white-space: nowrap;
