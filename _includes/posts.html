@@ -61,6 +61,7 @@
   On the Blog page, under the title the first 25 words of the post,
   small and grey; it is a link to the post too. A post from another blog
   shows its whole excerpt: it is written by hand, not cut from the text.
+  The excerpt has no footnote numbers: each <sup id="fnref:…"> is cut out.
   The title breaks like the text of a post, with no no-break spaces:
   words tied by them would never be hyphenated.
   A post from another blog (external_url) leads there, on the Blog page in a
@@ -79,7 +80,9 @@
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ href }}"{{ target }}>{{ post.title }}</a>
     </div>
     {%- unless include.limit %}
-    <a class="post-excerpt" href="{{ href }}"{{ target }} tabindex="-1">{% if post.external_url %}{{ post.excerpt | strip_html }}{% else %}{{ post.excerpt | strip_html | truncatewords: 25 }}{% endif %}</a>
+    {%- assign parts = post.excerpt | split: '<sup id="fnref:' %}
+    {%- capture excerpt %}{% for part in parts %}{% if forloop.first %}{{ part }}{% else %}{% assign rest = part | split: '</sup>' %}{% for piece in rest offset: 1 %}{{ piece }}{% endfor %}{% endif %}{% endfor %}{% endcapture %}
+    <a class="post-excerpt" href="{{ href }}"{{ target }} tabindex="-1">{% if post.external_url %}{{ excerpt | strip_html }}{% else %}{{ excerpt | strip_html | truncatewords: 25 }}{% endif %}</a>
     {%- endunless %}
   </li>
   {%- endfor %}
