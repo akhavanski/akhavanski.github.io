@@ -2951,26 +2951,34 @@ $tc-sticky: #fff8a8;
 
 
 
-// A post on another blog: the arrow points up and out, as large and dark as
-// the usual one, and "Guest post at" and the blog's name show after it, small and grey.
-// That text leads to the post too and does not change under the pointer.
-// The name takes no room in the line either.
+// A post on another blog: pointing at it shows "Guest post at" and the
+// blog's name right after the title, in the title's font and colour, then
+// the arrow, pointing up and out. Neither is underlined, even under the
+// pointer; the text leads to the post too. It takes no room in the line.
 .blog-posts li.external {
-  a:not(.post-excerpt, .guest-at)::after { content: "↗"; }
+  .post-title > a:not(.guest-at)::after { content: none; }
 
   .guest-at {
-    margin: 0 -100% 0 1.6em;
-    font-size: 0.85em;
-    color: #888;
+    margin: 0 -100% 0 0.4em;
+    color: inherit;
     text-decoration: none;
     white-space: nowrap;
     opacity: 0;
     transition: opacity 0.2s;
 
-    &:hover, &:focus-visible { color: #888; background: none; text-decoration: none; }
+    &:hover, &:focus-visible { color: inherit; background: none; text-decoration: none; }
+
+    &::after {
+      content: "↗";
+      display: inline-block;
+      margin-left: 0.4em;
+      text-decoration: none;
+    }
   }
 
   &:is(:hover, :focus-within) .guest-at { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) { .guest-at { transition: none; } }
 }
 
 // The study-guide book on the About page (see _includes/study-guide.html):
