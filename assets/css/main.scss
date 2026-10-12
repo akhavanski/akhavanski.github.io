@@ -1959,6 +1959,72 @@ article p, article li, .intro p, main .w > p, main .w > ul:not(.blog-posts) li, 
 // Code stays whole; links break like any other word.
 article code, main code { hyphens: manual; -webkit-hyphens: manual; }
 
+// certificate.tips in Projects on the Now page (_includes/ct-card.html),
+// in the design system of certificate.tips: green security paper, square
+// corners, a 2px dark green frame and a second 1px line 6px outside it,
+// no shadows; the name in Bodoni Moda, the text in Hanken Grotesk, one round
+// dark green button. Its own colours in both themes, like a printed sheet.
+$ct-paper: #E8F1EB;
+$ct-brand: #0C3B2E;
+$ct-brand-hover: #1C6B54;
+$ct-ink: #10201A;
+$ct-display: 'Bodoni Moda', Didot, 'Times New Roman', serif;
+$ct-sans: 'Hanken Grotesk', 'Trebuchet MS', sans-serif;
+
+.ct-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin: 1.5rem 7px 2rem;
+  padding: 1.75rem 1.5rem 1.5rem;
+  background: $ct-paper;
+  color: $ct-ink;
+  border: 2px solid $ct-brand;
+  outline: 1px solid $ct-brand;
+  outline-offset: 6px;
+  text-align: left;
+  hyphens: manual;
+
+  .ct-card-name {
+    font-family: $ct-display;
+    font-weight: 600;
+    font-size: 1.6rem;
+    line-height: 1.2;
+    color: $ct-brand;
+    text-decoration: none;
+    transition: color 0.15s;
+    &:hover { color: $ct-brand-hover; }
+  }
+
+  .ct-card-text {
+    margin: 0;
+    font-family: $ct-sans;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: $ct-ink;
+  }
+
+  .ct-card-button {
+    display: inline-block;
+    padding: 0.75rem 1.4rem;
+    border-radius: 999px;
+    background: $ct-brand;
+    color: #FFFFFF;
+    font-family: $ct-sans;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-decoration: none;
+    transition: background-color 0.15s;
+    &:hover { background: $ct-brand-hover; }
+  }
+
+  a:focus-visible { outline: 3px solid $ct-brand; outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) { a { transition: none; } }
+}
+
 // The certificate.tips link on About is set as the logo of the
 // certificate.tips site: Bodoni Moda 600, a little larger, no underline.
 // On hover, like the "now" link below, small grey names of the exams

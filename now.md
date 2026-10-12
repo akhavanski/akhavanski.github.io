@@ -15,7 +15,7 @@ My contacts{% include contact-icons.html %}
 
 ## Projects
 
-- [Certificate.tips](https://certificate.tips) is a site to help people prepare for IT certification in project management or business analysis.
+{% include ct-card.html %}
 
 ## Studying
 
