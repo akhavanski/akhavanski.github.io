@@ -10,6 +10,9 @@ $tiny-screen: 20.5rem;
 // From this width there is an empty column right of the 640px wide text.
 $wide-screen: 72rem;
 
+// Tiffany blue: the colour of the certificate.tips link on About under the pointer.
+$tiffany: #0ABAB5;
+
 // The red of terms.
 $term-red: #e0352b;
 
@@ -1959,24 +1962,47 @@ article p, article li, .intro p, main .w > p, main .w > ul:not(.blog-posts) li, 
 // Code stays whole; links break like any other word.
 article code, main code { hyphens: manual; -webkit-hyphens: manual; }
 
-// The certificate.tips link on About: under the pointer or in focus the word
-// turns into the header font of the certificate.tips site, Bodoni Moda 600,
-// a little larger, without the underline. The link keeps the width of
-// 16 monospace characters, so the rest of the line does not move.
+// The certificate.tips link on About is set as the logo of the
+// certificate.tips site: Bodoni Moda 600, a little larger, no underline.
+// On hover it turns Tiffany blue and, like the "now" link below, small
+// copies of the logo fly out from the word to its corners and wobble there
+// while the cursor stays.
 .ct-link {
+  position: relative;
   display: inline-block;
-  width: 16ch;
+  font-family: 'Bodoni Moda', Didot, 'Times New Roman', serif;
+  font-weight: 600;
+  font-size: 1.15em;
+  line-height: 1;
+  text-decoration-line: none;
+  transition: color 0.15s;
 
-  &:hover, &:focus-visible {
-    text-decoration-line: none;
-
-    span {
-      font-family: 'Bodoni Moda', Didot, 'Times New Roman', serif;
-      font-weight: 600;
-      font-size: 1.15em;
-      line-height: 1;
-    }
-  }
+  &:hover, &:focus-visible { color: $tiffany; }
+}
+.ct-fx i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-style: normal;
+  font-size: 0.45em;
+  white-space: nowrap;
+  color: $tiffany;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.35s cubic-bezier(0.3, 1.6, 0.5, 1), opacity 0.2s;
+}
+.ct-link:is(:hover, :focus-visible) .ct-fx i {
+  opacity: 1;
+  animation: zap-wobble 0.9s ease-in-out 0.35s infinite alternate;
+}
+.ct-link:is(:hover, :focus-visible) .ct-fx i:nth-child(1) { transform: translate(-50%, -50%) translate(-62%, -2.3em) rotate(-12deg) scale(1); }
+.ct-link:is(:hover, :focus-visible) .ct-fx i:nth-child(2) { transform: translate(-50%, -50%) translate(62%, -2.5em) rotate(9deg) scale(1); animation-duration: 0.7s; animation-delay: 0.45s; }
+.ct-link:is(:hover, :focus-visible) .ct-fx i:nth-child(3) { transform: translate(-50%, -50%) translate(62%, 2.3em) rotate(12deg) scale(1); animation-duration: 1s; animation-direction: alternate-reverse; }
+.ct-link:is(:hover, :focus-visible) .ct-fx i:nth-child(4) { transform: translate(-50%, -50%) translate(-62%, 2.5em) rotate(-9deg) scale(1); animation-duration: 0.8s; animation-delay: 0.5s; }
+@media (prefers-reduced-motion: reduce) {
+  .ct-fx i { transition: opacity 0.2s; }
+  .ct-link:is(:hover, :focus-visible) .ct-fx i { animation: none; }
 }
 
 // The "now" link on About: on hover red exclamation marks and yellow
