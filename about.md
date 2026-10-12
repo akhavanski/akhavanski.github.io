@@ -7,7 +7,7 @@ badge: Open to work
   The text about me, then the business card with contacts
   (_includes/social.html).
   The certificate.tips link is set as the logo of that site, Bodoni Moda;
-  on hover it turns Tiffany blue and copies of the logo fly around it
+  on hover small grey exam names fly around it
   (assets/css/main.scss, .ct-link). The font loads here, only the letters
   of this word.
   The About item of the menu in the header leads here.
@@ -18,7 +18,7 @@ I'm a Product Manager and Business Analyst with 7+ years of experience in IT. I'
 
 I live in Vilnius, Lithuania.
 
-I work at 21vek.by as a Product Owner and I’m building{% include study-guide.html %} <a class="ct-link" href="https://certificate.tips">certificate.tips<span class="ct-fx" aria-hidden="true"><i>certificate.tips</i><i>certificate.tips</i><i>certificate.tips</i><i>certificate.tips</i></span></a>. All my current projects are on the <a class="zap" href="/now">now<span class="zap-fx" aria-hidden="true"><i>❗️</i><i>⚡️</i><i>❗️</i><i>⚡️</i></span></a> page.
+I work at 21vek.by as a Product Owner and I’m building{% include study-guide.html %} <a class="ct-link" href="https://certificate.tips">certificate.tips<span class="ct-fx" aria-hidden="true"><i>CBAP</i><i>AAC</i><i>PSPO</i><i>CBDA</i></span></a>. All my current projects are on the <a class="zap" href="/now">now<span class="zap-fx" aria-hidden="true"><i>❗️</i><i>⚡️</i><i>❗️</i><i>⚡️</i></span></a> page.
 
 Previously, I was a Business Analyst at an outsourcing agency. My favourite project there was building data analysis pipelines for an MBB consulting firm.
 

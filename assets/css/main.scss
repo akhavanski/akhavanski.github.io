@@ -10,9 +10,6 @@ $tiny-screen: 20.5rem;
 // From this width there is an empty column right of the 640px wide text.
 $wide-screen: 72rem;
 
-// Tiffany blue: the colour of the certificate.tips link on About under the pointer.
-$tiffany: #0ABAB5;
-
 // The red of terms.
 $term-red: #e0352b;
 
@@ -1964,9 +1961,9 @@ article code, main code { hyphens: manual; -webkit-hyphens: manual; }
 
 // The certificate.tips link on About is set as the logo of the
 // certificate.tips site: Bodoni Moda 600, a little larger, no underline.
-// On hover it turns Tiffany blue and, like the "now" link below, small
-// copies of the logo fly out from the word to its corners and wobble there
-// while the cursor stays.
+// On hover, like the "now" link below, small grey names of the exams
+// (CBAP, AAC, PSPO, CBDA) in the site's own font fly out from the word
+// to its corners and wobble there while the cursor stays.
 .ct-link {
   position: relative;
   display: inline-block;
@@ -1975,18 +1972,17 @@ article code, main code { hyphens: manual; -webkit-hyphens: manual; }
   font-size: 1.15em;
   line-height: 1;
   text-decoration-line: none;
-  transition: color 0.15s;
-
-  &:hover, &:focus-visible { color: $tiffany; }
 }
 .ct-fx i {
   position: absolute;
   left: 50%;
   top: 50%;
   font-style: normal;
-  font-size: 0.45em;
+  font-family: monospace;
+  font-weight: normal;
+  font-size: 0.6em;
   white-space: nowrap;
-  color: $tiffany;
+  color: grey;
   opacity: 0;
   pointer-events: none;
   transform: translate(-50%, -50%) scale(0);
@@ -1996,10 +1992,10 @@ article code, main code { hyphens: manual; -webkit-hyphens: manual; }
   opacity: 1;
   animation: zap-wobble 0.9s ease-in-out 0.35s infinite alternate;
 }
-.ct-link:is(:hover, :focus-visible) .ct-fx i:nth-child(1) { transform: translate(-50%, -50%) translate(-62%, -2.3em) rotate(-12deg) scale(1); }
-.ct-link:is(:hover, :focus-visible) .ct-fx i:nth-child(2) { transform: translate(-50%, -50%) translate(62%, -2.5em) rotate(9deg) scale(1); animation-duration: 0.7s; animation-delay: 0.45s; }
-.ct-link:is(:hover, :focus-visible) .ct-fx i:nth-child(3) { transform: translate(-50%, -50%) translate(62%, 2.3em) rotate(12deg) scale(1); animation-duration: 1s; animation-direction: alternate-reverse; }
-.ct-link:is(:hover, :focus-visible) .ct-fx i:nth-child(4) { transform: translate(-50%, -50%) translate(-62%, 2.5em) rotate(-9deg) scale(1); animation-duration: 0.8s; animation-delay: 0.5s; }
+.ct-link:is(:hover, :focus-visible) .ct-fx i:nth-child(1) { transform: translate(-50%, -50%) translate(-5em, -1.7em) rotate(-12deg) scale(1); }
+.ct-link:is(:hover, :focus-visible) .ct-fx i:nth-child(2) { transform: translate(-50%, -50%) translate(5em, -1.8em) rotate(9deg) scale(1); animation-duration: 0.7s; animation-delay: 0.45s; }
+.ct-link:is(:hover, :focus-visible) .ct-fx i:nth-child(3) { transform: translate(-50%, -50%) translate(5em, 1.7em) rotate(12deg) scale(1); animation-duration: 1s; animation-direction: alternate-reverse; }
+.ct-link:is(:hover, :focus-visible) .ct-fx i:nth-child(4) { transform: translate(-50%, -50%) translate(-5em, 1.8em) rotate(-9deg) scale(1); animation-duration: 0.8s; animation-delay: 0.5s; }
 @media (prefers-reduced-motion: reduce) {
   .ct-fx i { transition: opacity 0.2s; }
   .ct-link:is(:hover, :focus-visible) .ct-fx i { animation: none; }
