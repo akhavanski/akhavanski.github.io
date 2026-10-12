@@ -6,13 +6,18 @@ badge: Open to work
 {%- comment -%}
   The text about me, then the business card with contacts
   (_includes/social.html).
+  On hover the certificate.tips link turns into the header font of the
+  certificate.tips site, Bodoni Moda (style in assets/css/main.scss, .ct-link);
+  the font loads here, only its letters for this word.
   The About item of the menu in the header leads here.
 {%- endcomment %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@600&text=certificate.tips&display=swap">
+
 I'm a Product Manager and Business Analyst with 7+ years of experience in IT. I'm good at turning ideas into products and scattered information into knowledge bases.
 
 I live in Vilnius, Lithuania.
 
-I work at 21vek.by as a Product Owner and I’m building{% include study-guide.html %} [certificate.tips](https://certificate.tips). All my current projects are on the <a class="zap" href="/now">now<span class="zap-fx" aria-hidden="true"><i>❗️</i><i>⚡️</i><i>❗️</i><i>⚡️</i></span></a> page.
+I work at 21vek.by as a Product Owner and I’m building{% include study-guide.html %} <a class="ct-link" href="https://certificate.tips"><span>certificate.tips</span></a>. All my current projects are on the <a class="zap" href="/now">now<span class="zap-fx" aria-hidden="true"><i>❗️</i><i>⚡️</i><i>❗️</i><i>⚡️</i></span></a> page.
 
 Previously, I was a Business Analyst at an outsourcing agency. My favourite project there was building data analysis pipelines for an MBB consulting firm.
 

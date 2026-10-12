@@ -1959,6 +1959,26 @@ article p, article li, .intro p, main .w > p, main .w > ul:not(.blog-posts) li, 
 // Code stays whole; links break like any other word.
 article code, main code { hyphens: manual; -webkit-hyphens: manual; }
 
+// The certificate.tips link on About: under the pointer or in focus the word
+// turns into the header font of the certificate.tips site, Bodoni Moda 600,
+// a little larger, without the underline. The link keeps the width of
+// 16 monospace characters, so the rest of the line does not move.
+.ct-link {
+  display: inline-block;
+  width: 16ch;
+
+  &:hover, &:focus-visible {
+    text-decoration-line: none;
+
+    span {
+      font-family: 'Bodoni Moda', Didot, 'Times New Roman', serif;
+      font-weight: 600;
+      font-size: 1.15em;
+      line-height: 1;
+    }
+  }
+}
+
 // The "now" link on About: on hover red exclamation marks and yellow
 // lightning bolts fly out from the word to its corners and wobble there
 // while the cursor stays.
