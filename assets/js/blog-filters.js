@@ -10,6 +10,8 @@
 // one at a time (both if none): guest is the posts from other blogs.
 // The choice is kept in the address, e.g. /?lang=en&tag=ai&source=guest,
 // so a filtered list can be shared or opened again.
+// "Read on …" after an external post's title is hidden where it would lie
+// over the filter.
 (function () {
   var box = document.querySelector(".blog-filters");
   if (!box) return;
@@ -148,6 +150,26 @@
   });
 
   wide.addEventListener("change", showKept);
+
+  // "Read on …" after the title of a post from another blog would lie over
+  // the filter or its open menu: then it is hidden and only ↗ is left.
+  function overlaps(a, b) {
+    return a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+  }
+
+  posts.forEach(function (post) {
+    var hint = post.querySelector(".guest-at");
+    if (!hint) return;
+    function check() {
+      var rect = hint.getBoundingClientRect();
+      var covered = [box].concat(Array.from(box.querySelectorAll(".filter-options.is-open"))).some(function (el) {
+        return overlaps(rect, el.getBoundingClientRect());
+      });
+      post.classList.toggle("no-room", covered);
+    }
+    post.addEventListener("mouseenter", check);
+    post.addEventListener("focusin", check);
+  });
 
   box.hidden = false;
   apply();

@@ -2956,7 +2956,7 @@ $tc-sticky: #fff8a8;
 // out after other titles). Pointing at the post shows, after the arrow, small
 // and grey, "Read on" and the blog's name; it is plain text, not a link,
 // and takes no room in the line. Where nothing can be pointed at (narrow
-// screens, touch), only the arrow shows.
+// screens, touch), or where it would lie over the filter, only the arrow shows.
 .blog-posts li.external {
   .post-title > a::after {
     content: "↗";
@@ -2979,6 +2979,9 @@ $tc-sticky: #fff8a8;
   }
 
   &:is(:hover, :focus-within) .guest-at { opacity: 1; }
+
+  // It would lie over the filter (see assets/js/blog-filters.js).
+  &.no-room .guest-at { visibility: hidden; }
 
   @media not all and (min-width: 52rem), (hover: none) {
     .guest-at { display: none; }
