@@ -4,13 +4,13 @@ title: "AI made outcome harder, but increased output"
 tags: [AI, communication]
 ---
 
-AI has increased amount of communication, in other words output, but not the outcome.[^jevons] It has decreased amount of ideas overall, density of notions per communication unit, and increased cognitive load for each knowledge worker.
+AI has increased amount of communication, in other words output, but not the outcome.[^jevons] It has decreased amount of ideas overall, density of notions per communication unit,[^symbols] and increased cognitive load for each knowledge worker.
 
 As always, there's no silver bullet, however we can work with these issues even now.
 
 ## Density of communication
 
-You probably don't want to make AI's text too dense. High density text can't be easily understood. Try a philosophy book (e.g. Hegel:). If a text is too dense, there's high chance you'll lose ideas and connections between them.[^symbols]
+You probably don't want to make AI's text too dense. High density text can't be easily understood. Try a philosophy book (e.g. Hegel:). If a text is too dense, there's high chance you'll lose ideas and connections between them.
 
 At the same time, AI's text may look too low on density[^density]: you lose the idea while trying to understand it. My solution to it is to use proper instructions and experimentation. More on that in the next sections.
 
