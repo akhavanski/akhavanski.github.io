@@ -1962,8 +1962,8 @@ article code, main code { hyphens: manual; -webkit-hyphens: manual; }
 // certificate.tips in Projects on the Now page (_includes/ct-card.html),
 // in the design system of certificate.tips: green security paper, square
 // corners, a 2px dark green frame and a second 1px line 6px outside it,
-// no shadows; the name in Bodoni Moda, the text in Hanken Grotesk ending in
-// a link set as a dark green pill right in the line, lighter on hover. Its own colours in both themes, like a printed sheet.
+// no shadows; the name in Bodoni Moda, the text in Hanken Grotesk and beside
+// it one small round dark green button, under the text on a narrow screen. Its own colours in both themes, like a printed sheet.
 $ct-paper: #E8F1EB;
 $ct-brand: #0C3B2E;
 $ct-brand-hover: #1C6B54;
@@ -1997,7 +1997,16 @@ $ct-sans: 'Hanken Grotesk', 'Trebuchet MS', sans-serif;
     &:hover { color: $ct-brand-hover; }
   }
 
+  .ct-card-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    flex-wrap: wrap;
+  }
+
   .ct-card-text {
+    flex: 1 1 18rem;
+    min-width: 0;
     margin: 0;
     font-family: $ct-sans;
     font-size: 0.95rem;
@@ -2006,13 +2015,16 @@ $ct-sans: 'Hanken Grotesk', 'Trebuchet MS', sans-serif;
   }
 
   .ct-card-button {
-    padding: 0.1em 0.6em;
+    flex: none;
+    display: inline-block;
+    padding: 0.45rem 0.95rem;
     border-radius: 999px;
     background: $ct-brand;
     color: #FFFFFF;
     font-family: $ct-sans;
     font-weight: 700;
-    font-size: 0.9em;
+    font-size: 0.85rem;
+    line-height: 1.2;
     white-space: nowrap;
     text-decoration: none;
     transition: background-color 0.15s;
