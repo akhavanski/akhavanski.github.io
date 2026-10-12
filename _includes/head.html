@@ -2,6 +2,7 @@
   The page head, our copy of the theme's head.html without the KaTeX styles:
   the posts have no formulas, so every page loaded them for nothing.
   If a post ever needs formulas, bring KaTeX back for that post only.
+  The tab title is "Page — Aliaksei Khavanski", on the home page just the name.
 {%- endcomment -%}
 <head>
   {%- if site.dark_theme %}
@@ -17,8 +18,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>
-    {%- if page.title -%}
-      {{ page.title }}
+    {%- if page.title and page.title != site.title -%}
+      {{ page.title }} — {{ site.title }}
     {%- else -%}
       {{ site.title }}
     {%- endif -%}
