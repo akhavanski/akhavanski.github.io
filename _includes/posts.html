@@ -80,9 +80,7 @@
   A post from another blog (external_url) leads there, in a new tab
   (on the home page and the Blog page). After its title, always, ↗; pointing
   at it shows, small and grey, plain text "Read on" with the blog's name;
-  where nothing can be pointed at, only ↗. Under its date, in the date's size
-  and colour, "external" (on narrow screens after the date, in its line)
-  (assets/css/main.scss).
+  where nothing can be pointed at, only ↗ (assets/css/main.scss).
   There is no space between the date and the title: the title is justified,
   and a space would stretch with it; the gap is the date's margin.
 {%- endcomment %}
@@ -94,7 +92,7 @@
   {%- capture target %}{% if post.external_url %} target="_blank" rel="noopener"{% endif %}{% endcapture %}
   <li lang="{{ post.lang }}" data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}"{% if post.external_url %} class="external"{% endif %}>
     <div class="post-title">
-      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}{% if post.external_url %}<span class="external-label">external</span>{% endif %}</time><a href="{{ href }}"{{ target }}>{{ post.title }}</a>
+      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ href }}"{{ target }}>{{ post.title }}</a>
       {%- if post.external_url %} <span class="guest-at">Read on {{ host[2] | remove: "www." }}</span>{% endif %}
     </div>
     {%- unless include.limit %}

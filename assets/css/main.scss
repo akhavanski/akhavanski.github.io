@@ -2957,17 +2957,7 @@ $tc-sticky: #fff8a8;
 // and grey, "Read on" and the blog's name; it is plain text, not a link,
 // and takes no room in the line. Where nothing can be pointed at (narrow
 // screens, touch), only the arrow shows.
-// Under the date, in its size and colour, "external", right-aligned with it;
-// on narrow screens, where the date stands in the title's line, it follows the date.
 .blog-posts li.external {
-  .external-label {
-    display: block;
-    text-align: right;
-
-    // A margin, not a space: the title's line is justified and would stretch a space.
-    @media not all and (min-width: 52rem) { display: inline; margin-left: 1ch; }
-  }
-
   .post-title > a::after {
     content: "↗";
     display: inline-block;
