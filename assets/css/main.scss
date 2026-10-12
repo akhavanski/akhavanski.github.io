@@ -1076,6 +1076,8 @@ $sparkle-cycle: 1.8s;
 
   &.lit { color: black; background: rgba(255, 230, 0, 0.45); }
   &:focus-visible { outline: 1px dotted black; }
+  // In a heading the number keeps the size and weight it has in the text.
+  h1 &, h2 &, h3 & { font-size: 0.68rem; font-weight: normal; }
 }
 
 // The note itself, in the text's font, smaller and greyer than the text.
