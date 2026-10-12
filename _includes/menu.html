@@ -1,9 +1,10 @@
 {%- comment -%}
-  The menu in the header: two text links, the current page underlined
+  The menu in the header: three text links, the current page underlined
   (assets/css/main.scss). Blog is current on the Blog page and in posts.
 {%- endcomment -%}
 {%- assign here = page.url | remove: ".html" -%}
 <nav class="menu" aria-label="Menu">
   <a href="{{ "/blog" | relative_url }}"{% if here == "/blog" %} aria-current="page"{% elsif page.layout == "post" %} aria-current="true"{% endif %}>Blog</a>
+  <a href="{{ "/now" | relative_url }}"{% if here == "/now" %} aria-current="page"{% endif %}>Now</a>
   <a href="{{ "/about" | relative_url }}"{% if here == "/about" %} aria-current="page"{% endif %}>About</a>
 </nav>
