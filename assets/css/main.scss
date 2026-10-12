@@ -1962,8 +1962,8 @@ article code, main code { hyphens: manual; -webkit-hyphens: manual; }
 // certificate.tips in Projects on the Now page (_includes/ct-card.html),
 // in the design system of certificate.tips: green security paper, square
 // corners, a 2px dark green frame and a second 1px line 6px outside it,
-// no shadows; the name in Bodoni Moda, the text in Hanken Grotesk, one round
-// dark green button. Its own colours in both themes, like a printed sheet.
+// no shadows; the name in Bodoni Moda, the text in Hanken Grotesk and beside
+// it one small round dark green button, under the text on a narrow screen. Its own colours in both themes, like a printed sheet.
 $ct-paper: #E8F1EB;
 $ct-brand: #0C3B2E;
 $ct-brand-hover: #1C6B54;
@@ -1974,10 +1974,9 @@ $ct-sans: 'Hanken Grotesk', 'Trebuchet MS', sans-serif;
 .ct-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
-  margin: 1.5rem 7px 2rem;
-  padding: 1.75rem 1.5rem 1.5rem;
+  gap: 0.5rem;
+  margin: 1.25rem 7px 1.75rem;
+  padding: 1rem 1.25rem;
   background: $ct-paper;
   color: $ct-ink;
   border: 2px solid $ct-brand;
@@ -1989,7 +1988,8 @@ $ct-sans: 'Hanken Grotesk', 'Trebuchet MS', sans-serif;
   .ct-card-name {
     font-family: $ct-display;
     font-weight: 600;
-    font-size: 1.6rem;
+    align-self: flex-start;
+    font-size: 1.25rem;
     line-height: 1.2;
     color: $ct-brand;
     text-decoration: none;
@@ -1997,24 +1997,35 @@ $ct-sans: 'Hanken Grotesk', 'Trebuchet MS', sans-serif;
     &:hover { color: $ct-brand-hover; }
   }
 
+  .ct-card-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+    flex-wrap: wrap;
+  }
+
   .ct-card-text {
+    flex: 1 1 18rem;
+    min-width: 0;
     margin: 0;
     font-family: $ct-sans;
-    font-size: 1.05rem;
-    line-height: 1.6;
+    font-size: 0.95rem;
+    line-height: 1.5;
     color: $ct-ink;
   }
 
   .ct-card-button {
+    flex: none;
     display: inline-block;
-    padding: 0.75rem 1.4rem;
+    padding: 0.45rem 0.95rem;
     border-radius: 999px;
     background: $ct-brand;
     color: #FFFFFF;
     font-family: $ct-sans;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.85rem;
     line-height: 1.2;
+    white-space: nowrap;
     text-decoration: none;
     transition: background-color 0.15s;
     &:hover { background: $ct-brand-hover; }
