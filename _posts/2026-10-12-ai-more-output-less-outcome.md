@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "AI has increased the amount of communication, but lowered density"
+title: "AI made outcome harder, but increased output"
 tags: [AI, communication]
 ---
 
