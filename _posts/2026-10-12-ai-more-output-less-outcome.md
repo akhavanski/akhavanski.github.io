@@ -8,11 +8,11 @@ AI has increased amount of communication, in other words output, but not the out
 
 As always, there's no silver bullet, however we can work with these issues even now.
 
-## Density of communication[^symbols]
+## Density of communication
 
-You probably don't want to make AI's text too dense. High density text can't be easily understood. Try a philosophy book (e.g. Hegel:). If a text is too dense, there's high chance you'll lose ideas and connections between them.
+You probably don't want to make AI's text too dense. High density text can't be easily understood. Try a philosophy book (e.g. Hegel:). If a text is too dense, there's high chance you'll lose ideas and connections between them.[^symbols]
 
-At the same time, AI's text may look too low on density: you lose the idea while trying to understand it. My solution to it is to use proper instructions and experimentation. More on that in the next sections.
+At the same time, AI's text may look too low on density[^density]: you lose the idea while trying to understand it. My solution to it is to use proper instructions and experimentation. More on that in the next sections.
 
 ## Amount of new ideas
 
@@ -34,3 +34,4 @@ So use your AI buddy with the proper density in the text, don't expect it to cre
 
 [^jevons]: There's the Jevons paradox: when efficiency grows, usage grows with it. So you can see how easy it is to produce a text now.
 [^symbols]: Written text does not transmit the whole message. AI fills the gap with the amount of text, while people solve this issue with communication: memes and overall context, hearing, seeing, touching. We aren't limited to readable symbols.
+[^density]: Density is not a characteristic that shows if a text is good or bad. You can see good texts with high density (e.g. *Finite and Infinite Games* by James P. Carse or Seneca's *Letters*) and with low density (*The Goal* by Goldratt or *The 80/20 Principle* by Richard Koch).
