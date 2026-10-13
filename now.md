@@ -4,7 +4,7 @@ title: Now
 badge: Open to work
 ---
 
-Looking for Product Manager or Business Analyst roles.\\
+Looking for Business Analyst roles.\\
 \\
 My contacts{% include contact-icons.html %}
 {: .title-note}
@@ -26,7 +26,7 @@ My contacts{% include contact-icons.html %}
 
 - “[How to Fail at Almost Everything and Still Win Big](https://en.wikipedia.org/wiki/How_to_Fail_at_Almost_Everything_and_Still_Win_Big)” by Scott Adams
 
-Updated on the 4th of October, 2026. It is a [Now](https://nownownow.com/) page.
+Updated on the 13th of October, 2026. It is a [Now](https://nownownow.com/) page.
 {: .post-footer}
 
 {% include delorean.html %}
