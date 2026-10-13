@@ -14,7 +14,7 @@ badge: Open to work
 {%- endcomment %}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@600&text=certificate.tips&display=swap">
 
-I'm a Product Manager and Business Analyst with 7+ years of experience in IT. I'm good at turning ideas into products and scattered information into knowledge bases.
+I'm a Business Analyst with 7+ years of experience in IT. I'm good at turning ideas into products and scattered information into knowledge bases.
 
 I live in Vilnius, Lithuania.
 
