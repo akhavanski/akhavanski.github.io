@@ -232,8 +232,8 @@ blockquote {
 // it is the cabinet right of the title, a click opens a menu under it. On wide
 // screens it is right of the list: a click on the name
 // brings its options out under it, one by one from the left.
-// The options are cards, several in a line, the keywords
-// and under them the languages with a small heading; a chosen one is filled
+// The options are words, several in a line, the keywords
+// and under them the languages with a small heading; a chosen one is marked
 // with its own colour. There are 24 colours: 24 hues (15 degrees apart in
 // OKLCH) at three lightness steps, light enough for black text (a contrast
 // of 10:1 and more). In the list each hue is 105 degrees from the one before
@@ -305,18 +305,32 @@ $filter-fills: #fda1a0, #bde07e, #c0e8fd, #f897e4, #fec766, #8ff7ea, #bcb2fd, #f
 
   &.is-open { display: flex; }
 
+  // The options are words without a frame; a chosen one is marked
+  // as on paper, with a marker or a piece of tape behind it
+  // (::before and ::after, see filter-highlight below). Pointing
+  // at one shows its mark faintly.
   button {
-    padding: 0.1rem 0.4rem;
-    border: 1.5px solid black;
-    border-radius: 2px;
-    background: white;
-    box-shadow: 2px 2px 0 black;
+    position: relative;
+    isolation: isolate;
+    margin: 0 0.15rem;
+    padding: 0.1rem 0.3rem;
+    border: 0;
+    background: none;
     font: inherit;
     font-size: 0.8rem;
     color: black;
     cursor: pointer;
 
-    &:hover { text-decoration: underline; }
+    &::before, &::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+    }
+    &:hover::before { opacity: 0.35; }
+    &[aria-pressed="true"]::before { opacity: 1; }
     &:focus-visible { outline: 1px dotted black; outline-offset: 3px; }
   }
 
@@ -338,29 +352,59 @@ $filter-fills: #fda1a0, #bde07e, #c0e8fd, #f897e4, #fec766, #8ff7ea, #bcb2fd, #f
   &:first-child { margin-top: 0; }
 }
 
+// The marks of the chosen options. Each option has its colour and one
+// of eight marks, in turn: a flat marker, a dry marker with ragged edges,
+// a thick underline, two strokes over each other, a ring drawn by hand,
+// clear tape, striped tape and tape with polka dots. Each mark is tilted
+// a little, by $hl-tilts in turn, so neighbours look drawn by hand.
+// The tape has torn ends.
+$hl-tilts: -1.4deg, 1deg, -0.6deg, 1.6deg, -1.8deg, 0.7deg, -1deg, 1.3deg, -0.4deg;
+$hl-styles: 8;
+$hl-tape-ends: polygon(0 0, 100% 0, calc(100% - 3px) 14%, 100% 28%, calc(100% - 3px) 42%, 100% 56%, calc(100% - 3px) 70%, 100% 84%, calc(100% - 3px) 100%, 3px 100%, 0 86%, 3px 72%, 0 58%, 3px 44%, 0 30%, 3px 16%, 0 2%);
+
+// $f is the colour, $ring the line of the hand-drawn ring, $blend how
+// the two strokes mix (multiply on white, normal at night).
+@mixin filter-highlight($button, $f, $ring, $tilt, $style, $blend: multiply) {
+  #{$button}::before { background: $f; transform: rotate($tilt); }
+
+  @if $style == 0 {
+    #{$button}::before { inset: 10% -2px 4% -2px; border-radius: 2px 5px 3px 6px; transform: skewX(-10deg) rotate($tilt); }
+  } @else if $style == 1 {
+    #{$button}::before { inset: 2% -4px 0 -4px; clip-path: polygon(2% 16%, 14% 6%, 31% 13%, 47% 3%, 66% 11%, 83% 4%, 99% 12%, 96% 34%, 100% 58%, 97% 90%, 81% 96%, 62% 88%, 43% 98%, 24% 90%, 7% 97%, 0 72%, 4% 48%, 0 30%); }
+  } @else if $style == 2 {
+    #{$button}::before { inset: 55% -3px -2px -3px; border-radius: 45% 12% 55% 10% / 70% 35% 80% 45%; }
+  } @else if $style == 3 {
+    #{$button}::before { inset: 6% -3px 34% -1px; border-radius: 3px 8px 4px 9px; mix-blend-mode: $blend; }
+    #{$button}::after { inset: 38% -1px 2% -4px; border-radius: 6px 3px 8px 4px; background: $f; mix-blend-mode: $blend; transform: rotate(-1.4 * $tilt); }
+    #{$button}[aria-pressed="true"]::before, #{$button}[aria-pressed="true"]::after { opacity: 0.8; }
+    #{$button}:hover::after { opacity: 0.3; }
+  } @else if $style == 4 {
+    #{$button}::before { inset: -3px -5px -2px -5px; border: 1.8px solid $ring; background: none; border-radius: 255px 18px 225px 16px / 16px 225px 18px 255px; transform: rotate(1.5 * $tilt); }
+    #{$button}::after { inset: 0 -2px; border-radius: 999px; background: $f; }
+    #{$button}[aria-pressed="true"]::after { opacity: 0.45; }
+  } @else {
+    #{$button}::before { inset: -1px -5px; clip-path: $hl-tape-ends; transform: rotate(1.8 * $tilt); }
+    @if $style == 5 {
+      #{$button}::before { background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0 16%, rgba(255, 255, 255, 0) 42%), rgba($f, 0.62); }
+    } @else if $style == 6 {
+      #{$button}::before { background: repeating-linear-gradient(-45deg, $f 0 5px, mix($f, white, 42%) 5px 10px); }
+    } @else {
+      #{$button}::before {
+        background:
+          radial-gradient(circle, rgba(255, 255, 255, 0.9) 0 1.5px, rgba(255, 255, 255, 0) 2px) 0 0 / 8px 8px,
+          radial-gradient(circle, rgba(255, 255, 255, 0.9) 0 1px, rgba(255, 255, 255, 0) 1.5px) 4px 4px / 8px 8px,
+          $f;
+      }
+    }
+  }
+}
+
 @for $i from 1 through length($filter-fills) {
-  .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { background: nth($filter-fills, $i); --fill: #{nth($filter-fills, $i)}; }
-}
-
-// Guest and Local, when chosen, are their colour with white polka dots
-// of three sizes; the three layers have tiles of different sizes,
-// so the dots do not line up in a grid. The letters have a halo
-// of the fill colour (--fill), 2px at most, so no dot touches them.
-@mixin polka-dots($dot: white) {
-  background-image:
-    radial-gradient(circle, $dot 0 2.6px, transparent 3.1px),
-    radial-gradient(circle, $dot 0 1.6px, transparent 2.1px),
-    radial-gradient(circle, $dot 0 0.9px, transparent 1.4px);
-  background-size: 17px 15px, 11px 12px, 7px 8px;
-  background-position: 2px 1px, 8px 7px, 4px 3px;
-}
-
-.filter-options button[data-filter="source"][aria-pressed="true"] {
-  @include polka-dots;
-  text-shadow:
-    1px 0 0 var(--fill), -1px 0 0 var(--fill), 0 1px 0 var(--fill), 0 -1px 0 var(--fill),
-    1px 1px 0 var(--fill), -1px 1px 0 var(--fill), 1px -1px 0 var(--fill), -1px -1px 0 var(--fill),
-    2px 0 0 var(--fill), -2px 0 0 var(--fill), 0 2px 0 var(--fill), 0 -2px 0 var(--fill);
+  $f: nth($filter-fills, $i);
+  @include filter-highlight(
+    '.filter-options button[data-fill="#{$i - 1}"]', $f, mix($f, black, 55%),
+    nth($hl-tilts, ($i - 1) % length($hl-tilts) + 1), ($i - 1) % $hl-styles
+  );
 }
 
 @media not all and (min-width: $wide-screen) {
@@ -2218,19 +2262,26 @@ html[data-theme="dark"] {
     box-shadow: 3px 3px 0 $night-ink;
   }
   @media (min-width: $wide-screen) { .filter-options { background: none; box-shadow: none; } }
-  .filter-options button {
-    background: $night-card;
-    border-color: $night-ink;
-    box-shadow: 2px 2px 0 $night-ink;
-    color: $night-ink;
-  }
+  .filter-options button { color: $night-ink; }
+  // At night the marks are their colour, dimmed, and a chosen word is dark
+  // on them; the underline and the ring leave the word light, as they
+  // do not lie under all of it.
   @for $i from 1 through length($filter-fills) {
     $f: mix(nth($filter-fills, $i), $night, 72%);
-    .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { background: $f; color: #111; --fill: #{$f}; }
+    $style: ($i - 1) % $hl-styles;
+    @include filter-highlight(
+      '.filter-options button[data-fill="#{$i - 1}"]', $f, $f,
+      nth($hl-tilts, ($i - 1) % length($hl-tilts) + 1), $style, normal
+    );
+    @if $style != 2 and $style != 4 {
+      .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { color: #111; }
+    }
+    @if $style == 4 {
+      .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"]::after { opacity: 0; }
+    }
     .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] .sparkles i { background-image: sparkle-card-night($f); }
   }
   .filter-options .sparkles i { background-image: sparkle-card-night(); filter: drop-shadow(1px 1px 0 $night-ink); }
-  .filter-options button[data-filter="source"][aria-pressed="true"] { @include polka-dots(rgba(255, 255, 255, 0.8)); }
   .turtle-bubble::after, .share-bubble::after { background: $night-card; border-color: $night-ink; }
 
   .to-blog, .toc-toggle {
