@@ -26,9 +26,11 @@ You don't expect AI to produce new market disruption for you, but use it as an e
 
 While struggling with all the volume of text coming from AI, I have created this approach for me.
 
-1. Going back to the classics.
+1. Visuals.
 
-   LLM is not limited to text and can generate other forms of information: [diagrams](https://www.certificate.tips/blog/business-analysis-diagrams-case-study), tables, [clickable visualizations](/2026-10-06-are-acceptance-criteria-a-section-of-a-backlog-item.html). Use it for your purpose instead of a text.
+   An LLM is not limited to text and can generate other forms of information: diagrams, tables, clickable visualizations. Use it for your purpose instead of a text.
+
+   I believe that information in form of a text (just words following each other) is not a cure. You may ask AI visualization instead of text so that all the output is visible at one sight. But I have already spoken about it [here](/2026-10-06-are-acceptance-criteria-a-section-of-a-backlog-item.html) and [here](https://www.certificate.tips/blog/business-analysis-diagrams-case-study).
 
 2. Create a skill that writes actually readable text.
 
