@@ -22,15 +22,21 @@ However, novelty is in the context. For one, an idea of Agile is a disruption of
 
 You don't expect AI to produce new market disruption for you, but use it as an extended mind — and chance to get valuable result gets higher.
 
-## Amount of output and cognitive overload
+## What worked for me
 
-I think it is the easiest thing to clean. As we write prompts or set up how Claudes answer, we can set there discourse characteristics we'd like to see: 'be strict, don't waffle' and so on.
+While struggling with all the volume of text coming from AI, I have created this approach for me.
 
-You can add these instructions in each session, in the Claude itself, make it a part of your Skill.
+1. Going back to the classics.
 
-I also believe that text in form of a text (just words following each other) is not a cure. You may ask AI visualization instead of text so that all the output is visible at one sight. But I have already spoken about it [here](/2026-10-06-are-acceptance-criteria-a-section-of-a-backlog-item.html) and [here](https://www.certificate.tips/blog/business-analysis-diagrams-case-study).
+   LLM is not limited to text and can generate other forms of information: [diagrams](https://www.certificate.tips/blog/business-analysis-diagrams-case-study), tables, [clickable visualizations](/2026-10-06-are-acceptance-criteria-a-section-of-a-backlog-item.html). Use it for your purpose instead of a text.
 
-So use your AI buddy with the proper density in the text, don't expect it to create a new business for you, and set up proper rules.
+2. Create a skill that writes actually readable text.
+
+   As I have an understanding of what exact form of ACs I like (and find readable) or texts produced by myself (incl. this one) I can formulate what discourse characteristics I possess and teach LLM to re-write in the way that I find better looking.
+
+---
+
+So use your AI buddy with the proper density in the text, don’t expect it to create a new business for you, and set up proper rules.
 
 [^jevons]: There's the Jevons paradox: when efficiency grows, usage grows with it. So you can see how easy it is to produce a text now.
 [^symbols]: Written text does not transmit the whole message. AI fills the gap with the amount of text, while people solve this issue with communication: memes and overall context, hearing, seeing, touching. We aren't limited to readable symbols.
