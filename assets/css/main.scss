@@ -379,9 +379,10 @@ $hl-tape-ends: polygon(0 0, 100% 0, calc(100% - 3px) 14%, 100% 28%, calc(100% - 
     #{$button}[aria-pressed="true"]::before, #{$button}[aria-pressed="true"]::after { opacity: 0.8; }
     #{$button}:hover::after { opacity: 0.3; }
   } @else if $style == 4 {
-    #{$button}::before { inset: -3px -5px -2px -5px; border: 1.8px solid $ring; background: none; border-radius: 255px 18px 225px 16px / 16px 225px 18px 255px; transform: rotate(1.5 * $tilt); }
-    #{$button}::after { inset: 0 -2px; border-radius: 999px; background: $f; }
-    #{$button}[aria-pressed="true"]::after { opacity: 0.45; }
+    #{$button}::before { inset: -4px -7px -3px -6px; border: 1.8px solid $ring; border-top-color: transparent; background: none; border-radius: 48% 52% 46% 54% / 58% 44% 56% 42%; transform: rotate(1.5 * $tilt); }
+    #{$button}::after { inset: -3px -5px -4px -8px; border: 1.8px solid $ring; border-bottom-color: transparent; border-left-color: transparent; border-radius: 52% 46% 54% 48% / 44% 58% 42% 56%; transform: rotate(-2.5 * $tilt); }
+    #{$button}[aria-pressed="true"]::after { opacity: 1; }
+    #{$button}:hover::after { opacity: 0.35; }
   } @else {
     #{$button}::before { inset: -1px -5px; clip-path: $hl-tape-ends; transform: rotate(1.8 * $tilt); }
     @if $style == 5 {
@@ -2275,9 +2276,6 @@ html[data-theme="dark"] {
     );
     @if $style != 2 and $style != 4 {
       .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { color: #111; }
-    }
-    @if $style == 4 {
-      .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"]::after { opacity: 0; }
     }
     .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] .sparkles i { background-image: sparkle-card-night($f); }
   }
