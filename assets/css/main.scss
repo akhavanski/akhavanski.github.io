@@ -69,9 +69,7 @@ a { color: black; }
 // under it, stand in the empty column left of the 640px wide text, at the left
 // edge of the window. The header takes no height, so the text starts at the top
 // (the page's h1 level with the site title). On a post the way back to the blog and
-// the table of contents, which live in the same column, go down under the header.
-$side-header-height: 9rem;
-
+// the table of contents, which lived in the same column, are hidden.
 @media (min-width: $wide-screen) {
   header { position: relative; height: 0; }
 
@@ -95,9 +93,9 @@ $side-header-height: 9rem;
     gap: 0.4rem;
   }
 
-  // `article` wins over the rules of these two further down.
-  article .to-blog { top: $side-header-height; }
-  article .toc { top: $side-header-height + 2rem; }
+  // The menu's Blog does the job of "← to blog", so it and the table of contents
+  // are hidden here. `article` wins over the rules of these two further down.
+  article .to-blog, article .toc { display: none; }
 }
 
 pre.mermaid { text-align: center; }
