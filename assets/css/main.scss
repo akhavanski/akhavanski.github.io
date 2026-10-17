@@ -1062,6 +1062,72 @@ article :is(h2, h3, h4):target {
   to { opacity: 0; }
 }
 
+// The chain after a heading of a post (see assets/js/anchors.js): it shows
+// when the pointer is on the heading or the chain is in focus; on touch screens
+// it is always there, pale. After a click "Copied" stands right of it,
+// small and grey, takes no room in the line and fades away in 1.5 seconds.
+.anchor-copy {
+  position: relative;
+  margin-left: 0.35em;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.8em;
+  line-height: 1;
+  vertical-align: 0.1em;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+
+  // The emoji fonts first, or the chain may come in the text font's outline.
+  &::before {
+    content: "🔗";
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  }
+
+  &::after {
+    content: "Copied";
+    position: absolute;
+    left: calc(100% + 0.45rem);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    font-weight: normal;
+    color: grey;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+
+  :is(h2, h3, h4):hover > &, &:focus-visible, &.is-copied { opacity: 0.7; }
+  &:hover { opacity: 1; }
+  &.is-copied::after { animation: anchor-copied 1.5s ease-in forwards; }
+  &:focus-visible { outline: 1px dotted grey; outline-offset: 2px; }
+
+  @media (hover: none) { opacity: 0.35; }
+  @media (prefers-reduced-motion: reduce) {
+    &, &::after { transition: none; }
+    &.is-copied::after { animation: none; opacity: 1; }
+  }
+}
+
+@keyframes anchor-copied {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+// Read out by screen readers only: "Link to the section copied".
+.anchor-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 // Author's signature at the end of each post: smaller, grey, on the right.
 .post-signature {
   margin-top: 2rem;
