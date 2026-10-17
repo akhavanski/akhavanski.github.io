@@ -22,7 +22,7 @@ Why is it an infinity? I think, again, philosophically that working with hypothe
 
 ### Philosophical approach
 
-One answer is that you have to find hypotheses from going into the wild. In other words, you're to use genchi genbutsu principle. It's called CusDev in simple words. You go out, speak to people, and their pains, emotions, and so on. On the basis of it you can find some other hypotheses. It is called empiricism.
+One answer is that you have to find hypotheses from going into the wild. In other words, you're to use genchi genbutsu principle. It's called CusDev in simple words. You go out, speak to people, and catch their pains, emotions, and so on. On the basis of it you can find some other hypotheses. It is called empiricism.
 
 Deutsch — on the other hand — says that you have to come up with hypotheses yourself and then understand if ideas are wrong via testing. In case of products the testing is either CusDev or A/B testing.
 
