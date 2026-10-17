@@ -440,16 +440,7 @@ $hl-tape-ends: polygon(0 0, 100% 0, calc(100% - 3px) 14%, 100% 28%, calc(100% - 
 // In the right column the options stand right under the name, as cards
 // without a frame.
 @media (min-width: $wide-screen) {
-  .filter-options {
-    margin-top: 0.8rem;
-
-    // The cards come out one by one when the cabinet is clicked
-    // (not on every visit: they are out from the start).
-    &.is-played .filter-option, &.is-played .filter-heading {
-      animation: keywords-card-in 0.45s ease-out both;
-      animation-delay: calc(var(--i) * 0.05s);
-    }
-  }
+  .filter-options { margin-top: 0.8rem; }
 }
 
 .filter-status {
@@ -1730,10 +1721,6 @@ $turn: 0.6s;
   }
 }
 
-@keyframes keywords-card-in {
-  from { opacity: 0; transform: translateX(-3rem); }
-}
-
 // The menu in the header (see _includes/menu.html): three text links,
 // the current page underlined.
 .menu {
@@ -2100,7 +2087,7 @@ html[data-theme="dark"] {
 @media (prefers-reduced-motion: reduce) {
   .catalog .cabinet, .catalog .drawer, .turtle-btn, .share-turtle-btn, .share-bubble, .delorean, .delorean img { transition: none; }
   .share-turtle-btn, .share-bubble { animation: none !important; }
-  .filter-option, .filter-heading, .post-tags .key { animation: none; }
+  .post-tags .key { animation: none; }
   // The sparkles just show, without twinkling.
   .has-sparkles:hover .sparkles i, .has-sparkles:focus-visible .sparkles i { animation: none; opacity: 1; transform: none; }
 }

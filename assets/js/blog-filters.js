@@ -9,7 +9,7 @@
 // The options are always out: on wide screens in the column right of the list,
 // on narrow screens under the title, a line per group (main.scss).
 // The cabinet by the name is a toy: a click pushes its drawer in and pulls it
-// out again, and on wide screens the options come out one by one once more.
+// out again. The options do not move with it.
 //
 // Each option shows how many posts it would give with the other groups
 // as they are; one that would give none is pale and cannot be chosen.
@@ -34,7 +34,6 @@
   var count = box.querySelector(".filter-count");
   // The width of $wide-screen in assets/css/main.scss.
   var wide = window.matchMedia("(min-width: 72rem)");
-  var still = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   function isRadio(option) {
     return option.getAttribute("role") === "radio";
@@ -212,8 +211,7 @@
   });
 
   // The cabinet: the drawer goes in (the turn back takes $turn and the drawer
-  // less, main.scss) and comes out again; then, on wide screens, the options
-  // fly in as cards. A click while it plays does nothing.
+  // less, main.scss) and comes out again. A click while it plays does nothing.
   var playing = false;
   cabinet.addEventListener("click", function () {
     if (playing) return;
@@ -221,11 +219,6 @@
     cabinet.classList.remove("is-out");
     setTimeout(function () {
       cabinet.classList.add("is-out");
-      if (wide.matches && !still.matches) {
-        menu.classList.remove("is-played");
-        void menu.offsetWidth; // restart the animation
-        menu.classList.add("is-played");
-      }
       setTimeout(function () { playing = false; }, 900);
     }, 700);
   });

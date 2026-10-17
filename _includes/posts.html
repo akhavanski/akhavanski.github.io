@@ -24,7 +24,7 @@
   The number after the name tells how many options are chosen.
   The catalogue cabinet by the name is a toy: it stands turned with its drawer
   out, as the options are; a click on it pushes the drawer in and pulls it out
-  again, and on wide screens the options come out one by one once more.
+  again; the options stay as they are.
   The name does not move with it: it stands clear of the pulled-out drawer.
   Each option has its own fill colour for when it is chosen: data-fill counts
   the tags, the languages and the two places in a row (the colours are in assets/css/main.scss).
@@ -62,32 +62,28 @@
     </div>
     <div class="filter-options" role="group" aria-labelledby="filter-title">
       <div class="filter-group" role="group" aria-labelledby="filter-heading-tags" data-group="tag">
-      <p class="filter-heading" id="filter-heading-tags" style="--i: 0">Tags<span class="filter-hint"> · any of them</span></p>
+      <p class="filter-heading" id="filter-heading-tags">Tags<span class="filter-hint"> · any of them</span></p>
       {%- for tag in tags %}
       {%- assign slug = tag | slugify %}
       {%- assign hint = site.data.tags[slug] %}
-      <button type="button" class="filter-option{% if slug == "ai" %} has-sparkles{% endif %}" aria-pressed="false" data-filter="tag" data-value="{{ slug }}" data-fill="{{ forloop.index0 | modulo: fills }}" style="--i: {{ forloop.index }}"{% if hint %} aria-describedby="filter-hint-{{ slug }}"{% endif %}>{{ tag }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}<span class="filter-option-count"></span><span class="hit" aria-hidden="true"></span>{% if hint %}<span class="tag-hint" id="filter-hint-{{ slug }}" aria-hidden="true">{{ hint }}</span>{% endif %}</button>
+      <button type="button" class="filter-option{% if slug == "ai" %} has-sparkles{% endif %}" aria-pressed="false" data-filter="tag" data-value="{{ slug }}" data-fill="{{ forloop.index0 | modulo: fills }}"{% if hint %} aria-describedby="filter-hint-{{ slug }}"{% endif %}>{{ tag }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}<span class="filter-option-count"></span><span class="hit" aria-hidden="true"></span>{% if hint %}<span class="tag-hint" id="filter-hint-{{ slug }}" aria-hidden="true">{{ hint }}</span>{% endif %}</button>
       {%- endfor %}
       </div>
       {%- assign n = tags.size %}
-      {%- assign i = tags.size %}
       {%- if big_langs > 1 %}
-      {%- assign i = i | plus: 1 %}
       <div class="filter-group" role="group" aria-labelledby="filter-heading-langs" data-group="lang">
-      <p class="filter-heading" id="filter-heading-langs" style="--i: {{ i }}">Languages<span class="filter-hint"> · any of them</span></p>
+      <p class="filter-heading" id="filter-heading-langs">Languages<span class="filter-hint"> · any of them</span></p>
       {%- for lang in langs %}
-      <button type="button" class="filter-option" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ n | plus: forloop.index0 | modulo: fills }}" style="--i: {{ i | plus: forloop.index }}">{{ site.data.languages[lang] | default: lang }}<span class="filter-option-count"></span><span class="hit" aria-hidden="true"></span></button>
+      <button type="button" class="filter-option" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ n | plus: forloop.index0 | modulo: fills }}">{{ site.data.languages[lang] | default: lang }}<span class="filter-option-count"></span><span class="hit" aria-hidden="true"></span></button>
       {%- endfor %}
       </div>
       {%- assign n = n | plus: langs.size %}
-      {%- assign i = i | plus: langs.size %}
       {%- endif %}
-      {%- assign i = i | plus: 1 %}
       <div class="filter-group" role="radiogroup" aria-labelledby="filter-heading-source" data-group="source">
-      <p class="filter-heading" id="filter-heading-source" style="--i: {{ i }}">Published on<span class="filter-hint"> · one of the two</span></p>
+      <p class="filter-heading" id="filter-heading-source">Published on<span class="filter-hint"> · one of the two</span></p>
       {%- assign sources = "guest,local" | split: "," %}
       {%- for source in sources %}
-      <button type="button" class="filter-option" role="radio" aria-checked="false" data-filter="source" data-value="{{ source }}" data-fill="{{ n | plus: forloop.index0 | modulo: fills }}" style="--i: {{ i | plus: forloop.index }}">{% if source == "guest" %}{% if hosts.size == 1 %}{{ hosts[0] }}{% else %}Other sites{% endif %}{% else %}{{ here[2] | default: "This site" }}{% endif %}<span class="filter-option-count"></span><span class="hit" aria-hidden="true"></span></button>
+      <button type="button" class="filter-option" role="radio" aria-checked="false" data-filter="source" data-value="{{ source }}" data-fill="{{ n | plus: forloop.index0 | modulo: fills }}">{% if source == "guest" %}{% if hosts.size == 1 %}{{ hosts[0] }}{% else %}Other sites{% endif %}{% else %}{{ here[2] | default: "This site" }}{% endif %}<span class="filter-option-count"></span><span class="hit" aria-hidden="true"></span></button>
       {%- endfor %}
       </div>
     </div>
