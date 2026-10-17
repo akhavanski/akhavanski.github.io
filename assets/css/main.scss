@@ -671,21 +671,17 @@ $bcard-width: 401px; // 1.25 × 321: at 321px the 10px contacts are too small be
 // the way back to the blog and the button "Table of contents" in a post.
 @mixin quiet-card {
   padding: 0.1rem 0.4rem;
-  border: 1.5px solid #aaa;
+  border: 1.5px solid transparent;
   border-radius: 2px;
   background: white;
-  box-shadow: 2px 2px 0 #ddd;
   font-size: 0.8rem;
   color: grey;
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: auto;
   white-space: nowrap;
-  transition: color 0.15s, border-color 0.15s, box-shadow 0.15s;
+  transition: color 0.15s;
 
-  &:hover, &:focus-visible {
-    border-color: #777;
-    box-shadow: 2px 2px 0 #bbb;
-    color: #444;
-  }
+  &:hover, &:focus-visible { color: #444; }
 
   &:focus-visible { outline: 1px dotted grey; outline-offset: 3px; }
 }
@@ -804,12 +800,7 @@ $tab: 1.35rem;
   pointer-events: auto;
 
   // Pressed in while the table of contents is out.
-  &[aria-expanded="true"] {
-    transform: translate(2px, 2px);
-    border-color: #777;
-    box-shadow: 0 0 0 #bbb;
-    color: #444;
-  }
+  &[aria-expanded="true"] { color: #444; }
 }
 
 // Once "← to blog" has scrolled away, the button is the only one left of the text
@@ -821,9 +812,6 @@ $quiet-time: 0.3s;
 
 .toc-toggle {
   position: relative;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-underline-offset: 3px;
   transition: color $quiet-time, border-color $quiet-time, box-shadow $quiet-time,
     text-decoration-color $quiet-time, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
 
@@ -2284,10 +2272,8 @@ html[data-theme="dark"] {
 
   .to-blog, .toc-toggle {
     background: $night-card;
-    border-color: $night-faint;
-    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
     color: $night-muted;
-    &:hover, &:focus-visible, &[aria-expanded="true"] { border-color: $night-muted; color: $night-ink; }
+    &:hover, &:focus-visible, &[aria-expanded="true"] { color: $night-ink; }
   }
   .toc-sheet {
     &::before {
