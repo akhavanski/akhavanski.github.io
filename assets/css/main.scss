@@ -1193,6 +1193,8 @@ $sparkle-cycle: 1.8s;
   transition: color 0.2s;
 
   em { font-style: italic; }
+  // A link in the note is as grey as its text and darkens with it.
+  a { color: inherit; }
   del {
     color: #999;
     text-decoration: line-through #d23;
@@ -1270,6 +1272,7 @@ $note-width: min(17rem, calc(50vw - 320px - 4.5rem));
 
     li { margin-bottom: 0.6rem; }
     em { font-style: italic; }
+    a { color: inherit; }
     .fn-n { font-size: 0.68em; vertical-align: super; line-height: 0; margin-right: 0.3em; }
     img { display: block; width: 100%; margin-top: 0.5rem; }
     del { color: #999; text-decoration: line-through #d23; }
@@ -2363,6 +2366,7 @@ html[data-theme="dark"] {
   .sidenote.open { border-left-color: $night-faint; }
   .notes-end { background-image: linear-gradient($night-faint, $night-faint); }
   .notes-end ol { color: $night-muted; }
+  .sidenote a, .notes-end a { color: inherit; }
   .notes-end del { color: #6a6a6a; text-decoration-color: $night-red; }
   .fn-ref { color: $night-muted; }
   .fn-ref.lit, .fn-ref.open, .fn-ref:hover { color: $night-ink; background: rgba(255, 230, 0, 0.25); }
