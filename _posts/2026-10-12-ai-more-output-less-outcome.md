@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "AI made outcome harder, but increased output"
-tags: [AI, communication]
+tags: [AI, Communication]
 ---
 
 AI has increased amount of communication, in other words output, but not the outcome.[^jevons] It has decreased amount of ideas overall, density of notions per communication unit,[^symbols] and increased cognitive load for each knowledge worker.

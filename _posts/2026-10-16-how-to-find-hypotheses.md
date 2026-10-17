@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "How to find product hypotheses"
-tags: [product]
+tags: [Product]
 ---
 
 A great majority of product work is some hassle around hypotheses. You uncover them, build them, calculate if the new options work better than the control option. There are many ways to find them.
