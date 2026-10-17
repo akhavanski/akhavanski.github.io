@@ -123,6 +123,9 @@ $left-header: 84rem;
 
     .toc-title { margin-bottom: 0.4em; font-size: inherit; }
 
+    // The current section's yellow paler still until the mouse is on it.
+    &:not(:hover):not(:focus-within) a[aria-current] span:not(.toc-num) { background: rgba(255, 230, 0, 0.2); }
+
     @media (prefers-reduced-motion: reduce) { transition: none; }
   }
 }
