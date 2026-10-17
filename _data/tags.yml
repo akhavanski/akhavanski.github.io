@@ -1,9 +1,8 @@
 # Hints for the tags in the filter on the Blog page (_includes/posts.html):
-# shown when pointing at a tag. The key is the tag as in a link, e.g. user-stories
-# for "User stories". A tag without a hint shows none.
+# shown when pointing at a tag. The key is the tag as in a link, e.g. backlog-items
+# for "Backlog items". A tag without a hint shows none.
 ai: How AI changes the work of analysts and product managers
-backlog-items: Acceptance criteria, Definition of Ready
+backlog-items: User stories, job stories, acceptance criteria, Definition of Ready
 communication: Working with stakeholders and the team
 diagrams: Visual models and knowledge bases
 product: Hypotheses, MVPs, discovery
-user-stories: User stories and job stories
