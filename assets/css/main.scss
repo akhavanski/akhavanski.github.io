@@ -370,41 +370,43 @@ $filter-fills: #fda1a0, #bde07e, #c0e8fd, #f897e4, #fec766, #8ff7ea, #bcb2fd, #f
 
   &.is-open { display: flex; }
 
-  // The options are words without a frame; a chosen one is marked
-  // as on paper, with a marker or a piece of tape behind it
-  // (::before and ::after, see filter-highlight below). Pointing
-  // at one shows its mark faintly.
-  button {
-    position: relative;
-    isolation: isolate;
-    margin: 0 0.15rem;
-    padding: 0.1rem 0.3rem;
-    border: 0;
-    background: none;
-    font: inherit;
-    font-size: 0.8rem;
-    color: black;
-    cursor: pointer;
-
-    &::before, &::after {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.15s ease;
-    }
-    &:hover::before { opacity: 0.35; }
-    &[aria-pressed="true"]::before { opacity: 1; }
-    &:focus-visible { outline: 1px dotted black; outline-offset: 3px; }
-  }
-
   // Without the right column a menu would not fit right of its name,
   // so it opens under the line of names, from its left edge.
   @media not all and (min-width: $wide-screen) {
     left: 0;
     max-width: 100%;
   }
+}
+
+// The options are words without a frame; a chosen one is marked
+// as on paper, with a marker or a piece of tape behind it
+// (::before and ::after, see filter-highlight below). Pointing
+// at one shows its mark faintly. They are in the menu, in the line of tags
+// on narrow screens and, chosen, in the line under the filter (.filter-chip).
+.filter-option {
+  position: relative;
+  isolation: isolate;
+  margin: 0 0.15rem;
+  padding: 0.1rem 0.3rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.8rem;
+  color: black;
+  cursor: pointer;
+
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+  &:hover { z-index: 1; }
+  &:hover::before { opacity: 0.35; }
+  &:is([aria-pressed="true"], [aria-checked="true"])::before { opacity: 1; }
+  &:focus-visible { outline: 1px dotted black; outline-offset: 3px; }
 }
 
 // The headings of the tags and the languages take a line of their own.
@@ -441,12 +443,12 @@ $hl-tape-ends: polygon(0 0, 100% 0, calc(100% - 3px) 14%, 100% 28%, calc(100% - 
   } @else if $style == 3 {
     #{$button}::before { inset: 6% -3px 34% -1px; border-radius: 3px 8px 4px 9px; mix-blend-mode: $blend; }
     #{$button}::after { inset: 38% -1px 2% -4px; border-radius: 6px 3px 8px 4px; background: $f; mix-blend-mode: $blend; transform: rotate(-1.4 * $tilt); }
-    #{$button}[aria-pressed="true"]::before, #{$button}[aria-pressed="true"]::after { opacity: 0.8; }
+    #{$button}:is([aria-pressed="true"], [aria-checked="true"])::before, #{$button}:is([aria-pressed="true"], [aria-checked="true"])::after { opacity: 0.8; }
     #{$button}:hover::after { opacity: 0.3; }
   } @else if $style == 4 {
     #{$button}::before { inset: -4px -7px -3px -6px; border: 1.8px solid $ring; border-top-color: transparent; background: none; border-radius: 48% 52% 46% 54% / 58% 44% 56% 42%; transform: rotate(1.5 * $tilt); }
     #{$button}::after { inset: -3px -5px -4px -8px; border: 1.8px solid $ring; border-bottom-color: transparent; border-left-color: transparent; border-radius: 52% 46% 54% 48% / 44% 58% 42% 56%; transform: rotate(-2.5 * $tilt); }
-    #{$button}[aria-pressed="true"]::after { opacity: 1; }
+    #{$button}:is([aria-pressed="true"], [aria-checked="true"])::after { opacity: 1; }
     #{$button}:hover::after { opacity: 0.35; }
   } @else {
     #{$button}::before { inset: -1px -5px; clip-path: $hl-tape-ends; transform: rotate(1.8 * $tilt); }
@@ -468,7 +470,7 @@ $hl-tape-ends: polygon(0 0, 100% 0, calc(100% - 3px) 14%, 100% 28%, calc(100% - 
 @for $i from 1 through length($filter-fills) {
   $f: nth($filter-fills, $i);
   @include filter-highlight(
-    '.filter-options button[data-fill="#{$i - 1}"]', $f, mix($f, black, 55%),
+    '.filter-option[data-fill="#{$i - 1}"]', $f, mix($f, black, 55%),
     nth($hl-tilts, ($i - 1) % length($hl-tilts) + 1), ($i - 1) % $hl-styles
   );
 }
@@ -497,8 +499,9 @@ $hl-tape-ends: polygon(0 0, 100% 0, calc(100% - 3px) 14%, 100% 28%, calc(100% - 
     background: none;
     box-shadow: none;
 
-    // The same entrance as the post keywords.
-    button, .filter-heading {
+    // The same entrance as the post keywords, when opened by hand:
+    // the options are open from the start, and would fly in on every visit.
+    &.is-played .filter-option, &.is-played .filter-heading {
       animation: keywords-card-in 0.45s ease-out both;
       animation-delay: calc(var(--i) * 0.05s);
     }
@@ -523,6 +526,165 @@ $hl-tape-ends: polygon(0 0, 100% 0, calc(100% - 3px) 14%, 100% 28%, calc(100% - 
   cursor: pointer;
 
   &:hover, &:focus-visible { color: black; }
+}
+
+// Text for screen readers only, e.g. ", 2 chosen" in the filter's name.
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// The groups of options (Tags, Languages, Published on) are for screen
+// readers: on screen their headings and options flow in the menu as before.
+.filter-group { display: contents; }
+
+// The heading's note on how the options of its group go together.
+.filter-hint { color: #b0b0b0; }
+
+// How many posts an option would give, small and grey after its name.
+.filter-option-count {
+  margin-left: 0.6ch;
+  font-size: 0.85em;
+  color: grey;
+
+  .filter-chip & { display: none; }
+}
+
+// An option that would give no posts: pale, without a mark when pointed at.
+.filter-option.is-empty {
+  color: #c4c4c4;
+  cursor: default;
+
+  .filter-option-count { color: inherit; }
+
+  &:hover::before, &:hover::after { opacity: 0; }
+}
+
+// A tag's hint (_data/tags.yml), above it when it is pointed at or focused.
+.tag-hint {
+  position: absolute;
+  z-index: 6;
+  bottom: calc(100% + 0.45rem);
+  left: -0.2rem;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: 15rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 2px;
+  background: #1f1f1f;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: white;
+  text-align: left;
+  white-space: normal;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s;
+}
+
+@media (hover: hover) {
+  .filter-option:is(:hover, :focus-visible) .tag-hint { opacity: 1; visibility: visible; }
+}
+
+// On narrow screens the tags stand in one line under the title and scroll
+// sideways; the line fades at its right edge, and its end can scroll clear of it.
+.filter-row {
+  display: flex;
+  gap: 0.45rem;
+  margin: -0.4rem -0.4rem 0.4rem;
+  padding: 0.4rem 2.5rem 0.4rem 0.4rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 2.5rem), transparent);
+  mask-image: linear-gradient(90deg, #000 calc(100% - 2.5rem), transparent);
+
+  &::-webkit-scrollbar { display: none; }
+  &[hidden] { display: none; }
+
+  .filter-heading { display: none; }
+  .filter-option { flex: none; font-size: 0.85rem; }
+}
+
+// "Show N posts" at the foot of the menu on narrow screens.
+.filter-apply {
+  flex-basis: 100%;
+  margin-top: 0.5rem;
+  padding: 0.6rem;
+  border: 1.5px solid black;
+  border-radius: 2px;
+  background: black;
+  font: inherit;
+  font-size: 0.85rem;
+  color: white;
+  cursor: pointer;
+
+  &:focus-visible { outline: 1px dotted black; outline-offset: 2px; }
+
+  @media (min-width: $wide-screen) { display: none; }
+}
+
+// In the line under the filter: the options chosen in the closed menu,
+// with their marks and ×, and what is shown, the chosen names in black.
+.filter-chosen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.6rem;
+  margin-bottom: 0.5rem;
+
+  &:empty { display: none; }
+
+  .filter-option { margin: 0; font-size: 0.85rem; }
+
+  // Under the open menu its marks would peek out at the menu's edge.
+  .blog-filters:has(.filter-options.is-open) & { visibility: hidden; }
+
+  @media (min-width: $wide-screen) { display: none; }
+}
+
+.filter-chip-x { color: #555; }
+
+.filter-summary b {
+  font-weight: normal;
+  color: black;
+}
+
+// The language of a post that is not in English, after its title, e.g. RU.
+.lang-badge {
+  display: inline-block;
+  margin-left: 0.6ch;
+  padding: 0 0.35em;
+  border: 1px solid #a6a6a6;
+  border-radius: 2px;
+  font-size: 0.7em;
+  line-height: 1.4;
+  color: #707070;
+  vertical-align: 0.15em;
+}
+
+// On touch screens each option is 44px high to the finger (WCAG 2.5.8 asks
+// for 24px, Apple's guidelines for 44pt): .hit stretches the place a tap
+// lands, the word and its mark stay as they are; the lines stand further apart.
+.filter-option .hit { display: none; }
+
+@media (pointer: coarse) {
+  .filter-option .hit {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(100% + 0.5rem);
+    min-width: 2.75rem;
+    height: 2.75rem;
+    transform: translate(-50%, -50%);
+  }
+
+  .filter-options { row-gap: 1.3rem; }
+  .filter-row { padding-top: 0.75rem; padding-bottom: 0.75rem; margin-top: -0.75rem; }
 }
 
 // The business card with contacts at the end of the About page
@@ -1187,7 +1349,7 @@ $sparkle-cycle: 1.8s;
   }
 }
 
-.filter-options .sparkles i {
+.filter-option .sparkles i {
   z-index: 1;
   background: sparkle-card() center / contain no-repeat;
   filter: drop-shadow(1px 1px 0 black);
@@ -1199,7 +1361,7 @@ $sparkle-cycle: 1.8s;
 
 // On a chosen card they take its fill.
 @for $i from 1 through length($filter-fills) {
-  .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] .sparkles i { background-image: sparkle-card(nth($filter-fills, $i)); }
+  .filter-option[data-fill="#{$i - 1}"]:is([aria-pressed="true"], [aria-checked="true"]) .sparkles i { background-image: sparkle-card(nth($filter-fills, $i)); }
 }
 
 .post-tags .sparkles i {
@@ -2054,7 +2216,7 @@ html[data-theme="dark"] {
 @media (prefers-reduced-motion: reduce) {
   .catalog .cabinet, .catalog .drawer, .keywords-label, .keywords-toggle + .filter-count, .turtle-btn, .share-turtle-btn, .share-bubble, .delorean, .delorean img { transition: none; }
   .share-turtle-btn, .share-bubble { animation: none !important; }
-  .filter-options button, .filter-heading, .post-tags .key { animation: none; }
+  .filter-option, .filter-heading, .post-tags .key { animation: none; }
   // The sparkles just show, without twinkling.
   .has-sparkles:hover .sparkles i, .has-sparkles:focus-visible .sparkles i { animation: none; opacity: 1; transform: none; }
 }
@@ -2385,7 +2547,12 @@ html[data-theme="dark"] {
     box-shadow: 3px 3px 0 $night-ink;
   }
   @media (min-width: $wide-screen) { .filter-options { background: none; box-shadow: none; } }
-  .filter-options button { color: $night-ink; }
+  .filter-option { color: $night-ink; }
+  .filter-option.is-empty { color: $night-faint; }
+  .filter-hint, .filter-chip-x { color: $night-faint; }
+  .filter-summary b { color: $night-ink; }
+  .filter-apply { border-color: $night-ink; background: $night-ink; color: $night-card; }
+  .lang-badge { border-color: $night-faint; color: $night-muted; }
   // At night the marks are their colour, dimmed, and a chosen word is dark
   // on them; the underline and the ring leave the word light, as they
   // do not lie under all of it.
@@ -2393,15 +2560,15 @@ html[data-theme="dark"] {
     $f: mix(nth($filter-fills, $i), $night, 72%);
     $style: ($i - 1) % $hl-styles;
     @include filter-highlight(
-      '.filter-options button[data-fill="#{$i - 1}"]', $f, $f,
+      '.filter-option[data-fill="#{$i - 1}"]', $f, $f,
       nth($hl-tilts, ($i - 1) % length($hl-tilts) + 1), $style, normal
     );
     @if $style != 2 and $style != 4 {
-      .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] { color: #111; }
+      .filter-option[data-fill="#{$i - 1}"]:is([aria-pressed="true"], [aria-checked="true"]) { color: #111; }
     }
-    .filter-options button[data-fill="#{$i - 1}"][aria-pressed="true"] .sparkles i { background-image: sparkle-card-night($f); }
+    .filter-option[data-fill="#{$i - 1}"]:is([aria-pressed="true"], [aria-checked="true"]) .sparkles i { background-image: sparkle-card-night($f); }
   }
-  .filter-options .sparkles i { background-image: sparkle-card-night(); filter: drop-shadow(1px 1px 0 $night-ink); }
+  .filter-option .sparkles i { background-image: sparkle-card-night(); filter: drop-shadow(1px 1px 0 $night-ink); }
   .turtle-bubble::after, .share-bubble::after { background: $night-card; border-color: $night-ink; }
 
   .to-blog, .toc-toggle {

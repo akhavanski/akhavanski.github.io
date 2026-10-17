@@ -1,32 +1,52 @@
 {%- comment -%}
   The posts on the home page (the five latest, include.limit=5, without
-  the heading Blog and the filter) and on the Blog page (all, with a filter
-  by keyword, that is a post's tag,
-  and by language, see assets/js/blog-filters.js). Several keywords and several
-  languages can be chosen: a post is shown if it has one of the chosen keywords
-  and is in one of the chosen languages.
-  The options start with a small heading Tags, the languages are under the
-  keywords, in the same options, with a small heading Languages; when all posts are in one language, they are not shown.
+  the heading Blog and the filter) and on the Blog page (all, with a filter,
+  see assets/js/blog-filters.js).
+  The filter has three groups, each with a small heading: Tags (a post's tags),
+  Languages and Published on. Several tags and several languages can be chosen:
+  a post is shown if it has one of the chosen tags and is in one of the chosen
+  languages; the headings say so ("any of them"). Published on has the name of
+  the other blog (or "Other sites" when there are several) and of this one;
+  only one of the two is on at a time, with none on all posts are shown.
+  Languages are shown only when two languages have $min_lang_posts posts
+  or more; until then a post in another language than English has a small
+  mark with its language after its title (lang-badge).
+  Each option shows how many posts it would give with the other groups as they
+  are; an option that would give none is pale and cannot be chosen.
+  A tag can have a hint, shown when pointing at it: _data/tags.yml.
   On wide screens the filter stands right of the list like the keywords
-  in a post, in the same place as there: a click on the name shows the options
-  under it. On narrow screens it is under the title: a click on the name opens
-  a menu with the options. On phones the name is the cabinet alone, right of
-  the title, under the menu.
-  Under the languages, with a small heading Published on, Other site and This site:
-  Other site is the posts from other blogs (external_url), This site the posts of this one.
-  Only one of the two is on at a time; with none on, all posts are shown.
+  in a post, open from the start: a click on its name (Filters) closes it.
+  On narrow screens the name is the cabinet alone, right of the title: the tags
+  stand in a line under the title (the script moves them into filter-row),
+  and the cabinet opens a menu with the languages and Published on; at its foot
+  "Show N posts" closes it.
+  Under the filter one line says in words what is shown, e.g.
+  "5 posts tagged AI or Product, in English"; on narrow screens the options
+  chosen in the closed menu stand there too, each with × to take it off.
+  When no post fits (a link can ask for that), the line offers to take off
+  one of the options, with the number of posts that would bring back.
   The number after the name tells how many options are chosen.
-  On wide screens the filter (named Filters) has the catalogue cabinet from the posts:
-  when its options are open, the cabinet is turned and its drawer is pulled out.
+  When its options are open, the cabinet is turned and its drawer is pulled out.
   Each option has its own fill colour for when it is chosen: data-fill counts
-  the keywords, the languages and Guest and Local in a row (the colours are in assets/css/main.scss).
+  the tags, the languages and the two places in a row (the colours are in assets/css/main.scss).
   Without the script the filter stays hidden and the whole list is shown.
 {%- endcomment -%}
 {%- capture langs %}{% for post in site.posts %}{{ post.lang }}|{% endfor %}{% endcapture %}
 {%- assign langs = langs | split: "|" | uniq | sort %}
+{%- comment -%} The language group needs two languages with this many posts. {%- endcomment -%}
+{%- assign min_lang_posts = 3 %}
+{%- assign big_langs = 0 %}
+{%- for lang in langs %}
+{%- assign lang_posts = site.posts | where: "lang", lang %}
+{%- if lang_posts.size >= min_lang_posts %}{% assign big_langs = big_langs | plus: 1 %}{% endif %}
+{%- endfor %}
 {%- comment -%} Tag names in alphabetical order, whatever their case. {%- endcomment -%}
 {%- capture tags %}{% for tag in site.tags %}{{ tag[0] }}|{% endfor %}{% endcapture %}
 {%- assign tags = tags | split: "|" | sort_natural %}
+{%- comment -%} The other blogs' names, for the option of their posts. {%- endcomment -%}
+{%- capture hosts %}{% for post in site.posts %}{% if post.external_url %}{% assign host = post.external_url | split: "/" %}{{ host[2] | remove: "www." }}|{% endif %}{% endfor %}{% endcapture %}
+{%- assign hosts = hosts | split: "|" | uniq %}
+{%- assign here = site.url | split: "/" %}
 {%- comment -%} The number of fill colours, as in $filter-fills in assets/css/main.scss. {%- endcomment -%}
 {%- assign fills = 24 %}
 
@@ -35,36 +55,48 @@
   <h2>Blog</h2>
 
   <div class="blog-filters" hidden>
+    <div class="filter-row"></div>
     <div class="filter-names">
       <div class="filter">
         <button type="button" class="filter-name keywords-toggle" aria-expanded="false" aria-controls="filter-keywords">
           {%- include catalog.html %}
-          <span class="keywords-label">Filters</span>
-        </button><span class="filter-count"></span>
+          <span class="keywords-label">Filters</span><span class="vh filter-count-text"></span>
+        </button><span class="filter-count" aria-hidden="true"></span>
         <div class="filter-options" id="filter-keywords" role="group" aria-label="Filters">
-          <p class="filter-heading" style="--i: 0">Tags</p>
+          <div class="filter-group" role="group" aria-labelledby="filter-heading-tags" data-group="tag">
+          <p class="filter-heading" id="filter-heading-tags" style="--i: 0">Tags<span class="filter-hint"> · any of them</span></p>
           {%- for tag in tags %}
           {%- assign slug = tag | slugify %}
-          <button type="button" aria-pressed="false" data-filter="tag" data-value="{{ slug }}" data-fill="{{ forloop.index0 | modulo: fills }}" style="--i: {{ forloop.index }}"{% if slug == "ai" %} class="has-sparkles"{% endif %}>{{ tag }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}</button>
+          {%- assign hint = site.data.tags[slug] %}
+          <button type="button" class="filter-option{% if slug == "ai" %} has-sparkles{% endif %}" aria-pressed="false" data-filter="tag" data-value="{{ slug }}" data-fill="{{ forloop.index0 | modulo: fills }}" style="--i: {{ forloop.index }}"{% if hint %} aria-describedby="filter-hint-{{ slug }}"{% endif %}>{{ tag }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}<span class="filter-option-count"></span><span class="hit" aria-hidden="true"></span>{% if hint %}<span class="tag-hint" id="filter-hint-{{ slug }}" aria-hidden="true">{{ hint }}</span>{% endif %}</button>
           {%- endfor %}
-          {%- if langs.size > 1 %}
-          <p class="filter-heading" style="--i: {{ tags.size | plus: 1 }}">Languages</p>
-          {%- for lang in langs %}
-          <button type="button" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ forloop.index0 | plus: tags.size | modulo: fills }}" style="--i: {{ forloop.index | plus: tags.size | plus: 1 }}">{{ site.data.languages[lang] | default: lang }}</button>
-          {%- endfor %}
-          {%- assign n = tags.size | plus: langs.size | plus: 1 %}
-          {%- else %}
+          </div>
           {%- assign n = tags.size %}
+          {%- assign i = tags.size %}
+          {%- if big_langs > 1 %}
+          {%- assign i = i | plus: 1 %}
+          <div class="filter-group" role="group" aria-labelledby="filter-heading-langs" data-group="lang">
+          <p class="filter-heading" id="filter-heading-langs" style="--i: {{ i }}">Languages<span class="filter-hint"> · any of them</span></p>
+          {%- for lang in langs %}
+          <button type="button" class="filter-option" aria-pressed="false" data-filter="lang" data-value="{{ lang }}" data-fill="{{ n | plus: forloop.index0 | modulo: fills }}" style="--i: {{ i | plus: forloop.index }}">{{ site.data.languages[lang] | default: lang }}<span class="filter-option-count"></span><span class="hit" aria-hidden="true"></span></button>
+          {%- endfor %}
+          </div>
+          {%- assign n = n | plus: langs.size %}
+          {%- assign i = i | plus: langs.size %}
           {%- endif %}
-          <p class="filter-heading" style="--i: {{ n | plus: 1 }}">Published on</p>
+          {%- assign i = i | plus: 1 %}
+          <div class="filter-group" role="radiogroup" aria-labelledby="filter-heading-source" data-group="source">
+          <p class="filter-heading" id="filter-heading-source" style="--i: {{ i }}">Published on<span class="filter-hint"> · one of the two</span></p>
           {%- assign sources = "guest,local" | split: "," %}
           {%- for source in sources %}
-          <button type="button" aria-pressed="false" data-filter="source" data-value="{{ source }}" data-fill="{{ n | plus: forloop.index0 | modulo: fills }}" style="--i: {{ n | plus: forloop.index | plus: 1 }}">{% if source == "guest" %}Other site{% else %}This site{% endif %}</button>
+          <button type="button" class="filter-option" role="radio" aria-checked="false" data-filter="source" data-value="{{ source }}" data-fill="{{ n | plus: forloop.index0 | modulo: fills }}" style="--i: {{ i | plus: forloop.index }}">{% if source == "guest" %}{% if hosts.size == 1 %}{{ hosts[0] }}{% else %}Other sites{% endif %}{% else %}{{ here[2] | default: "This site" }}{% endif %}<span class="filter-option-count"></span><span class="hit" aria-hidden="true"></span></button>
           {%- endfor %}
+          </div>
+          <button type="button" class="filter-apply">Show posts</button>
         </div>
       </div>
     </div>
-    <p class="filter-status" aria-live="polite"><span></span> <button type="button" class="filter-reset">Reset</button></p>
+    <p class="filter-status" aria-live="polite"><span class="filter-chosen"></span><span class="filter-summary"></span> <button type="button" class="filter-reset">Reset</button></p>
   </div>
 </div>
 {%- endunless %}
@@ -93,6 +125,7 @@
   <li lang="{{ post.lang }}" data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}"{% if post.external_url %} class="external"{% endif %}>
     <div class="post-title">
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ href }}"{{ target }}>{{ post.title }}</a>
+      {%- if post.lang != "en" %} <span class="lang-badge" title="{{ site.data.languages[post.lang] | default: post.lang }}">{{ post.lang | upcase }}</span>{% endif %}
       {%- if post.external_url %} <span class="guest-at">Read on {{ host[2] | remove: "www." }}</span>{% endif %}
     </div>
     {%- unless include.limit %}
