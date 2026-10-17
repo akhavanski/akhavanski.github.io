@@ -44,7 +44,7 @@ From this logic logistics is a by-product of a retail company that can be packed
 
 ### Use problem solving frameworks
 
-You can find ideas using various frameworks. A simple option is using ISRU[^isru] that limits your field to what you have around you. This approach was discussed well in movies about NASA (*I have watched none, it's a hypothesis. The term [ISRU](https://en.wikipedia.org/wiki/In_situ_resource_utilization) comes from NASA.*) or in book “Inside the Box: A Proven System of Creativity for Breakthrough Results” by Drew Boyd and Jacob Goldenberg [3].
+You can find ideas using various frameworks. A simple option is using ISRU that limits your field to what you have around you. This approach was discussed well in movies about NASA[^nasa] or in book “Inside the Box: A Proven System of Creativity for Breakthrough Results” by Drew Boyd and Jacob Goldenberg [3].
 
 Let me introduce you quickly to other ideas from SIT that stands for Systematic Inventive Thinking.
 
@@ -65,7 +65,7 @@ Instead of the finish: remember, that there are many (at least four) ways to fin
 [^romantic]: Later in the text I will present my view of Deutsch's idea. It is probably romantic and it's not scientific.
 [^competitors]: Direct, indirect, substitute, and potential.
 [^fba]: Fulfillment by Amazon.
-[^isru]: In-Situ Resource Utilization.
+[^nasa]: I have watched none, it's a hypothesis :) The term [ISRU](https://en.wikipedia.org/wiki/In_situ_resource_utilization) comes from NASA.<br><br>ISRU stands for In-Situ Resource Utilization.
 [^ikea]: AFAIK, e-comms tend to go into one-step checkout. I think this *may* be wrong, look at the IKEA principle for example. This idea assumes that a customer would love a product more if they set it up themselves. It also moves some costs from IKEA to customers, but 🤫
 [^jtbd]: I mean JTBD here.
 [^good]: Good news for product teams.
