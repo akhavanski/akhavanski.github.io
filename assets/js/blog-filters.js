@@ -6,17 +6,14 @@
 // place (both if none). The places are one at a time: they are radio buttons,
 // though a click on the chosen one takes it off.
 //
-// On wide screens the options are open from the start, in the column right
-// of the list; a click on the name (Filters) closes them and opens them again,
-// nothing else does. On narrow screens the tags stand in a line under
-// the title (they are moved into .filter-row), and the name, the cabinet,
-// opens a menu with the rest; a second click, a click anywhere else, Escape
-// or "Show N posts" at its foot closes it.
+// The options are always out: on wide screens in the column right of the list,
+// on narrow screens under the title, a line per group (main.scss).
+// The cabinet by the name is a toy: a click pushes its drawer in and pulls it
+// out again, and on wide screens the options come out one by one once more.
 //
 // Each option shows how many posts it would give with the other groups
 // as they are; one that would give none is pale and cannot be chosen.
-// A line under the filter says in words what is shown; on narrow screens
-// it also has the options chosen in the closed menu, each with × to take it off.
+// A line under the filter says in words what is shown.
 // When nothing fits (a shared link can ask for that), the line offers to take
 // off one of the options, with the number of posts that would bring back.
 //
@@ -28,22 +25,16 @@
   var box = document.querySelector(".blog-filters");
   if (!box) return;
 
-  var name = box.querySelector(".filter-name");
-  var menu = document.getElementById(name.getAttribute("aria-controls"));
-  var row = box.querySelector(".filter-row");
-  var tagGroup = menu.querySelector('[data-group="tag"]');
+  var cabinet = box.querySelector(".keywords-toggle");
+  var menu = box.querySelector(".filter-options");
   var options = Array.prototype.slice.call(box.querySelectorAll(".filter-option"));
   var posts = Array.prototype.slice.call(document.querySelectorAll(".blog-posts li"));
   var status = box.querySelector(".filter-status");
   var summary = status.querySelector(".filter-summary");
-  var chosenLine = status.querySelector(".filter-chosen");
-  var apply = menu.querySelector(".filter-apply");
   var count = box.querySelector(".filter-count");
-  var countText = name.querySelector(".filter-count-text");
   // The width of $wide-screen in assets/css/main.scss.
   var wide = window.matchMedia("(min-width: 72rem)");
-  // On wide screens the options stay open until the name is clicked.
-  var closedByHand = false;
+  var still = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   function isRadio(option) {
     return option.getAttribute("role") === "radio";
@@ -113,47 +104,6 @@
     }).join(" or ");
   }
 
-  function show(open) {
-    name.setAttribute("aria-expanded", String(open));
-    menu.classList.toggle("is-open", open);
-  }
-
-  // The tags: in the line under the title on narrow screens, in the menu on wide ones.
-  function place() {
-    if (wide.matches) {
-      if (tagGroup.parentNode !== menu) menu.insertBefore(tagGroup, menu.firstChild);
-      row.hidden = true;
-      show(!closedByHand);
-    } else {
-      if (tagGroup.parentNode !== row) row.appendChild(tagGroup);
-      row.hidden = false;
-      show(false);
-    }
-  }
-
-  // An option chosen in the closed menu, in the line under the filter, with ×.
-  function chip(option) {
-    var b = document.createElement("button");
-    b.type = "button";
-    b.className = "filter-option filter-chip";
-    b.dataset.fill = option.dataset.fill;
-    b.setAttribute("aria-pressed", "true");
-    b.setAttribute("aria-label", "Take off " + label(option));
-    b.appendChild(document.createTextNode(label(option) + " "));
-    var x = document.createElement("span");
-    x.className = "filter-chip-x";
-    x.setAttribute("aria-hidden", "true");
-    x.textContent = "×";
-    b.appendChild(x);
-    b.addEventListener("click", function (e) {
-      e.stopPropagation();
-      setOn(option, false);
-      render();
-      (chosenLine.querySelector("button") || name).focus();
-    });
-    return b;
-  }
-
   // "Take off “AI”" when no post fits.
   function takeOff(option) {
     var b = document.createElement("button");
@@ -190,14 +140,7 @@
 
     var on = options.filter(isOn);
     count.textContent = on.length ? "(" + on.length + ")" : "";
-    countText.textContent = on.length ? ", " + on.length + " chosen" : "";
     status.hidden = !on.length;
-    apply.textContent = shown ? "Show " + plural(shown) : "No posts match";
-
-    chosenLine.textContent = "";
-    on.forEach(function (option) {
-      if (option.dataset.filter !== "tag") chosenLine.appendChild(chip(option));
-    });
 
     summary.textContent = "";
     if (shown) {
@@ -235,24 +178,11 @@
     var button = e.target.closest("button");
     if (!button) return;
 
-    if (button === name) {
-      var open = name.getAttribute("aria-expanded") !== "true";
-      if (wide.matches) closedByHand = !open;
-      // From now on the options come out one by one when opened (main.scss).
-      menu.classList.add("is-played");
-      show(open);
-      return;
-    }
-    if (button === apply) {
-      show(false);
-      name.focus();
-      return;
-    }
     if (button.classList.contains("filter-reset")) {
       options.forEach(function (o) { setOn(o, false); });
       render();
-      // The reset button hides now, so the focus goes to the filter's name.
-      name.focus();
+      // The reset button hides now, so the focus goes to the first option.
+      options[0].focus();
       return;
     }
     if (!button.classList.contains("filter-option")) return;
@@ -281,21 +211,39 @@
     render();
   });
 
-  // On narrow screens a click elsewhere and Escape close the menu.
-  document.addEventListener("click", function (e) {
-    if (!wide.matches && !e.target.closest(".filter")) show(false);
+  // The cabinet: the drawer goes in (the turn back takes $turn and the drawer
+  // less, main.scss) and comes out again; then, on wide screens, the options
+  // fly in as cards. A click while it plays does nothing.
+  var playing = false;
+  cabinet.addEventListener("click", function () {
+    if (playing) return;
+    playing = true;
+    cabinet.classList.remove("is-out");
+    setTimeout(function () {
+      cabinet.classList.add("is-out");
+      if (wide.matches && !still.matches) {
+        menu.classList.remove("is-played");
+        void menu.offsetWidth; // restart the animation
+        menu.classList.add("is-played");
+      }
+      setTimeout(function () { playing = false; }, 900);
+    }, 700);
   });
 
-  document.addEventListener("keydown", function (e) {
-    if (e.key !== "Escape" || wide.matches || name.getAttribute("aria-expanded") !== "true") return;
-    show(false);
-    name.focus();
-  });
-
-  wide.addEventListener("change", place);
+  // On narrow screens a group's line fades at its right edge while more of it
+  // is hidden there (main.scss).
+  var groups = Array.prototype.slice.call(menu.querySelectorAll(".filter-group"));
+  function fade() {
+    groups.forEach(function (g) {
+      var last = g.lastElementChild;
+      g.classList.toggle("has-more", last.getBoundingClientRect().right > g.getBoundingClientRect().right - 2);
+    });
+  }
+  groups.forEach(function (g) { g.addEventListener("scroll", fade, { passive: true }); });
+  window.addEventListener("resize", fade);
 
   // "Read on …" after the title of a post from another blog would lie over
-  // the filter or its open menu: then it is hidden and only ↗ is left.
+  // the filter: then it is hidden and only ↗ is left.
   function overlaps(a, b) {
     return a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
   }
@@ -305,10 +253,7 @@
     if (!hint) return;
     function check() {
       var rect = hint.getBoundingClientRect();
-      var covered = [box].concat(menu.classList.contains("is-open") ? [menu] : []).some(function (el) {
-        return overlaps(rect, el.getBoundingClientRect());
-      });
-      post.classList.toggle("no-room", covered);
+      post.classList.toggle("no-room", overlaps(rect, box.getBoundingClientRect()));
     }
     post.addEventListener("mouseenter", check);
     post.addEventListener("focusin", check);
@@ -316,6 +261,6 @@
 
   summary.tabIndex = -1;
   box.hidden = false;
-  place();
   render();
+  fade();
 })();
