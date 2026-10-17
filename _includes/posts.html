@@ -22,9 +22,9 @@
   When no post fits (a link can ask for that), the line offers to take off
   one of the options, with the number of posts that would bring back.
   The number after the name tells how many options are chosen.
-  The catalogue cabinet by the name is a toy: it stands turned with its drawer
-  out, as the options are; a click on it pushes the drawer in and pulls it out
-  again; the options stay as they are.
+  The catalogue cabinet by the name is a toy: pointing at it turns it a little,
+  a click turns it to profile and pulls out its drawer, the next click puts it
+  back; the options stay as they are.
   The name does not move with it: it stands clear of the pulled-out drawer.
   Each option has its own fill colour for when it is chosen: data-fill counts
   the tags, the languages and the two places in a row (the colours are in assets/css/main.scss).
@@ -55,7 +55,7 @@
 
   <div class="blog-filters" hidden>
     <div class="filter-title">
-      <span class="keywords-toggle is-out" aria-hidden="true">
+      <span class="keywords-toggle" aria-hidden="true">
         {%- include catalog.html %}
       </span>
       <span class="keywords-label" id="filter-title">Filters</span><span class="filter-count" aria-hidden="true"></span>

@@ -8,8 +8,9 @@
 //
 // The options are always out: on wide screens in the column right of the list,
 // on narrow screens under the title, a line per group (main.scss).
-// The cabinet by the name is a toy: a click pushes its drawer in and pulls it
-// out again. The options do not move with it.
+// The cabinet by the name is a toy, as it always was: pointing at it turns it
+// a little, a click turns it to profile and pulls out its drawer, the next click
+// puts it back. The options do not move with it.
 //
 // Each option shows how many posts it would give with the other groups
 // as they are; one that would give none is pale and cannot be chosen.
@@ -210,17 +211,10 @@
     render();
   });
 
-  // The cabinet: the drawer goes in (the turn back takes $turn and the drawer
-  // less, main.scss) and comes out again. A click while it plays does nothing.
-  var playing = false;
+  // The cabinet: a click opens it or closes it (the turn and the drawer are
+  // in main.scss, under .keywords-toggle.is-out).
   cabinet.addEventListener("click", function () {
-    if (playing) return;
-    playing = true;
-    cabinet.classList.remove("is-out");
-    setTimeout(function () {
-      cabinet.classList.add("is-out");
-      setTimeout(function () { playing = false; }, 900);
-    }, 700);
+    cabinet.classList.toggle("is-out");
   });
 
   // On narrow screens a group's line fades at its right edge while more of it
