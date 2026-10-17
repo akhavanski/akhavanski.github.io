@@ -58,6 +58,12 @@ Let me introduce you quickly to other ideas from SIT that stands for Systematic 
 
 The last from SIT is **Attribute Dependency**. It talks about merging several jobs[^jtbd] into one. Before being bombed Russian marketplaces OZON and Wildberries were giving a place where you can pay and check the product. This same approach has [E-obuwie](https://eobuwie.com.pl/), a Polish biggest footwear online store: they have a store which is a place to test, select, store, and buy shoes.
 
+## Flow analysis
+
+You use [visualisation](https://www.certificate.tips/blog/business-analysis-diagrams-case-study) techniques to draw flows in your products. From such analysis you can find places where a user could get stuck without further evident actions. E.g. in empty cart without any informational blocks. You can take as a rule that your user should never reach a dead end.
+
+Such approach can be applied to business processes and technical systems. You can find steps or integrations that *may* not be needed.
+
 ---
 
 Instead of the finish: remember, that there are many (at least four) ways to find new ideas. Ideas and ways to enhance something will never end.[^good] When you have one, it is important to take action on it. Without an action, a brilliant idea dies.
