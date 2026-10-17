@@ -12,6 +12,9 @@
 // When it is too narrow for the button, the button says just "Contents".
 // On a narrow screen the button is at the bottom right of the window and the page
 // comes out above it (the styles do that, the script is the same).
+// On a screen wide enough for the header in the left column ($left-header in
+// assets/css/main.scss) there is no button: the script moves the same list into
+// the header, under the menu, where it is always out, and back below that width.
 // The post layout loads this script only when the post has two headings or more.
 (function () {
   var toggle = document.querySelector(".toc-toggle");
@@ -69,6 +72,18 @@
   });
   toggle.parentNode.appendChild(sheet);
 
+  // The list in the header on a wide screen, under the button otherwise.
+  var header = document.querySelector("header");
+  var left = matchMedia("(min-width: 84rem)");
+  function place() {
+    if (left.matches) {
+      show(false);
+      header.appendChild(sheet);
+    } else {
+      toggle.parentNode.appendChild(sheet);
+    }
+  }
+
   var inside = false, leaving = null, scrollFrom = 0, jumped = false;
 
   function isOpen() { return nav.classList.contains("is-open"); }
@@ -97,6 +112,8 @@
   }
   label();
   addEventListener("resize", label);
+  place();
+  left.addEventListener("change", place);
 
   function show(open) {
     if (open) fit();
@@ -142,7 +159,7 @@
   });
 
   // The section being read: the last heading above the upper third of the window.
-  var links = nav.querySelectorAll("a");
+  var links = sheet.querySelectorAll("a");
   var ticking = false;
   function mark() {
     ticking = false;

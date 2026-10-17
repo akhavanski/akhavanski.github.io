@@ -6,7 +6,12 @@ layout: default
 
 {%- assign keywords = page.tags %}
 
-{%- comment -%} Sections and subsections: the table of contents needs at least two. {%- endcomment -%}
+{%- comment -%}
+  Sections and subsections: the table of contents needs at least two.
+  Below $left-header (assets/css/main.scss) "← to blog" and the button
+  "Table of contents" stand left of the title; wider, the menu's Blog leads back
+  and the table of contents is a list in the header (assets/js/toc.js).
+{%- endcomment -%}
 {%- assign h2s = content | split: "<h2" | size | minus: 1 %}
 {%- assign h3s = content | split: "<h3" | size | minus: 1 %}
 {%- assign heads = h2s | plus: h3s %}

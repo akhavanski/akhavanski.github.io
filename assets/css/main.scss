@@ -65,6 +65,68 @@ a { color: black; }
   margin: 0;
 }
 
+// From this width the header leaves the top of the page for the column left
+// of the text and stays put at the window's left edge: the title, the menu under it
+// and, in a post, its table of contents (see assets/js/toc.js, which moves the list
+// there). Narrower, the left column has room for the post dates, not for the header.
+// toc.js has the same width.
+$left-header: 84rem;
+
+@media (min-width: $left-header) {
+  header {
+    position: fixed;
+    left: 2rem;
+    top: 2.75rem;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    // Clear of the theme dot at the bottom.
+    max-height: calc(100vh - 5.5rem);
+  }
+
+  .title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 0;
+  }
+
+  .brand { font-size: 1.25em; }
+
+  // The page's title on one line with the site's title.
+  .w > h1 { margin-top: 0; }
+  // Safari sets h1 in an article at 1.5em, not 2em, so the margin follows the
+  // baseline: 33px below the top of the text less the baseline's depth in the line.
+  .post-head h1 { margin-top: calc(33px - 0.5lh - 0.33em); }
+  .w > h1.has-badge { margin-top: 10.6px; }
+  .w .blog-head h2 { margin-top: 8px; }
+
+  // The menu's Blog leads back, and the list in the header is the table of contents.
+  article .to-blog, article .toc { display: none; }
+
+  // The table of contents, always out, quiet until the mouse is on it.
+  header .toc-sheet {
+    position: static;
+    min-height: 0;
+    width: auto;
+    max-width: calc(50vw - 320px - 4rem);
+    max-height: none;
+    margin-top: 18px;
+    padding: 0;
+    visibility: visible;
+    transform: none;
+    opacity: 0.4;
+    transition: opacity 0.2s;
+
+    &:hover, &:focus-within { opacity: 1; }
+    &::before { display: none; }
+
+    .toc-title { margin-bottom: 0.4em; font-size: inherit; }
+
+    @media (prefers-reduced-motion: reduce) { transition: none; }
+  }
+}
+
 pre.mermaid { text-align: center; }
 
 // The latest posts on the home page (_includes/posts.html): no bullets,
