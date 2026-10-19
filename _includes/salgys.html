@@ -1,0 +1,12 @@
+{%- comment -%}
+  The Salgys logo on the About page, next to certificate.tips: the word
+  "drawn by a child in wax crayons". Every letter is its own <text>, Gaegu
+  700, with its own colour, tilt, shift and size; the last "s" is mirrored,
+  written backwards. Under the word, a wavy dark line. The crayon look is
+  the SVG filter "salgys-crayon" on the whole group: a wobbly outline and
+  grain. Drawn at a base size of 120 units and scaled to the text by the
+  viewBox, so the filter scales with it. On hover the letters jump one by
+  one. The font loads on about.md, only the letters of this word.
+  Styles in assets/css/main.scss (.salgys).
+{%- endcomment -%}
+<a class="salgys" href="/" aria-label="Salgys"><svg viewBox="0 0 356 152" aria-hidden="true" focusable="false"><defs><filter id="salgys-crayon" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="warp"/><feDisplacementMap in="SourceGraphic" in2="warp" scale="7" xChannelSelector="R" yChannelSelector="G" result="d"/><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="9" result="grain"/><feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 1.75" result="mask"/><feComposite in="d" in2="mask" operator="in"/></filter></defs><g filter="url(#salgys-crayon)"><path class="salgys-line" d="M15 139 C 52 133, 92 145, 140 139 S 228 132, 268 140 S 330 137, 343 134"/><text class="sl" x="12" y="100" font-size="120" fill="#e8412e" style="--r:6deg">S</text><text class="sl" x="79.6" y="108.2" font-size="102" fill="#ff8a1f" style="--r:0deg">a</text><text class="sl" x="130.1" y="87.4" font-size="126" fill="#ffc21a" style="--r:-1deg">l</text><text class="sl" x="176.2" y="105.7" font-size="114" fill="#2fae4e" style="--r:-2deg">g</text><text class="sl" x="237.7" y="100" font-size="120" fill="#2f6fe0" style="--r:-4deg">y</text><text class="sl" x="301.5" y="100" font-size="108" fill="#8a4fd8" style="--r:-7deg;--sx:-1">s</text></g></svg></a>

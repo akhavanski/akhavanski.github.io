@@ -3377,3 +3377,45 @@ p:has(> .study-guide) { position: relative; }
     &, .sg-book, .sg-mark { transition: none; }
   }
 }
+
+// The Salgys logo on About (_includes/salgys.html): the word in crayons,
+// drawn at 120 units and scaled by the viewBox to about twice the text, sitting on the text baseline (100 of 152 units). Negative
+// margins keep the line from growing. On hover the letters jump up one
+// by one: 11 units are about 4px on screen.
+.salgys {
+  display: inline-block;
+  vertical-align: -0.96em;
+  margin: -0.8em 0 -0.6em;
+  line-height: 0;
+  text-decoration-line: none;
+  svg { height: 2.8em; width: auto; overflow: visible; }
+  text {
+    font-family: 'Gaegu', 'Comic Sans MS', cursive;
+    font-weight: 700;
+  }
+  .salgys-line {
+    fill: none;
+    stroke: #2a2622;
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.6;
+  }
+  .sl {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    transform: translateY(0) rotate(var(--r)) scaleX(var(--sx, 1));
+    transition: transform 150ms ease-out;
+  }
+  @for $i from 1 through 6 {
+    .sl:nth-of-type(#{$i}) { transition-delay: #{($i - 1) * 40}ms; }
+  }
+  &:is(:hover, :focus-visible) .sl {
+    transform: translateY(-11px) rotate(var(--r)) scaleX(var(--sx, 1));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .salgys .sl { transition: none; }
+  .salgys:is(:hover, :focus-visible) .sl { transform: rotate(var(--r)) scaleX(var(--sx, 1)); }
+}
+html[data-theme="dark"] .salgys .salgys-line { stroke: $night-ink; opacity: 0.5; }
