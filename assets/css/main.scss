@@ -3418,4 +3418,19 @@ p:has(> .study-guide) { position: relative; }
   .salgys .sl { transition: none; }
   .salgys:is(:hover, :focus-visible) .sl { transform: rotate(var(--r)) scaleX(var(--sx, 1)); }
 }
+// On Now the logo stands on its own line, about three times larger;
+// there 6 units are about 4px on screen.
+.salgys.salgys-big {
+  display: block;
+  width: fit-content;
+  margin: 0;
+  vertical-align: baseline;
+  svg { height: 5.5em; }
+  &:is(:hover, :focus-visible) .sl {
+    transform: translateY(-6px) rotate(var(--r)) scaleX(var(--sx, 1));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .salgys.salgys-big:is(:hover, :focus-visible) .sl { transform: rotate(var(--r)) scaleX(var(--sx, 1)); }
+}
 html[data-theme="dark"] .salgys .salgys-line { stroke: $night-ink; opacity: 0.5; }
