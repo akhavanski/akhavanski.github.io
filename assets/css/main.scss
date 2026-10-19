@@ -3378,11 +3378,11 @@ p:has(> .study-guide) { position: relative; }
   }
 }
 
-// The Salgys logo on About (_includes/salgys.html): the word in crayons,
+// The Saglys logo on About (_includes/saglys.html): the word in crayons,
 // drawn at 120 units and scaled by the viewBox to the size of the certificate.tips link, sitting on the text baseline (100 of 152 units). Negative
 // margins keep the line from growing. On hover the letters jump up one
 // by one: 16 units are about 4px on screen.
-.salgys {
+.saglys {
   display: inline-block;
   vertical-align: -0.63em;
   margin: -0.3em 0 -0.25em;
@@ -3393,7 +3393,7 @@ p:has(> .study-guide) { position: relative; }
     font-family: 'Gaegu', 'Comic Sans MS', cursive;
     font-weight: 700;
   }
-  .salgys-line {
+  .saglys-line {
     fill: none;
     stroke: #2a2622;
     stroke-width: 8;
@@ -3415,12 +3415,12 @@ p:has(> .study-guide) { position: relative; }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .salgys .sl { transition: none; }
-  .salgys:is(:hover, :focus-visible) .sl { transform: rotate(var(--r)) scaleX(var(--sx, 1)); }
+  .saglys .sl { transition: none; }
+  .saglys:is(:hover, :focus-visible) .sl { transform: rotate(var(--r)) scaleX(var(--sx, 1)); }
 }
 // On Now the logo stands on its own line, about three times larger;
 // there 6 units are about 4px on screen.
-.salgys.salgys-big {
+.saglys.saglys-big {
   display: block;
   width: fit-content;
   margin: 0;
@@ -3431,6 +3431,6 @@ p:has(> .study-guide) { position: relative; }
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .salgys.salgys-big:is(:hover, :focus-visible) .sl { transform: rotate(var(--r)) scaleX(var(--sx, 1)); }
+  .saglys.saglys-big:is(:hover, :focus-visible) .sl { transform: rotate(var(--r)) scaleX(var(--sx, 1)); }
 }
-html[data-theme="dark"] .salgys .salgys-line { stroke: $night-ink; opacity: 0.5; }
+html[data-theme="dark"] .saglys .saglys-line { stroke: $night-ink; opacity: 0.5; }

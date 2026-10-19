@@ -17,8 +17,8 @@ My contacts{% include contact-icons.html %}
 
 {% include ct-card.html %}
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&text=Salgys&display=swap">
-{% include salgys.html link="no" %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&text=Saglys&display=swap">
+{% include saglys.html link="no" %}
 
 ## Studying
 

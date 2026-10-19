@@ -13,13 +13,13 @@ badge: Open to work
   The About item of the menu in the header leads here.
 {%- endcomment %}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@600&text=certificate.tips&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&text=Salgys&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&text=Saglys&display=swap">
 
 I'm a Product Manager with 7+ years of experience in IT. I'm good at turning ideas into products and scattered information into knowledge bases.
 
 I live in Vilnius, Lithuania.
 
-I work at 21vek.by as a Product Owner and I’m building{% include study-guide.html %} <a class="ct-link" href="https://certificate.tips" target="_blank" rel="noopener">certificate.tips<span class="ct-fx" aria-hidden="true"><i>CBAP</i><i>AAC</i><i>PSPO</i><i>CBDA</i></span></a> and {% include salgys.html %}. All my current projects are on the <a class="zap" href="/now">now<span class="zap-fx" aria-hidden="true"><i>❗️</i><i>⚡️</i><i>❗️</i><i>⚡️</i></span></a> page.
+I work at 21vek.by as a Product Owner and I’m building{% include study-guide.html %} <a class="ct-link" href="https://certificate.tips" target="_blank" rel="noopener">certificate.tips<span class="ct-fx" aria-hidden="true"><i>CBAP</i><i>AAC</i><i>PSPO</i><i>CBDA</i></span></a> and {% include saglys.html %}. All my current projects are on the <a class="zap" href="/now">now<span class="zap-fx" aria-hidden="true"><i>❗️</i><i>⚡️</i><i>❗️</i><i>⚡️</i></span></a> page.
 
 Previously, I was a Business Analyst at an outsourcing agency. My favourite project there was building data analysis pipelines for an MBB consulting firm.
 
