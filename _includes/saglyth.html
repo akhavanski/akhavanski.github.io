@@ -1,0 +1,15 @@
+{%- comment -%}
+  The Saglyth logo on the About page, next to certificate.tips: the word
+  "drawn by a child in wax crayons". Every letter is its own <text>, Gaegu
+  700, with its own colour, tilt, shift and size;
+  Under the word, a wavy dark line. The crayon look is
+  the SVG filter "saglyth-crayon" on the whole group: a wobbly outline and
+  grain. Drawn at a base size of 120 units and scaled to the text by the
+  viewBox, so the filter scales with it. On hover the letters jump one by
+  one. Leads to the Now page. The font loads on about.md, only the letters of this word.
+  On Now, under the certificate.tips card, the same logo without a link:
+  the include with link="no", about three times larger (.saglyth-big);
+  the page loads the font itself.
+  Styles in assets/css/main.scss (.saglyth).
+{%- endcomment -%}
+{%- if include.link == "no" -%}<span class="saglyth saglyth-big" role="img" aria-label="Saglyth">{%- else -%}<a class="saglyth" href="/now" aria-label="Saglyth">{%- endif -%}<svg viewBox="0 0 410 152" aria-hidden="true" focusable="false"><defs><filter id="saglyth-crayon" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="warp"/><feDisplacementMap in="SourceGraphic" in2="warp" scale="7" xChannelSelector="R" yChannelSelector="G" result="d"/><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="9" result="grain"/><feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 1.75" result="mask"/><feComposite in="d" in2="mask" operator="in"/></filter></defs><g filter="url(#saglyth-crayon)"><path class="saglyth-line" d="M15 139 C 52 133, 92 145, 140 139 S 228 132, 268 140 S 340 134, 388 136"/><text class="sl" x="12" y="100" font-size="120" fill="#e8412e" style="--r:6deg">S</text><text class="sl" x="79.6" y="108.2" font-size="102" fill="#ff8a1f" style="--r:0deg">a</text><text class="sl" x="130.1" y="105.7" font-size="114" fill="#2fae4e" style="--r:-2deg">g</text><text class="sl" x="184.6" y="87.4" font-size="126" fill="#ffc21a" style="--r:-1deg">l</text><text class="sl" x="226.6" y="100" font-size="120" fill="#2f6fe0" style="--r:-4deg">y</text><text class="sl" x="288.4" y="100" font-size="114" fill="#8a4fd8" style="--r:5deg">t</text><text class="sl" x="331.6" y="100" font-size="112" fill="#e8467c" style="--r:-7deg">h</text></g></svg>{%- if include.link == "no" -%}</span>{%- else -%}</a>{%- endif -%}
