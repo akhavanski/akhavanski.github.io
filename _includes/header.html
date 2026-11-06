@@ -4,6 +4,9 @@
   assets/css/main.scss) the header stays put in the column left of the text,
   the menu under the title, and in a post the table of contents under the menu
   (assets/js/toc.js moves it there). The contact icons are on the About page.
+  On the home page, About and Now a third line under the menu: the
+  certificate.tips link set as that site's logo (.ct-home in
+  assets/css/main.scss), a plain link with no hover effects.
   In the bottom left corner of the window a dot switches the theme (assets/js/theme.js),
   if the dark theme is on in _config.yml.
 {%- endcomment -%}
@@ -17,6 +20,11 @@
       {%- endif -%}
     </div>
     {%-include menu.html-%}
+    {%- assign here = page.url | remove: ".html" -%}
+    {%- if include.home or here == "/about" or here == "/now" %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@600&text=certificate.tips&display=swap">
+    <a class="ct-home" href="https://certificate.tips" target="_blank" rel="noopener">certificate.tips</a>
+    {%- endif %}
   </div>
 </header>
 {%- if site.dark_theme %}
