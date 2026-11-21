@@ -256,14 +256,13 @@ check "note_page" do
   ok(doc.at_css("html")["lang"] == "ru", "html lang is not ru")
   art = doc.at_css("article")
   ok(art, "no <article>")
-  links = art.css(".cz-back a").map { |a| a["href"] }
-  ok(links == ["/czerepaha/", "/blog"], ".cz-back links are #{links.inspect}")
+  # No way back above the title and no grey lead under it (the owner took them out): the header leads back.
+  ok(doc.css(".cz-back, .cz-dek").empty?, "a .cz-back or .cz-dek is still on the note")
   meta = art.at_css(".cz-meta")&.text.to_s.strip
   ok(meta =~ /\d{2}\.\d{2}\.\d{4} · \d+ мин\z/, "meta is #{meta.inspect}")
   feed_meta = feed.css(".cz-post").find { |a| a.at_css("h2 a")["href"].end_with?("/karta-ne-territoriya.html") }.at_css(".cz-meta").text.strip
   ok(meta == feed_meta, "meta on the note (#{meta}) differs from the feed (#{feed_meta})")
   ok(art.at_css("h1")&.text.to_s.start_with?("Карта"), "h1 is missing or wrong")
-  ok(art.at_css(".cz-dek")&.text.to_s.strip.start_with?("Любая модель"), ".cz-dek is missing or has no description")
   ok(art.at_css("nav.toc .toc-toggle"), "no nav.toc .toc-toggle")
   ok(art.at_css(".cz-prose"), "no .cz-prose")
   ok(art.at_css("p.post-signature")&.text.to_s.strip == "— Aliaksei", "signature is not '— Aliaksei'")
@@ -310,7 +309,7 @@ check "real_notes" do
   files.each do |f|
     slug = fixture_slug(f)
     doc = page(dir, "czerepaha/#{slug}.html")
-    ok(doc.at_css("article.cz-note .cz-back"), "#{slug}: not on the section layout (no .cz-back)")
+    ok(doc.at_css("article.cz-note"), "#{slug}: not on the section layout (no article.cz-note)")
     on_section_layout(doc, slug)
     ok(REAL_TOPICS.key?(slug), "#{slug}: no expected topic in REAL_TOPICS")
     ok(front_matter(f)["topic"] == REAL_TOPICS[slug], "#{slug}: topic is #{front_matter(f)['topic'].inspect}, expected #{REAL_TOPICS[slug].inspect}")
@@ -626,7 +625,6 @@ LAYOUT_JS = NO_MOTION + <<~JS
     sheetInHeader: !!head.querySelector('.toc-sheet'),
     prose: box(prose),
     notes: [].map.call(document.querySelectorAll('.sidenote'), function (n) { return {d: getComputedStyle(n).display, b: box(n)}; }),
-    back: [].map.call(document.querySelectorAll('.cz-back a'), function (a) { return {b: box(a), vis: getComputedStyle(a).visibility}; }),
     toggle: toggle && {b: box(toggle), d: getComputedStyle(toggle).display, font: getComputedStyle(toggle).fontFamily}
   })
 JS
@@ -648,8 +646,6 @@ check "wide_layout" do
   ok((r["prose"]["w"] - 680).abs < 1, "1440: text column is #{r['prose']['w']}px, not 680")
   ok(((r["prose"]["l"] + r["prose"]["r"]) / 2 - r["vw"] / 2).abs < 1, "1440: text column is not centred")
   notes_in_margin(r, "1440")
-  ok(r["back"].size == 2, "1440: #{r['back'].size} .cz-back links")
-  r["back"].each { |b| ok(b["b"]["w"] > 0 && b["vis"] == "visible" && b["b"]["t"] >= 0, "1440: a .cz-back link is hidden") }
 end
 
 check "mid_layout" do

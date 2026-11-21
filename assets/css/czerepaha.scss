@@ -144,8 +144,6 @@ body.cz::before {
 // The feed
 .cz-main { max-width: calc(#{$column} + var(--gut-l) + var(--gut-r)); margin: 0 auto; padding: 44px var(--gut-r) 0 var(--gut-l); }
 .cz-intro { display: grid; gap: 14px; }
-.cz-back { font-size: 14px; color: var(--mut); a:hover { color: var(--ink); } span { color: var(--green); } }
-.cz-dek { margin: 0; font-size: 19px; line-height: 1.55; color: var(--mut); text-wrap: pretty; }
 .cz-empty { margin: 56px 0 0; font-size: 17px; color: var(--mut); }
 
 // The line at the bottom, in line with the text column
@@ -251,10 +249,7 @@ body.cz::before {
 
 .cz-note { position: relative; display: block; }
 .cz-head { display: grid; gap: 14px; }
-.cz-head .cz-meta { margin-top: 16px; }
 .cz-head h1 { margin: 0; font-size: clamp(32px, 4.8vw, 46px); letter-spacing: -.036em; line-height: 1.08; text-wrap: balance; }
-.cz-note .cz-back { display: flex; flex-wrap: wrap; gap: 6px 10px; }
-.cz-note .cz-sep { color: #b7bdb8; }
 
 // The text
 .cz-prose {
