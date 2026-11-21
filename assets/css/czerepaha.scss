@@ -185,6 +185,7 @@ body.cz::before {
     cursor: pointer;
     text-align: left;
     &:hover { background: var(--chip); }
+    &:focus-visible { outline: 2px solid var(--green); outline-offset: 1px; }
     &[aria-pressed="true"] { background: var(--green-soft); color: var(--ink); }
   }
   .n { margin-left: 2px; color: var(--mut); font-size: 12.5px; font-variant-numeric: tabular-nums; }
@@ -197,7 +198,6 @@ body.cz::before {
   padding: 20px 0;
   border-top: 1px solid var(--line);
   &:first-child { border-top: 0; padding-top: 0; }
-  &[hidden] { display: none; }
   h2 { margin: 0; font-size: 21px; letter-spacing: -.018em; line-height: 1.25; }
   h2 a {
     background: linear-gradient(var(--green), var(--green)) 0 100% / 0 2px no-repeat;
@@ -207,7 +207,9 @@ body.cz::before {
   .cz-ex { margin: 0; font-size: 15.5px; color: var(--mut); line-height: 1.55; }
 }
 @media (min-width: #{$narrow}) {
-  .cz-feed { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 56px; padding-top: 40px; }
+  // The feed is wider than the text column: topics (200px), a gap and the column of the list.
+  .cz-main:has(.cz-feed), .cz:has(.cz-feed) .cz-foot { max-width: calc(#{200px + 56px + $column} + var(--gut-l) + var(--gut-r)); }
+  .cz-feed { display: grid; grid-template-columns: 200px minmax(0, $column); gap: 56px; padding-top: 40px; }
   .cz-topics {
     position: sticky;
     top: 84px;
@@ -221,6 +223,14 @@ body.cz::before {
     .n { margin-left: auto; }
     .cz-gap { display: block; height: 12px; }
   }
+}
+
+// From $left-header the topics are in the header (czerepaha.js), under the menu, and the feed
+// is the column of text in the middle, as a note is.
+@media (min-width: $left-header) {
+  .cz-main:has(.cz-feed), .cz:has(.cz-feed) .cz-foot { max-width: calc(#{$column} + var(--gut-l) + var(--gut-r)); }
+  .cz-feed { display: block; }
+  header .cz-topics { position: static; width: 210px; margin-top: 30px; }
 }
 
 // The line with the two list pages under the description of the section: quiet, like the meta line

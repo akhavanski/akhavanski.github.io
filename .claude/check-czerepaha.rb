@@ -914,6 +914,133 @@ check "about_tail" do
   end
 end
 
+# ── The topic filter (Task 6) ───────────────────────────────────────────────────────────────────
+# What the feed shows now: the topics of the visible notes, which buttons are pressed, the address.
+FEED_STATE_JS = <<~JS
+  function state() {
+    return {
+      shown: [].filter.call(document.querySelectorAll('.cz-post'), function (p) { return !p.hidden; })
+        .map(function (p) { return p.dataset.topic; }),
+      pressed: [].filter.call(document.querySelectorAll('.cz-topics button'), function (b) { return b.getAttribute('aria-pressed') === 'true'; })
+        .map(function (b) { return b.dataset.topic; }),
+      search: location.search
+    };
+  }
+JS
+
+check "topic_filter" do
+  r = probe("#{serve(build(:fixtures))}/czerepaha/", 1200, FEED_STATE_JS + <<~JS)
+    var out = {topics: document.querySelector('.cz-topics').hidden};
+    document.querySelector('[data-topic="models"]').click();
+    out.models = state();
+    document.querySelector('[data-topic="biases"]').click();
+    out.biases = state();
+    document.querySelector('.cz-topics button[data-topic=""]').click();
+    out.all = state();
+    out
+  JS
+  ok(r["topics"] == false, ".cz-topics is still hidden after the script ran")
+  ok(r["models"]["shown"] == %w[models models], "models shows #{r['models']['shown'].inspect}")
+  ok(r["models"]["pressed"] == %w[models], "models: pressed #{r['models']['pressed'].inspect}")
+  ok(r["models"]["search"] == "?topic=models", "models: address #{r['models']['search'].inspect}")
+  ok(r["biases"]["shown"] == %w[biases biases], "biases shows #{r['biases']['shown'].inspect}")
+  ok(r["biases"]["pressed"] == %w[biases], "biases: pressed #{r['biases']['pressed'].inspect}")
+  ok(r["all"]["shown"].size == FIXTURE_COUNT, "'Все заметки' shows #{r['all']['shown'].size} notes")
+  ok(r["all"]["pressed"] == [""], "'Все заметки' is not the only pressed button: #{r['all']['pressed'].inspect}")
+  ok(r["all"]["search"] == "", "'Все заметки' leaves the address #{r['all']['search'].inspect}")
+end
+
+check "topic_from_url" do
+  r = probe("#{serve(build(:fixtures))}/czerepaha/?topic=biases", 1200, FEED_STATE_JS + "state()")
+  ok(r["shown"] == %w[biases biases], "?topic=biases shows #{r['shown'].inspect}")
+  ok(r["pressed"] == %w[biases], "?topic=biases: pressed #{r['pressed'].inspect}")
+end
+
+check "bad_topic_param" do
+  r = probe("#{serve(build(:fixtures))}/czerepaha/?topic=nope", 1200, FEED_STATE_JS + "state()")
+  ok(r["shown"].size == FIXTURE_COUNT, "?topic=nope shows #{r['shown'].size} notes")
+  ok(r["pressed"] == [""], "?topic=nope: pressed #{r['pressed'].inspect}, not 'Все заметки'")
+end
+
+check "topics_in_header" do
+  url = "#{serve(build(:fixtures))}/czerepaha/"
+  js = <<~JS
+    var t = document.querySelector('.cz-topics'), menu = document.querySelector('header .cz-menu');
+    ({inHeader: !!t.closest('header'), inMain: !!t.closest('main'),
+      afterMenu: !!menu && !!(menu.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING)})
+  JS
+  r = probe(url, 1440, js)
+  ok(r["inHeader"] && r["afterMenu"], "1440: .cz-topics is not in the header after the menu (#{r.inspect})")
+  r = probe(url, 1000, js)
+  ok(r["inMain"] && !r["inHeader"], "1000: .cz-topics is not in main (#{r.inspect})")
+end
+
+check "no_js_shows_all" do
+  doc = page(build(:fixtures), "czerepaha/index.html")
+  ok(doc.at_css(".cz-topics")&.key?("hidden"), ".cz-topics has no hidden attribute")
+  ok(doc.css(".cz-post").none? { |p| p.key?("hidden") }, "a note is hidden in the HTML")
+end
+
+check "topics_hidden_without_js" do
+  r = probe("#{serve(build(:empty))}/czerepaha/", 1200, <<~JS)
+    var a = document.createElement('aside');
+    a.className = 'cz-topics'; a.hidden = true; document.querySelector('main').appendChild(a);
+    a.hidden = false; var shown = getComputedStyle(a).display; a.hidden = true;
+    shown + '/' + getComputedStyle(a).display
+  JS
+  ok(r.split("/").first == "flex", "the test element is not styled as .cz-topics: #{r}")
+  ok(r.split("/").last == "none", "a hidden .cz-topics has display #{r.split('/').last}")
+end
+
+check "feed_column" do
+  url = "#{serve(build(:real))}/czerepaha/"
+  js = NO_MOTION + <<~JS
+    var l = box(document.querySelector('.cz-list')), t = box(document.querySelector('.cz-topics'));
+    ({list: l, topics: t, w: innerWidth})
+  JS
+  r = probe(url, 1440, js)
+  ok(r["list"]["w"] >= 600, "1440: the list is #{r['list']['w'].round}px wide")
+  ok(((r["list"]["l"] + r["list"]["r"]) / 2 - r["w"] / 2).abs <= 2, "1440: the list is not centred (#{r['list'].inspect})")
+  r = probe(url, 1200, js)
+  ok(r["list"]["w"] >= 600, "1200: the list is #{r['list']['w'].round}px wide")
+  ok(r["topics"]["r"] <= r["list"]["l"] && (r["topics"]["t"] - r["list"]["t"]).abs <= 4,
+     "1200: the topics are not in a column left of the list (#{r['topics'].inspect} #{r['list'].inspect})")
+end
+
+# The offscreen WebKit view is not the key window, so :focus-visible never matches there; the check
+# reads the rule instead.
+check "topic_focus" do
+  r = probe("#{serve(build(:fixtures))}/czerepaha/", 1200, <<~JS)
+    var found = [];
+    [].forEach.call(document.styleSheets, function (sh) {
+      var rules = [];
+      try { rules = sh.cssRules; } catch (e) {} // the fonts' stylesheet is cross-origin
+      [].forEach.call(rules, function (rule) {
+        if (rule.selectorText && /\.cz-topics button:focus-visible/.test(rule.selectorText)) {
+          found.push(rule.style.cssText);
+        }
+      });
+    });
+    found
+  JS
+  ok(r.size == 1, "no rule '.cz-topics button:focus-visible' (#{r.inspect})")
+  ok(r[0] =~ /outline:\s*(\d+)px solid (var\(--green\)|rgb\(47, 125, 79\))/ && $1.to_i >= 2, "the focus ring is #{r[0].inspect}")
+end
+
+check "topic_click_budget" do
+  r = probe("#{serve(build(:bulk))}/czerepaha/", 1200, FEED_STATE_JS + <<~JS)
+    var all = document.querySelector('.cz-topics button[data-topic=""]'), m = document.querySelector('[data-topic="models"]');
+    var worst = 0;
+    for (var i = 0; i < 10; i++) {
+      var t0 = performance.now(); m.click(); all.click(); var dt = (performance.now() - t0) / 2;
+      if (dt > worst) worst = dt;
+    }
+    ({worst: worst, n: document.querySelectorAll('.cz-post').length})
+  JS
+  ok(r["n"] == 200, "#{r['n']} notes in the bulk build")
+  ok(r["worst"] <= 16, "a topic click takes #{r['worst'].round(1)} ms on 200 notes")
+end
+
 names = ARGV.empty? ? CHECKS.keys : ARGV
 unknown = names - CHECKS.keys
 abort "unknown checks: #{unknown.join(', ')}" unless unknown.empty?
