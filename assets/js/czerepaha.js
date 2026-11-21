@@ -6,7 +6,9 @@
     var star = document.querySelector(".cz-star");
     var note = document.getElementById("cz-about");
     if (!star || !note) return;
+    // The note's tail points at the star, wherever the name has put it.
     function set(open) {
+      if (open) note.style.setProperty("--tail", star.offsetLeft + star.offsetWidth / 2 + "px");
       note.hidden = !open;
       star.setAttribute("aria-expanded", open ? "true" : "false");
     }

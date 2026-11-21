@@ -5,7 +5,10 @@
 // Widths as on the main site: 52rem (narrow), 72rem (side notes), 84rem (header fixed on the left).
 
 $narrow: 52rem;
+$wide-screen: 72rem;
 $left-header: 84rem;
+// The text column of the feed and of a note.
+$column: 680px;
 
 :root {
   --bg: #ffffff;
@@ -104,7 +107,8 @@ body.cz::before {
     content: "";
     position: absolute;
     top: -6px;
-    left: 196px;
+    // Under the star: assets/js/czerepaha.js sets --tail to the star's middle.
+    left: calc(var(--tail, 202px) - 6px);
     width: 12px;
     height: 12px;
     background: inherit;
@@ -121,7 +125,11 @@ body.cz::before {
     left: 0;
     width: 290px;
     height: auto;
-    display: block;
+    // A long table of contents scrolls inside the header, clear of the window's bottom.
+    max-height: calc(100vh - 88px);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
     padding-left: max(32px, env(safe-area-inset-left, 0px));
     padding-right: 0;
     background: none;
@@ -133,15 +141,15 @@ body.cz::before {
 }
 
 // The feed
-.cz-main { max-width: 680px; margin: 0 auto; padding: 44px var(--gut-r) 0 var(--gut-l); }
+.cz-main { max-width: calc(#{$column} + var(--gut-l) + var(--gut-r)); margin: 0 auto; padding: 44px var(--gut-r) 0 var(--gut-l); }
 .cz-intro { display: grid; gap: 14px; }
 .cz-back { font-size: 14px; color: var(--mut); a:hover { color: var(--ink); } span { color: var(--green); } }
 .cz-dek { margin: 0; font-size: 19px; line-height: 1.55; color: var(--mut); text-wrap: pretty; }
 .cz-empty { margin: 56px 0 0; font-size: 17px; color: var(--mut); }
 
-// The line at the bottom
+// The line at the bottom, in line with the text column
 .cz-foot {
-  max-width: 680px;
+  max-width: calc(#{$column} + var(--gut-l) + var(--gut-r));
   margin: 0 auto;
   padding: 56px var(--gut-r) 72px var(--gut-l);
   font-size: 13px;
@@ -149,7 +157,7 @@ body.cz::before {
   a { color: var(--ink2); border-bottom: 1px solid #a9cfb6; &:hover { border-color: var(--green); } }
 }
 
-@media (prefers-reduced-motion: reduce) { .cz *, .cz *::before, .cz *::after { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { .cz *, .cz *::before, .cz *::after { transition: none !important; animation: none !important; } }
 
 // The feed: topics on the left (a row of pills on a narrow screen), the notes by date
 .cz-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--dot, var(--green)); flex: none; }
@@ -214,15 +222,6 @@ body.cz::before {
   }
 }
 
-// A note: only enough to read it; the looks come in a later task
-.cz-note { display: block; }
-.cz-head { display: grid; gap: 14px; }
-.cz-head .cz-meta { margin-top: 16px; }
-.cz-head h1 { margin: 0; font-size: clamp(32px, 4.8vw, 46px); letter-spacing: -.036em; line-height: 1.08; text-wrap: balance; }
-.cz-note .cz-back { display: flex; flex-wrap: wrap; gap: 6px 10px; }
-.cz-note .cz-sep { color: #b7bdb8; }
-.cz-prose { margin-top: 36px; font-size: 18px; line-height: 1.7; color: var(--ink2); p { margin: 0 0 20px; } h2 { margin: 46px 0 12px; font-size: 25px; line-height: 1.2; color: var(--ink); } }
-
 // The line with the two list pages under the description of the section: quiet, like the meta line
 .cz-pages { gap: 10px; a:hover { color: var(--ink); } }
 
@@ -234,5 +233,426 @@ body.cz::before {
   a { border-bottom: 1px solid #a9cfb6; &:hover { border-color: var(--green); } }
 }
 
-// The label after the copied link to a section (the chain itself is styled with the rest of the note).
-.anchor-copy::after { content: "Скопировано"; }
+// ── A note (_layouts/czerepaha-post.html) ──────────────────────────────────────────────────────
+// One column of text, 680px. The shared post scripts style nothing themselves: the classes they
+// make (toc.js, notes.js, sources.js, anchors.js, share.js) are styled here as in main.scss,
+// in the section's looks.
+
+.cz-note { display: block; }
+.cz-head { display: grid; gap: 14px; }
+.cz-head .cz-meta { margin-top: 16px; }
+.cz-head h1 { margin: 0; font-size: clamp(32px, 4.8vw, 46px); letter-spacing: -.036em; line-height: 1.08; text-wrap: balance; }
+.cz-note .cz-back { display: flex; flex-wrap: wrap; gap: 6px 10px; }
+.cz-note .cz-sep { color: #b7bdb8; }
+
+// The text
+.cz-prose {
+  position: relative;
+  margin-top: 36px;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--ink2);
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  overflow-wrap: break-word;
+
+  p { margin: 0 0 20px; }
+
+  // The first letter of the note and of each section: bigger, bolder and green. The first <p>
+  // right in the text, not the first child: a note often opens with a quote.
+  > p:first-of-type::first-letter, > h2 + p::first-letter {
+    font-size: 1.36em;
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1;
+    letter-spacing: .01em;
+  }
+
+  h2, h3, h4 { position: relative; color: var(--ink); hyphens: manual; -webkit-hyphens: manual; }
+  h2 { margin: 46px 0 12px; font-size: 25px; letter-spacing: -.025em; line-height: 1.2; }
+  h3 { margin: 32px 0 10px; font-size: 20px; letter-spacing: -.018em; line-height: 1.25; }
+  h4 { margin: 26px 0 8px; font-size: 18px; line-height: 1.3; }
+
+  // A quote: a green line on the left, a bit bigger and darker than the text (the mock's 500 is
+  // not among the three weights of Inter loaded, so it is the regular one).
+  blockquote {
+    margin: 30px 0;
+    padding: 2px 0 2px 20px;
+    border-left: 3px solid var(--green);
+    font-size: 21px;
+    line-height: 1.5;
+    color: var(--ink);
+    p { margin: 0; }
+    p + p { margin-top: 12px; }
+  }
+  // The callout: centred between two thin lines.
+  blockquote.callout { border: 0; border-block: 1px solid var(--line); padding: 22px 8px; text-align: center; font-size: 22px; }
+
+  em { font-style: italic; }
+  strong, b { font-weight: 600; color: var(--ink); }
+  a:not([href^="#"]) { color: var(--ink); border-bottom: 1px solid #a9cfb6; &:hover { border-color: var(--green); } }
+  ul, ol { margin: 0 0 20px; padding-left: 1.4em; }
+  li { margin-bottom: 6px; }
+  li::marker { color: var(--green); }
+  img { display: block; max-width: 100%; height: auto; border-radius: 12px; }
+  hr { margin: 36px 0; border: 0; border-top: 1px solid var(--line); }
+  code { font-size: .88em; padding: 1px 5px; border-radius: 5px; background: var(--chip); }
+
+  .post-signature { margin: 30px 0 0; color: var(--ink); }
+}
+
+// The table of contents (assets/js/toc.js). Below $left-header: the button «Содержание» under the
+// description, a pill; a click drops a card with the numbered sections under it.
+.cz-note .toc { margin-top: 20px; }
+.cz-note .toc-rail { position: relative; display: inline-block; }
+.cz-note .toc-toggle {
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: none;
+  padding: 5px 13px;
+  font-size: 13.5px;
+  color: var(--ink2);
+  cursor: pointer;
+  transition: border-color .2s;
+  &:hover, &[aria-expanded="true"] { border-color: var(--green); }
+}
+.cz-note .toc-sheet {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 8px);
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  max-width: min(340px, calc(100vw - 32px));
+  max-height: min(60vh, 440px);
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  box-shadow: 0 14px 40px rgba(17, 19, 17, .12);
+  font-size: 14px;
+  line-height: 1.4;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity .2s, transform .2s, visibility 0s .2s;
+
+  .toc-title { margin: 0 0 8px; font-weight: 600; color: var(--ink); }
+  ol { margin: 0; padding: 0; list-style: none; }
+  > ol { min-height: 0; overflow-y: auto; }
+  li { margin: 0; }
+  .toc-section { margin-top: 6px; &:first-child { margin-top: 0; } }
+  // The subsections' numbers under the sections' titles.
+  ol ol { padding-left: 1.6em; }
+  a { display: flex; padding: 2px 0; color: var(--mut); &:hover, &:focus-visible { color: var(--ink); } }
+  a[aria-current] { color: var(--ink); }
+  .toc-num { flex: none; width: 1.6em; color: var(--green); font-variant-numeric: tabular-nums; }
+  ol ol .toc-num { width: 2.3em; }
+}
+
+.cz-note .toc.is-open .toc-sheet { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+
+// From $left-header toc.js moves the list into the header, under the menu: always out, quiet
+// until the mouse is on it, without numbers; the section being read has a green line.
+@media (min-width: $left-header) {
+  .cz-note .toc { display: none; }
+  header .toc-sheet {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    width: 210px;
+    margin-top: 30px;
+    font-size: 13.5px;
+    line-height: 1.35;
+    opacity: .55;
+    transition: opacity .2s;
+
+    &:hover, &:focus-within { opacity: 1; }
+
+    .toc-title { margin: 0 0 8px; font-weight: 600; color: var(--ink); }
+    ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+    > ol { min-height: 0; overflow-y: auto; }
+    ol ol { margin-top: 6px; padding-left: 12px; }
+    li { margin: 0; }
+    .toc-num { display: none; }
+    a { display: block; padding-left: 10px; border-left: 2px solid transparent; color: var(--mut); &:hover { color: var(--ink); } }
+    a[aria-current] { color: var(--ink); border-left-color: var(--green); }
+  }
+}
+
+// Footnotes (assets/js/notes.js): a small grey number over the line; the note on the right
+// margin from $wide-screen, under the line on a tap below it, and then also listed at the end.
+.fn-ref {
+  margin-left: 1px;
+  padding: 0 2px;
+  border-radius: 3px;
+  font-size: .62em;
+  font-weight: 600;
+  line-height: 0;
+  vertical-align: super;
+  color: var(--mut);
+  cursor: pointer;
+  &:hover, &.lit, &.open { color: var(--green); }
+  &.lit { background: var(--green-soft); }
+}
+.sidenote, .notes-end li {
+  font-size: 13.5px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: left;
+  color: var(--mut);
+  em { font-style: italic; }
+  a { color: inherit; border-bottom: 1px solid #a9cfb6; }
+  del { color: #9aa09b; }
+  img { display: block; width: 100%; margin-top: 8px; border-radius: 8px; }
+  .fn-n { margin-right: 4px; font-weight: 600; color: var(--green); font-variant-numeric: tabular-nums; }
+}
+.sidenote {
+  display: none;
+  transition: color .2s;
+  &.lit { color: var(--ink2); }
+}
+.notes-end { display: none; }
+
+// The margin right of the column (half of 680px from the middle), less a gap of 40px and 24px at the edge.
+$note-width: min(220px, calc(50vw - 340px - 64px));
+
+@media (min-width: $wide-screen) {
+  .sidenote {
+    display: block;
+    float: right;
+    clear: right;
+    width: $note-width;
+    margin: 4px calc(-1 * #{$note-width} - 40px) 12px 0;
+  }
+  .fn-ref { cursor: default; }
+}
+
+@media not all and (min-width: $wide-screen) {
+  .sidenote.open {
+    display: block;
+    margin: 8px 0 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: var(--chip);
+    animation: cz-note-in .2s ease-out;
+  }
+  .notes-end {
+    display: block;
+    margin: 34px 0 20px;
+    // A short line above the list, as in a book.
+    &::before { content: ""; display: block; width: 44px; margin-bottom: 14px; border-top: 1px solid #b7bdb8; }
+    ol { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    li { margin: 0; }
+  }
+}
+
+@keyframes cz-note-in { from { opacity: 0; transform: translateY(-4px); } }
+
+// Sources (assets/js/sources.js): [3] in the text, grey; the list at the end, the numbers green.
+.cite {
+  font-size: .86em;
+  color: var(--mut);
+  white-space: nowrap;
+  a { border-radius: 3px; color: inherit; &:hover { color: var(--green); } }
+}
+.cz-prose ol.sources {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--mut);
+  hyphens: manual;
+  -webkit-hyphens: manual;
+
+  li { margin: 0; padding-left: 1.8em; text-indent: -1.8em; border-radius: 6px; }
+  .source-n { display: inline-block; width: 1.8em; text-indent: 0; font-weight: 600; color: var(--green); font-variant-numeric: tabular-nums; }
+  .source-author { color: var(--ink2); }
+  cite { font-style: italic; }
+  a.source-url { color: var(--ink2); border-bottom: 1px solid var(--line); word-break: break-word; &:hover { border-color: var(--green); } }
+  .source-back { margin-left: 6px; font-size: 13px; a { margin-right: 4px; color: var(--green); } }
+}
+.cz-prose ol.sources li:target, .cite a:target { background: var(--green-soft); }
+
+// The chain after a heading (assets/js/anchors.js): shows on hover or focus, pale on touch
+// screens. After a click «Скопировано» stands right of it, takes no room and fades in 1.5 s.
+.anchor-copy {
+  position: relative;
+  margin-left: .35em;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: .7em;
+  line-height: 1;
+  vertical-align: .12em;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s;
+
+  // The emoji fonts first, or the chain may come in the text font's outline.
+  &::before { content: "🔗"; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+  &::after {
+    content: "Скопировано";
+    position: absolute;
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--green);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  :is(h2, h3, h4):hover > &, &:focus-visible, &.is-copied { opacity: .7; }
+  &:hover { opacity: 1; }
+  &.is-copied::after { animation: cz-anchor-copied 1.5s ease-in forwards; }
+
+  @media (hover: none) { opacity: .35; }
+  @media (prefers-reduced-motion: reduce) { &.is-copied::after { opacity: 1; } }
+}
+@keyframes cz-anchor-copied { from { opacity: 1; } to { opacity: 0; } }
+
+// Read out by screen readers only.
+.anchor-status, .share-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+// Under the note: the date, a way to write to me, the tags after a key (assets/js/post-tags.js
+// turns it as in a lock).
+.cz-signoff {
+  margin: 46px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--mut);
+  a { color: var(--ink); border-bottom: 1px solid #a9cfb6; &:hover { border-color: var(--green); } }
+  .post-tags { display: block; margin-top: 10px; }
+  .key { display: inline-block; vertical-align: -.2em; }
+  .post-tags.is-open .key { animation: cz-key-unlock .8s cubic-bezier(.34, 1.5, .64, 1); }
+}
+@keyframes cz-key-unlock { to { transform: rotateX(360deg); } }
+
+// The share turtle (_includes/share.html with pin="end", assets/js/share.js): fixed at the bottom
+// of the window, in the middle of the text column. Until the end of the note is in the window
+// (the class at-end) it hides under the window's edge and catches no pointer. At the end its
+// shell peeks out; on hover, focus or a click it climbs out with a bubble of buttons. Below
+// $wide-screen it is out at the end with the bubble «Поделиться»: a tap opens the share menu.
+.share-end { height: 1px; }
+.share {
+  position: fixed;
+  z-index: 15;
+  left: 50%;
+  bottom: 0;
+  width: 260px;
+  height: calc(150px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.share-turtle {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 92px;
+  height: 64px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  .share.at-end & { pointer-events: auto; }
+}
+// No clipping: the window's bottom edge hides the turtle.
+.share-peek { position: absolute; inset: 0; }
+.share-turtle-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform: translate(-50%, 100%);
+  transition: transform .5s cubic-bezier(.3, .7, .35, 1.25);
+  svg { display: block; width: 92px; height: 64px; }
+  &:focus-visible { outline-offset: -2px; }
+
+  .share.at-end & { transform: translate(-50%, calc(22px - env(safe-area-inset-bottom, 0px))); }
+  .share.at-end .share-turtle:hover &, .share.at-end &:focus-visible,
+  .share.at-end.is-open &, .share.at-end.is-copied & { transform: translate(-50%, calc(-1 * env(safe-area-inset-bottom, 0px))); }
+}
+
+// The bubble over the turtle, with a tail pointing down at it.
+.share-bubble {
+  position: absolute;
+  left: 50%;
+  bottom: 72px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  padding: 8px 12px;
+  border: 1.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--bg);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  transform: translateX(-50%) scale(.92);
+  transform-origin: 50% 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s, transform .25s;
+
+  // A bridge over the gap down to the turtle, so the pointer can reach the buttons.
+  &::before { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 18px; }
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -7px;
+    width: 12px;
+    height: 12px;
+    background: var(--bg);
+    border-right: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .share.at-end.is-open &, .share.at-end.is-copied & { opacity: 1; transform: translateX(-50%); pointer-events: auto; }
+}
+.share-word { display: none; }
+.share-links { display: flex; gap: 10px; }
+.is-copied .share-word { display: block; }
+.is-copied .share-links { display: none; }
+.share-links {
+  a, button {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    cursor: pointer;
+    transition: color .2s, transform .2s;
+    &:hover, &:focus-visible { color: var(--green); transform: translateY(-2px); }
+  }
+  svg { display: block; width: 22px; height: 22px; fill: currentColor; }
+}
+
+@media not all and (min-width: $wide-screen) {
+  .share-word { display: block; }
+  .share-links { display: none; }
+  .share-bubble { cursor: pointer; }
+  .share.at-end .share-bubble { opacity: 1; transform: translateX(-50%); pointer-events: auto; }
+  .share.at-end .share-turtle-btn { transform: translate(-50%, calc(-1 * env(safe-area-inset-bottom, 0px))); }
+  // Room under the last line for the turtle and its bubble.
+  .cz:has(.share[data-pin="end"]) .cz-foot { padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px)); }
+}

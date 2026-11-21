@@ -102,6 +102,23 @@
     hideTimer = setTimeout(function () { set(false); }, 1500);
   }
 
+  // With data-pin="end" (the section Черепаха и слоны) the turtle is fixed at the bottom of the
+  // window and comes out only while the end of the page (the mark .share-end) is in the window:
+  // the class at-end. Scrolled back up, it hides again and the bubble closes.
+  var end = box.dataset.pin === "end" && document.querySelector(".share-end");
+  if (end && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      var at = entries[entries.length - 1].isIntersecting;
+      box.classList.toggle("at-end", at);
+      if (!at) {
+        set(false);
+        if (box.contains(document.activeElement)) document.activeElement.blur();
+      }
+    }).observe(end);
+  } else if (end) {
+    box.classList.add("at-end");
+  }
+
   var area = box.querySelector(".share-turtle");
   area.addEventListener("mouseenter", function () { if (wide.matches) set(true); });
   area.addEventListener("mouseleave", hideLater);

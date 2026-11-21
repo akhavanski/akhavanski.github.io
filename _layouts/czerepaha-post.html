@@ -5,7 +5,8 @@ layout: czerepaha
   A note of the section "Черепаха и слоны" (czerepaha/_posts). Keeps the DOM contract of
   _layouts/post.html for the shared scripts (toc.js, notes.js, sources.js, anchors.js, share.js):
   the .toc nav with .toc-toggle in the <article>, the headings and the sources list in it,
-  .post-signature at the end; the scripts are loaded on the same conditions as there.
+  .post-signature at the end; the scripts are loaded on the same conditions as there. The share
+  turtle is pinned to the bottom of the window and comes out at the end of the note (pin="end").
   Labels are in Russian. The looks are in assets/css/czerepaha.scss.
 {%- endcomment -%}
 
@@ -38,7 +39,22 @@ layout: czerepaha
   </div>
 </article>
 
-{%- include share.html label_share="Поделиться" label_thanks="Спасибо!" label_copied="Ссылка скопирована" %}
+{%- comment -%}
+  Under the note: the date and a way to write to me, then the tags after a key
+  (_includes/key.html, turned by assets/js/post-tags.js). The tag czerepaha leads to the section
+  in the blog's filter, the others to their tag.
+{%- endcomment -%}
+<p class="cz-signoff">Опубликовано <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d.%m.%Y" }}</time>. Не согласны или нашли ошибку — <a href="mailto:{{ site.contact_email }}">напишите мне</a>.
+{%- if page.tags.size > 0 %}
+<span class="post-tags">{% include key.html decorative=true %} Теги:
+  {%- for tag in page.tags %}{% assign slug = tag | slugify %} <a href="{{ "/blog" | relative_url }}?{% if slug == "czerepaha" %}source=czerepaha{% else %}tag={{ slug }}{% endif %}">{{ tag }}</a>{% unless forloop.last %},{% endunless %}{% endfor %}</span>
+{%- endif %}</p>
+
+{%- include share.html pin="end" label_share="Поделиться" label_thanks="Спасибо!" label_copied="Ссылка скопирована" label_turtle="Поделиться заметкой" label_linkedin="Поделиться в LinkedIn" label_telegram="Отправить в Telegram" label_whatsapp="Отправить в WhatsApp" label_x="Поделиться в X" label_email="Отправить по почте" label_copy="Скопировать ссылку" %}
+
+{%- if page.tags.size > 0 %}
+<script src="{{ "/assets/js/post-tags.js" | relative_url }}"></script>
+{%- endif %}
 
 {%- comment -%} Side notes: footnotes. {%- endcomment -%}
 {%- assign notes = false %}

@@ -1,5 +1,6 @@
 {%- comment -%}
   A small key before the post's tags in the note under the post
   (_layouts/post.html). Drawn with the text colour, so it is grey like the note.
+  With decorative=true (a note of Черепаха и слоны, where the word «Теги:» follows) screen readers skip it.
 {%- endcomment -%}
-<svg class="key" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Tags" role="img"><circle cx="6" cy="12" r="4"/><path d="M10 12h12M18 12v4M21 12v3"/></svg>
+<svg class="key" viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" {% if include.decorative %}aria-hidden="true"{% else %}aria-label="Tags" role="img"{% endif %}><circle cx="6" cy="12" r="4"/><path d="M10 12h12M18 12v4M21 12v3"/></svg>
