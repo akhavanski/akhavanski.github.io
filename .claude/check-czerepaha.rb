@@ -457,6 +457,94 @@ check "labels_en_unchanged" do
   ok(r["shareStatus"] == "Link copied", "share status is #{r['shareStatus']}")
 end
 
+# The filter on /blog: the section is a third place in "Published on" (Task 3b).
+PLACES_JS = <<~JS
+  var g = document.querySelector('[data-group="source"]');
+  var opts = Array.prototype.slice.call(g.querySelectorAll('.filter-option'));
+  var lis = Array.prototype.slice.call(document.querySelectorAll('ul.blog-posts li'));
+  function shown() { return lis.filter(function (l) { return !l.hidden; }); }
+  function src(l) { return l.dataset.source; }
+  var tagOpts = Array.prototype.slice.call(document.querySelectorAll('.filter-option[data-filter="tag"]'));
+  var r = {
+    values: opts.map(function (o) { return o.dataset.value; }),
+    labels: opts.map(function (o) { return Array.prototype.filter.call(o.childNodes, function (n) { return n.nodeType === 3 && n.nodeValue.trim(); })[0].nodeValue.trim(); }),
+    hint: g.querySelector('.filter-hint').textContent.trim(),
+    svg: opts.map(function (o) { return !!o.querySelector('svg .t-shell'); }),
+    counts: opts.map(function (o) { return o.querySelector('.filter-option-count').textContent; }),
+    sources: lis.map(src),
+    external: lis.map(function (l) { return l.classList.contains('external'); }),
+    section: lis.map(function (l) { return !!l.querySelector('a[href^="/czerepaha/"]:not(.cz-turtle)'); }),
+    tagValues: tagOpts.map(function (o) { return o.dataset.value; }),
+    fills: tagOpts.map(function (o) { return o.dataset.fill; }),
+    pressed: opts.map(function (o) { return o.getAttribute('aria-checked'); }),
+    shownSources: shown().map(src), shownCount: shown().length,
+    search: location.search,
+    summary: document.querySelector('.filter-summary').textContent
+  };
+  r
+JS
+
+check "place_options" do
+  r = probe("#{serve(build(:real))}/blog.html", 1280, PLACES_JS)
+  ok(r["values"] == %w[guest local czerepaha], "place values are #{r['values'].inspect}")
+  ok(r["labels"][2] == "Черепаха и слоны", "third place is #{r['labels'][2].inspect}")
+  ok(r["svg"] == [false, false, true], "turtle svg in the places: #{r['svg'].inspect}")
+  ok(r["hint"] == "· one of them", "place hint is #{r['hint'].inspect}")
+  want = { "guest" => r["external"].count(true), "czerepaha" => r["section"].count(true) }
+  want["local"] = r["sources"].size - want["guest"] - want["czerepaha"]
+  ok(want["czerepaha"] == REAL_NOTES, "expected #{REAL_NOTES} section notes in the list, found #{want['czerepaha']}")
+  got = r["values"].zip(r["counts"]).to_h { |v, n| [v, n.to_i] }
+  ok(got == want, "place counts are #{got.inspect}, expected #{want.inspect}")
+  r["sources"].each_with_index do |s, i|
+    e = r["section"][i] ? "czerepaha" : (r["external"][i] ? "guest" : "local")
+    ok(s == e, "post #{i} has data-source #{s.inspect}, expected #{e}")
+  end
+end
+
+check "place_filter" do
+  dir = serve(build(:real))
+  r = probe("#{dir}/blog.html", 1280, PLACES_JS + "; document.querySelector('[data-value=czerepaha]').click(); var a = {n: shown().length, s: shown().map(src), q: location.search, sum: document.querySelector('.filter-summary').textContent}; document.querySelector('[data-value=local]').click(); ({a: a, local: shown().map(src), q2: location.search, total: lis.length})")
+  ok(r["a"]["n"] == REAL_NOTES && r["a"]["s"].uniq == ["czerepaha"], "czerepaha place shows #{r['a']['s'].tally.inspect}")
+  ok(r["a"]["q"] == "?source=czerepaha", "address after czerepaha is #{r['a']['q']}")
+  ok(r["a"]["sum"].include?("published on Черепаха и слоны"), "summary is #{r['a']['sum']}")
+  ok(r["local"].size > 0 && r["local"].uniq == ["local"], "akh.cx place shows #{r['local'].tally.inspect}")
+  ok(r["q2"] == "?source=local", "address after akh.cx is #{r['q2']}")
+end
+
+check "old_tag_link" do
+  r = probe("#{serve(build(:real))}/blog.html?tag=czerepaha", 1280, PLACES_JS)
+  ok(r["pressed"] == %w[false false true], "places pressed: #{r['pressed'].inspect}")
+  ok(r["shownCount"] == REAL_NOTES && r["shownSources"].uniq == ["czerepaha"], "shown: #{r['shownSources'].tally.inspect}")
+  ok(r["search"] == "?source=czerepaha", "address is #{r['search']}")
+end
+
+check "no_czerepaha_tag" do
+  r = probe("#{serve(build(:real))}/blog.html", 1280, PLACES_JS)
+  ok(!r["tagValues"].include?("czerepaha"), "tag czerepaha is in the Tags group")
+  ok(r["fills"] == (0...r["fills"].size).map(&:to_s), "tag fills are #{r['fills'].inspect}")
+  want = r["tagValues"].each_index.to_a
+  ok(r["fills"].map(&:to_i) == want, "tag fills skip a number")
+end
+
+check "tag_link_on_note" do
+  dir = build(:real)
+  Dir[File.join(dir, "**", "*.html")].each do |f|
+    ok(!File.read(f).include?("tag=czerepaha"), "#{f.sub(dir, '')} links to ?tag=czerepaha")
+  end
+  Dir[File.join(ROOT, "czerepaha", "_posts", "*.md")].each do |f|
+    doc = page(dir, "czerepaha/#{fixture_slug(f)}.html")
+    doc.css("a[href*='/blog?']").each { |a| ok(a["href"].include?("source=czerepaha"), "#{fixture_slug(f)}: tag link #{a['href']}") }
+  end
+  src = File.read(File.join(ROOT, "_layouts", "post.html"))
+  ok(src.include?("source=czerepaha"), "post.html does not send the czerepaha tag to ?source=czerepaha")
+end
+
+check "empty_filter" do
+  r = probe("#{serve(build(:empty))}/blog.html", 1280, PLACES_JS)
+  ok(r["values"] == %w[guest local], "empty build place values are #{r['values'].inspect}")
+  ok(r["hint"] == "· one of them", "empty build place hint is #{r['hint'].inspect}")
+end
+
 names = ARGV.empty? ? CHECKS.keys : ARGV
 unknown = names - CHECKS.keys
 abort "unknown checks: #{unknown.join(', ')}" unless unknown.empty?

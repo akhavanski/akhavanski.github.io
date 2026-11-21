@@ -38,7 +38,7 @@ layout: default
 <p class="post-footer">Published <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: site.theme_config.date_format }}</time>. If you don’t agree or think I made a mistake, drop me an <a href="mailto:{{ site.contact_email }}">email</a>.
 {%- if keywords.size > 0 %}<br><br>
 <span class="post-tags">{% include key.html %}
-  {%- for keyword in keywords %}{% assign slug = keyword | slugify %} <a href="{{ "/blog" | relative_url }}?tag={{ slug }}"{% if slug == "ai" %} class="has-sparkles"{% endif %}>{{ keyword }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}</a>{% unless forloop.last %},{% endunless %}{% endfor %}</span>
+  {%- for keyword in keywords %}{% assign slug = keyword | slugify %} <a href="{{ "/blog" | relative_url }}?{% if slug == "czerepaha" %}source=czerepaha{% else %}tag={{ slug }}{% endif %}"{% if slug == "ai" %} class="has-sparkles"{% endif %}>{{ keyword }}{% if slug == "ai" %}{% include sparkles.html %}{% endif %}</a>{% unless forloop.last %},{% endunless %}{% endfor %}</span>
 {%- endif %}</p>
 
 {%-include share.html-%}

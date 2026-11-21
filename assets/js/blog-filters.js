@@ -1,10 +1,11 @@
 // The filter on the Blog page (_includes/posts.html). Its options are tags,
-// languages and the place a post was published on (the other blog or this one).
+// languages and the place a post was published on (the other blog, this one
+// or the section Черепаха и слоны; data-source of a post: guest, local, czerepaha).
 // Several tags and several languages can be on at once. A post is shown
 // if it has one of the chosen tags (any if none is chosen), is in one of
 // the chosen languages (any if none is chosen) and was published on the chosen
-// place (both if none). The places are one at a time: they are radio buttons,
-// though a click on the chosen one takes it off.
+// place (any if none). The places (up to three) are one at a time: they are
+// radio buttons, though a click on the chosen one takes it off.
 //
 // The options are always out: on wide screens in the column right of the list,
 // on narrow screens under the title, a line per group (main.scss).
@@ -20,6 +21,8 @@
 //
 // The choice is kept in the address, e.g. /blog?lang=en&tag=ai&source=guest,
 // so a filtered list can be shared or opened again. Unknown values are ignored.
+// An old link ?tag=czerepaha (the section was a tag once) is read as
+// source=czerepaha, and the address is rewritten.
 // "Read on …" after an external post's title is hidden where it would lie
 // over the filter.
 (function () {
@@ -48,9 +51,13 @@
     option.setAttribute(isRadio(option) ? "aria-checked" : "aria-pressed", String(on));
   }
 
-  // The option's name, without its number of posts and its hint.
+  // The option's name, without its number of posts, its hint and its small
+  // picture (the turtle of Черепаха и слоны comes first): its first text.
   function label(option) {
-    return option.firstChild.nodeValue.trim();
+    for (var node = option.firstChild; node; node = node.nextSibling) {
+      if (node.nodeType === 3 && node.nodeValue.trim()) return node.nodeValue.trim();
+    }
+    return "";
   }
 
   function find(filter, value) {
@@ -71,7 +78,7 @@
     var tags = post.dataset.tags.split(" ");
     return (!c.lang.length || c.lang.indexOf(post.dataset.lang) !== -1) &&
       (!c.tag.length || c.tag.some(function (t) { return tags.indexOf(t) !== -1; })) &&
-      (!c.source.length || (c.source[0] === "guest") === post.classList.contains("external"));
+      (!c.source.length || c.source[0] === post.dataset.source);
   }
 
   function countFor(c) {
@@ -167,8 +174,9 @@
   }
 
   // The choice from the address, if the page was opened with one;
-  // one place at most, even if the address asks for both.
+  // one place at most, even if the address asks for several.
   var params = new URLSearchParams(location.search);
+  if (!params.has("source") && params.getAll("tag").indexOf("czerepaha") !== -1) params.set("source", "czerepaha");
   options.forEach(function (option) {
     var on = params.getAll(option.dataset.filter).indexOf(option.dataset.value) !== -1;
     setOn(option, on && !(option.dataset.filter === "source" && chosen("source").length));

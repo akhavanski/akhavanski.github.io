@@ -6,8 +6,13 @@
   Languages and Published on. Several tags and several languages can be chosen:
   a post is shown if it has one of the chosen tags and is in one of the chosen
   languages; the headings say so ("any of them"). Published on has the name of
-  the other blog (or "Other sites" when there are several) and of this one;
-  only one of the two is on at a time, with none on all posts are shown.
+  the other blog (or "Other sites" when there are several), of this one (only
+  its own posts, not the notes of Черепаха и слоны) and, when the section has
+  notes, Черепаха и слоны with a small turtle before the name; only one of the
+  places is on at a time, with none on all posts are shown. The tag czerepaha
+  has no option among the tags: the section is a place, an old link
+  ?tag=czerepaha is read as ?source=czerepaha (assets/js/blog-filters.js).
+  Each post says where it was published in data-source: guest, czerepaha or local.
   Languages are shown only when two languages have $min_lang_posts posts
   or more; until then a post in another language than English has a small
   mark with its language after its title (lang-badge).
@@ -27,7 +32,7 @@
   back; the options stay as they are.
   The name does not move with it: it stands clear of the pulled-out drawer.
   Each option has its own fill colour for when it is chosen: data-fill counts
-  the tags, the languages and the two places in a row (the colours are in assets/css/main.scss).
+  the tags, the languages and the places in a row (the colours are in assets/css/main.scss).
   Without the script the filter stays hidden and the whole list is shown.
 {%- endcomment -%}
 {%- capture langs %}{% for post in site.posts %}{{ post.lang }}|{% endfor %}{% endcapture %}
@@ -42,6 +47,10 @@
 {%- comment -%} Tag names in alphabetical order, whatever their case. {%- endcomment -%}
 {%- capture tags %}{% for tag in site.tags %}{{ tag[0] }}|{% endfor %}{% endcapture %}
 {%- assign tags = tags | split: "|" | sort_natural %}
+{%- comment -%} The tag czerepaha is the place Черепаха и слоны, not an option among the tags. {%- endcomment -%}
+{%- capture tags %}{% for tag in tags %}{% assign slug = tag | slugify %}{% unless slug == "czerepaha" %}{{ tag }}|{% endunless %}{% endfor %}{% endcapture %}
+{%- assign tags = tags | split: "|" %}
+{%- assign section_notes = site.posts | where_exp: "p", "p.categories contains 'czerepaha'" %}
 {%- comment -%} The other blogs' names, for the option of their posts. {%- endcomment -%}
 {%- capture hosts %}{% for post in site.posts %}{% if post.external_url %}{% assign host = post.external_url | split: "/" %}{{ host[2] | remove: "www." }}|{% endif %}{% endfor %}{% endcapture %}
 {%- assign hosts = hosts | split: "|" | uniq %}
@@ -80,10 +89,11 @@
       {%- assign n = n | plus: langs.size %}
       {%- endif %}
       <div class="filter-group" role="radiogroup" aria-labelledby="filter-heading-source" data-group="source">
-      <p class="filter-heading" id="filter-heading-source">Published on<span class="filter-hint"> · one of the two</span></p>
+      <p class="filter-heading" id="filter-heading-source">Published on<span class="filter-hint"> · one of them</span></p>
       {%- assign sources = "guest,local" | split: "," %}
+      {%- if section_notes.size > 0 %}{% assign sources = "guest,local,czerepaha" | split: "," %}{% endif %}
       {%- for source in sources %}
-      <button type="button" class="filter-option" role="radio" aria-checked="false" data-filter="source" data-value="{{ source }}" data-fill="{{ n | plus: forloop.index0 | modulo: fills }}">{% if source == "guest" %}{% if hosts.size == 1 %}{{ hosts[0] }}{% else %}Other sites{% endif %}{% else %}{{ here[2] | default: "This site" }}{% endif %}<span class="filter-option-count"></span><span class="hit" aria-hidden="true"></span></button>
+      <button type="button" class="filter-option" role="radio" aria-checked="false" data-filter="source" data-value="{{ source }}" data-fill="{{ n | plus: forloop.index0 | modulo: fills }}">{% if source == "guest" %}{% if hosts.size == 1 %}{{ hosts[0] }}{% else %}Other sites{% endif %}{% elsif source == "czerepaha" %}<span class="place-turtle">{% include turtle-svg.html %}</span>Черепаха и слоны{% else %}{{ here[2] | default: "This site" }}{% endif %}<span class="filter-option-count"></span><span class="hit" aria-hidden="true"></span></button>
       {%- endfor %}
       </div>
     </div>
@@ -113,10 +123,11 @@
 <ul class="blog-posts{% unless include.limit %} with-excerpts{% endunless %}">
   {%- for post in site.posts limit: include.limit %}
   {%- capture post_tags %}{% for tag in post.tags %}{{ tag | slugify }} {% endfor %}{% endcapture %}
+  {%- if post.external_url %}{% assign source = "guest" %}{% elsif post.categories contains "czerepaha" %}{% assign source = "czerepaha" %}{% else %}{% assign source = "local" %}{% endif %}
   {%- assign href = post.external_url | default: post.url | relative_url %}
   {%- assign host = post.external_url | split: "/" %}
   {%- capture target %}{% if post.external_url %} target="_blank" rel="noopener"{% endif %}{% endcapture %}
-  <li lang="{{ post.lang }}" data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}"{% if post.external_url %} class="external"{% endif %}>
+  <li lang="{{ post.lang }}" data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}" data-source="{{ source }}"{% if post.external_url %} class="external"{% endif %}>
     <div class="post-title">
       {%- if post.categories contains "czerepaha" %}<a class="cz-turtle" href="/czerepaha/" title="Черепаха и слоны" aria-label="Черепаха и слоны">{% include turtle-svg.html %}</a>{% endif -%}
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ href }}"{{ target }}>{{ post.title }}</a>

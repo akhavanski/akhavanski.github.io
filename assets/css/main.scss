@@ -1924,7 +1924,7 @@ html[data-theme="dark"] {
 
 // The turtle at the bottom of a post is flat, without the outline,
 // in the greens of Черепаха и слоны.
-.share-turtle-btn, .blog-posts .cz-turtle {
+.share-turtle-btn, .blog-posts .cz-turtle, .filter-option .place-turtle {
   svg { stroke: none; }
   .t-skin { fill: #8fc4a1; }
   .t-shell { fill: #2f7d4f; }
@@ -1932,6 +1932,16 @@ html[data-theme="dark"] {
   .t-plates { fill: none; stroke: #1f5c39; stroke-width: 1.6; }
   .t-eye { fill: $ink; }
   .t-smile { fill: none; stroke: $ink; stroke-width: 1.2; }
+}
+
+// The small turtle before "Черепаха и слоны" among the places of the filter.
+.filter-option .place-turtle {
+  display: inline-block;
+  margin-right: 0.4ch;
+  vertical-align: -2px;
+  line-height: 0;
+
+  svg { display: block; width: 18px; height: 12px; overflow: visible; }
 }
 
 // A comic speech bubble, with a tail pointing at the turtle.
