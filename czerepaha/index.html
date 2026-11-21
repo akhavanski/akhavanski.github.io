@@ -4,15 +4,42 @@ title: Черепаха и слоны
 permalink: /czerepaha/
 ---
 {%- comment -%}
-  The feed of the section "Черепаха и слоны" (akh.cx/czerepaha). For now only the empty state;
-  the notes and topics come later. The layout is _layouts/czerepaha.html.
+  The feed of the section "Черепаха и слоны" (akh.cx/czerepaha): the notes of czerepaha/_posts
+  (the category czerepaha), newest first, and the topic buttons with the number of notes of each
+  (_data/czerepaha.yml; a topic with no notes is left out, a note with no known topic is only
+  in "Все заметки"). The buttons are hidden until the script that filters by topic shows them.
+  With no notes: the empty state and no topics. The layout is _layouts/czerepaha.html.
 {%- endcomment -%}
 <div class="cz-intro">
   <nav class="cz-back" aria-label="Назад"><a href="{{ "/blog" | relative_url }}"><span aria-hidden="true">←</span> Весь блог</a></nav>
   <p class="cz-dek">Заметки о ментальных моделях: как думать медленнее и приходить туда, куда собирался.</p>
 </div>
-{%- assign notes = site.categories.czerepaha %}
-{%- comment -%} With no notes the category does not exist at all, so test for nil too. {%- endcomment -%}
-{%- unless notes and notes.size > 0 %}
+{%- comment -%} With no notes the category does not exist at all (nil). {%- endcomment -%}
+{%- if site.categories.czerepaha %}
+{%- assign notes = site.categories.czerepaha | sort: "date" | reverse %}
+<div class="cz-feed">
+  <aside class="cz-topics" aria-label="Темы" hidden>
+    <button type="button" aria-pressed="true" data-topic=""><span class="cz-dot"></span>Все заметки<span class="n">{{ notes.size }}</span></button>
+    <div class="cz-gap"></div>
+    {%- for topic in site.data.czerepaha %}
+    {%- assign count = notes | where: "topic", topic.key | size %}
+    {%- if count > 0 %}
+    <button type="button" aria-pressed="false" data-topic="{{ topic.key }}"><span class="cz-dot" style="--dot: {{ topic.color }}"></span>{{ topic.name }}<span class="n">{{ count }}</span></button>
+    {%- endif %}
+    {%- endfor %}
+  </aside>
+  <div class="cz-list">
+    {%- for note in notes %}
+    {%- assign known = false %}
+    {%- for topic in site.data.czerepaha %}{% if topic.key == note.topic %}{% assign known = true %}{% endif %}{% endfor %}
+    <article class="cz-post" data-topic="{% if known %}{{ note.topic }}{% endif %}">
+      {%- include czerepaha-meta.html post=note %}
+      <h2><a href="{{ note.url | relative_url }}">{{ note.title }}</a></h2>
+      <p class="cz-ex">{% include czerepaha-excerpt.html post=note %}</p>
+    </article>
+    {%- endfor %}
+  </div>
+</div>
+{%- else %}
 <p class="cz-empty">Скоро здесь будут заметки</p>
-{%- endunless %}
+{%- endif %}

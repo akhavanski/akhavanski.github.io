@@ -1,0 +1,12 @@
+# Topics of the section "Черепаха и слоны": key (the note's `topic:`), name, colour of the dot.
+# Used by czerepaha/index.html (the topic buttons) and _includes/czerepaha-meta.html (the note's line).
+# A note with no topic or an unknown one is shown with the default dot and no topic name.
+- key: think
+  name: Мышление
+  color: "#2f7d4f"
+- key: decide
+  name: Решения
+  color: "#111311"
+- key: sys
+  name: Системы
+  color: "#9fd2b0"

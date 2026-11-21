@@ -1,0 +1,12 @@
+{%- comment -%}
+  The description of a note, for the feed and under the title of the note's page: `description:`
+  if there is one, else the first 25 words of the text with no footnote numbers (every
+  <sup id="fnref:…"> is cut out, as in posts.html). Takes `post`.
+{%- endcomment -%}
+{%- if include.post.description -%}
+{{ include.post.description }}
+{%- else -%}
+{%- assign parts = include.post.excerpt | split: '<sup id="fnref:' -%}
+{%- capture excerpt %}{% for part in parts %}{% if forloop.first %}{{ part }}{% else %}{% assign rest = part | split: '</sup>' %}{% for piece in rest offset: 1 %}{{ piece }}{% endfor %}{% endif %}{% endfor %}{% endcapture -%}
+{{ excerpt | strip_html | strip_newlines | strip | truncatewords: 25 }}
+{%- endif -%}

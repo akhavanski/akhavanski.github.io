@@ -1,0 +1,64 @@
+---
+layout: czerepaha
+---
+{%- comment -%}
+  A note of the section "Черепаха и слоны" (czerepaha/_posts). Keeps the DOM contract of
+  _layouts/post.html for the shared scripts (toc.js, notes.js, sources.js, anchors.js, share.js):
+  the .toc nav with .toc-toggle in the <article>, the headings and the sources list in it,
+  .post-signature at the end; the scripts are loaded on the same conditions as there.
+  Labels are in Russian. The looks are in assets/css/czerepaha.scss.
+{%- endcomment -%}
+
+{%- comment -%} The table of contents needs at least two sections or subsections. {%- endcomment -%}
+{%- assign h2s = content | split: "<h2" | size | minus: 1 %}
+{%- assign h3s = content | split: "<h3" | size | minus: 1 %}
+{%- assign heads = h2s | plus: h3s %}
+
+<article class="cz-note" lang="ru">
+  <div class="cz-head">
+    <nav class="cz-back" aria-label="Назад">
+      <a href="{{ "/czerepaha/" | relative_url }}"><span aria-hidden="true">←</span> Черепаха и слоны</a><span class="cz-sep" aria-hidden="true">·</span><a href="{{ "/blog" | relative_url }}"><span aria-hidden="true">←</span> Весь блог</a>
+    </nav>
+    {%- include czerepaha-meta.html post=page %}
+    <h1>{{ page.title }}</h1>
+    <p class="cz-dek">{% include czerepaha-excerpt.html post=page %}</p>
+  </div>
+
+  {%- if heads >= 2 %}
+  <nav class="toc" aria-label="Содержание">
+    <div class="toc-rail">
+      <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc">Содержание</button>
+    </div>
+  </nav>
+  {%- endif %}
+
+  <div class="cz-prose">
+    {{ content }}
+    <p class="post-signature">— {{ site.author | split: " " | first }}</p>
+  </div>
+</article>
+
+{%- include share.html %}
+
+{%- comment -%} Side notes: footnotes. {%- endcomment -%}
+{%- assign notes = false %}
+{%- if content contains 'class="footnote"' %}{% assign notes = true %}{% endif %}
+
+{%- if heads >= 2 %}
+<script src="{{ "/assets/js/toc.js" | relative_url }}"></script>
+{%- endif %}
+
+{%- if notes %}
+<script src="{{ "/assets/js/notes.js" | relative_url }}"></script>
+{%- endif %}
+
+{%- comment -%} The chain next to headings copies a link to the section; after toc.js, which gives ids. {%- endcomment -%}
+{%- if content contains "<h2" or content contains "<h3" or content contains "<h4" %}
+<script src="{{ "/assets/js/anchors.js" | relative_url }}"></script>
+{%- endif %}
+
+{%- if content contains '<h2 id="sources">' or content contains '<h2 id="источники">' %}
+<script src="{{ "/assets/js/sources.js" | relative_url }}"></script>
+{%- endif %}
+
+{%- include hyphenate.html %}

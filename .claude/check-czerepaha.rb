@@ -3,6 +3,8 @@
 # serve(dir) serves a build over WEBrick, probe(url, width, js) runs JS in a WKWebView (webprobe).
 # Each check is `check "name" do … end`; it fails by raising Fail (see `ok`).
 require "json"
+require "yaml"
+require "date"
 require "fileutils"
 require "tmpdir"
 require "open3"
@@ -129,6 +131,135 @@ check "header_star" do
   ok(r["reopen"], "the note does not open a second time")
   ok(r["outside"], "click on body does not close the note")
   ok(r["toggle"], "a second click on the star does not close the note")
+end
+
+# The test notes: [slug, front matter hash] in the order of the feed (newest first).
+def fixture_files
+  Dir[File.join(ROOT, ".claude", "fixtures", "czerepaha", "*.md")].sort.reverse
+end
+
+def fixture_slug(file)
+  File.basename(file, ".md").sub(/\A\d{4}-\d{2}-\d{2}-/, "")
+end
+
+def front_matter(file)
+  YAML.safe_load(File.read(file)[/\A---\n(.*?)\n---/m, 1], permitted_classes: [Date, Time]) || {}
+end
+
+def script_srcs(doc)
+  doc.css("script[src]").map { |s| File.basename(s["src"].to_s.sub(/\?.*/, "")) }
+end
+
+check "note_urls" do
+  dir = build(:fixtures)
+  files = fixture_files
+  ok(files.size == 5, "expected 5 fixtures, found #{files.size}")
+  files.each do |f|
+    path = "czerepaha/#{fixture_slug(f)}.html"
+    ok(File.exist?(File.join(dir, path)), "no /#{path} for #{File.basename(f)}")
+    ok(page(dir, path).at_css("article.cz-note"), "/#{path} is not built with the note layout")
+  end
+end
+
+check "tag_matches_folder" do
+  folders = [File.join(ROOT, "czerepaha", "_posts"), File.join(ROOT, ".claude", "fixtures", "czerepaha")]
+  notes = folders.flat_map { |d| Dir[File.join(d, "*.md")] }
+  notes.each do |f|
+    tags = Array(front_matter(f)["tags"]).map { |t| t.to_s.downcase }
+    ok(tags.include?("czerepaha"), "#{File.basename(f)}: a note of the section has no tag czerepaha")
+  end
+  Dir[File.join(ROOT, "_posts", "**", "*.md")].each do |f|
+    tags = Array(front_matter(f)["tags"]).map { |t| t.to_s.downcase }
+    ok(!tags.include?("czerepaha"), "#{File.basename(f)}: a post outside czerepaha/_posts has the tag czerepaha")
+  end
+end
+
+check "feed_only_section" do
+  doc = page(build(:fixtures), "czerepaha/index.html")
+  want = fixture_files.map { |f| "/czerepaha/#{fixture_slug(f)}.html" }
+  got = doc.css(".cz-post h2 a").map { |a| a["href"] }
+  ok(got == want, "feed links differ:\n  got  #{got.inspect}\n  want #{want.inspect}")
+  ok(doc.css(".cz-post").size == 5, "expected 5 .cz-post, found #{doc.css('.cz-post').size}")
+  ok(doc.at_css(".cz-empty").nil?, ".cz-empty is shown with notes")
+end
+
+check "topic_counts" do
+  doc = page(build(:fixtures), "czerepaha/index.html")
+  buttons = doc.css(".cz-topics button[data-topic]")
+  all = buttons.find { |b| b["data-topic"].to_s.empty? }
+  ok(all, "no button 'Все заметки' (empty data-topic)")
+  ok(all.text.include?("Все заметки"), "the empty-topic button is not 'Все заметки': #{all.text}")
+  ok(all.at_css(".n").text.strip == "5", "'Все заметки' count is #{all.at_css('.n').text.strip}, not 5")
+  want = fixture_files.map { |f| front_matter(f)["topic"].to_s }.reject { |t| t.empty? || t == "models" }.tally
+  shown = buttons.reject { |b| b["data-topic"].to_s.empty? }
+  ok(shown.map { |b| b["data-topic"] } == %w[think decide sys].select { |k| want[k] },
+     "topic buttons are #{shown.map { |b| b['data-topic'] }.inspect}")
+  shown.each do |b|
+    n = b.at_css(".n").text.strip.to_i
+    ok(n == want[b["data-topic"]], "#{b['data-topic']}: count #{n}, expected #{want[b['data-topic']]}")
+    ok(doc.css(".cz-post[data-topic='#{b['data-topic']}']").size == n, "#{b['data-topic']}: count differs from the notes shown")
+  end
+end
+
+check "unknown_topic" do
+  doc = page(build(:fixtures), "czerepaha/index.html")
+  post = doc.css(".cz-post").find { |a| a.at_css("h2 a")["href"].end_with?("/inversiya.html") }
+  ok(post, "the note with an unknown topic is not in the feed")
+  ok(post["data-topic"] == "", "data-topic is #{post['data-topic'].inspect}, not empty")
+  dot = post.at_css(".cz-dot")
+  ok(dot, "no .cz-dot")
+  ok(dot["style"].to_s !~ /color|background|--dot/, "the dot has its own colour: #{dot['style']}")
+  ok(post.at_css(".cz-meta").text.strip =~ /\A30\.10\.2026 · \d+ мин\z/, "meta of an unknown topic: #{post.at_css('.cz-meta').text.strip}")
+end
+
+check "excerpt_without_footnote_numbers" do
+  dir = build(:fixtures)
+  feed = page(dir, "czerepaha/index.html")
+  post = feed.css(".cz-post").find { |a| a.at_css("h2 a")["href"].end_with?("/britva-okkama.html") }
+  ok(post, "the note without description is not in the feed")
+  text = post.at_css(".cz-ex").text.strip
+  ok(text.start_with?("Правило"), "feed description starts with #{text[0, 20].inspect}")
+  ok(text !~ /\d/, "feed description has digits: #{text}")
+  blog = page(dir, "blog.html")
+  li = blog.css("ul.blog-posts li").find { |l| l.at_css(".post-title a")["href"].end_with?("/czerepaha/britva-okkama.html") }
+  ok(li, "the note is not in /blog.html")
+  ex = li.at_css(".post-excerpt").text.strip
+  ok(ex.start_with?("Правило"), "/blog.html excerpt starts with #{ex[0, 20].inspect}")
+  ok(ex !~ /\d/, "/blog.html excerpt has digits: #{ex}")
+end
+
+check "note_page" do
+  dir = build(:fixtures)
+  feed = page(dir, "czerepaha/index.html")
+  doc = page(dir, "czerepaha/karta-ne-territoriya.html")
+  ok(doc.at_css("html")["lang"] == "ru", "html lang is not ru")
+  art = doc.at_css("article")
+  ok(art, "no <article>")
+  links = art.css(".cz-back a").map { |a| a["href"] }
+  ok(links == ["/czerepaha/", "/blog"], ".cz-back links are #{links.inspect}")
+  meta = art.at_css(".cz-meta")&.text.to_s.strip
+  ok(meta =~ /\d{2}\.\d{2}\.\d{4} · \d+ мин\z/, "meta is #{meta.inspect}")
+  feed_meta = feed.css(".cz-post").find { |a| a.at_css("h2 a")["href"].end_with?("/karta-ne-territoriya.html") }.at_css(".cz-meta").text.strip
+  ok(meta == feed_meta, "meta on the note (#{meta}) differs from the feed (#{feed_meta})")
+  ok(art.at_css("h1")&.text.to_s.start_with?("Карта"), "h1 is missing or wrong")
+  ok(art.at_css(".cz-dek")&.text.to_s.strip.start_with?("Любая модель"), ".cz-dek is missing or has no description")
+  ok(art.at_css("nav.toc .toc-toggle"), "no nav.toc .toc-toggle")
+  ok(art.at_css(".cz-prose"), "no .cz-prose")
+  ok(art.at_css("p.post-signature")&.text.to_s.strip == "— Aliaksei", "signature is not '— Aliaksei'")
+  srcs = script_srcs(doc)
+  %w[toc.js notes.js sources.js anchors.js share.js Hyphenopoly_Loader.js hyphenate.js].each do |s|
+    ok(srcs.include?(s), "#{s} is not loaded (have #{srcs.inspect})")
+  end
+  # Same conditions as in post.html: a note with one h2 has no table of contents, no notes, no sources
+  one = page(dir, "czerepaha/pyat-pochemu.html")
+  ok(one.at_css("nav.toc").nil?, "a note with one h2 has a table of contents")
+  s1 = script_srcs(one)
+  ok(!s1.include?("toc.js") && !s1.include?("notes.js") && !s1.include?("sources.js"), "one-h2 note loads toc/notes/sources: #{s1.inspect}")
+  ok(s1.include?("anchors.js"), "one-h2 note does not load anchors.js")
+  short = page(dir, "czerepaha/krug-kompetentsii.html")
+  s2 = script_srcs(short)
+  ok(%w[toc.js notes.js sources.js anchors.js].none? { |s| s2.include?(s) }, "short note loads scripts it does not need: #{s2.inspect}")
+  ok(s2.include?("share.js") && s2.include?("hyphenate.js"), "short note lacks share.js or hyphenate.js")
 end
 
 names = ARGV.empty? ? CHECKS.keys : ARGV

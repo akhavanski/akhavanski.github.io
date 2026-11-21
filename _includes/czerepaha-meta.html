@@ -1,0 +1,12 @@
+{%- comment -%}
+  The line above a note's title, in the feed and on the note's page: the dot and name of its
+  topic (_data/czerepaha.yml), the date as ДД.ММ.ГГГГ and the reading time (words / 180, rounded
+  up, at least one minute). Without a known topic the dot has the default colour and there is no
+  name. Takes `post`: the note (on the note's page it is `page`).
+{%- endcomment -%}
+{%- assign topic = nil %}
+{%- for t in site.data.czerepaha %}{% if t.key == include.post.topic %}{% assign topic = t %}{% endif %}{% endfor %}
+{%- assign words = include.post.content | strip_html | number_of_words %}
+{%- assign minutes = words | plus: 179 | divided_by: 180 %}
+{%- if minutes < 1 %}{% assign minutes = 1 %}{% endif %}
+<p class="cz-meta"><span class="cz-dot"{% if topic %} style="--dot: {{ topic.color }}"{% endif %}></span>{% if topic %}{{ topic.name }} · {% endif %}{{ include.post.date | date: "%d.%m.%Y" }} · {{ minutes }} мин</p>
