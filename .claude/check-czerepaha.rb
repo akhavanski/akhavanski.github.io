@@ -228,7 +228,7 @@ check "excerpt_without_footnote_numbers" do
   ok(text.start_with?("Правило"), "feed description starts with #{text[0, 20].inspect}")
   ok(text !~ /\d/, "feed description has digits: #{text}")
   blog = page(dir, "blog.html")
-  li = blog.css("ul.blog-posts li").find { |l| l.at_css(".post-title a")["href"].end_with?("/czerepaha/britva-okkama.html") }
+  li = blog.css("ul.blog-posts li").find { |l| l.at_css(".post-title a:not(.cz-turtle)")["href"].end_with?("/czerepaha/britva-okkama.html") }
   ok(li, "the note is not in /blog.html")
   ex = li.at_css(".post-excerpt").text.strip
   ok(ex.start_with?("Правило"), "/blog.html excerpt starts with #{ex[0, 20].inspect}")
@@ -343,6 +343,71 @@ check "note_image" do
   img = doc.at_css("img")
   ok(img && img["src"], "no img on circle-of-competence")
   ok(File.exist?(File.join(dir, img["src"].sub(/\?.*/, ""))), "img src #{img['src']} leads nowhere")
+end
+
+check "blog_turtles" do
+  dir = build(:fixtures)
+  %w[blog.html index.html].each do |f|
+    doc = page(dir, f)
+    hrefs = doc.css("link[rel=stylesheet]").map { |l| l["href"].to_s }
+    ok(hrefs.any? { |h| h.include?("/assets/css/main.css") }, "#{f}: main.css is not linked")
+    ok(hrefs.none? { |h| h.include?("czerepaha.css") }, "#{f}: czerepaha.css is linked")
+    items = doc.css("ul.blog-posts li")
+    section, other = items.partition { |li| li.at_css("a[href^='/czerepaha/']:not(.cz-turtle)") }
+    ok(section.size == FIXTURE_COUNT, "#{f}: #{section.size} section notes, expected #{FIXTURE_COUNT}") if f == "blog.html"
+    ok(!section.empty?, "#{f}: no section notes in the list")
+    ok(!other.empty?, "#{f}: no ordinary posts in the list")
+    section.each do |li|
+      marks = li.css("a.cz-turtle")
+      ok(marks.size == 1, "#{f}: #{marks.size} turtles in #{li.at_css('.post-title a:not(.cz-turtle)').text.strip}")
+      m = marks.first
+      ok(m["href"] == "/czerepaha/" && m["title"] == "Черепаха и слоны" && m["aria-label"] == "Черепаха и слоны", "#{f}: wrong turtle attributes")
+      ok(m.at_css("svg .t-shell"), "#{f}: the turtle has no drawing")
+      ok(m.next_element&.name == "time", "#{f}: the turtle is not right before <time>")
+    end
+    ok(other.all? { |li| li.at_css(".cz-turtle").nil? }, "#{f}: an ordinary post has a turtle")
+  end
+end
+
+check "turtle_hangs_left" do
+  dir = build(:fixtures)
+  js = <<~JS
+    var lis = Array.prototype.slice.call(document.querySelectorAll('ul.blog-posts li'));
+    function info(li) {
+      var t = li.querySelector('.cz-turtle'), d = li.querySelector('time');
+      var tr = t && t.getBoundingClientRect(), dr = d.getBoundingClientRect();
+      return t ? {tr: tr.right, tl: tr.left, tt: tr.top, tw: tr.width, th: tr.height, dl: dr.left, dt: dr.top} : {dl: dr.left, dt: dr.top};
+    }
+    var s = lis.filter(function (l) { return l.querySelector('a[href^="/czerepaha/"]'); })[0];
+    var o = lis.filter(function (l) { return !l.querySelector('a[href^="/czerepaha/"]'); })[0];
+    ({s: info(s), o: info(o), vw: window.innerWidth})
+  JS
+  r = probe("#{serve(dir)}/blog.html", 1280, js)
+  ok(r["s"]["tr"], "wide: no turtle")
+  ok(r["s"]["tr"] <= r["s"]["dl"], "wide: turtle right #{r['s']['tr']} is not left of the date #{r['s']['dl']}")
+  ok((r["s"]["dl"] - r["o"]["dl"]).abs < 0.5, "wide: date left differs: #{r['s']['dl']} vs #{r['o']['dl']}")
+  ok(r["s"]["tl"] > 0, "wide: turtle is off the screen")
+  ok((r["s"]["tw"] - 22).abs < 2 && (r["s"]["th"] - 15).abs < 2, "wide: turtle size #{r['s']['tw']}x#{r['s']['th']}, expected about 22x15")
+  [840, 928].each do |w|
+    mid = probe("#{serve(dir)}/blog.html", w, js)
+    ok(mid["s"]["tl"] >= 0, "#{w}: turtle is off the screen (left #{mid['s']['tl']})")
+  end
+  n = probe("#{serve(dir)}/blog.html", 390, js)
+  ok((n["s"]["tt"] - n["s"]["dt"]).abs < 4, "narrow: turtle top #{n['s']['tt']} and date top #{n['s']['dt']} are on different lines")
+  ok(n["s"]["tr"] <= n["s"]["dl"], "narrow: turtle is not before the date")
+end
+
+check "flat_share_turtle" do
+  dir = build(:fixtures)
+  js = <<~JS
+    var svg = document.querySelector('.share-turtle-btn svg');
+    var shell = svg.querySelector('.t-shell');
+    ({stroke: getComputedStyle(svg).stroke, fill: getComputedStyle(shell).fill, plates: getComputedStyle(svg.querySelector('.t-plates')).stroke})
+  JS
+  r = probe("#{serve(dir)}/2023-10-18-telling-a-good-job-story.html", 1280, js)
+  ok(r["stroke"] == "none", "share turtle stroke is #{r['stroke']}")
+  ok(r["fill"] == "rgb(47, 125, 79)", "share turtle shell fill is #{r['fill']}")
+  ok(r["plates"] != "none", "share turtle has no seams")
 end
 
 names = ARGV.empty? ? CHECKS.keys : ARGV

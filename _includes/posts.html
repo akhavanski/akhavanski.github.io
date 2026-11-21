@@ -104,6 +104,9 @@
   (on the home page and the Blog page). After its title, always, ↗; pointing
   at it shows, small and grey, plain text "Read on" with the blog's name;
   where nothing can be pointed at, only ↗ (assets/css/main.scss).
+  A note of the section Черепаха и слоны (the category czerepaha) has a small
+  turtle before its date, a link to the section: left of the date on wide
+  screens, in the line before it on narrow ones (a.cz-turtle in assets/css/main.scss).
   There is no space between the date and the title: the title is justified,
   and a space would stretch with it; the gap is the date's margin.
 {%- endcomment %}
@@ -115,6 +118,7 @@
   {%- capture target %}{% if post.external_url %} target="_blank" rel="noopener"{% endif %}{% endcapture %}
   <li lang="{{ post.lang }}" data-lang="{{ post.lang }}" data-tags="{{ post_tags | strip }}"{% if post.external_url %} class="external"{% endif %}>
     <div class="post-title">
+      {%- if post.categories contains "czerepaha" %}<a class="cz-turtle" href="/czerepaha/" title="Черепаха и слоны" aria-label="Черепаха и слоны">{% include turtle-svg.html %}</a>{% endif -%}
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.theme_config.date_format }}</time><a href="{{ href }}"{{ target }}>{{ post.title }}</a>
       {%- if post.lang != "en" %} <span class="lang-badge" title="{{ site.data.languages[post.lang] | default: post.lang }}">{{ post.lang | upcase }}</span>{% endif %}
       {%- if post.external_url %} <span class="guest-at">Read on {{ host[2] | remove: "www." }}</span>{% endif %}

@@ -208,10 +208,40 @@ pre.mermaid { text-align: center; }
     @media not all and (min-width: 52rem), (hover: none) { color: #888; }
   }
 
+  // The turtle of a note of Черепаха и слоны, before its date (a link to the
+  // section). From 58rem it hangs left of the date, so the dates stay in one
+  // column (further left there is no room for it); below that it stands in
+  // the line, before the title (and before the date on narrow screens).
+  .cz-turtle {
+    display: inline-block;
+    margin-right: 0.6ch;
+    vertical-align: -3px;
+    line-height: 0;
+    text-decoration: none;
+
+    svg {
+      display: block;
+      width: 22px;
+      height: 15px;
+      overflow: visible;
+      transition: transform 0.3s cubic-bezier(0.3, 0.7, 0.35, 1.3);
+    }
+
+    &:hover svg, &:focus-visible svg { transform: translateX(2px) rotate(-6deg); }
+
+    @media (min-width: 58rem) {
+      position: absolute;
+      right: calc(100% + 2ch + 7ch + 0.9rem); // the date (10 digits at 0.7em) and the gap
+      top: 0.2rem;
+      display: block;
+      margin: 0;
+    }
+  }
+
   // Pointing at a post darkens its date, and an arrow slides out
   // 3px to the right after the title (not after the excerpt). The arrow takes
   // no room in the line, so it never moves to a line of its own under a long title.
-  a:not(.post-excerpt)::after {
+  a:not(.post-excerpt):not(.cz-turtle)::after {
     content: "→";
     display: inline-block;
     width: 1em;
@@ -1892,6 +1922,18 @@ html[data-theme="dark"] {
   .t-smile { fill: none; stroke-width: 1.5; }
 }
 
+// The turtle at the bottom of a post is flat, without the outline,
+// in the greens of Черепаха и слоны.
+.share-turtle-btn, .blog-posts .cz-turtle {
+  svg { stroke: none; }
+  .t-skin { fill: #8fc4a1; }
+  .t-shell { fill: #2f7d4f; }
+  .t-rim { fill: #1f5c39; }
+  .t-plates { fill: none; stroke: #1f5c39; stroke-width: 1.6; }
+  .t-eye { fill: $ink; }
+  .t-smile { fill: none; stroke: $ink; stroke-width: 1.2; }
+}
+
 // A comic speech bubble, with a tail pointing at the turtle.
 .turtle-bubble {
   position: absolute;
@@ -2116,7 +2158,7 @@ html[data-theme="dark"] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .catalog .cabinet, .catalog .drawer, .turtle-btn, .share-turtle-btn, .share-bubble, .delorean, .delorean img { transition: none; }
+  .blog-posts .cz-turtle svg, .catalog .cabinet, .catalog .drawer, .turtle-btn, .share-turtle-btn, .share-bubble, .delorean, .delorean img { transition: none; }
   .share-turtle-btn, .share-bubble { animation: none !important; }
   .post-tags .key { animation: none; }
   // The sparkles just show, without twinkling.
