@@ -545,6 +545,332 @@ check "empty_filter" do
   ok(r["hint"] == "· one of them", "empty build place hint is #{r['hint'].inspect}")
 end
 
+# ── The note page (Task 5) ──────────────────────────────────────────────────────────────────────
+# WKWebView in the probe plays no CSS transitions and runs no requestAnimationFrame, so the checks
+# switch transitions off before reading geometry and wait with setTimeout, not frames.
+NO_MOTION = <<~JS
+  (function () {
+    var s = document.createElement('style');
+    s.textContent = '*, *::before, *::after { transition: none !important; animation: none !important; }';
+    document.head.appendChild(s);
+  })();
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function box(el) { var r = el.getBoundingClientRect(); return {l: r.left, r: r.right, t: r.top, b: r.bottom, w: r.width, h: r.height}; }
+JS
+
+GREEN = "rgb(47, 125, 79)"
+
+# For each <p> in the prose: the colour of its first letter and of its text, and whether it should
+# have the big first letter: the first <p> right in the prose and the first one right after an h2.
+DROP_CAPS_JS = <<~JS
+  var prose = document.querySelector('.cz-prose');
+  var first = prose.querySelector(':scope > p');
+  [].map.call(prose.querySelectorAll('p'), function (p) {
+    var prev = p.previousElementSibling;
+    return {
+      want: p.parentNode === prose && (p === first || (prev && prev.tagName === 'H2')),
+      letter: getComputedStyle(p, '::first-letter').color,
+      text: getComputedStyle(p).color,
+      start: p.textContent.trim().slice(0, 24)
+    };
+  })
+JS
+
+def check_drop_caps(ps, where)
+  ok(ps.count { |p| p["want"] } >= 2, "#{where}: fewer than two paragraphs should get the big letter")
+  ps.each do |p|
+    if p["want"]
+      ok(p["letter"] == GREEN, "#{where}: first letter of «#{p['start']}» is #{p['letter']}, not green")
+    else
+      ok(p["letter"] == p["text"], "#{where}: first letter of «#{p['start']}» is #{p['letter']}, text is #{p['text']}")
+    end
+  end
+end
+
+check "drop_caps" do
+  dir = build(:real)
+  url = "#{serve(dir)}/czerepaha/map-not-territory.html"
+  starts = probe(url, 1440, "document.querySelector('.cz-prose').firstElementChild.tagName")
+  ok(starts == "BLOCKQUOTE", "map-not-territory starts with #{starts}, not a blockquote")
+  check_drop_caps(probe(url, 1440, DROP_CAPS_JS), "map-not-territory")
+end
+
+check "one_heading" do
+  url = "#{serve(build(:fixtures))}/czerepaha/pyat-pochemu.html"
+  ok(probe(url, 1440, "!!document.querySelector('.toc')") == false, "a note with one h2 has .toc")
+  ps = probe(url, 1440, DROP_CAPS_JS)
+  ok(ps.size >= 2 && ps[0]["want"] && ps[1]["want"], "pyat-pochemu: expected the big letter on the first two paragraphs")
+  check_drop_caps(ps, "pyat-pochemu")
+end
+
+LAYOUT_JS = NO_MOTION + <<~JS
+  var prose = document.querySelector('.cz-prose'), head = document.querySelector('header');
+  var toggle = document.querySelector('.toc-toggle');
+  ({
+    vw: innerWidth,
+    headPos: getComputedStyle(head).position, head: box(head),
+    sheetInHeader: !!head.querySelector('.toc-sheet'),
+    prose: box(prose),
+    notes: [].map.call(document.querySelectorAll('.sidenote'), function (n) { return {d: getComputedStyle(n).display, b: box(n)}; }),
+    back: [].map.call(document.querySelectorAll('.cz-back a'), function (a) { return {b: box(a), vis: getComputedStyle(a).visibility}; }),
+    toggle: toggle && {b: box(toggle), d: getComputedStyle(toggle).display, font: getComputedStyle(toggle).fontFamily}
+  })
+JS
+
+def notes_in_margin(r, where)
+  ok(!r["notes"].empty?, "#{where}: no .sidenote")
+  r["notes"].each do |n|
+    ok(n["d"] != "none", "#{where}: a side note is hidden")
+    ok(n["b"]["l"] >= r["prose"]["r"], "#{where}: side note left #{n['b']['l']} is not right of the text (#{r['prose']['r']})")
+    ok(n["b"]["r"] <= r["vw"], "#{where}: side note runs off the window (#{n['b']['r']})")
+  end
+end
+
+check "wide_layout" do
+  r = probe("#{serve(build(:fixtures))}/czerepaha/karta-ne-territoriya.html", 1440, LAYOUT_JS)
+  ok(r["headPos"] == "fixed", "1440: header is #{r['headPos']}, not fixed")
+  ok(r["sheetInHeader"], "1440: the table of contents is not in the header")
+  ok(r["head"]["r"] <= r["prose"]["l"], "1440: the header (right #{r['head']['r']}) runs into the text (left #{r['prose']['l']})")
+  ok((r["prose"]["w"] - 680).abs < 1, "1440: text column is #{r['prose']['w']}px, not 680")
+  ok(((r["prose"]["l"] + r["prose"]["r"]) / 2 - r["vw"] / 2).abs < 1, "1440: text column is not centred")
+  notes_in_margin(r, "1440")
+  ok(r["back"].size == 2, "1440: #{r['back'].size} .cz-back links")
+  r["back"].each { |b| ok(b["b"]["w"] > 0 && b["vis"] == "visible" && b["b"]["t"] >= 0, "1440: a .cz-back link is hidden") }
+end
+
+check "mid_layout" do
+  url = "#{serve(build(:fixtures))}/czerepaha/karta-ne-territoriya.html"
+  r = probe(url, 1200, LAYOUT_JS)
+  ok(r["headPos"] == "sticky", "1200: header is #{r['headPos']}, not a strip on top")
+  ok(r["head"]["t"].abs < 1 && (r["head"]["w"] - r["vw"]).abs < 1, "1200: header is not a strip across the top: #{r['head'].inspect}")
+  ok(!r["sheetInHeader"], "1200: the table of contents is in the header")
+  notes_in_margin(r, "1200")
+  ok(r["toggle"] && r["toggle"]["d"] != "none" && r["toggle"]["b"]["w"] > 0, "1200: no visible .toc-toggle")
+  ok(r["toggle"]["font"].include?("Inter"), "1200: .toc-toggle font is #{r['toggle']['font']}")
+  o = probe(url, 1200, NO_MOTION + <<~JS)
+    document.querySelector('.toc-toggle').click();
+    var sheet = document.querySelector('.toc-sheet');
+    ({open: document.querySelector('.toc').classList.contains('is-open'), vis: getComputedStyle(sheet).visibility,
+      opacity: getComputedStyle(sheet).opacity, b: box(sheet), vw: innerWidth,
+      markers: [].map.call(sheet.querySelectorAll('ol'), function (o) { return getComputedStyle(o).listStyleType; })})
+  JS
+  ok(o["open"] && o["vis"] == "visible" && o["opacity"] == "1", "1200: the sheet does not come out on a click: #{o.inspect}")
+  ok(o["b"]["l"] >= 0 && o["b"]["r"] <= o["vw"], "1200: the sheet is off the window: #{o['b'].inspect}")
+  ok(o["markers"].uniq == ["none"], "1200: list markers in the sheet: #{o['markers'].inspect}")
+end
+
+check "toc_in_header" do
+  r = probe("#{serve(build(:real))}/czerepaha/map-not-territory.html", 1440, NO_MOTION + <<~JS)
+    var sheet = document.querySelector('header .toc-sheet'), toggle = document.querySelector('.toc-toggle');
+    var a = sheet.querySelector('a');
+    [].forEach.call(sheet.querySelectorAll('a'), function (x) { x.removeAttribute('aria-current'); });
+    var quiet = getComputedStyle(a).borderLeftColor;
+    a.setAttribute('aria-current', 'location');
+    ({
+      markers: [].map.call(sheet.querySelectorAll('ol, li'), function (o) { return getComputedStyle(o).listStyleType; }),
+      nums: [].filter.call(sheet.querySelectorAll('.toc-num'), function (n) { return n.offsetWidth > 0; }).length,
+      opacity: parseFloat(getComputedStyle(sheet).opacity),
+      font: getComputedStyle(sheet).fontFamily,
+      toggleShown: toggle.offsetWidth > 0 && toggle.offsetHeight > 0,
+      quiet: quiet, current: getComputedStyle(a).borderLeftColor
+    })
+  JS
+  ok(r["markers"].uniq == ["none"], "list markers in the header's contents: #{r['markers'].uniq.inspect}")
+  ok(r["nums"].zero?, "#{r['nums']} section numbers shown in the header's contents")
+  ok(r["opacity"] < 1, "the contents are not quiet without the mouse (opacity #{r['opacity']})")
+  ok(r["font"].include?("Inter"), "the contents' font is #{r['font']}")
+  ok(!r["toggleShown"], "the .toc-toggle button shows on a wide screen")
+  ok(r["current"] == GREEN && r["quiet"] != GREEN, "the current section's line is #{r['current']} (others #{r['quiet']})")
+end
+
+check "narrow_layout" do
+  r = probe("#{serve(build(:fixtures))}/czerepaha/karta-ne-territoriya.html", 390, NO_MOTION + <<~JS)
+    var end = document.querySelector('.notes-end'), ref = document.querySelector('.fn-ref');
+    var note = document.getElementById(ref.getAttribute('aria-controls'));
+    var before = getComputedStyle(note).display;
+    ref.click();
+    ({end: end && {d: getComputedStyle(end).display, h: end.offsetHeight, items: end.querySelectorAll('li').length},
+      before: before, after: getComputedStyle(note).display, ref: box(ref), note: box(note),
+      sw: document.documentElement.scrollWidth, vw: innerWidth})
+  JS
+  ok(r["end"] && r["end"]["d"] != "none" && r["end"]["h"] > 0 && r["end"]["items"] == 3, "390: the notes are not listed at the end: #{r['end'].inspect}")
+  ok(r["before"] == "none", "390: a side note shows before a tap")
+  ok(r["after"] != "none" && r["note"]["h"] > 0, "390: a tap on the number does not open the note")
+  ok(r["note"]["t"] > r["ref"]["t"], "390: the opened note is not under the line")
+  ok(r["sw"] <= r["vw"], "390: the page is #{r['sw']}px wide in a #{r['vw']}px window")
+end
+
+check "note_image_style" do
+  r = probe("#{serve(build(:real))}/czerepaha/circle-of-competence.html", 390, NO_MOTION + <<~JS)
+    var img = document.querySelector('.cz-prose img'), prose = document.querySelector('.cz-prose');
+    ({img: box(img), prose: box(prose), radius: parseFloat(getComputedStyle(img).borderTopLeftRadius),
+      max: getComputedStyle(img).maxWidth, sw: document.documentElement.scrollWidth, vw: innerWidth})
+  JS
+  ok(r["max"] == "100%", "img max-width is #{r['max']}")
+  ok(r["img"]["r"] <= r["prose"]["r"] + 0.5, "img runs out of the text column")
+  ok(r["radius"] > 0, "img has square corners")
+  ok(r["sw"] <= r["vw"], "390: the page is #{r['sw']}px wide in a #{r['vw']}px window")
+end
+
+# The share turtle of the section: fixed at the bottom of the window, out only at the end of a note.
+SHARE_JS = NO_MOTION + <<~JS
+  var share = document.querySelector('.share'), area = document.querySelector('.share-turtle');
+  var btn = document.querySelector('.share-turtle-btn'), bubble = document.querySelector('.share-bubble');
+  function state() {
+    return {atEnd: share.classList.contains('at-end'), open: share.classList.contains('is-open'),
+      btn: box(btn), pe: getComputedStyle(btn).pointerEvents, areaPe: getComputedStyle(area).pointerEvents,
+      bubble: box(bubble), bubbleOpacity: getComputedStyle(bubble).opacity, vh: innerHeight, vw: innerWidth};
+  }
+JS
+
+check "share_pinned" do
+  r = probe("#{serve(build(:real))}/czerepaha/map-not-territory.html", 1440, SHARE_JS + <<~JS)
+    (async function () {
+      var pos = getComputedStyle(share).position;
+      scrollTo(0, (document.documentElement.scrollHeight - innerHeight) / 2);
+      await wait(300);
+      var mid = box(share);
+      scrollTo(0, document.documentElement.scrollHeight);
+      await wait(300);
+      btn.click();
+      return {pos: pos, mid: mid, end: state()};
+    })()
+  JS
+  ok(r["pos"] == "fixed", ".share is #{r['pos']}, not fixed")
+  ok((r["mid"]["b"] - r["end"]["vh"]).abs <= 1, "mid page: .share bottom #{r['mid']['b']}, window #{r['end']['vh']}")
+  ok(r["end"]["open"], "a click on the turtle at the end does not open the bubble")
+  ok((r["end"]["btn"]["b"] - r["end"]["vh"]).abs <= 1, "open turtle bottom #{r['end']['btn']['b']}, window #{r['end']['vh']}")
+end
+
+check "share_hidden_until_end" do
+  dir = serve(build(:real))
+  [1440, 390].each do |w|
+    r = probe("#{dir}/czerepaha/map-not-territory.html", w, SHARE_JS + <<~JS)
+      (async function () {
+        var top = state();
+        scrollTo(0, document.documentElement.scrollHeight);
+        await wait(300);
+        var end = state();
+        if (innerWidth >= 1152) btn.click(); else share.classList.add('is-open');
+        var opened = share.classList.contains('is-open');
+        scrollTo(0, 0);
+        await wait(300);
+        return {top: top, end: end, opened: opened, back: state()};
+      })()
+    JS
+    ok(!r["top"]["atEnd"] && r["top"]["btn"]["t"] >= r["top"]["vh"], "#{w} top of the note: turtle top #{r['top']['btn']['t']} in a #{r['top']['vh']}px window")
+    ok(r["top"]["pe"] == "none" && r["top"]["areaPe"] == "none", "#{w} top of the note: the turtle catches the pointer")
+    ok(r["end"]["atEnd"] && r["end"]["btn"]["t"] < r["end"]["vh"], "#{w} end of the note: turtle is not out (#{r['end']['btn']['t']})")
+    ok(r["end"]["pe"] != "none", "#{w} end of the note: the turtle does not catch the pointer")
+    ok(r["opened"], "#{w}: the bubble did not open")
+    ok(!r["back"]["atEnd"] && !r["back"]["open"] && r["back"]["btn"]["t"] >= r["back"]["vh"], "#{w} back on top: turtle or bubble still out: #{r['back'].slice('atEnd', 'open').inspect}")
+  end
+  short = probe("#{serve(build(:fixtures))}/czerepaha/krug-kompetentsii.html", 1440, SHARE_JS + "state()")
+  ok(short["atEnd"] && short["btn"]["t"] < short["vh"], "a short note does not show the turtle at once")
+end
+
+check "share_bubble_inside" do
+  dir = serve(build(:real))
+  [390, 1440].each do |w|
+    r = probe("#{dir}/czerepaha/map-not-territory.html", w, SHARE_JS + <<~JS)
+      (async function () {
+        scrollTo(0, document.documentElement.scrollHeight);
+        await wait(300);
+        if (innerWidth >= 1152) btn.click();
+        var clip = [];
+        for (var el = bubble.parentElement; el && el !== document.body; el = el.parentElement) {
+          var cs = getComputedStyle(el);
+          if (cs.overflowX !== 'visible' || cs.overflowY !== 'visible') clip.push(el.className);
+        }
+        var s = state(); s.clip = clip; return s;
+      })()
+    JS
+    b = r["bubble"]
+    ok(r["bubbleOpacity"] == "1", "#{w}: the bubble is not shown (opacity #{r['bubbleOpacity']})")
+    ok(b["l"] >= 0 && b["r"] <= r["vw"] && b["t"] >= 0 && b["b"] <= r["vh"], "#{w}: the bubble is out of the window: #{b.inspect}")
+    ok(r["clip"].empty?, "#{w}: the bubble's ancestors clip it: #{r['clip'].inspect}")
+  end
+end
+
+check "share_main_unchanged" do
+  doc = page(build(:fixtures), "2023-10-18-telling-a-good-job-story.html")
+  share = doc.at_css(".share")
+  ok(share && share["data-pin"].nil?, "the main site's .share has data-pin")
+  ok(doc.at_css(".share-end").nil?, "the main site has .share-end")
+  labels = doc.css(".share-links [aria-label]").map { |a| a["aria-label"] }
+  ok(labels == ["Post in LinkedIn", "Send in Telegram", "Send in WhatsApp", "Post in X", "Send by email", "Copy link"], "main share labels are #{labels.inspect}")
+  ok(doc.at_css(".share-turtle-btn")["aria-label"] == "Share this post", "main share turtle label changed")
+end
+
+check "share_labels_ru" do
+  doc = page(build(:real), "czerepaha/map-not-territory.html")
+  labels = doc.css(".share-links [aria-label]").map { |a| a["aria-label"] }
+  ok(labels == ["Поделиться в LinkedIn", "Отправить в Telegram", "Отправить в WhatsApp", "Поделиться в X", "Отправить по почте", "Скопировать ссылку"],
+     "section share labels are #{labels.inspect}")
+  titles = doc.css(".share-links [title]").map { |a| a["title"] }
+  ok(titles == labels, "section share titles are #{titles.inspect}")
+  ok(doc.at_css(".share")["data-pin"] == "end", "the section's .share has no data-pin=end")
+  ok(doc.at_css(".share-end"), "no .share-end marker")
+end
+
+check "anchors_quiet" do
+  r = probe("#{serve(build(:real))}/czerepaha/map-not-territory.html", 1440, <<~JS)
+    Object.defineProperty(navigator, 'clipboard', {configurable: true, value: {writeText: function () { return {then: function (ok) { ok(); }}; }}});
+    var btn = document.querySelector('.anchor-copy');
+    var r = {chain: getComputedStyle(btn).opacity, before: getComputedStyle(btn, '::before').content,
+      after: getComputedStyle(btn, '::after').opacity, pos: getComputedStyle(btn, '::after').position};
+    btn.click();
+    r.copied = btn.classList.contains('is-copied');
+    r.anim = getComputedStyle(btn, '::after').animationName;
+    r
+  JS
+  ok(r["chain"] == "0", "the chain shows without hover (opacity #{r['chain']})")
+  ok(r["before"].include?("🔗"), "the chain is #{r['before']}")
+  ok(r["after"] == "0", "«Скопировано» shows before a click (opacity #{r['after']})")
+  ok(r["pos"] == "absolute", "«Скопировано» takes room in the line")
+  ok(r["copied"] && r["anim"] != "none", "«Скопировано» does not fade in after a click: #{r.inspect}")
+end
+
+check "note_signoff" do
+  dir = build(:real)
+  email = YAML.safe_load(File.read(File.join(ROOT, "_config.yml")))["contact_email"]
+  doc = page(dir, "czerepaha/map-not-territory.html")
+  s = doc.at_css(".cz-signoff")
+  ok(s, "no .cz-signoff")
+  text = s.text.gsub(/\s+/, " ").strip
+  ok(text.start_with?("Опубликовано 07.11.2025. Не согласны или нашли ошибку — напишите мне."), "signoff is #{text.inspect}")
+  mail = s.at_css("a[href^='mailto:']")
+  ok(mail && mail.text == "напишите мне" && mail["href"] == "mailto:#{email}", "mail link is #{mail&.to_html}")
+  tags = s.at_css(".post-tags")
+  ok(tags && tags.text.strip.start_with?("Теги:") && tags.at_css("svg.key[aria-hidden=true]"), "no «Теги:» with the key")
+  ok(tags.css("a").map { |a| a["href"] } == ["/blog?source=czerepaha"], "tag links are #{tags.css('a').map { |a| a['href'] }.inspect}")
+  ok(script_srcs(doc).include?("post-tags.js"), "post-tags.js is not loaded")
+  fx = page(build(:fixtures), "czerepaha/karta-ne-territoriya.html")
+  ok(fx.css(".cz-signoff .post-tags a").map { |a| a["href"] } == ["/blog?source=czerepaha", "/blog?tag=product"],
+     "fixture tag links are #{fx.css('.cz-signoff .post-tags a').map { |a| a['href'] }.inspect}")
+end
+
+check "footer_aligned" do
+  url = "#{serve(build(:real))}/czerepaha/map-not-territory.html"
+  [390, 1200, 1440].each do |w|
+    r = probe(url, w, NO_MOTION + "({foot: box(document.querySelector('.cz-foot a')), prose: box(document.querySelector('.cz-prose'))})")
+    ok((r["foot"]["l"] - r["prose"]["l"]).abs < 1, "#{w}: footer starts at #{r['foot']['l']}, text at #{r['prose']['l']}")
+  end
+end
+
+check "about_tail" do
+  url = "#{serve(build(:empty))}/czerepaha/"
+  [390, 1440].each do |w|
+    r = probe(url, w, NO_MOTION + <<~JS)
+      var star = document.querySelector('.cz-star'), about = document.getElementById('cz-about');
+      star.click();
+      var a = box(about), s = box(star), tail = getComputedStyle(about, '::before');
+      ({tail: a.l + parseFloat(tail.left) + parseFloat(tail.width) / 2, star: (s.l + s.r) / 2})
+    JS
+    ok((r["tail"] - r["star"]).abs <= 2, "#{w}: the tail is at #{r['tail'].round(1)}, the star at #{r['star'].round(1)}")
+  end
+end
+
 names = ARGV.empty? ? CHECKS.keys : ARGV
 unknown = names - CHECKS.keys
 abort "unknown checks: #{unknown.join(', ')}" unless unknown.empty?

@@ -1,5 +1,5 @@
 // webprobe: opens a URL in an offscreen WKWebView of the given width (the same engine as Safari),
-// waits 1.5 s after the load, runs the JS and prints JSON.stringify of its result.
+// waits 1.5 s after the load, runs the JS and prints JSON.stringify of its result (a promise is awaited).
 // Exit code 1 if the page does not load or the JS throws. Used by .claude/check-czerepaha.rb.
 // Usage: webprobe <url> <width> <height> <js>
 import Cocoa
@@ -20,12 +20,16 @@ func fail(_ msg: String) -> Never {
 class Delegate: NSObject, WKNavigationDelegate {
   func webView(_ v: WKWebView, didFinish n: WKNavigation!) {
     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-      // The JS is evaluated as a script, so it may be several statements; the last value is the result.
+      // The JS is evaluated as a global script, so it may be several statements; the last value
+      // is the result. If that value is a promise, its result is awaited (for checks that scroll
+      // and wait for an IntersectionObserver).
       let lit = String(data: try! JSONSerialization.data(withJSONObject: [js], options: []), encoding: .utf8)!
-      let wrapped = "JSON.stringify(eval(\(lit)[0]))"
-      v.evaluateJavaScript(wrapped) { r, e in
-        if let e = e { fail("js error: \(e)") }
-        print((r as? String) ?? "null")
+      let body = "return JSON.stringify(await (0, eval)(\(lit)[0]));"
+      v.callAsyncJavaScript(body, arguments: [:], in: nil, in: .page) { res in
+        switch res {
+        case .failure(let e): fail("js error: \(e)")
+        case .success(let r): print((r as? String) ?? "null")
+        }
         exit(0)
       }
     }
