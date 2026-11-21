@@ -1,0 +1,18 @@
+---
+layout: czerepaha
+---
+{%- comment -%}
+  A page of the section "Черепаха и слоны" with text (the lists of mental models and of cognitive
+  biases): the section's header and footer from czerepaha.html, the title as h1 and the text as
+  the prose of a note. No table of contents, notes or share turtle. Looks: .cz-page in
+  assets/css/czerepaha.scss.
+{%- endcomment -%}
+<article class="cz-page" lang="ru">
+  <div class="cz-head">
+    <nav class="cz-back" aria-label="Назад"><a href="{{ "/czerepaha/" | relative_url }}"><span aria-hidden="true">←</span> Черепаха и слоны</a></nav>
+    <h1>{{ page.title }}</h1>
+  </div>
+  <div class="cz-prose">
+    {{ content }}
+  </div>
+</article>

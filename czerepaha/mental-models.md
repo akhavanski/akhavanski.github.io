@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: czerepaha-page
 title: Ментальные модели
 permalink: /czerepaha/mental-models.html
 lang: ru

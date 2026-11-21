@@ -25,8 +25,11 @@ def ok(cond, msg)
   raise Fail, msg unless cond
 end
 
-# Modes: :empty is the repository as is, :fixtures adds .claude/fixtures/czerepaha/*.md as
-# czerepaha/_posts, :bulk adds 200 generated notes. Builds are cached per mode.
+# Modes: :empty is a copy of the repository without czerepaha/_posts, :fixtures replaces the real
+# notes with .claude/fixtures/czerepaha/*.md, :bulk with 200 generated notes, :real is the
+# repository as is. Builds are cached per mode.
+FIXTURE_COUNT = 5
+REAL_NOTES = 14
 BUILDS = {}
 def build(mode)
   BUILDS[mode] ||= begin
@@ -39,10 +42,14 @@ def build(mode)
     case mode
     when :empty
       FileUtils.rm_rf(posts)
+    when :real
+      nil
     when :fixtures
+      FileUtils.rm_rf(posts)
       FileUtils.mkdir_p(posts)
       Dir[File.join(ROOT, ".claude", "fixtures", "czerepaha", "*.md")].each { |f| FileUtils.cp(f, posts) }
     when :bulk
+      FileUtils.rm_rf(posts)
       FileUtils.mkdir_p(posts)
       200.times { |i| bulk_note(posts, i) } # filled in by the task that needs bulk data
     else raise "unknown mode #{mode}"
@@ -153,7 +160,7 @@ end
 check "note_urls" do
   dir = build(:fixtures)
   files = fixture_files
-  ok(files.size == 5, "expected 5 fixtures, found #{files.size}")
+  ok(files.size == FIXTURE_COUNT, "expected #{FIXTURE_COUNT} fixtures, found #{files.size}")
   files.each do |f|
     path = "czerepaha/#{fixture_slug(f)}.html"
     ok(File.exist?(File.join(dir, path)), "no /#{path} for #{File.basename(f)}")
@@ -179,7 +186,7 @@ check "feed_only_section" do
   want = fixture_files.map { |f| "/czerepaha/#{fixture_slug(f)}.html" }
   got = doc.css(".cz-post h2 a").map { |a| a["href"] }
   ok(got == want, "feed links differ:\n  got  #{got.inspect}\n  want #{want.inspect}")
-  ok(doc.css(".cz-post").size == 5, "expected 5 .cz-post, found #{doc.css('.cz-post').size}")
+  ok(doc.css(".cz-post").size == FIXTURE_COUNT, "expected #{FIXTURE_COUNT} .cz-post, found #{doc.css('.cz-post').size}")
   ok(doc.at_css(".cz-empty").nil?, ".cz-empty is shown with notes")
 end
 
@@ -189,10 +196,10 @@ check "topic_counts" do
   all = buttons.find { |b| b["data-topic"].to_s.empty? }
   ok(all, "no button 'Все заметки' (empty data-topic)")
   ok(all.text.include?("Все заметки"), "the empty-topic button is not 'Все заметки': #{all.text}")
-  ok(all.at_css(".n").text.strip == "5", "'Все заметки' count is #{all.at_css('.n').text.strip}, not 5")
-  want = fixture_files.map { |f| front_matter(f)["topic"].to_s }.reject { |t| t.empty? || t == "models" }.tally
+  ok(all.at_css(".n").text.strip == FIXTURE_COUNT.to_s, "'Все заметки' count is #{all.at_css('.n').text.strip}, not #{FIXTURE_COUNT}")
+  want = fixture_files.map { |f| front_matter(f)["topic"].to_s }.reject { |t| t.empty? || t == "mystery" }.tally
   shown = buttons.reject { |b| b["data-topic"].to_s.empty? }
-  ok(shown.map { |b| b["data-topic"] } == %w[think decide sys].select { |k| want[k] },
+  ok(shown.map { |b| b["data-topic"] } == %w[models biases].select { |k| want[k] },
      "topic buttons are #{shown.map { |b| b['data-topic'] }.inspect}")
   shown.each do |b|
     n = b.at_css(".n").text.strip.to_i
@@ -260,6 +267,82 @@ check "note_page" do
   s2 = script_srcs(short)
   ok(%w[toc.js notes.js sources.js anchors.js].none? { |s| s2.include?(s) }, "short note loads scripts it does not need: #{s2.inspect}")
   ok(s2.include?("share.js") && s2.include?("hyphenate.js"), "short note lacks share.js or hyphenate.js")
+end
+
+# The real notes of the section and the topic each must have (nil: none).
+REAL_TOPICS = {
+  "circle-of-competence" => "models", "map-not-territory" => "models", "model-is-not-the-original" => "models",
+  "razors" => "models", "entropy" => "models", "leverage" => "models", "simplicity" => "models",
+  "simplicity-again" => "models",
+  "confirmation-bias" => "biases", "collectors-fallacy" => "biases", "diderot-effect" => "biases",
+  "risky-bubble" => "biases", "on-the-hook" => "biases",
+  "we-start-digging" => nil
+}
+
+def stylesheet_hrefs(doc)
+  doc.css("link[rel=stylesheet]").map { |l| l["href"].to_s }
+end
+
+def on_section_layout(doc, what)
+  hrefs = stylesheet_hrefs(doc)
+  ok(hrefs.any? { |h| h.start_with?("/assets/css/czerepaha.css") }, "#{what}: czerepaha.css is not linked")
+  ok(hrefs.none? { |h| h.include?("/assets/css/main.css") }, "#{what}: main.css is linked")
+end
+
+check "real_notes" do
+  dir = build(:real)
+  files = Dir[File.join(ROOT, "czerepaha", "_posts", "*.md")]
+  ok(files.size == REAL_NOTES, "expected #{REAL_NOTES} real notes, found #{files.size}")
+  files.each do |f|
+    slug = fixture_slug(f)
+    doc = page(dir, "czerepaha/#{slug}.html")
+    ok(doc.at_css("article.cz-note .cz-back"), "#{slug}: not on the section layout (no .cz-back)")
+    on_section_layout(doc, slug)
+    ok(REAL_TOPICS.key?(slug), "#{slug}: no expected topic in REAL_TOPICS")
+    ok(front_matter(f)["topic"] == REAL_TOPICS[slug], "#{slug}: topic is #{front_matter(f)['topic'].inspect}, expected #{REAL_TOPICS[slug].inspect}")
+  end
+  feed = page(dir, "czerepaha/index.html")
+  posts = feed.css(".cz-post")
+  ok(posts.size == REAL_NOTES, "the feed has #{posts.size} notes, expected #{REAL_NOTES}")
+  posts.each do |post|
+    slug = post.at_css("h2 a")["href"][%r{/czerepaha/(.*)\.html}, 1]
+    ok(post["data-topic"] == REAL_TOPICS[slug].to_s, "#{slug}: data-topic is #{post['data-topic'].inspect}")
+  end
+  ok(posts.find { |p| p.at_css("h2 a")["href"].end_with?("/we-start-digging.html") }["data-topic"] == "", "we-start-digging has a topic in the feed")
+  counts = feed.css(".cz-topics button[data-topic]").to_h { |b| [b["data-topic"], b.at_css(".n").text.strip.to_i] }
+  ok(counts == { "" => 14, "models" => 8, "biases" => 5 }, "topic counts are #{counts.inspect}")
+  names = feed.css(".cz-topics button[data-topic]").to_h { |b| [b["data-topic"], b.text.gsub(/\d+\z/, "").strip] }
+  ok(names["models"] == "Ментальные модели" && names["biases"] == "Когнитивные искажения", "topic names are #{names.inspect}")
+end
+
+check "list_pages" do
+  dir = build(:real)
+  { "mental-models" => "Ментальные модели", "cognitive-biases" => "Когнитивные искажения" }.each do |slug, title|
+    doc = page(dir, "czerepaha/#{slug}.html")
+    ok(doc.at_css("html")["lang"] == "ru", "#{slug}: html lang is not ru")
+    on_section_layout(doc, slug)
+    ok(doc.at_css(".cz-top"), "#{slug}: no section header")
+    ok(doc.at_css(".cz-foot"), "#{slug}: no section footer")
+    ok(doc.at_css("h1")&.text.to_s.strip == title, "#{slug}: h1 is #{doc.at_css('h1')&.text.inspect}")
+    hrefs = doc.css(".cz-main a[href^='/czerepaha/']").map { |a| a["href"].sub(/#.*/, "") }.uniq
+    ok(hrefs.size > 1, "#{slug}: no links to notes")
+    hrefs.each do |h|
+      path = h.end_with?("/") ? "#{h}index.html" : h
+      ok(File.exist?(File.join(dir, path)), "#{slug}: the link #{h} leads nowhere")
+    end
+  end
+  feed = page(dir, "czerepaha/index.html")
+  links = feed.css(".cz-intro a").map { |a| a["href"] }
+  ok(links.include?("/czerepaha/mental-models.html") && links.include?("/czerepaha/cognitive-biases.html"),
+     "the feed has no links to the list pages: #{links.inspect}")
+end
+
+check "note_image" do
+  dir = build(:real)
+  doc = page(dir, "czerepaha/circle-of-competence.html")
+  img = doc.at_css("img")
+  ok(img && img["src"], "no img on circle-of-competence")
+  ok(File.exist?(File.join(dir, img["src"].sub(/\?.*/, ""))), "img src #{img['src']} leads nowhere")
 end
 
 names = ARGV.empty? ? CHECKS.keys : ARGV

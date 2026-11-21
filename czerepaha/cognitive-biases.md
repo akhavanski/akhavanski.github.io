@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: czerepaha-page
 title: Когнитивные искажения
 permalink: /czerepaha/cognitive-biases.html
 lang: ru
