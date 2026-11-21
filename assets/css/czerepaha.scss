@@ -69,7 +69,8 @@ body.cz::before {
   height: 60px;
   padding-left: var(--gut-l);
   padding-right: var(--gut-r);
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  // Nearly opaque: where the blur is not drawn, the text under it must not read through.
+  background: color-mix(in srgb, var(--bg) 95%, transparent);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
@@ -238,7 +239,7 @@ body.cz::before {
 // make (toc.js, notes.js, sources.js, anchors.js, share.js) are styled here as in main.scss,
 // in the section's looks.
 
-.cz-note { display: block; }
+.cz-note { position: relative; display: block; }
 .cz-head { display: grid; gap: 14px; }
 .cz-head .cz-meta { margin-top: 16px; }
 .cz-head h1 { margin: 0; font-size: clamp(32px, 4.8vw, 46px); letter-spacing: -.036em; line-height: 1.08; text-wrap: balance; }
@@ -301,31 +302,68 @@ body.cz::before {
   .post-signature { margin: 30px 0 0; color: var(--ink); }
 }
 
-// The table of contents (assets/js/toc.js). Below $left-header: the button «Содержание» under the
-// description, a pill; a click drops a card with the numbered sections under it.
-.cz-note .toc { margin-top: 20px; }
-.cz-note .toc-rail { position: relative; display: inline-block; }
+// The table of contents (assets/js/toc.js), as on the main site, in the section's looks.
+// From 60rem the button «Содержание» stands in the column left of the text and goes along while
+// you read (under the header strip); once the way back has scrolled away (is-alone) it slips
+// under the text and only its edge with a § peeks out. Below 60rem it is tucked under the
+// window's right edge at the bottom. A click slides the numbered sheet out from under the text
+// (or the window's edge). From $left-header the list is in the header instead (below).
+$tab: 22px;
+@mixin cz-tucked {
+  transform: translateX(calc(100% + 20px - #{$tab}));
+  color: transparent;
+  border-color: transparent;
+  box-shadow: 0 1px 3px rgba(17, 19, 17, .18), 0 4px 10px rgba(17, 19, 17, .06);
+  &::before { opacity: 1; }
+}
+// The list, in the sheet and in the header: no markers, a long one scrolls.
+.toc-sheet {
+  .toc-title { margin: 0 0 8px; font-weight: 600; color: var(--ink); }
+  ol { margin: 0; padding: 0; list-style: none; }
+  > ol { min-height: 0; overflow-y: auto; }
+  li { margin: 0; }
+}
+.cz-note .toc-rail { display: flex; justify-content: flex-end; padding-right: 20px; }
 .cz-note .toc-toggle {
+  position: relative;
+  padding: 4px 12px;
   border: 1px solid var(--line);
   border-radius: 99px;
-  background: none;
-  padding: 5px 13px;
+  background: var(--bg);
   font-size: 13.5px;
+  line-height: 1.4;
   color: var(--ink2);
+  white-space: nowrap;
   cursor: pointer;
-  transition: border-color .2s;
-  &:hover, &[aria-expanded="true"] { border-color: var(--green); }
+  pointer-events: auto;
+  transition: color .3s, border-color .3s, box-shadow .3s, transform .45s cubic-bezier(.2, .8, .2, 1);
+  &:hover, &:focus-visible, &[aria-expanded="true"] { border-color: var(--green); color: var(--ink); }
+  // The § on the edge that peeks out; "/ ''" keeps it out of the name.
+  &::before {
+    content: "§" / "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: $tab - 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--green);
+    opacity: 0;
+    transition: opacity .3s;
+  }
+  // The mouse stays on the button while it slides out from under the text.
+  &::after { content: ""; position: absolute; inset: 0 auto 0 100%; width: 24px; }
 }
 .cz-note .toc-sheet {
   position: absolute;
-  z-index: 10;
-  top: calc(100% + 8px);
-  left: 0;
+  top: calc(100% + 10px);
+  right: calc(20px - var(--toc-over, 0px));
   display: flex;
   flex-direction: column;
   width: max-content;
-  max-width: min(340px, calc(100vw - 32px));
-  max-height: min(60vh, 440px);
+  max-width: min(18rem, calc(100vw - 32px));
+  max-height: calc(100vh - 150px);
   padding: 14px 16px;
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -333,15 +371,11 @@ body.cz::before {
   box-shadow: 0 14px 40px rgba(17, 19, 17, .12);
   font-size: 14px;
   line-height: 1.4;
+  pointer-events: auto;
   visibility: hidden;
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: opacity .2s, transform .2s, visibility 0s .2s;
+  transform: translateX(calc(100% + 3rem));
+  transition: transform .55s cubic-bezier(.2, .8, .2, 1), visibility 0s .55s;
 
-  .toc-title { margin: 0 0 8px; font-weight: 600; color: var(--ink); }
-  ol { margin: 0; padding: 0; list-style: none; }
-  > ol { min-height: 0; overflow-y: auto; }
-  li { margin: 0; }
   .toc-section { margin-top: 6px; &:first-child { margin-top: 0; } }
   // The subsections' numbers under the sections' titles.
   ol ol { padding-left: 1.6em; }
@@ -350,8 +384,45 @@ body.cz::before {
   .toc-num { flex: none; width: 1.6em; color: var(--green); font-variant-numeric: tabular-nums; }
   ol ol .toc-num { width: 2.3em; }
 }
+.cz-note .toc.is-open .toc-sheet { visibility: visible; transform: none; transition-delay: 0s; }
 
-.cz-note .toc.is-open .toc-sheet { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+@media (min-width: 60rem) {
+  // From the top of the note down to its end, in the column left of the text; the text's edge
+  // hides the button's tucked part and the sheet. When the column is too narrow for the sheet,
+  // it lies over the text by --toc-over (toc.js).
+  .cz-note .toc {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 100%;
+    width: calc(50vw - 340px);
+    clip-path: inset(-3rem 0 -100vh -100vw);
+    pointer-events: none;
+    transition: clip-path .55s cubic-bezier(.2, .8, .2, 1);
+    &.is-open { z-index: 5; clip-path: inset(-3rem calc(-1 * var(--toc-over, 0px)) -100vh -100vw); }
+  }
+  .cz-note .toc-rail { position: sticky; top: calc(76px + env(safe-area-inset-top, 0px)); }
+  .cz-note .toc.is-alone .toc-toggle:not(:hover, :focus-visible, [aria-expanded="true"]) { @include cz-tucked; }
+}
+
+@media not all and (min-width: 60rem) {
+  .cz-note .toc {
+    position: fixed;
+    z-index: 10;
+    right: 0;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    clip-path: inset(-100vh 0 -3rem -100vw);
+    pointer-events: none;
+  }
+  // Always tucked, only the § peeks out; black while the sheet is out above it.
+  .cz-note .toc .toc-toggle {
+    @include cz-tucked;
+    transition: none;
+    &::before { transition: none; }
+    &[aria-expanded="true"]::before { color: var(--ink); }
+  }
+  .cz-note .toc-sheet { top: auto; bottom: calc(100% + 10px); width: min(20rem, calc(100vw - 40px)); max-width: none; }
+}
 
 // From $left-header toc.js moves the list into the header, under the menu: always out, quiet
 // until the mouse is on it, without numbers; the section being read has a green line.
@@ -370,11 +441,8 @@ body.cz::before {
 
     &:hover, &:focus-within { opacity: 1; }
 
-    .toc-title { margin: 0 0 8px; font-weight: 600; color: var(--ink); }
-    ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
-    > ol { min-height: 0; overflow-y: auto; }
+    ol { display: grid; gap: 6px; }
     ol ol { margin-top: 6px; padding-left: 12px; }
-    li { margin: 0; }
     .toc-num { display: none; }
     a { display: block; padding-left: 10px; border-left: 2px solid transparent; color: var(--mut); &:hover { color: var(--ink); } }
     a[aria-current] { color: var(--ink); border-left-color: var(--green); }
@@ -570,7 +638,10 @@ $note-width: min(220px, calc(50vw - 340px - 64px));
   height: 64px;
   transform: translateX(-50%);
   pointer-events: none;
-  .share.at-end & { pointer-events: auto; }
+  // Hidden (out of the tab order) until the end; it hides once it has slid down.
+  visibility: hidden;
+  transition: visibility 0s .5s;
+  .share.at-end & { pointer-events: auto; visibility: visible; transition-delay: 0s; }
 }
 // No clipping: the window's bottom edge hides the turtle.
 .share-peek { position: absolute; inset: 0; }

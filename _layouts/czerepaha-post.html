@@ -5,7 +5,8 @@ layout: czerepaha
   A note of the section "Черепаха и слоны" (czerepaha/_posts). Keeps the DOM contract of
   _layouts/post.html for the shared scripts (toc.js, notes.js, sources.js, anchors.js, share.js):
   the .toc nav with .toc-toggle in the <article>, the headings and the sources list in it,
-  .post-signature at the end; the scripts are loaded on the same conditions as there. The share
+  .post-signature at the end, .to-blog on the way back (toc.js quiets its button once it has
+  scrolled away); the scripts are loaded on the same conditions as there. The share
   turtle is pinned to the bottom of the window and comes out at the end of the note (pin="end").
   Labels are in Russian. The looks are in assets/css/czerepaha.scss.
 {%- endcomment -%}
@@ -17,7 +18,7 @@ layout: czerepaha
 
 <article class="cz-note" lang="ru" data-label-copied="Ссылка на раздел скопирована">
   <div class="cz-head">
-    <nav class="cz-back" aria-label="Назад">
+    <nav class="cz-back to-blog" aria-label="Назад">
       <a href="{{ "/czerepaha/" | relative_url }}"><span aria-hidden="true">←</span> Черепаха и слоны</a><span class="cz-sep" aria-hidden="true">·</span><a href="{{ "/blog" | relative_url }}"><span aria-hidden="true">←</span> Весь блог</a>
     </nav>
     {%- include czerepaha-meta.html post=page %}

@@ -659,6 +659,38 @@ check "mid_layout" do
   ok(o["markers"].uniq == ["none"], "1200: list markers in the sheet: #{o['markers'].inspect}")
 end
 
+# Below $left-header the button of the table of contents goes along while you read (sticky in the
+# left column from 60rem, tucked at the window's bottom right below): halfway down the note it is in
+# the window and nothing covers it; a click brings the numbered sheet out inside the window.
+check "toc_reachable" do
+  url = "#{serve(build(:fixtures))}/czerepaha/karta-ne-territoriya.html"
+  [390, 960, 1200].each do |w|
+    r = probe(url, w, NO_MOTION + <<~JS, 700)
+      (async function () {
+        var toggle = document.querySelector('.toc-toggle'), nav = document.querySelector('.toc');
+        scrollTo(0, (document.documentElement.scrollHeight - innerHeight) / 2);
+        await wait(300);
+        var t = box(toggle), hit = document.elementFromPoint(t.l + 8, (t.t + t.b) / 2);
+        var top = document.querySelector('header').getBoundingClientRect().bottom;
+        toggle.click();
+        var sheet = document.querySelector('.toc-sheet');
+        return {t: t, hit: !!hit && toggle.contains(hit), headerBottom: top, scrolled: scrollY > 100,
+          open: nav.classList.contains('is-open'), vis: getComputedStyle(sheet).visibility, s: box(sheet),
+          inNav: nav.contains(sheet), nums: [].filter.call(sheet.querySelectorAll('.toc-num'), function (n) { return n.textContent; }).length,
+          vw: innerWidth, vh: innerHeight};
+      })()
+    JS
+    t = r["t"]
+    ok(r["scrolled"], "#{w}: the page did not scroll")
+    ok(t["l"] >= 0 && t["l"] <= r["vw"] - 16 && t["t"] >= r["headerBottom"] && t["b"] <= r["vh"], "#{w}: mid page the button is out of reach: #{t.inspect}")
+    ok(r["hit"], "#{w}: mid page something covers the button")
+    ok(r["open"] && r["vis"] == "visible" && r["inNav"], "#{w}: the sheet does not come out: #{r.slice('open', 'vis', 'inNav').inspect}")
+    s = r["s"]
+    ok(s["l"] >= 0 && s["r"] <= r["vw"] && s["t"] >= 0 && s["b"] <= r["vh"], "#{w}: the sheet is out of the window: #{s.inspect}")
+    ok(r["nums"] >= 3, "#{w}: the sections in the sheet are not numbered")
+  end
+end
+
 check "toc_in_header" do
   r = probe("#{serve(build(:real))}/czerepaha/map-not-territory.html", 1440, NO_MOTION + <<~JS)
     var sheet = document.querySelector('header .toc-sheet'), toggle = document.querySelector('.toc-toggle');
@@ -716,10 +748,20 @@ end
 SHARE_JS = NO_MOTION + <<~JS
   var share = document.querySelector('.share'), area = document.querySelector('.share-turtle');
   var btn = document.querySelector('.share-turtle-btn'), bubble = document.querySelector('.share-bubble');
-  function state() {
+  function state(withFocus) {
     return {atEnd: share.classList.contains('at-end'), open: share.classList.contains('is-open'),
       btn: box(btn), pe: getComputedStyle(btn).pointerEvents, areaPe: getComputedStyle(area).pointerEvents,
-      bubble: box(bubble), bubbleOpacity: getComputedStyle(bubble).opacity, vh: innerHeight, vw: innerWidth};
+      bubble: box(bubble), bubbleOpacity: getComputedStyle(bubble).opacity, vh: innerHeight, vw: innerWidth,
+      vis: getComputedStyle(btn).visibility, focus: withFocus ? focusable() : null};
+  }
+  // Whether the turtle or a button of its bubble can take the focus (then gives it back).
+  function focusable() {
+    var was = document.activeElement, got = false;
+    [btn].concat([].slice.call(share.querySelectorAll('.share-links a, .share-links button'))).forEach(function (el) {
+      el.focus(); if (document.activeElement === el) got = true;
+    });
+    if (was && was.focus) was.focus(); else document.activeElement.blur();
+    return got;
   }
 JS
 
@@ -747,7 +789,7 @@ check "share_hidden_until_end" do
   [1440, 390].each do |w|
     r = probe("#{dir}/czerepaha/map-not-territory.html", w, SHARE_JS + <<~JS)
       (async function () {
-        var top = state();
+        var top = state(true);
         scrollTo(0, document.documentElement.scrollHeight);
         await wait(300);
         var end = state();
@@ -760,6 +802,7 @@ check "share_hidden_until_end" do
     JS
     ok(!r["top"]["atEnd"] && r["top"]["btn"]["t"] >= r["top"]["vh"], "#{w} top of the note: turtle top #{r['top']['btn']['t']} in a #{r['top']['vh']}px window")
     ok(r["top"]["pe"] == "none" && r["top"]["areaPe"] == "none", "#{w} top of the note: the turtle catches the pointer")
+    ok(r["top"]["vis"] == "hidden" && !r["top"]["focus"], "#{w} top of the note: the turtle can take the focus: #{r['top'].slice('vis', 'focus').inspect}")
     ok(r["end"]["atEnd"] && r["end"]["btn"]["t"] < r["end"]["vh"], "#{w} end of the note: turtle is not out (#{r['end']['btn']['t']})")
     ok(r["end"]["pe"] != "none", "#{w} end of the note: the turtle does not catch the pointer")
     ok(r["opened"], "#{w}: the bubble did not open")
