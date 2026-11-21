@@ -2,7 +2,8 @@
 // waits 1.5 s after the load (3.2 s with an instrument), runs the JS and prints JSON.stringify of its result (a promise is awaited).
 // Exit code 1 if the page does not load or the JS throws. Used by .claude/check-czerepaha.rb.
 // Optional 5th argument: JS that runs at the start of the document, before the page's own scripts
-// (for instruments such as a timer that watches the main thread during the load).
+// (for instruments such as a loop that watches the main thread during the load); then a blank
+// page is loaded first and the URL 0.7 s later, so the view's own start-up stall is not measured.
 // Usage: webprobe <url> <width> <height> <js> [<js at document start>]
 import Cocoa
 import WebKit
@@ -21,7 +22,13 @@ func fail(_ msg: String) -> Never {
 }
 
 class Delegate: NSObject, WKNavigationDelegate {
+  var warm = a.count < 6 // with an instrument, a blank page is loaded first so the view's start-up is over before the real load
   func webView(_ v: WKWebView, didFinish n: WKNavigation!) {
+    if !warm {
+      warm = true
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { v.load(URLRequest(url: URL(string: a[1])!)) }
+      return
+    }
     DispatchQueue.main.asyncAfter(deadline: .now() + wait) {
       // The JS is evaluated as a global script, so it may be several statements; the last value
       // is the result. If that value is a promise, its result is awaited (for checks that scroll
@@ -51,6 +58,6 @@ let wv = WKWebView(frame: NSRect(x: 0, y: 0, width: w, height: h), configuration
 win.contentView = wv
 let delegate = Delegate()
 wv.navigationDelegate = delegate
-wv.load(URLRequest(url: url))
+if a.count >= 6 { wv.loadHTMLString("<!doctype html><p>warm-up</p>", baseURL: nil) } else { wv.load(URLRequest(url: URL(string: a[1])!)) }
 DispatchQueue.main.asyncAfter(deadline: .now() + 30) { fail("timeout") }
 app.run()

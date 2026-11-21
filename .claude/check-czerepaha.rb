@@ -1106,6 +1106,7 @@ check "perf_topic_click" do
   ok(r["n"] == 200, "#{r['n']} notes in the bulk build")
   med = median(r["times"])
   note_perf("perf_topic_click", "median #{med.round(2)} ms, max #{r['times'].max.round(2)} ms over #{r['times'].size} clicks, 200 notes")
+  ok(r["times"].max <= 100, "one topic click took #{r['times'].max.round} ms on 200 notes")
   ok(med <= 16, "a topic click takes #{med.round(1)} ms (median of 20) on 200 notes")
 end
 
@@ -1138,12 +1139,14 @@ check "perf_notes_layout" do
     ok(r["notes"] >= BULK_FOOTNOTES, "#{w}: #{r['notes']} side notes, expected #{BULK_FOOTNOTES}")
     med = median(r["times"])
     note_perf("perf_notes_layout", "#{w}px, 30 footnotes: median #{med.round(2)} ms, max #{r['times'].max.round(2)} ms, mean of 200 #{r['mean'].round(2)} ms")
+    ok(r["times"].max <= 100, "#{w}: one resize + layout took #{r['times'].max.round} ms")
     ok(med <= 16 && r["mean"] <= 16, "#{w}: resize + layout takes #{med.round(1)} ms (median of 20) with 30 footnotes")
   end
   # The longest real note (no footnotes in it), as the worst real data.
   r = probe("#{serve(build(:real))}/czerepaha/map-not-territory.html", 1440, RESIZE_JS)
   med = median(r["times"])
   note_perf("perf_notes_layout", "1440px, real map-not-territory: median #{med.round(2)} ms, max #{r['times'].max.round(2)} ms, mean of 200 #{r['mean'].round(2)} ms")
+  ok(r["times"].max <= 100, "1440: one resize + layout took #{r['times'].max.round} ms")
   ok(med <= 16 && r["mean"] <= 16, "1440: resize + layout takes #{med.round(1)} ms (median of 20) on map-not-territory")
 end
 
@@ -1168,23 +1171,22 @@ HEARTBEAT_JS = <<~JS
 JS
 
 check "long_tasks" do
-  # An empty page stalls the main thread for ~75-90 ms at the start of the load (the web view's own
-  # start-up, seen on <p>x</p> too). That stall is the floor: the budget is for what a page adds to it.
+  # webprobe loads a blank page first when given an instrument, so the web view's own start-up
+  # stall (~80 ms) is over before the page loads. The raw worst gap of the median run of 3 is the budget.
   bulk = build(:bulk)
   File.write(File.join(bulk, "blank.html"), "<!doctype html><p>x</p>")
-  floor = median(Array.new(3) { probe("#{serve(bulk)}/blank.html", 1440, "window.__beat", 900, HEARTBEAT_JS)["worst"] })
-  note_perf("long_tasks", "floor (an empty page): #{floor.round(1)} ms")
   pages = {
+    "blank page" => ["#{serve(bulk)}/blank.html", 1440],
     "feed, 200 notes" => ["#{serve(bulk)}/czerepaha/", 1440],
     "note, 30 footnotes" => ["#{serve(bulk)}/czerepaha/bulk-footnotes.html", 1440],
     "feed, real" => ["#{serve(build(:real))}/czerepaha/", 1440],
     "note, real map-not-territory" => ["#{serve(build(:real))}/czerepaha/map-not-territory.html", 1440]
   }
   pages.each do |what, (url, w)|
-    r = Array.new(3) { probe(url, w, "window.__beat", 900, HEARTBEAT_JS) }.min_by { |x| x["worst"] } # the quietest of 3: a stall that repeats is the page's
-    net = r["worst"] - floor
-    note_perf("long_tasks", "#{what}: longest stall #{r['worst'].round(1)} ms, #{net.round(1)} ms over the floor (#{r['ticks']} ticks, gaps over 30 ms: #{r['gaps'].inspect})")
-    ok(net <= 100, "#{what}: the main thread was blocked #{net.round}ms over the floor in the first 3 s #{r['gaps'].inspect}")
+    runs = Array.new(3) { probe(url, w, "window.__beat", 900, HEARTBEAT_JS) }
+    worst = median(runs.map { |x| x["worst"] })
+    note_perf("long_tasks", "#{what}: longest stall per run #{runs.map { |x| x['worst'].round(1) }.join(', ')} ms (median #{worst.round(1)}); gaps over 30 ms: #{runs.map { |x| x['gaps'] }.inspect}")
+    ok(worst <= 100, "#{what}: the main thread was blocked #{worst.round}ms in the first 3 s #{runs.last['gaps'].inspect}")
   end
 end
 
@@ -1226,6 +1228,7 @@ end
 
 check "build_time" do
   main = File.join(WORK, "main-worktree")
+  system("git", "-C", ROOT, "worktree", "prune")
   out, st = Open3.capture2e("git", "-C", ROOT, "worktree", "add", "--detach", main, "main")
   raise Fail, "git worktree add main failed: #{out}" unless st.success?
   begin

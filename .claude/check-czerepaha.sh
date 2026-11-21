@@ -27,13 +27,14 @@ printf 'repository: akhavanski/akhavanski.github.io\ndescription: ""\n' > "$CACH
 WORK="$(cd -P "$(mktemp -d "${TMPDIR:-/tmp}/czerepaha-check.XXXXXX")" && pwd -P)"
 trap 'rm -rf "$WORK"' EXIT
 export WORK
-# webprobe is compiled once into the cache and rebuilt only when the .swift is newer.
-PROBE="$CACHE/webprobe"
+# webprobe is compiled once per content of the .swift: the binary's name carries its hash, so
+# worktrees and branches sharing the cache never run a stale one.
+PROBE="$CACHE/webprobe-$(shasum "$BLOG_DIR/.claude/webprobe.swift" | cut -c1-12)"
 export PROBE
-if [ ! -x "$PROBE" ] || [ "$BLOG_DIR/.claude/webprobe.swift" -nt "$PROBE" ]; then
-  swiftc -O -o "$PROBE.new" "$BLOG_DIR/.claude/webprobe.swift" 2> "$WORK/swiftc.log" \
+if [ ! -x "$PROBE" ]; then
+  swiftc -O -o "$PROBE.$$" "$BLOG_DIR/.claude/webprobe.swift" 2> "$WORK/swiftc.log" \
     || { cat "$WORK/swiftc.log" >&2; exit 1; }
-  mv "$PROBE.new" "$PROBE"
+  mv "$PROBE.$$" "$PROBE"
 fi
 
 cd "$BLOG_DIR"
