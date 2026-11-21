@@ -221,6 +221,10 @@ pre.mermaid { text-align: center; }
     transition: opacity 0.2s, transform 0.2s ease-out;
   }
 
+  // Before a language mark the arrow keeps its room, so the mark stands
+  // clear of it.
+  .post-title > a:has(+ .lang-badge)::after { margin-right: 0; }
+
   li:is(:hover, :focus-within) {
     time { color: #333; }
 
