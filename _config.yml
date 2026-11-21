@@ -70,3 +70,4 @@ exclude:
   - README.md
   - CLAUDE.md
   - not-used # tried and put aside, kept apart from the site
+  - docs # specs and plans, not for the site
