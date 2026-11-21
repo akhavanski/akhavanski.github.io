@@ -22,6 +22,12 @@
   if (!toggle || !nav) return;
   var article = nav.parentNode;
 
+  // The labels come from data attributes of the nav (a section in another language
+  // sets them); without them they are English.
+  var labelLong = nav.dataset.labelLong || "Table of contents";
+  var labelShort = nav.dataset.labelShort || "Contents";
+  var labelTitle = nav.dataset.labelTitle || "Contents";
+
   // While "← to blog" is out of the window, the button gets the class is-alone.
   var back = document.querySelector(".to-blog");
   if (back && "IntersectionObserver" in window) {
@@ -52,7 +58,7 @@
   sheet.id = "toc";
   var title = sheet.appendChild(document.createElement("p"));
   title.className = "toc-title";
-  title.textContent = "Contents";
+  title.textContent = labelTitle;
   var list = sheet.appendChild(document.createElement("ol"));
 
   // Subsections go inside their section; one before any section counts as a section.
@@ -102,13 +108,13 @@
   }
   addEventListener("resize", fit);
 
-  // "Table of contents" if it fits in the column 1rem off the window's left edge,
-  // otherwise "Contents".
+  // The long label if it fits in the column 1rem off the window's left edge,
+  // otherwise the short one.
   function label() {
-    toggle.textContent = "Table of contents";
+    toggle.textContent = labelLong;
     if (!wide.matches) return;
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    if (toggle.offsetWidth + 2.25 * rem > nav.offsetWidth) toggle.textContent = "Contents";
+    if (toggle.offsetWidth + 2.25 * rem > nav.offsetWidth) toggle.textContent = labelShort;
   }
   label();
   addEventListener("resize", label);

@@ -14,7 +14,7 @@ layout: czerepaha
 {%- assign h3s = content | split: "<h3" | size | minus: 1 %}
 {%- assign heads = h2s | plus: h3s %}
 
-<article class="cz-note" lang="ru">
+<article class="cz-note" lang="ru" data-label-copied="Ссылка на раздел скопирована">
   <div class="cz-head">
     <nav class="cz-back" aria-label="Назад">
       <a href="{{ "/czerepaha/" | relative_url }}"><span aria-hidden="true">←</span> Черепаха и слоны</a><span class="cz-sep" aria-hidden="true">·</span><a href="{{ "/blog" | relative_url }}"><span aria-hidden="true">←</span> Весь блог</a>
@@ -25,7 +25,7 @@ layout: czerepaha
   </div>
 
   {%- if heads >= 2 %}
-  <nav class="toc" aria-label="Содержание">
+  <nav class="toc" aria-label="Содержание" data-label-long="Содержание" data-label-short="Содержание" data-label-title="Содержание">
     <div class="toc-rail">
       <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc">Содержание</button>
     </div>
@@ -38,7 +38,7 @@ layout: czerepaha
   </div>
 </article>
 
-{%- include share.html %}
+{%- include share.html label_share="Поделиться" label_thanks="Спасибо!" label_copied="Ссылка скопирована" %}
 
 {%- comment -%} Side notes: footnotes. {%- endcomment -%}
 {%- assign notes = false %}

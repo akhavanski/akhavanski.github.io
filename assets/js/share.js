@@ -9,6 +9,11 @@
   if (!box) return;
   var url = box.dataset.url;
   var title = box.dataset.title;
+  // The labels come from data attributes (a section in another language sets them);
+  // without them they are English.
+  var labelShare = box.dataset.labelShare || "Share";
+  var labelThanks = box.dataset.labelThanks || "Thank you!";
+  var labelCopied = box.dataset.labelCopied || "Link copied";
 
   var turtle = box.querySelector(".share-turtle-btn");
   var word = box.querySelector(".share-word");
@@ -57,8 +62,8 @@
 
   // For 1.5 seconds the element says the link is copied.
   function flash(el, back, after) {
-    el.textContent = "Thank you!";
-    status.textContent = "Link copied";
+    el.textContent = labelThanks;
+    status.textContent = labelCopied;
     box.classList.add("is-copied");
     clearTimeout(timer);
     timer = setTimeout(function () {
@@ -76,7 +81,7 @@
     if (navigator.share) {
       navigator.share({ title: title, url: url }).catch(function () {});
     } else {
-      copy(turtle, function () { flash(word, "Share"); });
+      copy(turtle, function () { flash(word, labelShare); });
     }
   }
 
@@ -113,7 +118,7 @@
 
   copyBtn.addEventListener("click", function () {
     copy(copyBtn, function () {
-      flash(word, "Share", function () {
+      flash(word, labelShare, function () {
         if (!area.matches(":hover")) hideLater();
       });
     });

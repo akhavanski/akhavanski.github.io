@@ -233,3 +233,6 @@ body.cz::before {
   li { margin-bottom: 6px; }
   a { border-bottom: 1px solid #a9cfb6; &:hover { border-color: var(--green); } }
 }
+
+// The label after the copied link to a section (the chain itself is styled with the rest of the note).
+.anchor-copy::after { content: "Скопировано"; }

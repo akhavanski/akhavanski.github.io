@@ -410,6 +410,53 @@ check "flat_share_turtle" do
   ok(r["plates"] != "none", "share turtle has no seams")
 end
 
+# Labels of the shared scripts (toc.js, share.js, anchors.js): the section passes Russian ones
+# through data attributes, the main site keeps its English defaults.
+LABELS_JS = <<~JS
+  var r = {};
+  // The probe does not wait for promises: a stub whose then() calls back at once keeps it synchronous.
+  Object.defineProperty(navigator, 'clipboard', {configurable: true, value: {writeText: function () { return {then: function (ok) { ok(); }}; }}});
+  r.toggle = document.querySelector('.toc-toggle').textContent;
+  r.title = document.querySelector('.toc-title').textContent;
+  r.word = document.querySelector('.share-word').textContent;
+  var btn = document.querySelector('.anchor-copy');
+  r.after = getComputedStyle(btn, '::after').content;
+  btn.click();
+  r.status = document.querySelector('.anchor-status').textContent;
+  r.copied = btn.classList.contains('is-copied');
+  document.querySelector('.share-copy').click();
+  r.thanks = document.querySelector('.share-word').textContent;
+  r.shareStatus = document.querySelector('.share-status').textContent;
+  r
+JS
+
+check "labels_ru" do
+  dir = build(:real)
+  r = probe("#{serve(dir)}/czerepaha/map-not-territory.html", 1000, LABELS_JS)
+  ok(r["toggle"] == "Содержание", "toc toggle is #{r['toggle']}")
+  ok(r["title"] == "Содержание", "toc title is #{r['title']}")
+  ok(r["word"] == "Поделиться", "share word is #{r['word']}")
+  ok(r["after"] == '"Скопировано"', "anchor ::after is #{r['after']}")
+  ok(r["copied"], "anchor button did not get is-copied")
+  ok(r["status"] == "Ссылка на раздел скопирована", "anchor status is #{r['status']}")
+  ok(r["thanks"] == "Спасибо!", "share thanks is #{r['thanks']}")
+  ok(r["shareStatus"] == "Ссылка скопирована", "share status is #{r['shareStatus']}")
+  narrow = probe("#{serve(dir)}/czerepaha/map-not-territory.html", 390, "document.querySelector('.share-word').textContent")
+  ok(narrow == "Поделиться", "share word at 390 is #{narrow}")
+end
+
+check "labels_en_unchanged" do
+  dir = build(:fixtures)
+  r = probe("#{serve(dir)}/2023-10-18-telling-a-good-job-story.html", 1300, LABELS_JS)
+  ok(r["toggle"] == "Table of contents", "toc toggle is #{r['toggle']}")
+  ok(r["title"] == "Contents", "toc title is #{r['title']}")
+  ok(r["word"] == "Share", "share word is #{r['word']}")
+  ok(r["after"] == '"Copied"', "anchor ::after is #{r['after']}")
+  ok(r["status"] == "Link to the section copied", "anchor status is #{r.inspect}")
+  ok(r["thanks"] == "Thank you!", "share thanks is #{r['thanks']}")
+  ok(r["shareStatus"] == "Link copied", "share status is #{r['shareStatus']}")
+end
+
 names = ARGV.empty? ? CHECKS.keys : ARGV
 unknown = names - CHECKS.keys
 abort "unknown checks: #{unknown.join(', ')}" unless unknown.empty?

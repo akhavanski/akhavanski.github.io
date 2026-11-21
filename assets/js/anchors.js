@@ -10,6 +10,10 @@
   var heads = document.querySelectorAll("article h2, article h3, article h4");
   if (!heads.length) return;
 
+  // The label comes from a data attribute of the article (a section in another language
+  // sets it); without it, English.
+  var labelCopied = document.querySelector("article").dataset.labelCopied || "Link to the section copied";
+
   var status = document.createElement("span");
   status.className = "anchor-status";
   status.setAttribute("aria-live", "polite");
@@ -47,7 +51,7 @@
       btn.classList.remove("is-copied");
       void btn.offsetWidth;
       btn.classList.add("is-copied");
-      status.textContent = "Link to the section copied";
+      status.textContent = labelCopied;
       clearTimeout(timer);
       timer = setTimeout(function () {
         btn.classList.remove("is-copied");
