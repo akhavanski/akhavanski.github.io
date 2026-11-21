@@ -53,12 +53,13 @@ defaults:
       type: posts
     values:
       lang: en
-  # Notes of «Черепаха и слоны» (czerepaha/_posts): in Russian, at /czerepaha/<name>.html.
+  # Notes of «Черепаха и слоны» (czerepaha/_posts, see CLAUDE.md): Russian, at
+  # /czerepaha/<name>.html, in the section's own layout.
   - scope:
       path: czerepaha
       type: posts
     values:
-      layout: post # the section's own layout will replace it
+      layout: czerepaha-post
       lang: ru
       permalink: /czerepaha/:title.html
 

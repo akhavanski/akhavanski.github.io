@@ -1,0 +1,20 @@
+---
+---
+{%- comment -%}
+  A page of the section "Черепаха и слоны" (akh.cx/czerepaha): its own <html lang="ru">, the
+  site's head.html with the section's stylesheet instead of main.css, the section's header,
+  the content and one quiet line at the bottom. Does not use the no-style-please theme.
+{%- endcomment -%}
+<!DOCTYPE html>
+<html lang="ru">
+{%- include head.html css="czerepaha" %}
+<body class="cz">
+  {%- include czerepaha-header.html %}
+  <main class="cz-main">
+    {{ content }}
+  </main>
+  <footer class="cz-foot"><a href="https://akh.cx" target="_blank" rel="noopener">Алексей Хованский</a>, 2026</footer>
+  <script src="{{ "/assets/js/czerepaha.js" | relative_url }}"></script>
+  {%- include goatcounter.html %}
+</body>
+</html>

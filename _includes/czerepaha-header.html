@@ -1,0 +1,16 @@
+{%- comment -%}
+  The header of the section "Черепаха и слоны": the turtle and the name (a link to the
+  section), a star that opens a note about the section (assets/js/czerepaha.js), and the menu
+  with Blog and About. A strip on top; from $left-header (assets/css/czerepaha.scss) it is
+  fixed on the left.
+{%- endcomment -%}
+<header class="cz-top">
+  <div class="cz-brand">
+    <a class="cz-name" href="{{ "/czerepaha/" | relative_url }}">{% include turtle-svg.html %}Черепаха и слоны</a><button class="cz-star" type="button" aria-expanded="false" aria-controls="cz-about" aria-label="Что это за раздел">*</button>
+    <p class="cz-about" id="cz-about" hidden>Вы находитесь в особом отделе моего сайта, который посвящён ментальным моделям. Черепаха, может, и двигается медленнее, но точно доходит до цели.</p>
+  </div>
+  <nav class="cz-menu" aria-label="Сайт">
+    <a href="{{ "/blog" | relative_url }}">Blog</a>
+    <a href="{{ "/about" | relative_url }}">About</a>
+  </nav>
+</header>

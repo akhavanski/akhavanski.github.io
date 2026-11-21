@@ -1,0 +1,18 @@
+---
+layout: czerepaha
+title: Черепаха и слоны
+permalink: /czerepaha/
+---
+{%- comment -%}
+  The feed of the section "Черепаха и слоны" (akh.cx/czerepaha). For now only the empty state;
+  the notes and topics come later. The layout is _layouts/czerepaha.html.
+{%- endcomment -%}
+<div class="cz-intro">
+  <nav class="cz-back" aria-label="Назад"><a href="{{ "/blog" | relative_url }}"><span aria-hidden="true">←</span> Весь блог</a></nav>
+  <p class="cz-dek">Заметки о ментальных моделях: как думать медленнее и приходить туда, куда собирался.</p>
+</div>
+{%- assign notes = site.categories.czerepaha %}
+{%- comment -%} With no notes the category does not exist at all, so test for nil too. {%- endcomment -%}
+{%- unless notes and notes.size > 0 %}
+<p class="cz-empty">Скоро здесь будут заметки</p>
+{%- endunless %}
