@@ -221,9 +221,36 @@ pre.mermaid { text-align: center; }
     transition: opacity 0.2s, transform 0.2s ease-out;
   }
 
-  // Before a language mark the arrow keeps its room, so the mark stands
-  // clear of it.
-  .post-title > a:has(+ .lang-badge)::after { margin-right: 0; }
+  // A title with a language mark: the mark stands right after the title,
+  // and the arrow slides out after the mark, as big as the title, taking no room.
+  .post-title > a:has(+ .lang-badge)::after { display: none; }
+
+  .post-title > .lang-badge {
+    position: relative;
+
+    &::after {
+      content: "→";
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      margin-left: 0.4em;
+      font-size: calc(1em / 0.7); // the title's size
+      line-height: 1;
+      color: #000;
+      opacity: 0;
+      transform: translate(-3px, -50%);
+      transition: opacity 0.2s, transform 0.2s ease-out;
+    }
+  }
+
+  li:is(:hover, :focus-within) .post-title > .lang-badge::after {
+    opacity: 1;
+    transform: translate(0, -50%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .post-title > .lang-badge::after { transition: none; }
+  }
 
   li:is(:hover, :focus-within) {
     time { color: #333; }
@@ -2426,6 +2453,7 @@ html[data-theme="dark"] {
   .filter-hint { color: $night-faint; }
   .filter-summary b { color: $night-ink; }
   .lang-badge { border-color: $night-faint; color: $night-muted; }
+  .blog-posts .post-title > .lang-badge::after { color: $night-ink; }
   // At night the marks are their colour, dimmed, and a chosen word is dark
   // on them; the underline and the ring leave the word light, as they
   // do not lie under all of it.
