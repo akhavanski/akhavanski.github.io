@@ -1041,6 +1041,46 @@ check "topic_click_budget" do
   ok(r["worst"] <= 16, "a topic click takes #{r['worst'].round(1)} ms on 200 notes")
 end
 
+check "first_visible_note_flush" do
+  r = probe("#{serve(build(:fixtures))}/czerepaha/", 1200, FEED_STATE_JS + <<~JS)
+    function edge() {
+      var vis = [].filter.call(document.querySelectorAll('.cz-post'), function (p) { return !p.hidden; });
+      return vis.map(function (p) { var c = getComputedStyle(p); return [c.borderTopWidth, c.paddingTop]; });
+    }
+    var out = {all: edge()};
+    document.querySelector('[data-topic="biases"]').click(); out.biases = edge();
+    document.querySelector('[data-topic="models"]').click(); out.models = edge();
+    out
+  JS
+  %w[all biases models].each do |k|
+    e = r[k]
+    ok(e.first == %w[0px 0px], "#{k}: the first visible note has top border/padding #{e.first.inspect}")
+    ok(e.drop(1).all? { |x| x == %w[1px 20px] }, "#{k}: later notes have #{e.drop(1).inspect}, not a rule and 20px")
+  end
+end
+
+check "topic_keeps_address" do
+  r = probe("#{serve(build(:fixtures))}/czerepaha/?utm=x#top", 1200, <<~JS)
+    document.querySelector('[data-topic="biases"]').click();
+    var a = location.search + '|' + location.hash;
+    document.querySelector('.cz-topics button[data-topic=""]').click();
+    [a, location.search + '|' + location.hash]
+  JS
+  ok(r[0] == "?utm=x&topic=biases|#top", "after a topic click the address is #{r[0].inspect}")
+  ok(r[1] == "?utm=x|#top", "after 'Все заметки' the address is #{r[1].inspect}")
+end
+
+check "topic_click_wide" do
+  r = probe("#{serve(build(:fixtures))}/czerepaha/", 1440, FEED_STATE_JS + <<~JS)
+    var inHeader = !!document.querySelector('.cz-topics').closest('header');
+    document.querySelector('[data-topic="biases"]').click();
+    ({inHeader: inHeader, state: state()})
+  JS
+  ok(r["inHeader"], "1440: the topics are not in the header")
+  ok(r["state"]["shown"] == %w[biases biases], "1440: a click shows #{r['state']['shown'].inspect}")
+  ok(r["state"]["search"] == "?topic=biases", "1440: address #{r['state']['search'].inspect}")
+end
+
 names = ARGV.empty? ? CHECKS.keys : ARGV
 unknown = names - CHECKS.keys
 abort "unknown checks: #{unknown.join(', ')}" unless unknown.empty?

@@ -195,9 +195,9 @@ body.cz::before {
 .cz-post {
   display: grid;
   gap: 5px;
-  padding: 20px 0;
-  border-top: 1px solid var(--line);
-  &:first-child { border-top: 0; padding-top: 0; }
+  padding: 0 0 20px;
+  // A rule and a gap only between visible notes: the first visible one (any topic) goes flush.
+  &:not([hidden]) ~ &:not([hidden]) { border-top: 1px solid var(--line); padding-top: 20px; }
   h2 { margin: 0; font-size: 21px; letter-spacing: -.018em; line-height: 1.25; }
   h2 a {
     background: linear-gradient(var(--green), var(--green)) 0 100% / 0 2px no-repeat;

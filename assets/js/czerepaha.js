@@ -48,7 +48,12 @@
       if (!b) return;
       var key = b.dataset.topic;
       show(key);
-      history.replaceState(null, "", key ? "?topic=" + key : location.pathname);
+      // Other parameters and the hash stay as they were.
+      var q = new URLSearchParams(location.search);
+      if (key) q.set("topic", key);
+      else q.delete("topic");
+      var qs = q.toString();
+      history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
     });
     var key = new URLSearchParams(location.search).get("topic") || "";
     show(known(key) ? key : "");
