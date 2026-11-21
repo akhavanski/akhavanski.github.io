@@ -2,7 +2,7 @@
 # Checks for the "Черепаха и слоны" section (akh.cx/czerepaha).
 # .claude/check-czerepaha.sh [name…]: runs all checks or the named ones, prints
 # "PASS name" or "FAIL name: reason", exits non-zero if any check failed.
-# The environment is the same as in serve.sh; webprobe is compiled to a temp folder.
+# The environment is the same as in serve.sh; webprobe is compiled once into the cache folder.
 set -euo pipefail
 
 BLOG_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -27,8 +27,14 @@ printf 'repository: akhavanski/akhavanski.github.io\ndescription: ""\n' > "$CACH
 WORK="$(cd -P "$(mktemp -d "${TMPDIR:-/tmp}/czerepaha-check.XXXXXX")" && pwd -P)"
 trap 'rm -rf "$WORK"' EXIT
 export WORK
-swiftc -O -o "$WORK/webprobe" "$BLOG_DIR/.claude/webprobe.swift" 2> "$WORK/swiftc.log" \
-  || { cat "$WORK/swiftc.log" >&2; exit 1; }
+# webprobe is compiled once into the cache and rebuilt only when the .swift is newer.
+PROBE="$CACHE/webprobe"
+export PROBE
+if [ ! -x "$PROBE" ] || [ "$BLOG_DIR/.claude/webprobe.swift" -nt "$PROBE" ]; then
+  swiftc -O -o "$PROBE.new" "$BLOG_DIR/.claude/webprobe.swift" 2> "$WORK/swiftc.log" \
+    || { cat "$WORK/swiftc.log" >&2; exit 1; }
+  mv "$PROBE.new" "$PROBE"
+fi
 
 cd "$BLOG_DIR"
 bundle exec ruby "$BLOG_DIR/.claude/check-czerepaha.rb" "$@"

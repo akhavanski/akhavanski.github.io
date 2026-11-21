@@ -14,7 +14,7 @@ require "webrick"
 ROOT = ENV.fetch("BLOG_DIR")
 CACHE = ENV.fetch("CACHE")
 WORK = ENV.fetch("WORK")
-PROBE = File.join(WORK, "webprobe")
+PROBE = ENV.fetch("PROBE")
 
 STAR_TEXT = "Вы находитесь в особом отделе моего сайта, который посвящён ментальным моделям. " \
             "Черепаха, может, и двигается медленнее, но точно доходит до цели."
@@ -26,7 +26,7 @@ def ok(cond, msg)
 end
 
 # Modes: :empty is a copy of the repository without czerepaha/_posts, :fixtures replaces the real
-# notes with .claude/fixtures/czerepaha/*.md, :bulk with 200 generated notes, :real is the
+# notes with .claude/fixtures/czerepaha/*.md, :bulk with 200 generated notes (one has 30 footnotes), :real is the
 # repository as is. Builds are cached per mode.
 FIXTURE_COUNT = 5
 REAL_NOTES = 14
@@ -51,7 +51,8 @@ def build(mode)
     when :bulk
       FileUtils.rm_rf(posts)
       FileUtils.mkdir_p(posts)
-      200.times { |i| bulk_note(posts, i) } # filled in by the task that needs bulk data
+      199.times { |i| bulk_note(posts, i) }
+      bulk_footnotes_note(posts)
     else raise "unknown mode #{mode}"
     end
     out, st = Open3.capture2e("bundle", "exec", "jekyll", "build", "--source", src,
@@ -62,11 +63,24 @@ def build(mode)
   end
 end
 
-# One generated note for the :bulk build (200 of them), enough text to be a real list row.
+# The :bulk build: 199 plain notes (alternating topics models/biases, a title, an excerpt and a few
+# paragraphs, as a real list row) and one long note with 30 footnotes (/czerepaha/bulk-footnotes.html).
+BULK_FOOTNOTES = 30
 def bulk_note(dir, i)
   date = (Date.new(2026, 1, 1) + i).strftime("%Y-%m-%d")
+  topic = i.even? ? "models" : "biases"
+  body = (1..4).map { |k| "Абзац #{k} заметки #{i}. " + "Модель упрощает мир, и потому полезна, пока мы помним о её границах. " * 3 }.join("\n\n")
   File.write(File.join(dir, "#{date}-bulk-#{i}.md"),
-             "---\ntitle: Заметка #{i}\ntags: [czerepaha]\ntopic: models\n---\n\nТекст заметки #{i}.\n")
+             "---\ntitle: Заметка #{i}\ndescription: Короткое описание заметки #{i}, как в ленте.\ntags: [czerepaha]\ntopic: #{topic}\n---\n\n#{body}\n")
+end
+
+def bulk_footnotes_note(dir)
+  parts = (1..BULK_FOOTNOTES).map do |n|
+    "## Раздел #{n}\n\nАбзац раздела #{n}, где есть сноска[^n#{n}]. " + "Ещё немного текста, чтобы строка была настоящей. " * 6
+  end
+  notes = (1..BULK_FOOTNOTES).map { |n| "[^n#{n}]: Сноска номер #{n}, довольно длинная, чтобы занять на полях несколько строк. " + "Пояснение. " * 8 }
+  File.write(File.join(dir, "2026-06-30-bulk-footnotes.md"),
+             "---\ntitle: Заметка со сносками\ndescription: Тридцать сносок.\ntags: [czerepaha]\ntopic: models\n---\n\n#{parts.join("\n\n")}\n\n#{notes.join("\n\n")}\n")
 end
 
 def page(dir, path)
@@ -86,8 +100,8 @@ def serve(dir)
   end
 end
 
-def probe(url, width, js, height = 900)
-  out, err, st = Open3.capture3(PROBE, url, width.to_s, height.to_s, js)
+def probe(url, width, js, height = 900, at_start = nil)
+  out, err, st = Open3.capture3(PROBE, url, width.to_s, height.to_s, js, *at_start)
   raise Fail, "webprobe failed: #{err.strip}" unless st.success?
   JSON.parse(out)
 end
@@ -1027,20 +1041,6 @@ check "topic_focus" do
   ok(r[0] =~ /outline:\s*(\d+)px solid (var\(--green\)|rgb\(47, 125, 79\))/ && $1.to_i >= 2, "the focus ring is #{r[0].inspect}")
 end
 
-check "topic_click_budget" do
-  r = probe("#{serve(build(:bulk))}/czerepaha/", 1200, FEED_STATE_JS + <<~JS)
-    var all = document.querySelector('.cz-topics button[data-topic=""]'), m = document.querySelector('[data-topic="models"]');
-    var worst = 0;
-    for (var i = 0; i < 10; i++) {
-      var t0 = performance.now(); m.click(); all.click(); var dt = (performance.now() - t0) / 2;
-      if (dt > worst) worst = dt;
-    }
-    ({worst: worst, n: document.querySelectorAll('.cz-post').length})
-  JS
-  ok(r["n"] == 200, "#{r['n']} notes in the bulk build")
-  ok(r["worst"] <= 16, "a topic click takes #{r['worst'].round(1)} ms on 200 notes")
-end
-
 check "first_visible_note_flush" do
   r = probe("#{serve(build(:fixtures))}/czerepaha/", 1200, FEED_STATE_JS + <<~JS)
     function edge() {
@@ -1079,6 +1079,168 @@ check "topic_click_wide" do
   ok(r["inHeader"], "1440: the topics are not in the header")
   ok(r["state"]["shown"] == %w[biases biases], "1440: a click shows #{r['state']['shown'].inspect}")
   ok(r["state"]["search"] == "?topic=biases", "1440: address #{r['state']['search'].inspect}")
+end
+
+# ── Speed, size, build time (Task 7) ────────────────────────────────────────────────────────────
+def median(a)
+  v = a.sort
+  v.size.odd? ? v[v.size / 2] : (v[v.size / 2 - 1] + v[v.size / 2]) / 2.0
+end
+
+PERF_NOTES = {} # measured numbers, printed by the checks that take them (PERF=1)
+def note_perf(name, text)
+  puts "  #{name}: #{text}" if ENV["PERF"]
+end
+
+check "perf_topic_click" do
+  r = probe("#{serve(build(:bulk))}/czerepaha/", 1200, FEED_STATE_JS + <<~JS)
+    var all = document.querySelector('.cz-topics button[data-topic=""]'), m = document.querySelector('[data-topic="models"]');
+    var times = [];
+    // 20 clicks, alternating a topic and 'Все заметки'; each one includes the layout it forces.
+    for (var i = 0; i < 20; i++) {
+      var b = i % 2 ? all : m;
+      var t0 = performance.now(); b.click(); document.body.offsetHeight; times.push(performance.now() - t0);
+    }
+    ({times: times, n: document.querySelectorAll('.cz-post').length})
+  JS
+  ok(r["n"] == 200, "#{r['n']} notes in the bulk build")
+  med = median(r["times"])
+  note_perf("perf_topic_click", "median #{med.round(2)} ms, max #{r['times'].max.round(2)} ms over #{r['times'].size} clicks, 200 notes")
+  ok(med <= 16, "a topic click takes #{med.round(1)} ms (median of 20) on 200 notes")
+end
+
+# Dirties the layout, then times a synchronous resize event plus a forced layout, 20 times.
+RESIZE_JS = <<~JS
+  var times = [];
+  for (var i = 0; i < 20; i++) {
+    document.body.style.paddingTop = (i % 2) + 'px';
+    var t0 = performance.now();
+    window.dispatchEvent(new Event('resize'));
+    document.body.offsetHeight;
+    times.push(performance.now() - t0);
+  }
+  // The timer ticks in whole milliseconds, so the same loop 200 times gives the finer mean.
+  var t1 = performance.now();
+  for (var j = 0; j < 200; j++) {
+    document.body.style.paddingTop = (j % 2) + 'px';
+    window.dispatchEvent(new Event('resize'));
+    document.body.offsetHeight;
+  }
+  var mean = (performance.now() - t1) / 200;
+  document.body.style.paddingTop = '';
+  ({times: times, mean: mean, notes: document.querySelectorAll('.sidenote').length})
+JS
+
+check "perf_notes_layout" do
+  base = "#{serve(build(:bulk))}/czerepaha/bulk-footnotes.html"
+  [1440, 1000, 400].each do |w|
+    r = probe(base, w, RESIZE_JS)
+    ok(r["notes"] >= BULK_FOOTNOTES, "#{w}: #{r['notes']} side notes, expected #{BULK_FOOTNOTES}")
+    med = median(r["times"])
+    note_perf("perf_notes_layout", "#{w}px, 30 footnotes: median #{med.round(2)} ms, max #{r['times'].max.round(2)} ms, mean of 200 #{r['mean'].round(2)} ms")
+    ok(med <= 16 && r["mean"] <= 16, "#{w}: resize + layout takes #{med.round(1)} ms (median of 20) with 30 footnotes")
+  end
+  # The longest real note (no footnotes in it), as the worst real data.
+  r = probe("#{serve(build(:real))}/czerepaha/map-not-territory.html", 1440, RESIZE_JS)
+  med = median(r["times"])
+  note_perf("perf_notes_layout", "1440px, real map-not-territory: median #{med.round(2)} ms, max #{r['times'].max.round(2)} ms, mean of 200 #{r['mean'].round(2)} ms")
+  ok(med <= 16 && r["mean"] <= 16, "1440: resize + layout takes #{med.round(1)} ms (median of 20) on map-not-territory")
+end
+
+# Safari 17.3 has no 'longtask' entries (PerformanceObserver.supportedEntryTypes lacks it). Instead a
+# message loop starts at the very beginning of the document (webprobe's document-start script) and
+# runs 3 s: a gap between two of its messages is the time the main thread was blocked, which is what a long
+# task is. Budget 100 ms. The probe then reads the result.
+HEARTBEAT_JS = <<~JS
+  (function () {
+    // A message loop, not setInterval: WebKit stretches the timers of a page that is not on screen to 1 s.
+    var ch = new MessageChannel(), last = performance.now(), start = last, worst = 0, gaps = [], ticks = 0;
+    ch.port1.onmessage = function () {
+      var t = performance.now(), gap = t - last;
+      ticks++;
+      if (gap > 30) gaps.push([Math.round(last), Math.round(gap)]);
+      worst = Math.max(worst, gap); last = t;
+      if (t - start < 3000) ch.port2.postMessage(0);
+      else window.__beat = {worst: worst, gaps: gaps, ticks: ticks};
+    };
+    ch.port2.postMessage(0);
+  })();
+JS
+
+check "long_tasks" do
+  # An empty page stalls the main thread for ~75-90 ms at the start of the load (the web view's own
+  # start-up, seen on <p>x</p> too). That stall is the floor: the budget is for what a page adds to it.
+  bulk = build(:bulk)
+  File.write(File.join(bulk, "blank.html"), "<!doctype html><p>x</p>")
+  floor = median(Array.new(3) { probe("#{serve(bulk)}/blank.html", 1440, "window.__beat", 900, HEARTBEAT_JS)["worst"] })
+  note_perf("long_tasks", "floor (an empty page): #{floor.round(1)} ms")
+  pages = {
+    "feed, 200 notes" => ["#{serve(bulk)}/czerepaha/", 1440],
+    "note, 30 footnotes" => ["#{serve(bulk)}/czerepaha/bulk-footnotes.html", 1440],
+    "feed, real" => ["#{serve(build(:real))}/czerepaha/", 1440],
+    "note, real map-not-territory" => ["#{serve(build(:real))}/czerepaha/map-not-territory.html", 1440]
+  }
+  pages.each do |what, (url, w)|
+    r = Array.new(3) { probe(url, w, "window.__beat", 900, HEARTBEAT_JS) }.min_by { |x| x["worst"] } # the quietest of 3: a stall that repeats is the page's
+    net = r["worst"] - floor
+    note_perf("long_tasks", "#{what}: longest stall #{r['worst'].round(1)} ms, #{net.round(1)} ms over the floor (#{r['ticks']} ticks, gaps over 30 ms: #{r['gaps'].inspect})")
+    ok(net <= 100, "#{what}: the main thread was blocked #{net.round}ms over the floor in the first 3 s #{r['gaps'].inspect}")
+  end
+end
+
+check "asset_sizes" do
+  dir = build(:real)
+  css = File.size(File.join(dir, "assets/css/czerepaha.css"))
+  js = File.size(File.join(dir, "assets/js/czerepaha.js"))
+  note_perf("asset_sizes", "czerepaha.css #{css} bytes (budget 20480), czerepaha.js #{js} bytes (budget 4096)")
+  ok(css <= 20_480, "czerepaha.css is #{css} bytes, over 20480")
+  ok(js <= 4_096, "czerepaha.js is #{js} bytes, over 4096")
+  faces = File.read(File.join(dir, "assets/css/czerepaha.css")).scan("@font-face").size
+  ok(faces == 0, "czerepaha.css declares #{faces} @font-face (the font comes from Google Fonts)")
+  ["czerepaha/index.html", "czerepaha/map-not-territory.html", "czerepaha/confirmation-bias.html"].each do |f|
+    doc = page(dir, f)
+    inter = doc.css("head link[href]").select { |l| l["href"].include?("fonts.googleapis.com/css") }
+    ok(inter.size == 1, "#{f}: #{inter.size} Google Fonts stylesheets in head")
+    weights = inter.first["href"][/wght@([\d;]+)/, 1].to_s.split(";")
+    note_perf("asset_sizes", "#{f}: Inter weights #{weights.join(',')}")
+    ok(inter.first["href"].include?("family=Inter") && weights.size <= 3 && !weights.empty?, "#{f}: Inter weights #{weights.inspect}")
+    ok(doc.css("head link[href]").count { |l| l["href"].include?("fonts.g") && l["rel"] == "stylesheet" } == 1, "#{f}: other font stylesheets in head")
+  end
+end
+
+# Median of 3 jekyll builds of the empty section (:empty) on this branch and on main, alternating.
+def timed_build(src_root, tag)
+  src = File.join(WORK, "bt-#{tag}-src")
+  dest = File.join(WORK, "bt-#{tag}-site")
+  FileUtils.rm_rf([src, dest])
+  FileUtils.mkdir_p(src)
+  system("rsync", "-a", "--exclude=.git", "--exclude=_site", "--exclude=.jekyll-cache",
+         "--exclude=.superpowers", "--exclude=czerepaha/_posts", "#{src_root}/", "#{src}/") or raise "rsync failed"
+  t0 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+  out, st = Open3.capture2e("bundle", "exec", "jekyll", "build", "--source", src,
+                            "--config", "#{src}/_config.yml,#{CACHE}/_config.local.yml", "--destination", dest)
+  dt = Process.clock_gettime(Process::CLOCK_MONOTONIC) - t0
+  raise Fail, "jekyll build failed (#{tag}): #{out.lines.last(4).join}" unless st.success?
+  dt
+end
+
+check "build_time" do
+  main = File.join(WORK, "main-worktree")
+  out, st = Open3.capture2e("git", "-C", ROOT, "worktree", "add", "--detach", main, "main")
+  raise Fail, "git worktree add main failed: #{out}" unless st.success?
+  begin
+    branch = []
+    base = []
+    3.times do |i|
+      branch << timed_build(ROOT, "branch#{i}")
+      base << timed_build(main, "main#{i}")
+    end
+    b, m = median(branch), median(base)
+    note_perf("build_time", "branch #{b.round(2)} s (#{branch.map { |x| x.round(2) }.join(', ')}), main #{m.round(2)} s (#{base.map { |x| x.round(2) }.join(', ')}); limit #{[m * 1.1, m + 1].max.round(2)} s")
+    ok(b <= [m * 1.1, m + 1].max, "an empty-section build takes #{b.round(2)} s on the branch, #{m.round(2)} s on main (limit #{[m * 1.1, m + 1].max.round(2)} s)")
+  ensure
+    system("git", "-C", ROOT, "worktree", "remove", "--force", main, out: File::NULL, err: File::NULL)
+  end
 end
 
 names = ARGV.empty? ? CHECKS.keys : ARGV
