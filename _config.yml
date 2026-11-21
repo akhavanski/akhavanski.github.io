@@ -53,6 +53,13 @@ defaults:
       type: posts
     values:
       lang: en
+  # Notes of «Черепаха и слоны» (czerepaha/_posts): in Russian, at /czerepaha/<name>.html.
+  - scope:
+      path: czerepaha
+      type: posts
+    values:
+      lang: ru
+      permalink: /czerepaha/:title.html
 
 sass:
   style: compressed
