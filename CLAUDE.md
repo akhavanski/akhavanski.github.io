@@ -29,3 +29,25 @@ Jekyll на GitHub Pages, тема `riggraz/no-style-please` подключае�
 Варианты делай в отдельных `git worktree` в scratchpad. Каждому добавь в `.claude/launch.json` временную запись: `bash .claude/serve.sh <порт> <папка worktree>`, порты 4001, 4002 и т. д. Перед коммитом эти записи убери.
 
 В облачной сессии гемы ставит хук `.claude/hooks/session-start.sh`. Проверить сборку там: `bundle exec jekyll build`.
+
+## Черепаха и слоны
+
+Раздел о ментальных моделях по адресу `/czerepaha/`, по-русски, со своим видом: Inter, зелёный `#2f7d4f`, белый, чёрный. Заметки лежат в `czerepaha/_posts/`. `defaults` в `_config.yml` дают им `layout: czerepaha-post`, `lang: ru` и адрес `/czerepaha/<имя>.html`, категория `czerepaha` ставится сама. Новая заметка:
+
+```yaml
+---
+title: "Карта не территория"
+description: Коротко, о чём заметка (иначе берётся начало текста).
+topic: models
+tags: [czerepaha]
+---
+```
+
+Темы — `_data/czerepaha.yml` (`models` «Ментальные модели», `biases` «Когнитивные искажения»). Заметка без `topic:` видна только в «Все заметки». Страницы-списки `czerepaha/mental-models.md` и `cognitive-biases.md` на макете `czerepaha-page`, ссылки на них есть на ленте.
+
+Свои файлы: `_layouts/czerepaha.html` (основа: шапка, подвал «Алексей Хованский, 2026»), `czerepaha-post.html` (заметка), `czerepaha-page.html` (страница с текстом); `_includes/czerepaha-header.html` (черепаха, название, звёздочка с запиской о разделе, меню), `czerepaha-meta.html`, `czerepaha-excerpt.html`; `czerepaha/index.html` (лента, фильтр тем, пустое состояние); `assets/css/czerepaha.scss` (все стили раздела, `main.css` раздел не грузит; `head.html` получает `css="czerepaha"`); `assets/js/czerepaha.js` (звёздочка, фильтр тем с `?topic=`, перенос тем в шапку с 84rem). Сноски, источники, оглавление, якоря и черепаха «Поделиться» — общие скрипты постов; подписи по-русски им передаются через `data-label-*` (по умолчанию английские). В разделе черепаха «Поделиться» прижата к низу окна и выглядывает, только когда заметка долистана до конца (`share.html` с `pin="end"`).
+
+В общем блоге: у заметки раздела перед датой зелёная черепаха (ссылка на раздел), в фильтре `/blog` раздел — отдельное место в «Published on» (`?source=czerepaha`), тега `czerepaha` в фильтре нет. Черепаха «Поделиться» на всём сайте плоская зелёная.
+
+Проверки раздела: `bash .claude/check-czerepaha.sh [имена]` (около 3 минут целиком): собирает сайт пустым, с фикстурами из `.claude/fixtures/czerepaha/`, как есть и с 200 заметками, проверяет разметку, поведение в WebKit (`.claude/webprobe.swift`), скорость, вес и время сборки против main.
+
