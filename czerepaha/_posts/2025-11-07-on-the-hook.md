@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "На крючке"
 date: 2025-11-07 17:45:03 +0000
 tags: [czerepaha]

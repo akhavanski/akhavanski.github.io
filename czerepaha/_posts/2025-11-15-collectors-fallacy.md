@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Ошибка коллекционера"
 date: 2025-11-15 10:28:29 +0000
 tags: [czerepaha]

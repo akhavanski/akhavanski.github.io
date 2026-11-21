@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Идея простоты"
 date: 2025-11-18 07:59:02 +0000
 tags: [czerepaha]

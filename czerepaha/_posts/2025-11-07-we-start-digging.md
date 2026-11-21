@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Мы начинаем и будем копать"
 date: 2025-11-07 10:49:24 +0000
 tags: [czerepaha]

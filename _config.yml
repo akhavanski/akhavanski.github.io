@@ -58,6 +58,7 @@ defaults:
       path: czerepaha
       type: posts
     values:
+      layout: post # the section's own layout will replace it
       lang: ru
       permalink: /czerepaha/:title.html
 

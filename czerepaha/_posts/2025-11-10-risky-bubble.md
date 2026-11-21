@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Рисковый пузырь"
 date: 2025-11-10 11:52:45 +0000
 tags: [czerepaha]

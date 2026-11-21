@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Ещё раз о простоте"
 date: 2025-12-29 08:25:06 +0000
 tags: [czerepaha]
