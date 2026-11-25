@@ -32,6 +32,8 @@ Jekyll на GitHub Pages, тема `riggraz/no-style-please` подключае�
 
 ## Черепаха и слоны
 
+Сейчас раздел снят с сайта: `czerepaha`, `assets/css/czerepaha.scss` и `assets/js/czerepaha.js` в `exclude` в `_config.yml`, файлы остаются в репозитории. Без заметок раздела на сайте пропадают и его следы в общем блоге (черепаха у даты, место в «Published on»). Вернуть — убрать эти три строки из `exclude`.
+
 Раздел о ментальных моделях по адресу `/czerepaha/`, по-русски, со своим видом: Inter, зелёный `#2f7d4f`, белый, чёрный. Заметки лежат в `czerepaha/_posts/`. `defaults` в `_config.yml` дают им `layout: czerepaha-post`, `lang: ru` и адрес `/czerepaha/<имя>.html`, категория `czerepaha` ставится сама. Новая заметка:
 
 ```yaml

@@ -80,3 +80,8 @@ exclude:
   - CLAUDE.md
   - not-used # tried and put aside, kept apart from the site
   - docs # specs and plans, not for the site
+  # Черепаха и слоны: kept in the repository, off the site for now. Remove these
+  # three lines to bring the section back.
+  - czerepaha
+  - assets/css/czerepaha.scss
+  - assets/js/czerepaha.js
