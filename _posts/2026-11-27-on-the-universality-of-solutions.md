@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "On the universality of solutions"
+date: 2026-11-27 23:30
 tags: [Linguistics]
 ---
 

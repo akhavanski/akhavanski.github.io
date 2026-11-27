@@ -6,7 +6,7 @@ url: https://akh.cx # root address of the site
 baseurl: "" # subpath of the site, e.g. "/blog" (leave it blank "" if you're site shouldn't use a subpath)
 
 permalink: /:year-:month-:day-:slug.html
-timezone: Europe/Minsk # GitHub Pages builds in UTC: without it a post dated today is "future" until 03:00 Minsk and is skipped
+timezone: Europe/Vilnius # post dates are Vilnius dates; GitHub Pages builds in UTC and skips posts it thinks are in the future
 
 favicon: "favicon.ico" # name+extension of favicon (which must be put on the root folder)
 
