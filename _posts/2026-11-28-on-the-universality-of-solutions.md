@@ -30,7 +30,7 @@ So you can solve your linguistic task in many ways and several solutions may be 
 
 It works in other real life spheres where there's no predefined right solution[^real-options]. And the big idea is not that if something works in context A it won't work on context B, but that in both A and B you may use solutions x, y, and z that'll give you same (or different) value and fit.
 
-When defining a solution many of tend to be logical. Recently I read a book Alchemy by Rory Sutherland who said that sometimes irrational would work better.
+When defining a solution many of us tend to be logical. Recently I read a book Alchemy by Rory Sutherland who said that sometimes irrational would work better.
 
 I am now looking for a job. The rational solution for a search would be to apply at more open positions. So that at some point the magic of many attempts would get you to an offer. While in fact, applying **less** and using more actions like studying a company, adjusting your CV, etc. would get you an offer faster[^intuitive].
 
