@@ -80,6 +80,7 @@ exclude:
   - CLAUDE.md
   - not-used # tried and put aside, kept apart from the site
   - docs # specs and plans, not for the site
+  - ia-writer # the iA Writer template in the style of a post
   # Черепаха и слоны: kept in the repository, off the site for now. Remove these
   # three lines to bring the section back.
   - czerepaha

@@ -1,0 +1,197 @@
+/*
+  A post as on akh.cx, for iA Writer's Preview, PDFs and printouts.
+  Copied from the theme no-style-please and assets/css/main.scss of the blog;
+  when the posts there change their look, change it here too.
+  The text is EB Garamond (loaded by document.html), 20px in a 640px column,
+  justified with hyphens; code, the footnotes and the page edges are monospace.
+  Night mode (iA Writer puts .night-mode on <html>) takes the blog's dark theme.
+*/
+
+:root {
+  --bg: white;
+  --ink: black;
+  --muted: #999;    /* the footnotes */
+  --grey: grey;     /* footnote numbers, [n] of the sources */
+  --faint: #bbb;    /* link underlines, the quote mark */
+  --rule: #ccc;     /* the short line over the footnotes */
+  --card: black;    /* code: white on black */
+  --card-ink: white;
+  --red: #d23;      /* the line through an old text in a fix */
+  --serif: "EB Garamond", "Hoefler Text", Garamond, "Times New Roman", serif;
+}
+
+html.night-mode {
+  --bg: #1e1e1e;
+  --ink: #e4e4e4;
+  --muted: #8c8c8c;
+  --grey: #8c8c8c;
+  --faint: #4a4a4a;
+  --rule: #4a4a4a;
+  --card: #2a2a2a;
+  --card-ink: #e4e4e4;
+  --red: #ff6b5e;
+}
+
+html, body { background: var(--bg); }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: monospace;
+  font-size: 16px;
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+
+/* The post. */
+body.document {
+  box-sizing: border-box;
+  max-width: calc(640px + 4rem);
+  margin: 0 auto;
+  padding: 0 2rem;
+  font-family: var(--serif);
+  font-size: 1.25em;
+  line-height: 1.45;
+}
+
+h1, h2, h3, h4, h5, h6 { font-weight: 600; }
+h2, h3, h4, h5, h6 { margin-top: 3rem; }
+p { margin: 1rem 0; }
+li { margin: 0.4rem 0; }
+strong, b { font-weight: 600; }
+
+/* Paragraphs fill the whole line, long words break with a hyphen
+   (blog.js sets the language, en or ru, the hyphens follow it). */
+.document p, .document li {
+  text-align: justify;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+/* Links stay the colour of the text, underlined thin, light grey, broken by the tails. */
+a {
+  color: var(--ink);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-skip-ink: auto;
+  text-decoration-color: var(--faint);
+}
+a:hover { text-decoration-color: currentColor; }
+
+/* Code: monospace, white on black, a size smaller than the text. */
+code, pre { font-family: monospace; font-size: 0.8em; }
+code { color: var(--card-ink); background: var(--card); -webkit-hyphens: manual; hyphens: manual; }
+pre code { display: block; overflow-x: auto; white-space: pre-wrap; padding: 1rem; font-size: 1em; }
+
+/* A break: ///// in the middle. */
+hr { margin: 2rem 0; border: 0; text-align: center; }
+hr::before { content: "/////"; }
+
+img { display: block; max-width: 100%; margin: 0 auto; }
+figure { margin: 1rem 0; }
+figcaption { display: none; }
+
+table { width: 100%; }
+table, th, td { border: thin solid var(--ink); border-collapse: collapse; padding: 0.4rem; }
+caption { color: var(--grey); font-size: 0.8em; }
+
+/* A quote: italic, a big grey opening quote mark on the left, no frame. */
+blockquote {
+  position: relative;
+  margin: 1.5rem 0;
+  padding: 0 0 0 2.25rem;
+  font-style: italic;
+}
+blockquote::before {
+  content: "\201C";
+  position: absolute;
+  top: -0.15em;
+  left: 0;
+  font-size: 2.6em;
+  font-style: normal;
+  line-height: 1;
+  color: var(--faint);
+}
+blockquote p { margin: 0; }
+blockquote p + p { margin-top: 0.75rem; }
+
+/* A callout ({: .callout} under a quote, see blog.js): upright, a bit larger,
+   centred between two thin rules. */
+blockquote.callout {
+  padding: 1rem 0.5rem;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  font-size: 1.1em;
+  font-style: normal;
+}
+blockquote.callout p { text-align: center; }
+blockquote.callout::before { content: none; }
+
+/* Footnotes: a small grey number over the line... */
+sup { font-size: 0.68em; line-height: 0; vertical-align: super; }
+a.footnote { color: var(--grey); text-decoration: none; padding: 0 0.1em; }
+
+/* ...and the notes at the end, as in a book and on the blog's narrow screen:
+   a short line, then the notes, monospace, small and grey. */
+.footnotes {
+  margin-top: 2.5rem;
+  padding-top: 0.8rem;
+  background: linear-gradient(var(--rule), var(--rule)) top left / 6rem 1px no-repeat;
+  font-family: monospace;
+}
+.footnotes hr { display: none; }
+.footnotes ol {
+  padding: 0;
+  list-style: none;
+  counter-reset: note;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.footnotes li { margin: 0 0 0.6rem; text-align: left; counter-increment: note; }
+.footnotes li > p { margin: 0; text-align: left; }
+.footnotes li > p:first-of-type::before {
+  content: counter(note);
+  font-size: 0.68em;
+  vertical-align: super;
+  line-height: 0;
+  margin-right: 0.3em;
+}
+.footnotes a { color: inherit; }
+.footnotes a.reversefootnote { display: none; }
+/* Longhands: WebKit takes the text-decoration shorthand for the line alone and drops it whole. */
+.footnotes del { color: var(--muted); text-decoration-line: line-through; text-decoration-color: var(--red); }
+.footnotes img { display: block; width: 100%; margin-top: 0.5rem; }
+
+/* Sources: [n] in the text is grey, the list under ## Sources or ## Источники
+   is dense, a source a line, the number hanging on the left (see blog.js). */
+.cite { color: var(--grey); white-space: nowrap; }
+ol.sources {
+  padding: 0 0 0 1.6rem;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+ol.sources li { margin-bottom: 0.25rem; text-align: left; }
+ol.sources li::marker { font-weight: bold; }
+
+/* PDFs and printouts: the page is the column, the text in book sizes. */
+@media print {
+  body.document { max-width: none; padding: 0; font-size: 12pt; }
+  pre code { white-space: pre-wrap; }
+}
+
+/* The title page, the header and the footer. */
+body.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 0 2rem;
+}
+body.title h1 { margin: 0; font-family: var(--serif); font-size: 32pt; line-height: 1.15; }
+body.title p { margin: 1rem 0 0; font-size: 10pt; }
+
+body.header, body.footer { font-size: 8pt; color: var(--grey); }
+body.header p, body.footer p { margin: 0; }
+body.header { display: flex; align-items: flex-end; height: 100vh; padding-bottom: 12pt; box-sizing: border-box; }
+body.footer { display: flex; align-items: flex-start; justify-content: center; height: 100vh; padding-top: 12pt; box-sizing: border-box; }
