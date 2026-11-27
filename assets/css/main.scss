@@ -3518,3 +3518,16 @@ p:has(> .study-guide) { position: relative; }
   .saglyth.saglyth-big:is(:hover, :focus-visible) .sl { transform: rotate(var(--r)) scaleX(var(--sx, 1)); }
 }
 html[data-theme="dark"] .saglyth .saglyth-line { stroke: $night-ink; opacity: 0.5; }
+
+// The post in a book face, EB Garamond (loaded by _includes/head.html
+// on post pages). Code, the post's controls, the table of contents and the notes
+// (on the margin and, on a narrow screen, listed at the end) stay in the monospace font.
+article {
+  font-family: "EB Garamond", Garamond, "Times New Roman", serif;
+  font-size: 1.25em;
+  line-height: 1.45;
+
+  code, pre { font-size: 0.8em; }
+  .to-blog, .toc { font-family: monospace; font-size: 0.8em; }
+  .sidenote, .notes-end { font-family: monospace; }
+}

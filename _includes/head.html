@@ -5,6 +5,7 @@
   The tab title is "Page — Aliaksei Khavanski", on the home page just the name.
   `css` picks the stylesheet: main (the default) or czerepaha for the section
   (_layouts/czerepaha.html), which also loads its font, Inter.
+  A post page also loads EB Garamond, the font of the post's text.
 {%- endcomment -%}
 {%- assign css = include.css | default: "main" -%}
 <head>
@@ -36,6 +37,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
+  {%- endif %}
+  {%- if page.layout == "post" %}
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" />
   {%- endif %}
   <link rel="stylesheet" href="{{ "/assets/css/" | append: css | append: ".css" | relative_url }}?v={{ site.time | date: "%s" }}" />
 </head>
