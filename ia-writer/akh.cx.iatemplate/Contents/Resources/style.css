@@ -18,6 +18,9 @@
   --card-ink: white;
   --red: #d23;      /* the line through an old text in a fix */
   --serif: "EB Garamond", "Hoefler Text", Garamond, "Times New Roman", serif;
+  /* Named: a bare monospace is Courier in a page without a language (the header,
+     the footer, the title page), Menlo elsewhere; on the blog it looks like Menlo. */
+  --mono: Menlo, ui-monospace, monospace;
 }
 
 html.night-mode {
@@ -37,7 +40,7 @@ html, body { background: var(--bg); }
 body {
   margin: 0;
   color: var(--ink);
-  font-family: monospace;
+  font-family: var(--mono);
   font-size: 16px;
   line-height: 1.4;
   overflow-wrap: break-word;
@@ -79,7 +82,7 @@ a {
 a:hover { text-decoration-color: currentColor; }
 
 /* Code: monospace, white on black, a size smaller than the text. */
-code, pre { font-family: monospace; font-size: 0.8em; }
+code, pre { font-family: var(--mono); font-size: 0.8em; }
 code { color: var(--card-ink); background: var(--card); -webkit-hyphens: manual; hyphens: manual; }
 pre code { display: block; overflow-x: auto; white-space: pre-wrap; padding: 1rem; font-size: 1em; }
 
@@ -137,7 +140,7 @@ a.footnote { color: var(--grey); text-decoration: none; padding: 0 0.1em; }
   margin-top: 2.5rem;
   padding-top: 0.8rem;
   background: linear-gradient(var(--rule), var(--rule)) top left / 6rem 1px no-repeat;
-  font-family: monospace;
+  font-family: var(--mono);
 }
 .footnotes hr { display: none; }
 .footnotes ol {
@@ -174,24 +177,29 @@ ol.sources {
 ol.sources li { margin-bottom: 0.25rem; text-align: left; }
 ol.sources li::marker { font-weight: bold; }
 
-/* PDFs and printouts: the page is the column, the text in book sizes. */
+/* Pages: iA Writer's paged Preview, PDFs and printouts. The page has no side
+   margins of its own (its top and bottom are the header and the footer, 90pt
+   each in Info.plist), so the text is a 384pt column in the middle, as the blog's
+   640px for 20px text: 32em of 12pt, about 105pt of white either side on A4. */
+:root { --measure: 384pt; }
+
 @media print {
-  body.document { max-width: none; padding: 0; font-size: 12pt; }
+  body.document { max-width: var(--measure); padding: 0; font-size: 12pt; }
   pre code { white-space: pre-wrap; }
 }
 
-/* The title page, the header and the footer. */
-body.title {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 0 2rem;
+/* The title page, the header and the footer, in the same column. */
+body.title, body.header, body.footer {
+  box-sizing: border-box;
+  max-width: var(--measure);
+  height: 100vh;
+  margin: 0 auto;
 }
+body.title { display: flex; flex-direction: column; justify-content: center; }
 body.title h1 { margin: 0; font-family: var(--serif); font-size: 32pt; line-height: 1.15; }
 body.title p { margin: 1rem 0 0; font-size: 10pt; }
 
-body.header, body.footer { font-size: 8pt; color: var(--grey); }
+body.header, body.footer { display: flex; font-size: 8pt; color: var(--grey); }
 body.header p, body.footer p { margin: 0; }
-body.header { display: flex; align-items: flex-end; height: 100vh; padding-bottom: 12pt; box-sizing: border-box; }
-body.footer { display: flex; align-items: flex-start; justify-content: center; height: 100vh; padding-top: 12pt; box-sizing: border-box; }
+body.header { align-items: flex-end; padding-bottom: 18pt; }
+body.footer { align-items: flex-start; justify-content: center; padding-top: 18pt; }
