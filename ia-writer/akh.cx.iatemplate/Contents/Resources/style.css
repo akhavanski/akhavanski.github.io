@@ -2,7 +2,7 @@
   A post as on akh.cx, for iA Writer's Preview, PDFs and printouts.
   Copied from the theme no-style-please and assets/css/main.scss of the blog;
   when the posts there change their look, change it here too.
-  The text is EB Garamond (loaded by document.html), 20px in a 640px column,
+  The text is EB Garamond (fonts.css, the files in fonts/), 20px in a 640px column,
   justified with hyphens; code, the footnotes and the page edges are monospace.
   Night mode (iA Writer puts .night-mode on <html>) takes the blog's dark theme.
 */
